@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     [Header("Parâmetros Player: ")]
     [SerializeField] int playerLife;
 
+    [Header("Variáveis de controle")]
+    [SerializeField] bool inGame;
+
 
     // Teste
     public UnityEvent shakeEffect;
@@ -31,7 +34,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
     }
 
-    public void PlayerDamage(int value)
+    public void PlayerDamage(int value) // Jogador perde vida passando valor do dano como parâmetro
     {
         playerLife -= value;
         if(value < 0)
@@ -40,8 +43,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GameOver()
+    public void GameOver() // Vida do jogador zerou
     {
 
     }
+
+
 }

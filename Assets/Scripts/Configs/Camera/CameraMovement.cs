@@ -12,19 +12,21 @@ enum CamEffect
 
 public class CameraMovement : MonoBehaviour
 {
+    [Header("Parâmetros Gerais")]
     [SerializeField] private float posSpeed;
     [SerializeField] private float rotSpeed;
     [SerializeField] private Transform target;
-    private float posY;
-    [SerializeField] CamEffect effect;
 
-    // Variaveis de controle
-    Vector3 shakePos;
-    float shakeSpeed = 1;
+    [Header("Parâmetros Efeitos")]
+    [SerializeField] CamEffect effect;
+    [SerializeField] float shakeSpeed = 1;
+    [SerializeField] float timeEffect;
     float cdEffect = 0;
     bool inEffect = false;
     Coroutine coroutineRun;
 
+    // Variáveis de controle
+    Vector3 shakePos; // Ajusta uma nova posição para a camera
 
 
     private void Start()
@@ -45,7 +47,7 @@ public class CameraMovement : MonoBehaviour
         {
             inEffect = true;
             effect = CamEffect.Shake;
-            coroutineRun = StartCoroutine("CDEffect", 0.5f);
+            coroutineRun = StartCoroutine("CDEffect", timeEffect);
             Shaking();
         }
     }
