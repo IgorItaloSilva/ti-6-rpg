@@ -9,7 +9,7 @@ enum TypeGizmo
 }
 public class CustomShowCollider : MonoBehaviour
 {
-    [SerializeField] Color color;
+    [SerializeField] Color color = Color.white;
     [SerializeField] TypeGizmo type;
 
 
@@ -22,13 +22,13 @@ public class CustomShowCollider : MonoBehaviour
             {
                 SphereCollider collider = GetComponent<SphereCollider>();
                 Gizmos.color = color;
-                Gizmos.DrawSphere(collider.center, collider.radius);
+                Gizmos.DrawWireSphere(transform.position + collider.center, collider.radius);
             }
             else
             {
                 BoxCollider collider = GetComponent<BoxCollider>();
                 Gizmos.color = color;
-                Gizmos.DrawCube(collider.center, GetComponent<BoxCollider>().size);
+                Gizmos.DrawWireCube(transform.position + collider.center, GetComponent<BoxCollider>().size);
             }
         }
         catch
@@ -46,13 +46,13 @@ public class CustomShowCollider : MonoBehaviour
             {
                 SphereCollider collider = GetComponent<SphereCollider>();
                 Gizmos.color = color;
-                Gizmos.DrawSphere(collider.center, collider.radius);
+                Gizmos.DrawWireSphere(collider.center, collider.radius);
             }
             else
             {
                 BoxCollider collider = GetComponent<BoxCollider>();
                 Gizmos.color = color;
-                Gizmos.DrawCube(transform.position, GetComponent<BoxCollider>().size);
+                Gizmos.DrawWireCube(transform.position, GetComponent<BoxCollider>().size);
             }
         }
         catch
