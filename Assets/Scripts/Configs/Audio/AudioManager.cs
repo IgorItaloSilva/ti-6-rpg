@@ -17,9 +17,9 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        if (!GameManager.instance.audioManager)
+        if (!GameManager.gm.audioManager)
         {
-            GameManager.instance.audioManager = this;
+            GameManager.gm.audioManager = this;
             DontDestroyOnLoad(gameObject);
         }
         else
@@ -44,7 +44,6 @@ public class AudioManager : MonoBehaviour
         SetMasterVolume(masterSlider.value);
         SetMusicVolume(musicSlider.value);
         SetEffectVolume(effectSlider.value);
-        btnShake.onClick.AddListener(ShakeCam); //  ----- Teste
     }
 
     void SetMasterVolume(float value)
@@ -60,11 +59,6 @@ public class AudioManager : MonoBehaviour
     void SetEffectVolume(float value)
     {
         audioMixer.SetFloat(exposedEffect, Mathf.Log10(value) * 20);
-    }
-
-    void ShakeCam() // ----- Teste
-    {
-        GameManager.instance?.shakeEffect?.Invoke();
     }
 
 }

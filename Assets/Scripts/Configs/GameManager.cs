@@ -1,43 +1,40 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-
 
 
 [DefaultExecutionOrder(-99)]
 public class GameManager : MonoBehaviour
 {
-    [Header("Referências: ")]
-    public static GameManager instance;
+    // Singleton do GameManager IMPORTANTE
+    public static GameManager gm;
+    
+    [Header("Referências:")] 
     public AudioManager audioManager;
-    public CameraMovement camMove;
-    public Transform camTarget;
 
-    [Header("Parâmetros Player: ")]
-    [SerializeField] int playerLife;
+    [Header("Parâmetros Player: ")] [SerializeField]
+    private int playerHP;
 
-    [Header("Variáveis de controle")]
-    [SerializeField] bool inGame;
-
-
-    // Teste
-    public UnityEvent shakeEffect;
+    [Header("Variáveis de controle")] [SerializeField]
+    private bool inGame;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        if (!instance)
+        ToggleCursor(false);
+        if (gm)
+            Destroy(gameObject);
+        else
         {
-            instance = this;
+            gm = this;
             DontDestroyOnLoad(gameObject);
         }
-        else
-            Destroy(gameObject);
     }
 
     public void PlayerDamage(int value) // Jogador perde vida passando valor do dano como parâmetro
     {
-        playerLife -= value;
-        if(value < 0)
+        playerHP -= value;
+        if (playerHP <= 0)
         {
             GameOver();
         }
@@ -45,8 +42,21 @@ public class GameManager : MonoBehaviour
 
     public void GameOver() // Vida do jogador zerou
     {
-
     }
 
+    // Método para definir visibilidade do cursor
+    public void ToggleCursor(bool show)
+    {
+        Cursor.visible = show;
+        Cursor.lockState = show ? CursorLockMode.Confined : CursorLockMode.Locked;
+    }
 
+    // Método para alternar visibilidade do cursor sem precisar definir.
+    public void ToggleCursor()
+    {
+        Cursor.visible = !Cursor.visible;
+        Cursor.lockState = Cursor.lockState == CursorLockMode.Locked
+            ? CursorLockMode.Confined
+            : CursorLockMode.Locked;
+    }
 }
