@@ -16,10 +16,11 @@ public class PlayerMovement : MonoBehaviour
     private InputAction cursorToggleAction;
     private Camera mainCam;
 
-    [Header("Parametros: ")] [SerializeField]
-    private float moveSpeed = 10f;
+    [Header("Parametros: ")] 
+    [SerializeField] private float moveSpeed = 10f;
 
-    private const float turnSmoothTime = 0.015f, jumpForce = 500f, jumpDragModifier = 4f, jumpSpeedModifier = 30f;
+    [SerializeField] private LayerMask groundLayers;
+    private const float turnSmoothTime = 0.015f, jumpForce = 500f, jumpDrag = 0f, groundDrag = 4f, jumpSpeedModifier = 30f;
     private float turnSmoothSpeed;
     private Vector2 moveInput;
     private bool isGrounded = true;
@@ -52,17 +53,31 @@ public class PlayerMovement : MonoBehaviour
     {
         // Ler valores de movimento do InputActionReference
         moveInput = moveAction.ReadValue<Vector2>().normalized;
+        
+        // Raycast para baixo para checar se o player está no chão
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f, groundLayers);
 
+        // Retornar drag para o padrão quando o player cair no chão
+        if (isGrounded)
+        {
+            rb.drag = groundDrag;
+            Debug.Log("Grounded");
+        }
+        
         // Checar magnitude do input para aplicar movimentação
-        if ((moveInput.magnitude > 0.1))
+        if ((moveInput.magnitude > 0.1 && isGrounded))
             Move();
-
+        
         // Pular quando o player apertar o botão e estiver no chão
         if (jumpAction.triggered && isGrounded)
             Jump();
 
-        if (cursorToggleAction.triggered)
+        
+#if UNITY_EDITOR
+        if (Keyboard.current.cKey.wasPressedThisFrame)
             GameManager.gm.ToggleCursor();
+#endif
+
     }
 
     private void Move()
@@ -84,17 +99,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Debug.Log("Jump");
         rb.AddForce(0f, jumpForce, 0f);
-        rb.drag /= jumpDragModifier; // Diminuir o drag enquanto o player pula para acelerar a queda.
+        rb.drag = jumpDrag; // Diminuir o drag enquanto o player pula para acelerar a queda.
         isGrounded = false;
     }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        // Quando o player cair no chão:
-        if (!isGrounded && other.collider.CompareTag("Ground"))
-        {
-            isGrounded = true;
-            rb.drag *= jumpDragModifier; // Voltar o drag ao normal para o player não deslizar demais.
-        }
-    }
+    
 }

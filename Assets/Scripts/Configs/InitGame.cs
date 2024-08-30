@@ -3,15 +3,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-
 public class InitGame : MonoBehaviour
 {
     [SerializeField] string[] scenes; // Lista das cenas inicias do projeto(Menu inicial e hud)
-
-
+    
     void Start()
     {
-        for(int i = 1; i < scenes.Length; i++)
+        for (int i = 1; i < scenes.Length; i++)
             LoadScene(scenes[i]);
         StartCoroutine("UnloadScene", scenes[0]);
     }
