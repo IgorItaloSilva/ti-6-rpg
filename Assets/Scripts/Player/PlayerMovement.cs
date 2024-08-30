@@ -1,4 +1,6 @@
 using System;
+using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Referências: ")] [SerializeField]
     private Rigidbody rb;
 
+    private CinemachineFreeLook cinemachine;
+
     [SerializeField] private PlayerInput playerInput;
     private InputAction moveAction;
     private InputAction jumpAction;
@@ -20,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
 
     [SerializeField] private LayerMask groundLayers;
-    private const float turnSmoothTime = 0.015f, jumpForce = 500f, jumpDrag = 0f, groundDrag = 4f, jumpSpeedModifier = 30f;
+    private const float turnSmoothTime = 0.015f, jumpForce = 500f, jumpDrag = 0f, groundDrag = 0f, jumpSpeedModifier = 30f;
     private float turnSmoothSpeed;
     private Vector2 moveInput;
     private bool isGrounded = true;
@@ -37,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         mainCam = Camera.main;
+        cinemachine = mainCam.transform.parent.gameObject.GetComponent<CinemachineFreeLook>();
 
         HandleInput();
     }
@@ -55,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         moveInput = moveAction.ReadValue<Vector2>().normalized;
         
         // Raycast para baixo para checar se o player está no chão
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f, groundLayers);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.01f, groundLayers);
 
         // Retornar drag para o padrão quando o player cair no chão
         if (isGrounded)
@@ -69,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
             Move();
         
         // Pular quando o player apertar o botão e estiver no chão
-        if (jumpAction.triggered && isGrounded)
+        if (jumpAction.triggered && isGrounded && moveInput is not {x: 0f, y: 0f})
             Jump();
 
         
@@ -78,6 +83,11 @@ public class PlayerMovement : MonoBehaviour
             GameManager.gm.ToggleCursor();
 #endif
 
+    }
+
+    private void FixedUpdate()
+    {
+        cinemachine.m_RecenterToTargetHeading.m_enabled = moveInput is not { x: 0f, y: < 0f };
     }
 
     private void Move()
