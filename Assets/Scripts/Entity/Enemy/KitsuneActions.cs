@@ -7,14 +7,13 @@ public class KitsuneActions : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        IEnemyAction[] allAction = new IEnemyAction[]
+        AEnemyAction[] allAction = new AEnemyAction[]
         {
-            gameObject.AddComponent<KitsuneIdle>(),
-            gameObject.AddComponent<KitsuneAttack>(),
-            gameObject.AddComponent<KitsuneDash>()
+            new KitsuneDash(),
+            new KitsuneAttack()
 
         };
-        GetComponent<EnemyBehaviour>().action = allAction;
+        GetComponent<EnemyBehaviour>().SetActions(allAction);
         Destroy(this);
     }
 }

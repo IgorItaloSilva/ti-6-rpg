@@ -1,13 +1,29 @@
-using System.Collections;
 using UnityEngine;
 
 
 public class EnemyBehaviour : MonoBehaviour, IEnemyBehave
 {
-    public IEnemyAction[] action;
-    public IEnemyAction currentAction;
+    AEnemyAction[] action; // Todas ações possiveis do personagem
+    [SerializeField] float[] coolDownActions; // Cooldown de cada skill
+    [SerializeField] float[] actionsReady; // Quando zerado, habilidade pronta para usar
+    AEnemyAction currentAction; // Ação atual do personagem
+    [SerializeField] Rigidbody rb; 
+    [SerializeField] Animator animator;
+
     int index = 0;
 
+    
+
+    public void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        currentAction?.UpdateAction();
+    }
 
     public bool CheckDistance()
     {
@@ -24,17 +40,32 @@ public class EnemyBehaviour : MonoBehaviour, IEnemyBehave
         throw new System.NotImplementedException();
     }
 
-    public void ChangeAction()
+    public void ChangeActionStage()
     {
-        currentAction = action[index];
-        currentAction.StartAction();
-        index++;
-        if(index == action.Length)
-            index = 0;
+        currentAction?.ChangeStage();
     }
 
-    public IEnumerator WaitTime(float value, string method)
+    public Rigidbody GetRB()
     {
-        yield return new WaitForSeconds(value);
+        return GetComponent<Rigidbody>();
     }
+
+    public void SetActions(AEnemyAction[] enemyActions) // Setar as possiveis ações do personagem (DEV: Tentar incorporar usando um abstract por causa do uso de variável)
+    { 
+        action = enemyActions;
+        currentAction = action[0];
+    }
+
+
+
+     // ----- EDITOR
+#if UNITY_EDITOR
+    [SerializeField] int whichAction;
+    public void DebugAction()
+    {
+        currentAction = action[whichAction];
+        currentAction.StartAction(this);
+    }
+#endif
+
 }
