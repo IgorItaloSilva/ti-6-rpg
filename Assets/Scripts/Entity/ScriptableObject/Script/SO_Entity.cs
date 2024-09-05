@@ -13,7 +13,7 @@ public enum EntityType
 public class SO_Entity : ScriptableObject
 {
     [Header("Base Entidade")]
-    [SerializeField] string name;
+    [SerializeField] string entityName;
     [SerializeField] EntityType type;
 
     [Header("Parametros da entidade")]

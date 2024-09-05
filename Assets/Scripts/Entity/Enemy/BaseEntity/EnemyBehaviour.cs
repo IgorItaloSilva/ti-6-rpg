@@ -1,14 +1,15 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 
 public class EnemyBehaviour : MonoBehaviour, IEnemyBehave
 {
+    Rigidbody rb; 
+    Animator animator;
     AEnemyAction[] action; // Todas ações possiveis do personagem
     [SerializeField] float[] coolDownActions; // Cooldown de cada skill
     [SerializeField] float[] actionsReady; // Quando zerado, habilidade pronta para usar
     AEnemyAction currentAction; // Ação atual do personagem
-    [SerializeField] Rigidbody rb; 
-    [SerializeField] Animator animator;
 
     int index = 0;
 

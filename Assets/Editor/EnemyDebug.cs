@@ -4,20 +4,29 @@ using UnityEngine;
 [CustomEditor(typeof(EnemyBehaviour))]
 public class EnemyDebug : Editor
 {
-    SerializedProperty _value;
+    SerializedProperty _value, _coolDown, _actionsReady;
 
 
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
-
-        EditorGUILayout.LabelField("----- DEBUG -----");
-        _value = serializedObject.FindProperty("whichAction");
-        EnemyBehaviour eb = (EnemyBehaviour)target;
         serializedObject.Update();
-        EditorGUILayout.PropertyField(_value);
-        serializedObject.ApplyModifiedProperties();
+        using (new EditorGUI.DisabledScope(true))
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((MonoBehaviour)target), GetType(), false);
+        GUILayout.Label("COMPONENTS: \n -Rigidbody \n -Animator");
 
+        //DrawDefaultInspector();
+        _value = serializedObject.FindProperty("whichAction");
+        _coolDown = serializedObject.FindProperty("coolDownActions");
+        _actionsReady = serializedObject.FindProperty("actionsReady");
+
+        EditorGUILayout.PropertyField(_coolDown);
+        EditorGUILayout.PropertyField(_actionsReady);
+
+        GUILayout.Label("\n----- DEBUG -----");
+        EditorGUILayout.PropertyField(_value);
+
+        serializedObject.ApplyModifiedProperties();
+        EnemyBehaviour eb = (EnemyBehaviour)target;
         if (GUILayout.Button("Ativar Acao"))
         {
             eb.DebugAction();
