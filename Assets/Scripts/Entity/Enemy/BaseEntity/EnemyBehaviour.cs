@@ -6,11 +6,12 @@ public class EnemyBehaviour : MonoBehaviour, IEnemyBehave
 {
     Rigidbody rb; 
     Animator animator;
-    AEnemyAction[] action; // Todas aï¿½ï¿½es possiveis do personagem
+    AEnemyAction[] action; // Todas ações possiveis do personagem
     [SerializeField] float[] coolDownActions; // Cooldown de cada skill
     [SerializeField] float[] actionsReady; // Quando zerado, habilidade pronta para usar
-    AEnemyAction currentAction; // Aï¿½ï¿½o atual do personagem
-    
+    AEnemyAction currentAction; // Ação atual do personagem
+
+    int index = 0;
 
     
 
@@ -50,7 +51,7 @@ public class EnemyBehaviour : MonoBehaviour, IEnemyBehave
         return GetComponent<Rigidbody>();
     }
 
-    public void SetActions(AEnemyAction[] enemyActions) // Setar as possiveis aï¿½ï¿½es do personagem (DEV: Tentar incorporar usando um abstract por causa do uso de variï¿½vel)
+    public void SetActions(AEnemyAction[] enemyActions) // Setar as possiveis ações do personagem (DEV: Tentar incorporar usando um abstract por causa do uso de variável)
     { 
         action = enemyActions;
         currentAction = action[0];
