@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,15 +23,19 @@ public class PlayerMovement : MonoBehaviour
     private Camera mainCam;
     private Animator animator;
 
-    [Header("Parametros: ")] [SerializeField] private float moveSpeed = 10f, sprintMoveSpeed = 15f;
+    [Header("Parametros: ")] [SerializeField]
+    private float moveSpeed = walkMoveSpeed;
 
     [SerializeField] private LayerMask groundLayers;
 
     private const float turnSmoothTime = 0.02f,
+        walkMoveSpeed = 10f,
+        sprintMoveSpeed = 15f,
+        dodgeMoveSpeed = 30f,
+        dodgeDuration = 0.2f,
         jumpForce = 1500f,
-        jumpDrag = 0f,
-        groundDrag = 0f,
-        jumpSpeedModifier = 30f;
+        airDrag = 0f,
+        groundDrag = 0f;
 
     private float turnSmoothSpeed;
     private Vector2 moveInput;
@@ -49,13 +54,9 @@ public class PlayerMovement : MonoBehaviour
     private void CreateSingleton()
     {
         if (playerMovement)
-        {
             Destroy(this); // Deletar novo objeto caso playerMovement já tenha sido instanciado
-        }
         else
-        {
             playerMovement = this; // Instanciar PlayerMovement caso não exista
-        }
     }
 
     private void HandleInput()
@@ -72,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
         moveInput = moveAction.ReadValue<Vector2>().normalized;
 
         // Raycast para baixo para checar se o player está no chão
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.01f, groundLayers);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.05f, groundLayers);
 
         // Retornar drag para o padrão quando o player cair no chão
         if (isGrounded)
@@ -81,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            rb.AddForce(0f, -(jumpForce / 100), 0f);
+            rb.AddForce(0f, -(jumpForce / 80), 0f);
         }
 
         // Checar magnitude do input para aplicar movimentação
@@ -90,22 +91,20 @@ public class PlayerMovement : MonoBehaviour
 
         // Pular quando o player apertar o botão e estiver no chão
         if (jumpAction.triggered && isGrounded && moveInput is not { x: 0f, y: 0f })
-            Jump();
+            if (combatMode)
+                StartCoroutine(nameof(Dodge));
+            else
+                Jump();
 
 #if UNITY_EDITOR
         if (Keyboard.current.cKey.wasPressedThisFrame)
             GameManager.gm.ToggleCursor();
+        if (Keyboard.current.tabKey.wasPressedThisFrame)
+        {
+            combatMode = !combatMode;
+            Debug.Log("Combat Mode: " + combatMode);
+        }
 #endif
-    }
-
-    private void ToggleCombatMode()
-    {
-        combatMode = !combatMode;
-    }
-
-    private void SetCombatMode(bool value)
-    {
-        combatMode = value;
     }
 
     private void FixedUpdate()
@@ -128,14 +127,22 @@ public class PlayerMovement : MonoBehaviour
         var moveVelocity = moveDir * (sprintAction.inProgress ? sprintMoveSpeed : moveSpeed);
 
         // Aplicar diretamente ao velocity evita que o cinemachine tenha uma convulsão.
-        rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z); 
+        rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
     }
 
     private void Jump()
     {
         Debug.Log("Jump");
         rb.AddForce(0f, jumpForce, 0f);
-        rb.drag = jumpDrag; // Diminuir o drag enquanto o player pula para acelerar a queda.
+        rb.drag = airDrag; // Diminuir o drag enquanto o player pula para acelerar a queda.
         isGrounded = false;
+    }
+
+    private IEnumerator Dodge()
+    {
+        moveSpeed = dodgeMoveSpeed;
+        Debug.Log("Dodge");
+        yield return new WaitForSeconds(dodgeDuration);
+        moveSpeed = walkMoveSpeed;
     }
 }

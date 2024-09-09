@@ -130,6 +130,36 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 707143444524403290, guid: e4538f667c0f61f43b222293f30e1d37,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: a4c518d9ed3e8ad44892b273c6a8713a, type: 2}
+    - target: {fileID: 859882657055140501, guid: e4538f667c0f61f43b222293f30e1d37,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.49999994
+      objectReference: {fileID: 0}
+    - target: {fileID: 859882657055140501, guid: e4538f667c0f61f43b222293f30e1d37,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.451
+      objectReference: {fileID: 0}
+    - target: {fileID: 859882657055140501, guid: e4538f667c0f61f43b222293f30e1d37,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70710653
+      objectReference: {fileID: 0}
+    - target: {fileID: 859882657055140501, guid: e4538f667c0f61f43b222293f30e1d37,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.70710707
+      objectReference: {fileID: 0}
+    - target: {fileID: 859882657055140501, guid: e4538f667c0f61f43b222293f30e1d37,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
+      objectReference: {fileID: 0}
     - target: {fileID: 2378050509896725692, guid: e4538f667c0f61f43b222293f30e1d37,
         type: 3}
       propertyPath: m_Name
@@ -185,6 +215,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3557313006395705351, guid: e4538f667c0f61f43b222293f30e1d37,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 4105806769280244223, guid: e4538f667c0f61f43b222293f30e1d37,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -194,6 +229,11 @@ PrefabInstance:
         type: 3}
       propertyPath: groundLayers.m_Bits
       value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848327079548293350, guid: e4538f667c0f61f43b222293f30e1d37,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
