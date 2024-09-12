@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IDataPersistence
 {
     // Singleton publico do PlayerMovement
     public static PlayerMovement playerMovement;
@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded)
         {
             rb.drag = groundDrag;
-            Debug.Log("Grounded");
+            //Debug.Log("Grounded");
         }
         
         // Checar magnitude do input para aplicar movimentação
@@ -76,6 +76,10 @@ public class PlayerMovement : MonoBehaviour
         // Pular quando o player apertar o botão e estiver no chão
         if (jumpAction.triggered && isGrounded && moveInput is not {x: 0f, y: 0f})
             Jump();
+        if(Keyboard.current.lKey.wasPressedThisFrame)
+            GameEventsManager.instance.playerEvents.PlayerDied();
+        if(Keyboard.current.kKey.wasPressedThisFrame)
+            DataPersistenceManager.instance.SaveGame();
 
         
 #if UNITY_EDITOR
@@ -112,5 +116,16 @@ public class PlayerMovement : MonoBehaviour
         rb.drag = jumpDrag; // Diminuir o drag enquanto o player pula para acelerar a queda.
         isGrounded = false;
     }
-    
+
+    //Chamado após a cena ser carregada
+    public void LoadData(GameData gameData)
+    {
+        transform.position = gameData.pos;
+        Physics.SyncTransforms();
+    }
+    //Chamado manualmente para salvar o jogo
+    public void SaveData(GameData gameData)
+    {
+        gameData.pos = transform.position;
+    }
 }
