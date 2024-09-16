@@ -1,22 +1,22 @@
 using UnityEngine;
 
 
-public class BotTestAttack : AEnemyAction
+public class BotTestKickCombo : AEnemyAction
 {
     int countAction = 0;
 
-    public BotTestAttack(AEnemyBehave enemyBehave) : base(enemyBehave)
+    public BotTestKickCombo()
     {
-        this.enemyBehave = enemyBehave;
+        minDistanceSkill = 3;
     }
 
-    public override void StartAction(EnemyController _enemyBehave)
+
+    public override void StartAction(EnemyController enemyController)
     {
-        base.StartAction(_enemyBehave);
-        enemyController.SetBoolAnimation("isAttacking", true);
+        base.StartAction(enemyController);
+        base.enemyController.SetBoolAnimation("isAttacking", true);
+        
         countAction = 0;
-        canExit = false;
-        Debug.Log("");
         Debug.Log("Attack");
     }
 
@@ -32,18 +32,16 @@ public class BotTestAttack : AEnemyAction
             rb.AddForce(dir * 3.5f, ForceMode.Impulse);
             rb.velocity = dir * 200 * Time.fixedDeltaTime;
             countAction++;
-            if (Vector3.Distance(target.position, enemyBehave.transform.position) > 1.5f)
-            {
+            if (Vector3.Distance(target.position, enemyController.transform.position) > 1.5f)
                 enemyController.SetBoolAnimation("isAttacking", false);
-            }
-        }
+        }else
+            ExitAction();
     }
 
-    public override void EndAnimation()
+
+    public override void ExitAction()
     {
         enemyController.SetBoolAnimation("isAttacking", false);
-        enemyBehave.SkillUsed(3);
-        ExitAction(enemyBehave.GetAction(0));
+        enemyController.ChangeAction(true);
     }
-
 }

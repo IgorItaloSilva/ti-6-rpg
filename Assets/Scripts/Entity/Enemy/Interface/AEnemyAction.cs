@@ -3,38 +3,33 @@ using UnityEngine;
 
 public abstract class AEnemyAction
 {
-    protected AEnemyBehave enemyBehave;
+
+    protected Rigidbody rb; // Rigidbody do personagem atual
     protected EnemyController enemyController; // Script que está executando esta ação
     protected Transform target;
-    protected Rigidbody rb; // Rigidbody do personagem atual
-    protected bool antecipation, climax; // Estagios da ação
-    protected bool canExit = false;
+    protected float minDistanceSkill;
 
-    public AEnemyAction(AEnemyBehave enemyBehave)
+
+    public virtual void StartAction(EnemyController enemyController) // Metodo inicial para ações de ataque (Definir na nova ação qual )
     {
-        this.enemyBehave = enemyBehave;
-    }
-
-
-    public virtual void StartAction(EnemyController _enemyController) // Metodo inicial da ação
-    {
-        enemyController = _enemyController; // Declara variavel do personagem
-        target = enemyController.GetTarget();
         rb = enemyController.GetRB(); // Declara Rigidbody do personagem
-        antecipation = true;
+        target = enemyController.GetTarget();
+        this.enemyController = enemyController; // Declara variavel do personagem
     }
 
     // ------
     public abstract void UpdateAction(); // O que acontece a cada frame da ação
 
-    protected void ExitAction(AEnemyAction action) // Conclusão da ação
-    {
-        enemyController.SetAction(action);
-    } 
+    public abstract void ExitAction(); // Conclusão da ação (Qual o index da habilidade para aplicar o cooldown)
 
     public virtual void ActionWithAnimator() { }
 
     public virtual void CanExit() { }
     public virtual void EndAnimation() { }
+
+    public float GetMinDistanceSkill() { return minDistanceSkill; }
+
+    public virtual void SetDistance(float distance) { minDistanceSkill = distance; }
+    public virtual void SetRestTime(float restTime) { }
 
 }

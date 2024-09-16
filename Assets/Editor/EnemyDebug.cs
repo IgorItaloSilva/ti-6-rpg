@@ -20,10 +20,6 @@ public class EnemyDebug : Editor
         GUILayout.Label("\nAlvo que este personagem está lutando:");
         EditorGUILayout.PropertyField(_target);
 
-        _meleeDistance = serializedObject.FindProperty("meleeDistance");
-        GUILayout.Label("\nDistância max para ser considerada melee:");
-        EditorGUILayout.PropertyField(_meleeDistance);
-
         serializedObject.ApplyModifiedProperties();
 
         //DrawDefaultInspector();

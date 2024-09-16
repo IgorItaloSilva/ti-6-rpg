@@ -3,41 +3,35 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour//, IEnemyBehave
 {
- 
     Rigidbody rb;
     Animator animator;
     AEnemyBehave enemyBehave; // Comportamento do personagem
     [HideInInspector] public AEnemyAction currentAction; // Ação atual do personagem
-    [SerializeField] Transform target;
-    [SerializeField] float meleeDistance;// Distância máxima que é considerado melee
+    [SerializeField] Transform target; // posição do alvo
 
 
     public void Awake()
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        enemyBehave = GetComponent<AEnemyBehave>();
-        enemyBehave.StartBehave(this);
-        SetAction(enemyBehave.GetAction(0));
-        
+
+        enemyBehave = GetComponent<AEnemyBehave>(); // Declara o "Cérebro" do persoangem
+
+        enemyBehave.StartBehave(this, out currentAction); // Começa o "Cérebro" do personagem e recebe a primeira ação
+        currentAction.StartAction(this); // Começa a ação atual do personagem
     }
 
     void FixedUpdate()
     {
         currentAction?.UpdateAction();
-        enemyBehave.CoolDownTimer();
     }
 
-    public bool CheckDistance() // Checa distância entre o alvo o este personagem de acordo com a varável meleeDistance
-    {
-        throw new System.NotImplementedException();
-    }
 
     // ----- ACTION e BEHAVIOUR
 
-    public void SetAction(AEnemyAction action)
+    public void ChangeAction(bool haveToRest) // Muda a ação atual o personagem
     {
-        currentAction = action;
+        enemyBehave.Think(out currentAction, haveToRest);
         currentAction.StartAction(this);
     }
 
@@ -46,16 +40,23 @@ public class EnemyController : MonoBehaviour//, IEnemyBehave
         animator.SetBool(_name, _value);
     }
 
-    public void ActionWithAnimator()
+    public void SetBlendTree(string _name, float _value)
+    {
+        animator.SetFloat(_name, _value);
+    }
+
+    public void ActionWithAnimator() // Ação junto com a animação do personagem
     {
         currentAction.ActionWithAnimator();
     }
 
-    public void EndAnimation()
+    public void EndAnimation() // Fim da ação pela animação
     {
-        currentAction.EndAnimation();
+        currentAction.ExitAction();
     }
 
+
+    // ----- GETTERS
     public Transform GetTarget() { return target; }
     public Rigidbody GetRB() { return GetComponent<Rigidbody>(); }
 }

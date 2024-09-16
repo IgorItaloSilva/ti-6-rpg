@@ -4,50 +4,33 @@ using UnityEngine;
 public class BotTestIdle : AEnemyAction
 {
     float restTime;
-    public BotTestIdle(AEnemyBehave enemyBehave) : base(enemyBehave)
+
+
+    public override void SetRestTime(float restTime)
     {
-        this.enemyBehave = enemyBehave;
+        this.restTime = restTime;
+        Debug.Log("First rest time: " + this.restTime);
     }
 
-    public override void StartAction(EnemyController _enemyBehave)
+    public override void StartAction(EnemyController enemyController)
     {
-        restTime = Random.Range(0.5f, 1.5f);
-        base.StartAction(_enemyBehave);
+        base.StartAction(enemyController);
         enemyController.SetBoolAnimation("isIdle", true);
-        Debug.Log("");
-        Debug.Log("Idle");
+        enemyController.SetBlendTree("Velocity", 0);
+        Debug.Log("Idle: " + restTime);
     }
 
     public override void UpdateAction()
     {
         if (restTime <= 0)
-            BehaveLogic();
+            ExitAction();
         restTime = Mathf.Max(0, restTime - Time.deltaTime);
     }
 
-    public void BehaveLogic()
+    public override void ExitAction()
     {
-        Vector3 thisForward = enemyController.transform.forward;
-        Vector3 dir = (target.position - enemyController.transform.position).normalized;
-        thisForward.y = 0;
-        dir.y = 0;
-        if(Vector3.Angle(enemyController.transform.forward, dir) > 130f)
-        {
-            enemyController.SetBoolAnimation("isIdle", false);
-            ExitAction(enemyBehave.GetAction(4));
-        }else if (enemyBehave.SkillReady())
-        {
-            enemyController.SetBoolAnimation("isIdle", false);
-            ExitAction(enemyBehave.GetAction(1));
-        }
-        else
-        {
-            if (Vector3.Distance(target.position, enemyController.transform.position) <= 4.5f)
-            {
-                enemyController.SetBoolAnimation("isIdle", false);
-                ExitAction(enemyBehave.GetAction(2));
-            }
-        }
+        enemyController.SetBoolAnimation("isIdle", false);
+        enemyController.ChangeAction(false);
     }
 
 }

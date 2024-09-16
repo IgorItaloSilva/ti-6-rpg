@@ -1,53 +1,31 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 
 public abstract class AEnemyBehave : MonoBehaviour
 {
     protected EnemyController enemyController; // Controlador deste personagem
-    protected AEnemyAction[] allActions; // Todas as ações possiveis do personagem
-    protected float[] coolDown;
-    protected float[] coolUp;
+    protected List<AEnemyAction> actionList = new List<AEnemyAction>();
+    protected List<AEnemyAction> actionsCanUse = new List<AEnemyAction>();
+
+    protected int startSkills;
+    protected bool haveToRest;
 
 
-    int startSkills;
-    int indexMelee;
-
-    public void StartBehave(EnemyController enemyController)
+    public void StartBehave(EnemyController enemyController, out AEnemyAction action) // Definir Corpo do cerebro
     {
         this.enemyController = enemyController; // Define o controlador deste personagem
         SetActions();
+        action = actionList[0];
     }
 
     protected abstract void SetActions(); // Define todas as ações deste personagem
 
-    public AEnemyAction GetAction(int index)
-    {
 
-        return allActions[index];
-    }
+    //public abstract AEnemyAction GetAction();
 
-    public bool SkillReady()
-    {
-        if (coolUp[3] <= 0)
-        {
-            return true;
-        }
-        return false;
-    }
+    public abstract void Think(out AEnemyAction action, bool haveToRest);
 
-    public void SkillUsed(int index)
-    {
-        coolUp[index] = coolDown[index];
-    }
-
-    public void CoolDownTimer()
-    {
-        for(int i = startSkills; i < coolUp.Length; i++)
-        {
-            coolUp[i] = Mathf.Max(0, coolUp[i] - Time.fixedDeltaTime);
-        }
-    }
+    protected abstract void HaveToRest(bool haveToRest);
 
 }
