@@ -1,6 +1,6 @@
-using Cinemachine.Editor;
 using UnityEditor;
 using UnityEngine;
+
 
 [CustomEditor(typeof(EnemyController))]
 public class EnemyDebug : Editor

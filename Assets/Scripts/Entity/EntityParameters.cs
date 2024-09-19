@@ -13,8 +13,8 @@ public class EntityParameters : MonoBehaviour
     {
         if (entity)
         {
-            currentHp = entity.GetmaxHp();
-            currentSpeed = entity.GetmaxSpeed();
+            currentHp = entity.cons;
+            currentSpeed = entity.dext;
         }
     }
 }
