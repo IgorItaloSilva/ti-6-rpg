@@ -78,8 +78,10 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
             Jump();
         if(Keyboard.current.lKey.wasPressedThisFrame)
             GameEventsManager.instance.playerEvents.PlayerDied();
-        if(Keyboard.current.kKey.wasPressedThisFrame)
+        if(Keyboard.current.kKey.wasPressedThisFrame){
             DataPersistenceManager.instance.SaveGame();
+            GameEventsManager.instance.uiEvents.SavedGame();
+        }
 
         
 #if UNITY_EDITOR

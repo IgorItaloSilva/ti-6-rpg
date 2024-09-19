@@ -14,6 +14,8 @@ public class DataPersistenceManager : MonoBehaviour
     [Header("File Storage Config")]
     [SerializeField]private string fileName;
     [SerializeField]private bool useEncryption;
+    [Header("Scriptable Objects Data")]
+    [SerializeField]private PlayerStatsDefaultSO playerStatsDefaultSO;
     private GameData gameData;
     private List<IDataPersistence> dataPersistenceObjects;
     private FileDataHandler dataHandler;
@@ -37,7 +39,13 @@ public class DataPersistenceManager : MonoBehaviour
     }
     public void NewGame(){
         Debug.LogWarning("Foi criada uma nova gameData");
-        this.gameData = new GameData();
+        if(playerStatsDefaultSO==null){
+            this.gameData = new GameData();
+        }
+        else{
+            //Debug.Log("o data manager tem um SO");
+            this.gameData = new GameData(playerStatsDefaultSO);
+        }
     }
     public void LoadGame(){
         if(disableDataPersistence){

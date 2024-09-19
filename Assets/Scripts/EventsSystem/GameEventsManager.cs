@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 [DefaultExecutionOrder(-100)]
@@ -14,6 +15,7 @@ public class GameEventsManager : MonoBehaviour
     *****************************************/
     public static GameEventsManager instance {get; private set;}
     public PlayerEvents playerEvents;
+    public UIEvents uiEvents;
     //EXEMPLO DE NOVA CLASSE
     //public NovaClasseEvents novaClasseEvents;
     private void Awake(){
@@ -22,6 +24,7 @@ public class GameEventsManager : MonoBehaviour
         }
         instance = this;
         playerEvents = new PlayerEvents();
+        uiEvents = new UIEvents();
         //novaClasseEvents = new NovaClasseEvents();
     }
 

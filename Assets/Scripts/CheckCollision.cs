@@ -1,14 +1,12 @@
+#if UNITY_EDITOR //maluco eu movi isso pro inicio do script pra poder criar uma build
 using UnityEngine;
 
 
 public class CheckCollision : MonoBehaviour
 {
-#if UNITY_EDITOR //maluco eu movi isso pro inicio do script pra poder criar uma build
     private void Start()
     {
-        if(showCollider!=null){
         showCollider = GetComponent<CustomShowCollider>();
-        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -30,5 +28,5 @@ public class CheckCollision : MonoBehaviour
     {
         showCollider.IsTouching(value);
     }
-#endif
 }
+#endif
