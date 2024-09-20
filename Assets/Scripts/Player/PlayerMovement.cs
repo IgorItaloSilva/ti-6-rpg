@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
     private float turnSmoothSpeed;
     private Vector2 moveInput;
-    private bool isGrounded, hasJumped, isFalling, isSprinting;
+    private bool isGrounded, hasJumped, isFalling, isSprinting, isDodging;
 
     private enum movementSystems
     {
@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
             Move();
 
         // Raycast para baixo para checar se o player está no chão
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, cc.height / 2 + cc.stepOffset + 0.1f,
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, cc.height / 2 + cc.stepOffset + 0.05f,
             groundLayers);
 
         switch (isGrounded)
@@ -103,7 +103,7 @@ public class PlayerMovement : MonoBehaviour
             // Pular quando o player apertar o botão e estiver no chão
             case true:
             {
-                if (jumpAction.triggered && moveInput is not { x: 0f, y: 0f })
+                if (jumpAction.triggered && moveInput is not { x: 0f, y: 0f } && !isDodging)
                     StartCoroutine(nameof(Jump));
                 if (dodgeAction.triggered)
                     StartCoroutine(nameof(Dodge));
@@ -164,6 +164,16 @@ public class PlayerMovement : MonoBehaviour
         yield return null;
     }
 
+    private IEnumerator Land()
+    {
+        yield return new WaitForSeconds(0.05f);
+        yield return new WaitUntil(() => isGrounded);
+        hasJumped = false;
+        isFalling = false;
+        yield return new WaitUntil(() => moveInput is not { x: 0f, y: 0f });
+        SwitchMovements(movementSystems.cc);
+    }
+
     private IEnumerator Sprint()
     {
         isSprinting = true;
@@ -171,6 +181,16 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitUntil(() => sprintAction.WasReleasedThisFrame());
         isSprinting = false;
         moveSpeed = walkMoveSpeed;
+    }
+
+    private IEnumerator Dodge()
+    {
+        isDodging = true;
+        moveSpeed = walkMoveSpeed * dodgeMoveSpeedModifier;
+        Debug.Log("Dodge");
+        yield return new WaitForSeconds(dodgeDuration);
+        moveSpeed = walkMoveSpeed;
+        isDodging = false;
     }
 
     private void SwitchMovements(movementSystems ms)
@@ -194,22 +214,5 @@ public class PlayerMovement : MonoBehaviour
                 Debug.LogWarning(ms + " is already enabled!");
                 return;
         }
-    }
-
-    private IEnumerator Land()
-    {
-        yield return new WaitForSeconds(0.1f);
-        yield return new WaitUntil(() => isGrounded);
-        hasJumped = false;
-        isFalling = false;
-        SwitchMovements(movementSystems.cc);
-    }
-
-    private IEnumerator Dodge()
-    {
-        moveSpeed = walkMoveSpeed * dodgeMoveSpeedModifier;
-        Debug.Log("Dodge");
-        yield return new WaitForSeconds(dodgeDuration);
-        moveSpeed = walkMoveSpeed;
     }
 }
