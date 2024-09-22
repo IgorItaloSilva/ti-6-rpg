@@ -1,43 +1,35 @@
-using System;
 using UnityEngine;
 
 
-public abstract class AEnemyAction : MonoBehaviour 
+public abstract class AEnemyAction
 {
-    protected IEnemyBehave enemyBehaviour; // Script que está executando esta ação
-    protected Rigidbody rb; // Rigidbody do personagem atual
-    protected bool antecipation, climax, dissipation; // Estagios da ação
-    protected float cooldownAction; // !!! ATENÇÃO: Definir o cooldown em algum momento da ação(Preferencialmente no StartAction)
 
-    public virtual void StartAction(IEnemyBehave _enemyBehave) // Metodo inicial da ação
+    protected Rigidbody rb; // Rigidbody do personagem atual
+    protected EnemyController enemyController; // Script que está executando esta ação
+    protected Transform target;
+    protected float minDistanceSkill;
+
+
+    public virtual void StartAction(EnemyController enemyController) // Metodo inicial para ações de ataque (Definir na nova ação qual )
     {
-        enemyBehaviour = _enemyBehave; // Declara variavel do personagem
-        rb = enemyBehaviour.GetRB(); // Declara Rigidbody do personagem
-        Antecipation(); // Inicia a ação do personagem pela antecipação
+        rb = enemyController.GetRB(); // Declara Rigidbody do personagem
+        target = enemyController.GetTarget();
+        this.enemyController = enemyController; // Declara variavel do personagem
     }
 
     // ------
     public abstract void UpdateAction(); // O que acontece a cada frame da ação
 
-    public virtual void Antecipation() { } // Estagio inicial
-    public virtual void Climax() { } // estagio de frame ativo
-    public virtual void Dissipation() { } // Final da ação
+    public abstract void ExitAction(); // Conclusão da ação (Qual o index da habilidade para aplicar o cooldown)
 
-    public void ChangeStage() // Mudar o estágio da ação
-    {
-        if (antecipation)
-        {
+    public virtual void ActionWithAnimator() { }
 
-            climax = true;
-        }else if (climax)
-        {
-            antecipation = false;
-            climax = false;
-            dissipation = true;
-        }
-    }
+    public virtual void CanExit() { }
+    public virtual void EndAnimation() { }
 
-    // ------
-    public abstract void ExitAction(AEnemyAction _nextAction); // Conclusão da ação
+    public float GetMinDistanceSkill() { return minDistanceSkill; }
+
+    public virtual void SetDistance(float distance) { minDistanceSkill = distance; }
+    public virtual void SetRestTime(float restTime) { }
 
 }

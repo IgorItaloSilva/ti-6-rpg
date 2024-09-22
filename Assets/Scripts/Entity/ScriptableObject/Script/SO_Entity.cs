@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -12,20 +13,22 @@ public enum EntityType
 [CreateAssetMenu(fileName = "Entity", menuName = "SO/New Entity")]
 public class SO_Entity : ScriptableObject
 {
-    [Header("Base Entidade")]
-    [SerializeField] string entityName;
-    [SerializeField] EntityType type;
+    //[InspectorLabel("Base Entidade")]
+    [field: SerializeField]
+    [SerializeField] public string entityName { get; private set; }
 
-    [Header("Parametros da entidade")]
-    [SerializeField] int maxHp;
-    [SerializeField] int def;
-    [SerializeField] int maxSpeed;
+    public EntityType type;
+
+    //[InspectorLabel("Parametros da entidade")]
+    [field: SerializeField]
+    public int cons { get; private set; }
+    [field: SerializeField]
+    public int stre { get; private set; }
+    [field: SerializeField]
+    public int inte { get; private set; }
+    [field: SerializeField]
+    public int dext { get; private set; }
     
     // ----- Getters ----- \\
-    public string Getname() { return name; }
-    public EntityType GetMaterial() { return type; }
-    public int GetmaxHp() {  return maxHp; }
-    public int Getdef() { return def; }
-    public int GetmaxSpeed() {  return maxSpeed; }
 
 }
