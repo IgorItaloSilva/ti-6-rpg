@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IDataPersistence
 {
     // Singleton publico do PlayerMovement
     public static PlayerMovement playerMovement;
@@ -89,10 +89,27 @@ public class PlayerMovement : MonoBehaviour
     {
         // Ler valores de movimento do InputActionReference 
         moveInput = moveAction.ReadValue<Vector2>().normalized;
-
+        /*  ISSO TINHA SIDO REMOVIDO PELO FELIPE ANTES DO MERGE DOS 3 CODIGOS, E VOLTOU PRA CA VINDO DO SAVESYSTEM
+            // Retornar drag para o padrão quando o player cair no chão
+            if (isGrounded)
+            {
+                rb.drag = groundDrag;
+                //Debug.Log("Grounded");
+        } */
+        
         // Checar magnitude do input para aplicar movimentação
         if ((moveInput.magnitude > 0.1))
             Move();
+        
+        // Pular quando o player apertar o botão e estiver no chão
+        if (jumpAction.triggered && isGrounded && moveInput is not {x: 0f, y: 0f})
+            Jump();
+        if(Keyboard.current.lKey.wasPressedThisFrame)
+            GameEventsManager.instance.playerEvents.PlayerDied();
+        if(Keyboard.current.kKey.wasPressedThisFrame){
+            DataPersistenceManager.instance.SaveGame();
+            GameEventsManager.instance.uiEvents.SavedGame();
+        }
 
         // Raycast para baixo para checar se o player está no chão
         isGrounded = Physics.Raycast(transform.position, Vector3.down, cc.height / 2 + cc.stepOffset + 0.05f,
@@ -214,5 +231,17 @@ public class PlayerMovement : MonoBehaviour
                 Debug.LogWarning(ms + " is already enabled!");
                 return;
         }
+    }
+
+    //Chamado após a cena ser carregada
+    public void LoadData(GameData gameData)
+    {
+        transform.position = gameData.pos;
+        Physics.SyncTransforms();
+    }
+    //Chamado manualmente para salvar o jogo
+    public void SaveData(GameData gameData)
+    {
+        gameData.pos = transform.position;
     }
 }

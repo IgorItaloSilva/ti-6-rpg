@@ -1,3 +1,4 @@
+#if UNITY_EDITOR //maluco eu movi isso pro inicio do script pra poder criar uma build
 using UnityEngine;
 
 
@@ -22,11 +23,10 @@ public class CheckCollision : MonoBehaviour
         Colliding(false);
     }
 
-#if UNITY_EDITOR
     CustomShowCollider showCollider;
     private void Colliding(bool value)
     {
         showCollider.IsTouching(value);
     }
-#endif
 }
+#endif
