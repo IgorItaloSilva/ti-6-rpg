@@ -37,10 +37,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     // Update is called once per frame
     void Update()
     {
-        if(Keyboard.current.hKey.wasPressedThisFrame){
-            GameEventsManager.instance.uiEvents.UpdateSliders(0,0,vidaMax);//Essas duas funções deveriam ser chamadas
-            GameEventsManager.instance.uiEvents.LifeChange(VidaAtual);
-        }
+        GameEventsManager.instance.uiEvents.UpdateSliders(0,0,vidaMax);//Essas duas funções deveriam ser chamadas
+        GameEventsManager.instance.uiEvents.LifeChange(VidaAtual);
     }
     public void TomarDano(float dano){
         VidaAtual -= dano;
