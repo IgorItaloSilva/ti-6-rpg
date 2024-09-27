@@ -39,7 +39,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         dodgeDuration = 0.2f, // Duration of the dodge speed
         dodgeMoveSpeedModifier = 5f, // Multiplier for player speed when dodging
         walkMoveSpeed = 12f,
-        sprintMoveModifier = 1.75f, // Multiplier for player speed when running
+        sprintMoveModifier = 1.5f, // Multiplier for player speed when running
         walkTurnTime = 0.05f, // Player default turn speed when walking
         jumpTurnModifier = 10f; // Player turn speed when in air
 
@@ -65,7 +65,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         moveSpeed = walkMoveSpeed;
         turnTime = walkTurnTime;
 
-        Physics.gravity *= 2;
+        Physics.gravity *= 2.5f;
     }
 
     private void CreateSingleton()
@@ -96,17 +96,18 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
                 rb.drag = groundDrag;
                 //Debug.Log("Grounded");
         } */
-        
+
         // Checar magnitude do input para aplicar movimentação
         if ((moveInput.magnitude > 0.1))
             Move();
-        
+
         // Pular quando o player apertar o botão e estiver no chão
-        if (jumpAction.triggered && isGrounded && moveInput is not {x: 0f, y: 0f})
+        if (jumpAction.triggered && isGrounded && moveInput is not { x: 0f, y: 0f })
             Jump();
-        if(Keyboard.current.lKey.wasPressedThisFrame)
+        if (Keyboard.current.lKey.wasPressedThisFrame)
             GameEventsManager.instance.playerEvents.PlayerDied();
-        if(Keyboard.current.kKey.wasPressedThisFrame){
+        if (Keyboard.current.kKey.wasPressedThisFrame)
+        {
             DataPersistenceManager.instance.SaveGame();
             GameEventsManager.instance.uiEvents.SavedGame();
         }
@@ -182,7 +183,6 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         yield return new WaitUntil(() => isGrounded);
         hasJumped = false;
         isFalling = false;
-        yield return new WaitUntil(() => moveInput is not { x: 0f, y: 0f });
         SwitchMovements(movementSystems.cc);
     }
 
@@ -234,6 +234,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         transform.position = gameData.pos;
         Physics.SyncTransforms();
     }
+
     //Chamado manualmente para salvar o jogo
     public void SaveData(GameData gameData)
     {
