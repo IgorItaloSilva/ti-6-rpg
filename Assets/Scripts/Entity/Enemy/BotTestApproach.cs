@@ -19,7 +19,7 @@ public class BotTestApproach : AEnemyAction
 
     public override void UpdateAction()
     {
-        Debug.Log("Velocity: " + rb.velocity.magnitude);
+        //Debug.Log("Velocity: " + rb.velocity.magnitude);
         Vector3 dir = (target.position - enemyController.transform.position);
         //rb.transform.LookAt(Vector3.Slerp(enemyController.transform.position + enemyController.transform.forward, dir, 0.15f));
         Quaternion desiredRotation = Quaternion.LookRotation(dir);

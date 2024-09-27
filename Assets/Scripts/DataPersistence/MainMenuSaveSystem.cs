@@ -26,7 +26,8 @@ public class MainMenu : Menu
     }
     public void ContinueButton(){
         DataPersistenceManager.instance.SaveGame();
-        SceneManager.LoadScene(1);
+        SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync("Hud",LoadSceneMode.Additive);
         //SceneManager.LoadScene(1);
     }
     public void DeactivateMenu(){

@@ -81,6 +81,7 @@ public class SaveSlotMenu : Menu
     private void SaveGameAndLoadScene(){
         DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadSceneAsync(1);
+        SceneManager.LoadSceneAsync("Hud",LoadSceneMode.Additive);
     }
     public void OnDeleteClick(SaveSlot saveSlot){
 

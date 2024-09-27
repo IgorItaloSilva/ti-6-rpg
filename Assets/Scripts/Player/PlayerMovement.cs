@@ -132,11 +132,6 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
                 StartCoroutine(nameof(Land));
                 break;
         }
-
-#if UNITY_EDITOR
-        if (Keyboard.current.cKey.wasPressedThisFrame)
-            GameManager.gm.ToggleCursor();
-#endif
     }
 
     private void FixedUpdate()

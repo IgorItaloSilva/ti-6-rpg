@@ -20,9 +20,12 @@ public class GameEventsManager : MonoBehaviour
     //public NovaClasseEvents novaClasseEvents;
     private void Awake(){
         if(instance!=null){
-            Debug.LogError("Mais de um Game Events Manager existe");
+            Destroy(gameObject);
         }
-        instance = this;
+        else{
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
         playerEvents = new PlayerEvents();
         uiEvents = new UIEvents();
         //novaClasseEvents = new NovaClasseEvents();

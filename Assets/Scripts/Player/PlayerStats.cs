@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerStats : MonoBehaviour, IDataPersistence
+public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
 {
     /*  Essa classe foi pensada em ser a classe principal para lidar com os status do jogador,
         ela mantem vários atributos que serão usados em vários outros scripts, e é responsavel por eles.
@@ -29,14 +30,17 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
     void Start()
     {
         vidaMax = VidaBase + vidaModCons * Con;
-        GameEventsManager.instance.uiEvents.UpdateSliders(0,VidaAtual,vidaMax);//Essas duas funções deveriam ser chamadas
+        GameEventsManager.instance.uiEvents.UpdateSliders(0,0,vidaMax);//Essas duas funções deveriam ser chamadas
         GameEventsManager.instance.uiEvents.LifeChange(VidaAtual);//             pra stamina e mana tambem
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Keyboard.current.hKey.wasPressedThisFrame){
+            GameEventsManager.instance.uiEvents.UpdateSliders(0,0,vidaMax);//Essas duas funções deveriam ser chamadas
+            GameEventsManager.instance.uiEvents.LifeChange(VidaAtual);
+        }
     }
     public void TomarDano(float dano){
         VidaAtual -= dano;
@@ -74,5 +78,14 @@ public class PlayerStats : MonoBehaviour, IDataPersistence
         this.Level = data.playerStatsData.level;
         this.VidaAtual = data.playerStatsData.vidaAtual;
         this.VidaBase = data.playerStatsData.vidaBase;
+        UpdateStatusEvent();
+    }
+    private void UpdateStatusEvent(){
+        //GameEventsManager.instance.playerEvents.onStatusChanged
+    }
+
+    public void TakeDamage(float damage)
+    {
+        TomarDano(damage);
     }
 }
