@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour, IDataPersistence
+public class PlayerMovement : MonoBehaviour
 {
     // Singleton publico do PlayerMovement
     public static PlayerMovement playerMovement;
@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
 
     private Camera mainCam;
     private Animator animator;
+    [SerializeField] private MeshRenderer playerMesh;
 
     [Header("Parametros: ")] [SerializeField]
     private float jumpForce = 7500f;
@@ -66,6 +67,9 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         turnTime = walkTurnTime;
 
         Physics.gravity *= 2.5f;
+
+        if(Debug.isDebugBuild)
+            Debug.developerConsoleVisible = true;
     }
 
     private void CreateSingleton()
@@ -98,8 +102,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         } */
 
         // Checar magnitude do input para aplicar movimentação
-        if ((moveInput.magnitude > 0.1))
-            Move();
+        
 
         // Pular quando o player apertar o botão e estiver no chão
         if (jumpAction.triggered && isGrounded && moveInput is not { x: 0f, y: 0f })
@@ -137,6 +140,9 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
 
     private void FixedUpdate()
     {
+        if ((moveInput.magnitude > 0.01f))
+            Move();
+
         cinemachine.m_RecenterToTargetHeading.m_enabled = moveInput is not { x: 0f, y: < 0f };
     }
 
@@ -157,7 +163,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
             StartCoroutine(nameof(Sprint));
 
         // Mover com character controller quando estiver no chão e com o rigidbody quando estiver no ar
-        if (isGrounded && cc.enabled)
+        if (isGrounded)
         {
             cc.Move(moveDir * (moveSpeed * Time.deltaTime));
         }
@@ -179,7 +185,7 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
 
     private IEnumerator Land()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.1f);
         yield return new WaitUntil(() => isGrounded);
         hasJumped = false;
         isFalling = false;
@@ -210,12 +216,16 @@ public class PlayerMovement : MonoBehaviour, IDataPersistence
         switch (ms)
         {
             case movementSystems.cc when !cc.enabled:
+                Debug.Log("SWITCHING TO: CC");
+                playerMesh.material.color = Color.red;
                 turnTime = walkTurnTime;
                 cc.enabled = true;
                 rb.isKinematic = true;
                 col.enabled = false;
                 break;
             case movementSystems.rb when rb.isKinematic:
+                Debug.Log("SWITCHING TO: RB");
+                playerMesh.material.color = Color.blue;
                 turnTime = walkTurnTime * jumpTurnModifier;
                 rb.isKinematic = false;
                 rb.velocity = cc.velocity;
