@@ -9137,11 +9137,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6783019600933817145, guid: 930f215d62b425c498ea41baa58db735,
+        type: 3}
+      propertyPath: playerMesh
+      value: 
+      objectReference: {fileID: 1324241788125000444}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 930f215d62b425c498ea41baa58db735, type: 3}
+--- !u!23 &1324241788125000444 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4054791994780709333, guid: 930f215d62b425c498ea41baa58db735,
+    type: 3}
+  m_PrefabInstance: {fileID: 1324241788125000443}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9152078400359845202 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4133643009367029584, guid: 930f215d62b425c498ea41baa58db735,
