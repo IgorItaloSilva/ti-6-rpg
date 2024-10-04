@@ -223,7 +223,7 @@ public class PlayerMovement : MonoBehaviour
         {
             case movementSystems.cc when !cc.enabled:
                 Debug.Log("SWITCHING TO: CC");
-                playerMesh.material.color = Color.red;
+                if(playerMesh) playerMesh.material.color = Color.red;
                 turnTime = walkTurnTime;
                 cc.enabled = true;
                 rb.isKinematic = true;
@@ -231,7 +231,7 @@ public class PlayerMovement : MonoBehaviour
                 break;
             case movementSystems.rb when rb.isKinematic:
                 Debug.Log("SWITCHING TO: RB");
-                playerMesh.material.color = Color.blue;
+                if(playerMesh) playerMesh.material.color = Color.blue;
                 turnTime = walkTurnTime * jumpTurnModifier;
                 rb.isKinematic = false;
                 rb.velocity = cc.velocity;
