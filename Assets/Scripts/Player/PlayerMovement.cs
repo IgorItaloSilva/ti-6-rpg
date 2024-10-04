@@ -4,6 +4,7 @@ using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -56,6 +57,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
+#if UNITY_EDITOR
+        if (!UIManager.instance)
+            SceneManager.LoadSceneAsync("Hud", LoadSceneMode.Additive);
+#endif
+
         CreateSingleton();
 
         mainCam = Camera.main;
@@ -68,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 
         Physics.gravity *= 2.5f;
 
-        if(Debug.isDebugBuild)
+        if (Debug.isDebugBuild)
             Debug.developerConsoleVisible = true;
     }
 
@@ -102,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
         } */
 
         // Checar magnitude do input para aplicar movimentação
-        
+
 
         // Pular quando o player apertar o botão e estiver no chão
         if (jumpAction.triggered && isGrounded && moveInput is not { x: 0f, y: 0f })
