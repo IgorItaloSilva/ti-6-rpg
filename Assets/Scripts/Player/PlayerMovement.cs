@@ -192,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
             await Task.Yield();
         SwitchMovements(movementSystems.cc);
         EnterPlayerState(landState);
-        await Task.Delay(250);
+        await Task.Delay(150);
         EnterPlayerState(sprintAction.inProgress ? sprintState : walkState);
         hasJumped = false;
     }
