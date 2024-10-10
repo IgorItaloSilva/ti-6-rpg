@@ -176,6 +176,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Jump()
     {
+        if (activeMoveState == moveStateTypes.dodging) return;
         Debug.Log("Jumping");
         hasJumped = true;
         SwitchMovements(movementSystems.rb);
