@@ -30,7 +30,8 @@ public class PlayerMovement : MonoBehaviour
     [Header("Parametros: ")] private float jumpForce = 7500f;
     private float moveSpeed, turnTime;
     private const float dodgeDuration = 0.15f;
-    private float turnSmoothSpeed;
+    private float turnSmoothSpeed, turnOrientation, smoothedTurnOrientation;
+    private Vector3 moveDir;
     private Vector2 moveInput;
     private bool isGrounded, hasJumped;
     [SerializeField] private LayerMask groundLayers;
@@ -153,12 +154,11 @@ public class PlayerMovement : MonoBehaviour
     private void Move()
     {
         // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
-        var turnOrientation = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
-        var smoothedTurnOrientation =
-            Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref turnSmoothSpeed, turnTime);
+        turnOrientation = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
+        smoothedTurnOrientation = Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref turnSmoothSpeed, turnTime);
 
         // Aplicar movimentação multiplicando pela velocidade do player:
-        var moveDir = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
+        moveDir = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
 
         // Rotacionar a direção do player
         transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
@@ -180,9 +180,6 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Jumping");
         hasJumped = true;
         SwitchMovements(movementSystems.rb);
-        var moveDir = Quaternion.Euler(0f,
-                          Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg + mainCam.transform.eulerAngles.y, 0f) *
-                      Vector3.forward;
         rb.AddForce(moveDir * moveSpeed + Vector3.up * jumpForce);
         LandAsync();
     }
