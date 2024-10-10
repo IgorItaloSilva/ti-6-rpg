@@ -127,8 +127,7 @@ public class PlayerMovement : MonoBehaviour
         }
 #endif
         // Raycast para baixo para checar se o player está no chão
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, cc.height / 2 + cc.stepOffset + 0.05f,
-            groundLayers);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, cc.height / 2 + cc.stepOffset + 0.05f,groundLayers);
 
         if (isGrounded)
         {
@@ -136,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
             if (jumpAction.triggered) Jump();
             if (dodgeAction.triggered) DodgeAsync();
         }
-        
+
         if (!isGrounded && !hasJumped && activeMoveState != moveStateTypes.inAir)
         {
             SwitchMovements(movementSystems.rb);
@@ -146,6 +145,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
+        // Aplicar movimentação do player no FixedUpdate para não causar os travamentos de antes
         if ((moveInput.magnitude > 0.01f)) Move();
 
         cinemachine.m_RecenterToTargetHeading.m_enabled = moveInput is not { x: 0f, y: < 0f };
@@ -186,6 +187,7 @@ public class PlayerMovement : MonoBehaviour
 
     private async Task LandAsync()
     {
+        Debug.LogWarning("Landing started!");
         EnterPlayerState(inAirState);
         await Task.Delay(100);
         while (!isGrounded)
@@ -199,6 +201,7 @@ public class PlayerMovement : MonoBehaviour
 
     private async Task SprintAsync()
     {
+        Debug.LogWarning("Sprint started!");
         EnterPlayerState(sprintState);
         while (sprintAction.inProgress)
             await Task.Yield();
@@ -207,6 +210,7 @@ public class PlayerMovement : MonoBehaviour
 
     private async Task DodgeAsync()
     {
+        Debug.LogWarning("Dodge started!");
         EnterPlayerState(dodgeState);
         Debug.Log("Dodge");
         await Task.Delay((int)(dodgeDuration * 1000f));
