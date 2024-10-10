@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Threading.Tasks;
 using Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
