@@ -180,7 +180,7 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Jumping");
         hasJumped = true;
         SwitchMovements(movementSystems.rb);
-        rb.AddForce(moveDir * moveSpeed + Vector3.up * jumpForce);
+        rb.AddForce((transform.forward * moveSpeed) + (Vector3.up * jumpForce));
         LandAsync();
     }
 
