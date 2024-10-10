@@ -135,6 +135,7 @@ public class PlayerMovement : MonoBehaviour
             if (jumpAction.triggered) Jump();
             if (dodgeAction.triggered) DodgeAsync();
         }
+        
 
         if (!isGrounded && !hasJumped && activeMoveState != moveStateTypes.inAir)
         {
@@ -145,7 +146,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
         // Aplicar movimentação do player no FixedUpdate para não causar os travamentos de antes
         if ((moveInput.magnitude > 0.01f)) Move();
 
@@ -154,6 +154,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
+        
         // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
         turnOrientation = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
         smoothedTurnOrientation = Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref turnSmoothSpeed, turnTime);
@@ -167,11 +168,11 @@ public class PlayerMovement : MonoBehaviour
         // Mover com character controller quando estiver no chão e com o rigidbody quando estiver no ar
         if (isGrounded && cc.enabled)
         {
-            cc.Move(moveDir * (moveSpeed * Time.deltaTime));
+            cc.Move(moveDir * (moveSpeed * Time.fixedDeltaTime));
         }
         else
         {
-            rb.AddForce(moveDir * moveSpeed);
+            rb.AddForce(moveDir * (moveSpeed * Time.fixedDeltaTime));
         }
     }
 
