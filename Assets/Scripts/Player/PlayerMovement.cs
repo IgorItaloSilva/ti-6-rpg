@@ -166,8 +166,7 @@ public class PlayerMovement : MonoBehaviour
         // Mover com character controller quando estiver no chão e com o rigidbody quando estiver no ar
         if (isGrounded && cc.enabled)
         {
-            
-            cc.Move(transform.forward * (moveSpeed * Time.deltaTime));
+            cc.Move(moveDir * (moveSpeed * Time.deltaTime));
         }
         else
         {
