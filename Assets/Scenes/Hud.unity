@@ -1324,7 +1324,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &379983973
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6180,7 +6180,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1474155076}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1767994922}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: AlternarPainelSkillTree
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1474155076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7155,6 +7167,7 @@ MonoBehaviour:
   lifeSlider: {fileID: 497277862}
   saveIcon: {fileID: 2128424594}
   painelPause: {fileID: 1218206575}
+  painelSkillTree: {fileID: 379983972}
   powerUpNodes:
   - {fileID: 1043796902}
   - {fileID: 1931411572}

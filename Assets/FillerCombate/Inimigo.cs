@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inimigo : MonoBehaviour,IDamagable
 {
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage,Enums.DamageType damageType)
     {
         Debug.Log($"Eu {name} recebi {damage} de dano");
     }

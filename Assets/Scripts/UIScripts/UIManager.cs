@@ -67,7 +67,10 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         if(Keyboard.current.escapeKey.wasPressedThisFrame){
-            if(painelPauseIsOpen){
+            if(painelSkillTreeIsOpen){
+                AlternarPainelSkillTree();
+            }
+            else if(painelPauseIsOpen){
                 UnpauseGame();
             }
             else{
@@ -149,11 +152,11 @@ public class UIManager : MonoBehaviour
     public void AlternarPainelSkillTree(){
         if(painelSkillTreeIsOpen){
             painelSkillTree.SetActive(false);
-            painelPauseIsOpen=false;
+            painelSkillTreeIsOpen=false;
         }
         else{
             painelSkillTree.SetActive(true);
-            painelPauseIsOpen=true;
+            painelSkillTreeIsOpen=true;
         }
 
     }
