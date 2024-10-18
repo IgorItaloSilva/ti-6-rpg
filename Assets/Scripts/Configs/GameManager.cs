@@ -9,13 +9,13 @@ public class GameManager : MonoBehaviour
     // Singleton do GameManager IMPORTANTE
     public static GameManager gm;
     
-    [Header("Referências:")] 
+    [Header("Referï¿½ncias:")] 
     public AudioManager audioManager;
 
-    [Header("Parâmetros Player: ")] [SerializeField]
+    [Header("Parï¿½metros Player: ")] [SerializeField]
     private int playerHP;
 
-    [Header("Variáveis de controle")] [SerializeField]
+    [Header("Variï¿½veis de controle")] [SerializeField]
     private bool inGame;
 
     // Start is called before the first frame update
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PlayerDamage(int value) // Jogador perde vida passando valor do dano como parâmetro
+    public void PlayerDamage(int value) // Jogador perde vida passando valor do dano como parï¿½metro
     {
         playerHP -= value;
         if (playerHP <= 0)
@@ -44,14 +44,14 @@ public class GameManager : MonoBehaviour
     {
     }
 
-    // Método para definir visibilidade do cursor
+    // Mï¿½todo para definir visibilidade do cursor
     public void ToggleCursor(bool show)
     {
         Cursor.visible = show;
         Cursor.lockState = show ? CursorLockMode.Confined : CursorLockMode.Locked;
     }
 
-    // Método para alternar visibilidade do cursor sem precisar definir.
+    // Mï¿½todo para alternar visibilidade do cursor sem precisar definir.
     public void ToggleCursor()
     {
         Cursor.visible = !Cursor.visible;
