@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour
         attacking,
     }
 
-    private moveStateTypes activeMoveState = moveStateTypes.walking;
+    private moveTypes activeMoveType = moveTypes.walking;
 
     private readonly PlayerState walkState = new WalkState();
     private readonly PlayerState sprintState = new SprintState();
