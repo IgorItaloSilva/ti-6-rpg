@@ -5,11 +5,12 @@ using UnityEngine.InputSystem.Android.LowLevel;
 
 public class Enums {
     public enum PowerUpType{
-        light,
-        dark
+        Light,
+        Dark
     }
     public enum DamageType{
-        regular,
-        magic
+        Regular,
+        Magic
     }
+    
 }

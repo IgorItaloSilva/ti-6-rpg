@@ -54,10 +54,10 @@ public class SkillTree : MonoBehaviour,IDataPersistence
         GameEventsManager.instance.skillTreeEvents.ActivatePowerUp(id);
     }
     public bool BuyPowerUp(int id){//Vai ser chamado por uma função da UI, que vai responder um click de um botão
-        Debug.Log($"Tentaram comprar o powerUp de Id {id}");
+        //Debug.Log($"Tentaram comprar o powerUp de Id {id}");
         Enums.PowerUpType powerUpType = powerUps[id].PUType;
         if(currentMoney[(int)powerUpType]<=0){
-            Debug.Log($"Sem dinheiro do tipo {powerUpType}");
+            //Debug.Log($"Sem dinheiro do tipo {powerUpType}");
             return false;
         }
         if(buyablePowerUps[id]&&!boughtPowerUps[id]){
@@ -65,7 +65,7 @@ public class SkillTree : MonoBehaviour,IDataPersistence
             ActivatePowerUp(id);
             AjustBuyablePowerUps();
             currentMoney[(int)powerUpType]--;
-            Debug.Log($"Comprei o power up de Id {id}");
+            //Debug.Log($"Comprei o power up de Id {id}");
             GameEventsManager.instance.uiEvents.SkillTreeMoneyChange((int)powerUpType,currentMoney[(int)powerUpType]);
             return true;
         }
@@ -84,7 +84,7 @@ public class SkillTree : MonoBehaviour,IDataPersistence
     }
     private void GainMoney(int powerUpType){//Adicionar isso como resposta a um evento GanharPontos que já teria que
         if(powerUpType>=0&&powerUpType<Enum.GetNames(typeof(Enums.PowerUpType)).Length){
-            Debug.Log($"Ganhei um powerup do tipo {powerUpType}");
+            //Debug.Log($"Ganhei dinheiro do tipo {powerUpType}");
             currentMoney[powerUpType]++;          //Fazer a conversao do Enum pra int, chamado ao derotar um boss
             GameEventsManager.instance.uiEvents.SkillTreeMoneyChange(powerUpType,currentMoney[powerUpType]);
         }
