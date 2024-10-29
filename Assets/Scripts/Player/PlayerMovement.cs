@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Cinemachine;
 using UnityEngine;
@@ -7,230 +8,180 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     // Singleton publico do PlayerMovement
-    public static PlayerMovement instance;
+    public static PlayerMovement Instance;
 
-    [Header("Referências: ")] [SerializeField]
-    private Rigidbody rb;
-
-    private CinemachineFreeLook cinemachine;
+    [Header("Referências: ")] 
+    
+    [HideInInspector] public CinemachineFreeLook cinemachine;
     private Camera mainCam;
+
     private Animator animator;
-    [SerializeField] private MeshRenderer playerMesh;
-    [SerializeField] private CharacterController cc;
-    [SerializeField] private CapsuleCollider col;
-    [SerializeField] private PhysicMaterial physicMat;
+    private CharacterController cc;
 
-    [Header("Input: ")] [SerializeField] private PlayerInput playerInput;
-    public InputAction moveAction;
-    public InputAction jumpAction;
-    public InputAction dodgeAction;
-    public InputAction sprintAction;
-
-
-    [Header("Parametros: ")] private float jumpForce = 6000f;
-    private float moveSpeed, turnTime;
-    private const float dodgeDuration = 0.15f;
-    private float turnSmoothSpeed, turnOrientation, smoothedTurnOrientation;
-    private Vector3 moveDir;
-    private Vector2 moveInput;
-    public Vector2 MoveInput => moveInput;
-    private bool isGrounded { get; set; }
-    private bool hasJumped;
-    public bool IsGrounded => isGrounded;
+    [Header("Input: ")] 
+    
+    private PlayerInput playerInput;
+    private float _turnSmoothSpeed, _gravity, _initialJumpVelocity;
+    private const float MaxJumpHeight = 0.6f, MaxJumpTime = .65f, MoveSpeed = 10f, SprintSpeedModifier = 2f, GroundedGravity = -0.05f, TurnTime = 0.1f;
+    private Vector3 _currentMovement;
+    private Vector2 _currentMovementInput;
+    private bool _hasJumped, _isMovementPressed, _isSprintPressed, _isJumpPressed, _isJumping;
 
     [SerializeField] private LayerMask groundLayers;
 
-    #region MoveStates
 
-    public enum moveTypes
+    #region InputSystemSetup
+
+    private void SetupInputCallbackContext()
     {
-        idle,
-        walking,
-        sprinting,
-        dodging,
-        inAir,
-        landing,
-        attacking,
+        playerInput.Gameplay.Move.started += OnMovementPressed;
+        playerInput.Gameplay.Move.canceled += OnMovementPressed;
+        playerInput.Gameplay.Move.performed += OnMovementPressed;
+        playerInput.Gameplay.Sprint.started += Sprint;
+        playerInput.Gameplay.Sprint.canceled += Sprint;
+        playerInput.Gameplay.Jump.started += Jump;
+        playerInput.Gameplay.Jump.canceled += Jump;
     }
 
-    private moveTypes activeMoveType = moveTypes.walking;
-
-    private readonly PlayerState walkState = new WalkState();
-    private readonly PlayerState sprintState = new SprintState();
-    private readonly PlayerState dodgeState = new DodgeState();
-    private readonly PlayerState inAirState = new InAirState();
-    private readonly PlayerState landState = new LandState();
-    private readonly PlayerState attackState = new AttackState();
-
-    private PlayerState activePlayerState;
-
-    private void EnterPlayerState(PlayerState newState)
+    private void OnMovementPressed(InputAction.CallbackContext context)
     {
-        Debug.Log("\nExiting: " + activeMoveType + "\nEntering: " + newState.moveType);
-        activePlayerState = newState;
-        activeMoveType = newState.moveType;
-        moveSpeed = newState.MoveSpeed;
-        turnTime = newState.TurnTime;
-        activePlayerState.Enter();
+        _currentMovementInput = context.ReadValue<Vector2>();
+        _currentMovement.x = _currentMovementInput.x;
+        _currentMovement.z = _currentMovementInput.y;
+        _isMovementPressed = _currentMovementInput is not { x: 0f, y: 0f };
+    }
+
+    private void OnEnable()
+    {
+        playerInput.Gameplay.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerInput.Gameplay.Disable();
+    }
+    
+    private void Sprint(InputAction.CallbackContext context)
+    {
+        _isSprintPressed = context.ReadValueAsButton();
+    }
+
+    private void Jump(InputAction.CallbackContext context)
+    {
+        _isJumpPressed = context.ReadValueAsButton();
     }
 
     #endregion
 
+    #region Awake
+
     private void CreateSingleton()
     {
-        if (instance)
+        if (Instance)
             Destroy(this); // Deletar novo objeto caso playerMovement já tenha sido instanciado
         else
-            instance = this; // Instanciar PlayerMovement caso não exista
+            Instance = this; // Instanciar PlayerMovement caso não exista
     }
 
-
-    private void HandleActions()
+    private void PrepareJumpVariables()
     {
-        // Definir input do player:
-        moveAction = playerInput.actions.FindAction("Move");
-        jumpAction = playerInput.actions.FindAction("Jump");
-        dodgeAction = playerInput.actions.FindAction("Dodge");
-        sprintAction = playerInput.actions.FindAction("Sprint");
+        var _timeToApex = MaxJumpTime / 2;
+        _gravity = (-2 * MaxJumpHeight) / Mathf.Pow(_timeToApex, 2);
+        _initialJumpVelocity = (2 * MaxJumpHeight) / _timeToApex;
     }
-
+    
     private void Awake()
     {
-        EnterPlayerState(walkState);
+        CreateSingleton();
+        playerInput = new PlayerInput();
+        mainCam = Camera.main;
+        
+        SetupInputCallbackContext();
 
+        cinemachine = mainCam?.transform.parent.gameObject.GetComponent<CinemachineFreeLook>();
+        cc = GetComponent<CharacterController>();
+
+        PrepareJumpVariables();
+        
 #if UNITY_EDITOR
         if (!UIManager.instance)
             SceneManager.LoadSceneAsync("Hud", LoadSceneMode.Additive);
 #endif
-
-        CreateSingleton();
-
-        mainCam = Camera.main;
-        cinemachine = mainCam?.transform.parent.gameObject.GetComponent<CinemachineFreeLook>();
-
-        HandleActions();
-
-        Physics.gravity *= 2.5f;
-
-        if (Debug.isDebugBuild)
-            Debug.developerConsoleVisible = true;
     }
 
-    private void Update()
+    #endregion
+
+    
+    
+    #region Update
+    private void HandleJump()
     {
-        // Ler valores de movimento do InputActionReference 
-        moveInput = moveAction.ReadValue<Vector2>().normalized;
-
-#if UNITY_EDITOR || DEBUG
-        if (Keyboard.current.lKey.wasPressedThisFrame)
-            GameEventsManager.instance.playerEvents.PlayerDied();
-        if (Keyboard.current.kKey.wasPressedThisFrame)
+        switch (_isJumpPressed)
         {
-            DataPersistenceManager.instance.SaveGame();
-            GameEventsManager.instance.uiEvents.SavedGame();
+            case true when !_isJumping && cc.isGrounded:
+                _isJumping = true;
+                _currentMovement.y += _initialJumpVelocity * 0.5f;
+                break;
+            case false when _isJumping && cc.isGrounded:
+                _isJumping = false;
+                break;
         }
-#endif
-        // Raycast para baixo para checar se o player está no chão
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, cc.height / 2 + cc.stepOffset + 0.05f,
-            groundLayers);
-
-        if (!isGrounded && !hasJumped)
-        {
-            SwitchMovements(toCC: false);
-            EnterPlayerState(inAirState);
-        }
-
-        activePlayerState.Update();
     }
 
     private void FixedUpdate()
     {
-        activePlayerState.FixedUpdate();
-
-        cinemachine.m_RecenterToTargetHeading.m_enabled = moveInput is not { x: 0f, y: < 0f };
+        cinemachine.m_RecenterToTargetHeading.m_enabled = _currentMovementInput is { x: not 0, y: > 0f };
     }
 
-    public void Move()
+    private void HandleMove()
+    {
+        if (_isSprintPressed && _isMovementPressed)
+        {
+            _currentMovement.x = transform.forward.x * SprintSpeedModifier;
+            _currentMovement.z = transform.forward.z * SprintSpeedModifier;
+        }
+        // Aplicar direção e rotação só caso o player esteja se movendo
+        cc.Move(_currentMovement * (MoveSpeed * Time.deltaTime));
+    }
+
+    private void HandleGravity()
+    {
+        if (cc.isGrounded) _currentMovement.y = GroundedGravity;
+        else
+        {
+            var previousYVelocity = _currentMovement.y;
+            var newYVelocity = _currentMovement.y + (_gravity * Time.deltaTime);
+            var nextYVelocity = (previousYVelocity + newYVelocity) * 0.5f;
+            _currentMovement.y = nextYVelocity;
+        }
+    }
+
+    private void HandleRotation()
     {
         // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
-        turnOrientation = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
-        smoothedTurnOrientation =
-            Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref turnSmoothSpeed, turnTime);
+        var turnOrientation = Mathf.Atan2(_currentMovementInput.x, _currentMovementInput.y) * Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
+        var smoothedTurnOrientation = Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref _turnSmoothSpeed, TurnTime);
 
+        if (!_isMovementPressed) return;
         // Aplicar movimentação multiplicando pela velocidade do player:
-        moveDir = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
+        var _targetMovement = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
+
+        _currentMovement = new Vector3(_targetMovement.x, _currentMovement.y, _targetMovement.z);
 
         // Rotacionar a direção do player
         transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
-
-        // Mover com character controller quando estiver no chão e com o rigidbody quando estiver no ar
-        if (isGrounded && cc.enabled)
-        {
-            cc.Move(moveDir * (moveSpeed * Time.fixedDeltaTime));
-        }
-        else
-        {
-            rb.AddForce(moveDir * (moveSpeed * Time.fixedDeltaTime));
-        }
     }
 
-    public void Jump()
+    private void Update()
     {
-        Debug.Log("Jumping");
-        SwitchMovements(toCC: false);
-        EnterPlayerState(inAirState);
-        rb.AddForce(0f, jumpForce, 0f);
-        hasJumped = true;
-    }
+        HandleRotation();
+        HandleMove();
+        HandleGravity();
+        HandleJump();
 
-    public async Task LandAsync()
-    {
-        Debug.Log("Landing started!");
-        await Task.Delay(100);
-        while (!isGrounded) await Task.Yield();
-
-        EnterPlayerState(landState);
-        await Task.Delay(150);
-        EnterPlayerState(sprintAction.inProgress ? sprintState : walkState);
-        hasJumped = false;
     }
-
-    public async Task SprintAsync()
-    {
-        Debug.Log("Sprint started!");
-        EnterPlayerState(sprintState);
-        while (sprintAction.inProgress)
-            await Task.Yield();
-        EnterPlayerState(walkState);
-    }
-
-    public async Task DodgeAsync()
-    {
-        Debug.Log("Dodge started!");
-        EnterPlayerState(dodgeState);
-        Debug.Log("Dodge");
-        await Task.Delay((int)(dodgeDuration * 1000f));
-        EnterPlayerState(walkState);
-    }
-
-    public void SwitchMovements(bool toCC)
-    {
-        if (toCC)
-        {
-            if (playerMesh) playerMesh.material.color = Color.red;
-            cc.enabled = true;
-            rb.isKinematic = true;
-            col.enabled = false;
-        }
-        else
-        {
-            if (playerMesh) playerMesh.material.color = Color.blue;
-            cc.enabled = false;
-            rb.isKinematic = false;
-            rb.velocity = new Vector3(cc.velocity.x, rb.velocity.y, cc.velocity.z);
-            col.enabled = true;
-        }
-    }
+    
+    #endregion
 
     //Chamado após a cena ser carregada
     public void LoadData(GameData gameData)
