@@ -9,21 +9,31 @@ public class PlayerStatsData
     public int dex;
     public int inte;
     public float exp;
-    public float level;
-    public float vidaAtual;
-    public float vidaBase;
+    public int level;
+    public float currentLife;
+    public float baseLife;
+    public float currentMana;
+    public float baseMana;
+    public float baseMagicDamage;
+    public float baseLightAttackcDamage;
+    public float baseHeavyAttackDamage;
 
     //ESSE É O CONSTRUTOR DEFALT QUE É CRIADO COM O INICIO DO JOGO
     public PlayerStatsData(PlayerStatsDefaultSO playerStatsDefault){
         
-        this.con = playerStatsDefault.conBase;
-        this.str = playerStatsDefault.strBase;
-        this.dex = playerStatsDefault.dexBase;
-        this.inte = playerStatsDefault.IntBase;
-        this.exp = playerStatsDefault.expBase;
-        this.level = playerStatsDefault.levelBase;
-        this.vidaAtual = playerStatsDefault.vidaBase + playerStatsDefault.conBase * 25;
-        this.vidaBase = playerStatsDefault.vidaBase;
+        this.con = playerStatsDefault.baseCon;
+        this.str = playerStatsDefault.baseStr;
+        this.dex = playerStatsDefault.baseDex;
+        this.inte = playerStatsDefault.baseInt;
+        this.exp = playerStatsDefault.baseExp;
+        this.level = playerStatsDefault.baseLevel;
+        this.currentLife = playerStatsDefault.baseLife + playerStatsDefault.baseCon * 25;
+        this.baseLife = playerStatsDefault.baseLife;
+        this.currentLife = playerStatsDefault.baseMana + playerStatsDefault.baseMana * 10;
+        this.baseMana = playerStatsDefault.baseMana;
+        this.baseMagicDamage = playerStatsDefault.baseMagicDamage;
+        this.baseLightAttackcDamage = playerStatsDefault.baseLightAttackDamage;
+        this.baseHeavyAttackDamage = playerStatsDefault.baseHeavyAttackDamage;
     }
     public PlayerStatsData(){
         //Debug.Log("O player não tem um ScriptableObject com os stats dele, usando valores hardcoded");
@@ -33,8 +43,8 @@ public class PlayerStatsData
         inte = 1;
         exp = 1;
         level = 1;
-        vidaAtual = 1000;
-        vidaBase = 975;
+        currentLife = 1000;
+        baseLife = 975;
     }
      public PlayerStatsData(PlayerStats playerStats){//Manter como Adapter
         this.con = playerStats.Con;
@@ -43,18 +53,22 @@ public class PlayerStatsData
         this.inte = playerStats.Int;
         this.exp = playerStats.Exp;
         this.level = playerStats.Level;
-        this.vidaAtual = playerStats.CurrentLife;
-        this.vidaBase = playerStats.BaseLife;
+        this.currentLife = playerStats.CurrentLife;
+        this.baseLife = playerStats.BaseLife;
+        this.baseMana = playerStats.BaseMana;
+        this.baseMagicDamage = playerStats.BaseMagicDamage;
+        this.baseLightAttackcDamage = playerStats.BaseLightAttackDamage;
+        this.baseHeavyAttackDamage = playerStats.BaseHeavyAttackDamage;
     }
-    public PlayerStatsData(int con, int str,int dex, int inte, float exp, float level, float vidaAtual,float vidaBase){
+    public PlayerStatsData(int con, int str,int dex, int inte, float exp, int level, float currentLife,float baseLife){
         this.con = con;
         this.str = str;
         this.dex = dex;
         this.inte = inte;
         this.exp = exp;
         this.level = level;
-        this.vidaAtual = vidaAtual;
-        this.vidaBase = vidaBase;
+        this.currentLife = currentLife;
+        this.baseLife = baseLife;
     }
 
 }
