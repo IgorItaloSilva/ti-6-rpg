@@ -1,12 +1,12 @@
 {
-    "name": "PlayerActions",
+    "name": "PlayerInput",
     "maps": [
         {
             "name": "Gameplay",
             "id": "bff93cb6-17b4-4db9-90fc-bd0c2c229673",
             "actions": [
                 {
-                    "name": "Fire",
+                    "name": "Attack",
                     "type": "Button",
                     "id": "e7fa1279-f17e-4bbb-94d5-568e3f3c6692",
                     "expectedControlType": "Button",
@@ -25,12 +25,12 @@
                 },
                 {
                     "name": "Move",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "d0c319f3-7a58-43ed-9cf7-652847ff26b3",
                     "expectedControlType": "Vector2",
-                    "processors": "",
+                    "processors": "NormalizeVector2",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Jump",
@@ -77,7 +77,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard + Mouse",
-                    "action": "Fire",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "638c92a9-289a-45dc-8974-15f37d9e0ebf",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Attack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -182,6 +193,17 @@
                 },
                 {
                     "name": "",
+                    "id": "0382861e-7ad8-4272-9be9-d760f0bb4387",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "7c30c230-655e-4a9a-8fbc-f5327d1f6800",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -193,11 +215,22 @@
                 },
                 {
                     "name": "",
+                    "id": "56de74f5-331a-4943-876c-a336d99793fb",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "03e50969-a25f-4b33-8fea-2e29cae0ef0b",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Controller",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -215,22 +248,22 @@
                 },
                 {
                     "name": "",
-                    "id": "f8b48234-5ea5-48c0-8d6e-85a1ceb4ae25",
-                    "path": "<Joystick>/{Hatswitch}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "06ab343b-0e1f-49ea-a474-4defc14dd77e",
                     "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard + Mouse",
+                    "action": "Sprint",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "39778a0f-065e-40fc-b547-274ec7d95a73",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
                     "action": "Sprint",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -248,11 +281,33 @@
                 },
                 {
                     "name": "",
+                    "id": "13d6e618-ed74-4b73-9ea7-658aecc34d2a",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
+                    "action": "Dodge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "96cec7b1-6026-49c3-844d-1ab86ad831fe",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": "Keyboard + Mouse",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c312dca1-d51b-4c8f-8070-381c3a2c87ee",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Controller",
                     "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -812,6 +867,11 @@
                     "isOR": false
                 }
             ]
+        },
+        {
+            "name": "Controller",
+            "bindingGroup": "Controller",
+            "devices": []
         }
     ]
 }

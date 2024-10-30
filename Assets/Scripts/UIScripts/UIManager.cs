@@ -28,18 +28,23 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onLifeChange+=UpdateHealth;
         GameEventsManager.instance.uiEvents.onSavedGame+=FeedBackSave;
     }
-    void OnDisable(){
-        GameEventsManager.instance.uiEvents.onUpdateSliders-=UpdateSliders;
-        GameEventsManager.instance.uiEvents.onLifeChange-=UpdateHealth;
-        GameEventsManager.instance.uiEvents.onSavedGame-=FeedBackSave;
+
+    void OnDisable()
+    {
+        GameEventsManager.instance.uiEvents.onUpdateSliders -= UpdateSliders;
+        GameEventsManager.instance.uiEvents.onLifeChange -= UpdateHealth;
+        GameEventsManager.instance.uiEvents.onSavedGame -= FeedBackSave;
     }
+
     void Start()
     {
-        if(instance==null){
-            instance=this;
+        if (instance == null)
+        {
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else{
+        else
+        {
             Destroy(gameObject);
         }
         if(!skillTreeUIManager){
@@ -79,11 +84,13 @@ public class UIManager : MonoBehaviour
     private void UpdateSliders(int id,float minValue,float maxValue){////MUDAR PARA UM MANAGER DE STATS DEPOIS
         switch(id){
             case 0:
-                if(lifeSlider!=null){
-                    lifeSlider.minValue=minValue;
-                    lifeSlider.maxValue=maxValue;
+                if (lifeSlider != null)
+                {
+                    lifeSlider.minValue = minValue;
+                    lifeSlider.maxValue = maxValue;
                 }
-            break;
+
+                break;
             default: return;
         }
     }
@@ -110,6 +117,7 @@ public class UIManager : MonoBehaviour
             saveIcon.rectTransform.Rotate(Vector3.forward,-5);
             yield return null;
         }
+
         saveIcon.gameObject.SetActive(false);
     }
     private void UnpauseGame(){
@@ -181,4 +189,3 @@ public class UIManager : MonoBehaviour
     }
     
 }
-

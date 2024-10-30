@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class CombatManagerProvisorio : MonoBehaviour
 {
-    PlayerActions inputSystem;
+    PlayerInput inputSystem;
     Animation anim;
     WeaponManager weapon;
     PlayerStats playerStats;
@@ -15,9 +15,9 @@ public class CombatManagerProvisorio : MonoBehaviour
         anim=GetComponent<Animation>();
         weapon=GetComponentInChildren<WeaponManager>(true);
         playerStats=GetComponent<PlayerStats>();
-        inputSystem = new PlayerActions();
+        inputSystem = new PlayerInput();
         inputSystem.Gameplay.Enable();
-        inputSystem.Gameplay.Fire.started += Atacar;
+        inputSystem.Gameplay.Attack.started += Atacar;
         if(weapon!=null){
             if(playerStats!=null){
                 weapon.SetDamage(playerStats.Str,playerStats.Dex);
@@ -35,6 +35,6 @@ public class CombatManagerProvisorio : MonoBehaviour
         weapon?.EnableCollider();
     }
     public void OnDisable(){
-        inputSystem.Gameplay.Fire.started -= Atacar;
+        inputSystem.Gameplay.Attack.started -= Atacar;
     }
 }
