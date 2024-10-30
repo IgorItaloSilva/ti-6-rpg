@@ -30,6 +30,13 @@ public class UIEvents
             onSavedGame();
         }
     }
+    public event Action<int,int> onSkillTreeMoneyChange;
+
+    public void SkillTreeMoneyChange(int index,int value){
+        if(onSkillTreeMoneyChange!=null){
+            onSkillTreeMoneyChange(index,value);
+        }
+    }
 
 
 }

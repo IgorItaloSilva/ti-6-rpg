@@ -10,7 +10,7 @@ public class EntityParameters : MonoBehaviour,IDamagable
     [SerializeField] int currentSpeed;
     [SerializeField] Slider sliderVida;
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage,Enums.DamageType damageType)
     {
         currentHp -= damage;
         sliderVida.value = currentHp;

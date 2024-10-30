@@ -1,0 +1,131 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using UnityEngine.InputSystem;
+using System.Linq;
+using System;
+
+public class SkillTreeUIManager : MonoBehaviour
+{
+    public static SkillTreeUIManager instance;
+    [Header("Painel Skill Tree")]
+    [SerializeField]private GameObject painelSkillTree;
+    [Header("Texto Das Moedas")]
+    [SerializeField]String textCoinHonor;
+    [SerializeField]String textCoinCorruption;
+    [SerializeField]private TextMeshProUGUI tmpCoinsHonor;
+    [SerializeField]private TextMeshProUGUI tmpCoinsCorruption;
+    [Header("Caixinha Descricao e Nome")]
+    [SerializeField]GameObject powerUpUIBox;
+    [SerializeField]TextMeshProUGUI powerUpDescriptionText;
+    [SerializeField]TextMeshProUGUI powerUpNameText;    
+    [SerializeField]float pixelOffset = 5;
+    [SerializeField]SkillNodeUI[] powerUpNodes; //O NODE PRECISA SER FEITO EM ORDER PELO ID, não precisaria ser o node, mas caso precise já esta aqui
+    bool powerUpBoxIsOpen = false;
+    bool painelSkillTreeIsOpen;
+    private bool[]boughtPowerUps;
+    private bool[]buyablePowerUps;
+    private int[]currentMoney;
+
+    private void Start(){
+        if(instance==null){
+            instance=this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else{
+            Destroy(gameObject);
+        }
+        AjustUiOnStart();
+        int quantidadePowerUps = powerUpNodes.Count();
+        buyablePowerUps = new bool[quantidadePowerUps];
+        boughtPowerUps = new bool[quantidadePowerUps];
+        currentMoney = new int[Enum.GetNames(typeof(Enums.PowerUpType)).Length];
+    }
+    public void OnEnable(){
+        GameEventsManager.instance.skillTreeEvents.onUnlockBuy+=AjustBuyable;
+        GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=AjustBuy;
+        GameEventsManager.instance.uiEvents.onSkillTreeMoneyChange+=ChangeMoney;
+    }
+    void OnDisable(){
+        GameEventsManager.instance.skillTreeEvents.onUnlockBuy-=AjustBuyable;
+        GameEventsManager.instance.skillTreeEvents.onActivatePowerUp-=AjustBuy;
+        GameEventsManager.instance.uiEvents.onSkillTreeMoneyChange-=ChangeMoney;
+    }
+    public void ActivatePowerUpDescriptionBox(int id){
+        if(!powerUpBoxIsOpen){
+            SkillNodeUI node = powerUpNodes[id];
+            powerUpUIBox.SetActive(true);
+            Vector2 pos = Mouse.current.position.ReadValue() + new Vector2(pixelOffset,pixelOffset);
+            powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos,Quaternion.identity);
+            powerUpNameText.text = node.powerUp.Name;
+            powerUpDescriptionText.text = node.powerUp.UiDescription;
+            powerUpBoxIsOpen=true;
+        }
+    }
+    public void DeactivatePowerUpDescriptionBox(){
+        powerUpUIBox.SetActive(false);
+        powerUpBoxIsOpen=false;
+    }
+    public void AjustUiOnStart(){
+    if(!powerUpUIBox){
+            Debug.LogWarning("O nosso SkilltreeManagerUi não tem referencia da caixa do powerUp");
+        }
+        else{
+            DeactivatePowerUpDescriptionBox();
+        }
+        if(!painelSkillTree){
+            Debug.LogWarning("O nosso SkilltreeManagerUi não tem referencia ao painel de skill");
+        }
+        else{
+            painelSkillTree.SetActive(false);
+            painelSkillTreeIsOpen=false;
+        }
+    }
+    public void AlternarPainelSkillTree(){//Abre e fecha o painel
+        if(painelSkillTreeIsOpen){
+            painelSkillTree.SetActive(false);
+            painelSkillTreeIsOpen=false;
+            DeactivatePowerUpDescriptionBox();
+        }
+        else{
+            AjustButtonsSprites();
+            AjustText();
+            painelSkillTree.SetActive(true);
+            painelSkillTreeIsOpen=true;
+        }
+    }
+    public void AjustButtonsSprites(){
+        foreach(SkillNodeUI skillNode in powerUpNodes){
+            int id = skillNode.powerUp.Id;
+            if(buyablePowerUps[id]){
+                skillNode.button.interactable=true;
+            }
+            else{
+                skillNode.button.interactable=false;
+            }
+            if(boughtPowerUps[id]){
+                powerUpNodes[id].button.interactable = true;
+                skillNode.button.image.sprite=skillNode.powerUpBoughtSprite;
+            }
+        }
+    }
+    public void AjustBuy(int id){
+        boughtPowerUps[id]=true;
+        powerUpNodes[id].button.interactable=true;
+        powerUpNodes[id].button.image.sprite=powerUpNodes[id].powerUpBoughtSprite;
+    }
+    public void AjustBuyable(int id){
+        buyablePowerUps[id]=true;
+        powerUpNodes[id].button.interactable=true;
+    }
+    
+    public void AjustText(){
+        tmpCoinsHonor.text = textCoinHonor + " " + currentMoney[0].ToString();
+        tmpCoinsCorruption.text = textCoinCorruption + " " + currentMoney[1].ToString();
+    }
+    private void ChangeMoney(int index,int value){
+        currentMoney[index]=value;
+        AjustText();
+    } 
+}

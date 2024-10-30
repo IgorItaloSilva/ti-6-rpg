@@ -43,8 +43,8 @@ public class PlayerStatsData
         this.inte = playerStats.Int;
         this.exp = playerStats.Exp;
         this.level = playerStats.Level;
-        this.vidaAtual = playerStats.VidaAtual;
-        this.vidaBase = playerStats.VidaBase;
+        this.vidaAtual = playerStats.CurrentLife;
+        this.vidaBase = playerStats.BaseLife;
     }
     public PlayerStatsData(int con, int str,int dex, int inte, float exp, float level, float vidaAtual,float vidaBase){
         this.con = con;
