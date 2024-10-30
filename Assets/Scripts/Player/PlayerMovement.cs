@@ -21,11 +21,11 @@ public class PlayerMovement : MonoBehaviour
     [Header("Input: ")] 
     
     private PlayerInput playerInput;
-    private float _turnSmoothSpeed, _gravity, _initialJumpVelocity;
-    private const float MaxJumpHeight = 0.6f, MaxJumpTime = .65f, MoveSpeed = 10f, SprintSpeedModifier = 2f, GroundedGravity = -0.05f, TurnTime = 0.1f;
+    private float _turnSmoothSpeed, _gravity, _initialJumpVelocity, _turnTime = TurnTime;
+    private const float MaxJumpHeight = .6f, MaxJumpTime = .75f, MoveSpeed = 10f, SprintSpeedModifier = 2f, DodgeSpeedMultiplier = 4f, GroundedGravity = -0.05f, TurnTime = 0.15f, SprintTurnTimeModifier = 3f;
     private Vector3 _currentMovement;
     private Vector2 _currentMovementInput;
-    private bool _hasJumped, _isMovementPressed, _isSprintPressed, _isJumpPressed, _isJumping;
+    private bool _hasJumped, _isMovementPressed, _isSprintPressed, _isJumpPressed, _isJumping, _isDodgePressed, _isDodging;
 
     [SerializeField] private LayerMask groundLayers;
 
@@ -41,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
         playerInput.Gameplay.Sprint.canceled += Sprint;
         playerInput.Gameplay.Jump.started += Jump;
         playerInput.Gameplay.Jump.canceled += Jump;
+        playerInput.Gameplay.Dodge.started += Dodge;
     }
 
     private void OnMovementPressed(InputAction.CallbackContext context)
@@ -71,6 +72,11 @@ public class PlayerMovement : MonoBehaviour
         _isJumpPressed = context.ReadValueAsButton();
     }
 
+    private void Dodge(InputAction.CallbackContext context)
+    {
+        _isDodgePressed = context.ReadValueAsButton();
+    }
+    
     #endregion
 
     #region Awake
@@ -119,12 +125,30 @@ public class PlayerMovement : MonoBehaviour
         switch (_isJumpPressed)
         {
             case true when !_isJumping && cc.isGrounded:
+                _turnTime = TurnTime * SprintTurnTimeModifier;
                 _isJumping = true;
                 _currentMovement.y += _initialJumpVelocity * 0.5f;
                 break;
             case false when _isJumping && cc.isGrounded:
+                _turnTime = TurnTime;
                 _isJumping = false;
                 break;
+        }
+    }
+
+    private async void ResetDodge(int ms = 150)
+    {
+        await Task.Delay(ms);
+        _isDodgePressed = false;
+        _isDodging = false;
+    }
+    
+    private void HandleDodge()
+    {
+        if (_isDodgePressed && (!_isSprintPressed && !_isDodging && !_isJumping && cc.isGrounded))
+        {
+            _isDodging = true;
+            ResetDodge();
         }
     }
 
@@ -135,10 +159,20 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleMove()
     {
-        if (_isSprintPressed && _isMovementPressed)
+        if ((_isSprintPressed || !cc.isGrounded) && _isMovementPressed)
         {
-            _currentMovement.x = transform.forward.x * SprintSpeedModifier;
-            _currentMovement.z = transform.forward.z * SprintSpeedModifier;
+            _currentMovement.x = _isSprintPressed ? transform.forward.x * SprintSpeedModifier : transform.forward.x;
+            _currentMovement.z = _isSprintPressed ? transform.forward.z * SprintSpeedModifier : transform.forward.z;
+            _turnTime = TurnTime * SprintTurnTimeModifier;
+        }
+        else if (_isDodging)
+        {
+            _currentMovement.x *= DodgeSpeedMultiplier;
+            _currentMovement.z *= DodgeSpeedMultiplier;
+        }
+        else
+        {
+            _turnTime = TurnTime;
         }
         // Aplicar direção e rotação só caso o player esteja se movendo
         cc.Move(_currentMovement * (MoveSpeed * Time.deltaTime));
@@ -160,7 +194,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
         var turnOrientation = Mathf.Atan2(_currentMovementInput.x, _currentMovementInput.y) * Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
-        var smoothedTurnOrientation = Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref _turnSmoothSpeed, TurnTime);
+        var smoothedTurnOrientation = Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref _turnSmoothSpeed, _turnTime);
 
         if (!_isMovementPressed) return;
         // Aplicar movimentação multiplicando pela velocidade do player:
@@ -175,10 +209,10 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         HandleRotation();
+        HandleDodge();
         HandleMove();
         HandleGravity();
         HandleJump();
-
     }
     
     #endregion
