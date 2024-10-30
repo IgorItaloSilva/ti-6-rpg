@@ -8,10 +8,14 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
     [Header("Outros scripts de UI")]
+    public SkillTreeUIManager skillTreeUIManager;
+    public StatsUIManager statsUIManager;
+    [Header("Referencias Internas")]
     [SerializeField]private Slider lifeSlider;
     [SerializeField]private Image saveIcon;
     [SerializeField]private GameObject painelPause;
-    public SkillTreeUIManager skillTreeUIManager;
+    [SerializeField]private GameObject painelStats;
+    [SerializeField]private GameObject hideblePartUI;
     private UIScreens currentUIScreen;
     public enum UIScreens{
         Closed = -1,
@@ -51,6 +55,10 @@ public class UIManager : MonoBehaviour
             Debug.Log("o skillTreeUIManager está vazio");
             skillTreeUIManager=GetComponent<SkillTreeUIManager>();
         }
+        if(!statsUIManager){
+            Debug.Log("o statsUiManager está vazio");
+            statsUIManager=GetComponent<StatsUIManager>();
+        }
         currentUIScreen = UIScreens.Closed;
         AjustUiOnStart();
     }
@@ -64,8 +72,6 @@ public class UIManager : MonoBehaviour
                 SwitchToScreen((int)UIScreens.MainPause);
             }else 
             if(currentUIScreen == UIScreens.MainPause){
-                //Mudar isso quando começar a usar um game manager. Essa função deveria fazer só a parte da UI,
-                //Mudar a time scale não é responsabilidade de um manager de UI
                 SwitchToScreen((int)UIScreens.Closed);
             }
             else{
@@ -135,6 +141,7 @@ public class UIManager : MonoBehaviour
         Cursor.lockState=CursorLockMode.Confined;
         Cursor.visible=true;
         painelPause.SetActive(true);
+        hideblePartUI.SetActive(true);
     }
     private void AjustUiOnStart(){
         if(!painelPause){
@@ -145,17 +152,22 @@ public class UIManager : MonoBehaviour
             currentUIScreen=UIScreens.Closed;
         }
         skillTreeUIManager?.AjustUiOnStart();
+        painelStats.SetActive(false);
     }
     public void SwitchToScreen(int destinationUiScreen){
         Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");
         //desativa a tela atual
         switch(currentUIScreen){
             case UIScreens.Closed: break;
-            case UIScreens.MainPause: break;
+            case UIScreens.MainPause:
+                hideblePartUI.SetActive(false);
+            break;
+            case UIScreens.Stats:
+                painelStats.SetActive(false);
+            break;
             case UIScreens.SkillTree:
                 skillTreeUIManager?.AlternarPainelSkillTree();
             break;
-            case UIScreens.Stats: break;
             case UIScreens.Weapon: break;
             case UIScreens.System: break;
             default: Debug.LogWarning("A tela atual é indefinida"); break;
@@ -175,7 +187,9 @@ public class UIManager : MonoBehaviour
                 skillTreeUIManager?.AlternarPainelSkillTree();
                 currentUIScreen=UIScreens.SkillTree; 
             break;
-            case UIScreens.Stats: 
+            case UIScreens.Stats:
+                painelStats.SetActive(true);
+                statsUIManager.UpdateValues();
                 currentUIScreen=UIScreens.Stats;
             break;
             case UIScreens.Weapon: 

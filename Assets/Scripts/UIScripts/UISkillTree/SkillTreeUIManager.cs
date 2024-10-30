@@ -38,9 +38,10 @@ public class SkillTreeUIManager : MonoBehaviour
         }
         AjustUiOnStart();
         int quantidadePowerUps = powerUpNodes.Count();
+        /* ESSES MANOS VÃO SER CRIADOS NO LOAD DO SKILL TREE, QUE OCORRE ANTES DO START
         buyablePowerUps = new bool[quantidadePowerUps];
         boughtPowerUps = new bool[quantidadePowerUps];
-        currentMoney = new int[Enum.GetNames(typeof(Enums.PowerUpType)).Length];
+        currentMoney = new int[Enum.GetNames(typeof(Enums.PowerUpType)).Length]; */
     }
     public void OnEnable(){
         GameEventsManager.instance.skillTreeEvents.onUnlockBuy+=AjustBuyable;
@@ -111,11 +112,17 @@ public class SkillTreeUIManager : MonoBehaviour
         }
     }
     public void AjustBuy(int id){
+        if(boughtPowerUps==null){
+            boughtPowerUps = new bool[powerUpNodes.Count()];
+        }
         boughtPowerUps[id]=true;
         powerUpNodes[id].button.interactable=true;
         powerUpNodes[id].button.image.sprite=powerUpNodes[id].powerUpBoughtSprite;
     }
     public void AjustBuyable(int id){
+        if(buyablePowerUps==null){
+            buyablePowerUps=new bool[powerUpNodes.Count()];
+        }
         buyablePowerUps[id]=true;
         powerUpNodes[id].button.interactable=true;
     }
@@ -125,6 +132,9 @@ public class SkillTreeUIManager : MonoBehaviour
         tmpCoinsCorruption.text = textCoinCorruption + " " + currentMoney[1].ToString();
     }
     private void ChangeMoney(int index,int value){
+        if(currentMoney==null){
+            currentMoney=new int[Enum.GetNames(typeof(Enums.PowerUpType)).Length];
+        }
         currentMoney[index]=value;
         AjustText();
     } 
