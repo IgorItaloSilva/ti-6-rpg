@@ -5,12 +5,12 @@ public abstract class AEnemyAction
 {
 
     protected Rigidbody rb; // Rigidbody do personagem atual
-    protected EnemyController enemyController; // Script que está executando esta ação
+    protected OldEnemyController enemyController; // Script que está executando esta ação
     protected Transform target;
     protected float minDistanceSkill;
 
 
-    public virtual void StartAction(EnemyController enemyController) // Metodo inicial para ações de ataque (Definir na nova ação qual )
+    public virtual void StartAction(OldEnemyController enemyController) // Metodo inicial para ações de ataque (Definir na nova ação qual )
     {
         rb = enemyController.GetRB(); // Declara Rigidbody do personagem
         target = enemyController.GetTarget();
