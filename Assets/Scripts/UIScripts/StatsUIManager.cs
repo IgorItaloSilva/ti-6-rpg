@@ -4,13 +4,14 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using Unity.VisualScripting;
 
 public class StatsUIManager : MonoBehaviour
 {
     [Header("Stats Base")]
     [SerializeField]TextMeshProUGUI con;
-    [SerializeField]TextMeshProUGUI str;
     [SerializeField]TextMeshProUGUI dex;
+    [SerializeField]TextMeshProUGUI str;
     [SerializeField]TextMeshProUGUI inte;
     [Header("Exp e Level")]
     [SerializeField]Slider expSlider;
@@ -23,6 +24,12 @@ public class StatsUIManager : MonoBehaviour
     [SerializeField]TextMeshProUGUI ligthAttackDamage;
     [SerializeField]TextMeshProUGUI heavyAtackDamage;
     [SerializeField]TextMeshProUGUI magicAttackDamage;
+    [Header("Coisas Level Up")]
+    [SerializeField]GameObject levelUpStuff;
+    [SerializeField]TextMeshProUGUI pointsToSpend;
+    [Header("Cor dos Textos")]
+    [SerializeField]Color textColor = Color.white;
+    public bool isSimulating{get;private set;}
 
     
     void Start()
@@ -34,11 +41,17 @@ public class StatsUIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onReviceBaseStatsInfo+=ReciveBaseStatsInfo;
         GameEventsManager.instance.uiEvents.onReviceExpStatsInfo+=ReciveExpStatsInfo;
         GameEventsManager.instance.uiEvents.onReviceAdvancedStatsInfo+=ReciveAdvancedStatsInfo;
+        GameEventsManager.instance.uiEvents.onSimulateChangeBaseValue+=SimulateChangeBaseStat;
+        GameEventsManager.instance.uiEvents.onSimulateChangeAdvancedValue+=SimulateChangeAdvancedValue;
+        GameEventsManager.instance.uiEvents.onReciveLevelUpInfo+=ReciveLevelUpInfo;
     }
     void OnDisable(){
         GameEventsManager.instance.uiEvents.onReviceBaseStatsInfo-=ReciveBaseStatsInfo;
         GameEventsManager.instance.uiEvents.onReviceExpStatsInfo-=ReciveExpStatsInfo;
         GameEventsManager.instance.uiEvents.onReviceAdvancedStatsInfo-=ReciveAdvancedStatsInfo;
+        GameEventsManager.instance.uiEvents.onSimulateChangeBaseValue-=SimulateChangeBaseStat;
+        GameEventsManager.instance.uiEvents.onSimulateChangeAdvancedValue-=SimulateChangeAdvancedValue;
+        GameEventsManager.instance.uiEvents.onReciveLevelUpInfo-=ReciveLevelUpInfo;
     }
     public void UpdateValues(){
         RequestAllStatsInfo();
@@ -49,6 +62,11 @@ public class StatsUIManager : MonoBehaviour
         this.str.text=str.ToString();
         this.dex.text=dex.ToString();
         this.inte.text=inte.ToString();
+        //Set cores
+        this.con.color = textColor;
+        this.str.color = textColor;
+        this.dex.color = textColor;
+        this.inte.color = textColor;
     }
     void ReciveExpStatsInfo(int level,float currentExp){
         this.level.text=level.ToString();
@@ -65,16 +83,95 @@ public class StatsUIManager : MonoBehaviour
         magicAttackDamage.text = magicDamage.ToString("F0");
         this.ligthAttackDamage.text = ligthAttackDamage.ToString("F0");
         this.heavyAtackDamage.text = heavyAtackDamage.ToString("F0");
+        //Set cores
+        lifeInfo.color = textColor;
+        manaInfo.color = textColor;
+        magicAttackDamage.color = textColor;
+        this.ligthAttackDamage.color = textColor;
+        this.heavyAtackDamage.color = textColor;
+    }
+    void ReciveLevelUpInfo(int pointsToSpend,bool isNearCampfire){
+        if(isNearCampfire){
+            levelUpStuff.SetActive(true);
+            this.pointsToSpend.text = pointsToSpend.ToString();
+        }
+        else{
+            levelUpStuff.SetActive(false);
+        }
     }
     void RequestAllStatsInfo(){
         GameEventsManager.instance.uiEvents.RequestBaseStatsInfo();
         GameEventsManager.instance.uiEvents.RequestExpStatsInfo();
         GameEventsManager.instance.uiEvents.RequestAdvancedStatsInfo();
+        GameEventsManager.instance.uiEvents.RequestLevelUpInfo();
     }
     int ExpToNextLevel(int level){
         if(level==0){
             return 0;
         }
         return 100*(int)MathF.Pow(2,(level-1));
+    }
+    //COISAS DO LEVEL UP
+    public void SimulateChangeBaseStat(int id,int newValue,bool isDifferent){
+        Color aux = isDifferent ? Color.green : textColor;
+        switch(id){
+            case 0:
+                this.con.text=newValue.ToString();
+                this.con.color = aux;
+            break;
+            case 1:
+                this.dex.text=newValue.ToString();
+                this.dex.color = aux;
+            break;
+            case 2:
+                this.str.text=newValue.ToString();
+                this.str.color = aux;
+            break;
+            case 3:
+                this.inte.text=newValue.ToString();
+                this.inte.color = aux;
+            break;
+        }
+    }
+    public void SimulateChangeAdvancedValue(int hardcodedId,float currentLifeOrMana,float value,bool isDifferent){
+        Color aux = isDifferent ? Color.green : textColor;
+        switch(hardcodedId){
+            case 0:
+                lifeInfo.text = currentLifeOrMana.ToString("F0") + "/" + value.ToString("F0");
+                lifeInfo.color = aux;
+            break;
+            case 1:
+                manaInfo.text = currentLifeOrMana.ToString("F0") + "/" + value.ToString("F0");
+                manaInfo.color = aux;
+            break;
+            case 2:
+                this.ligthAttackDamage.text = value.ToString("F0");
+                this.ligthAttackDamage.color = aux;
+            break;
+            case 3:
+                this.heavyAtackDamage.text = value.ToString("F0");
+                this.heavyAtackDamage.color = aux;
+            break;
+            case 4:
+                magicAttackDamage.text = value.ToString("F0");
+                magicAttackDamage.color = aux;
+            break;
+        }
+    }
+    public void IncreaseStatusButtonPressed(int statusId){
+        isSimulating=true;
+        GameEventsManager.instance.uiEvents.ChangeStatusButtonPressed(statusId,true);
+    }
+    public void DecreaseStatusButtonPressed(int statusId){
+        isSimulating=true;
+        GameEventsManager.instance.uiEvents.ChangeStatusButtonPressed(statusId,false);
+    }
+    public void ConfirmLevelUp(){
+        isSimulating=false;
+        GameEventsManager.instance.uiEvents.ConfirmLevelUp();
+    }
+    public void CancelSimulation(){
+        isSimulating=false;
+        GameEventsManager.instance.uiEvents.DiscardLevelUp();
     }
 }
