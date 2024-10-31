@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class AEnemyBehave : MonoBehaviour
 {
-    protected EnemyController enemyController; // Controlador deste personagem
+    protected OldEnemyController enemyController; // Controlador deste personagem
     protected List<AEnemyAction> actionList = new List<AEnemyAction>();
     protected List<AEnemyAction> actionsCanUse = new List<AEnemyAction>();
 
@@ -12,7 +12,7 @@ public abstract class AEnemyBehave : MonoBehaviour
     protected bool haveToRest;
 
 
-    public void StartBehave(EnemyController enemyController, out AEnemyAction action) // Definir Corpo do cerebro
+    public void StartBehave(OldEnemyController enemyController, out AEnemyAction action) // Definir Corpo do cerebro
     {
         this.enemyController = enemyController; // Define o controlador deste personagem
         SetActions();

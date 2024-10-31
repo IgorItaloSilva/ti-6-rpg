@@ -8,7 +8,7 @@ public class BotTestTurn : AEnemyAction
     Quaternion thisRotation;
 
 
-    public override void StartAction(EnemyController _enemyBehave)
+    public override void StartAction(OldEnemyController _enemyBehave)
     {
         base.StartAction(_enemyBehave);
         enemyController.SetBoolAnimation("isTurning", true);

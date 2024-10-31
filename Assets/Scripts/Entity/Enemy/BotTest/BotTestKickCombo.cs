@@ -11,7 +11,7 @@ public class BotTestKickCombo : AEnemyAction
     }
 
 
-    public override void StartAction(EnemyController enemyController)
+    public override void StartAction(OldEnemyController enemyController)
     {
         base.StartAction(enemyController);
         base.enemyController.SetBoolAnimation("isAttacking", true);

@@ -30,7 +30,7 @@ public class BotTestBehave : AEnemyBehave
             action = actionList[0];
             action.SetRestTime(UnityEngine.Random.Range(1.5f, 2.5f));
         }
-        else if (Vector3.Angle(enemyController.transform.forward, dir) > 130f)
+        else if (Vector3.Angle(enemyController.transform.forward, dir) > 130f) // Virar personagem para o jogador
             action = actionList[2];
         else if (Vector3.Distance(transform.position, enemyController.GetTarget().position) > actionsCanUse[0].GetMinDistanceSkill())
         {
