@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 662831836097041185}
   - component: {fileID: 7001136559969210805}
   - component: {fileID: 5662855281143258581}
-  - component: {fileID: 5265557136131009417}
-  - component: {fileID: 5329936054282224580}
   - component: {fileID: 8532838021014001503}
   - component: {fileID: 7917478016269853345}
   m_Layer: 9
@@ -52,11 +50,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef276a02aef059042b5df3311c68059e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 5265557136131009417}
-  playerMesh: {fileID: 0}
+  rb: {fileID: 0}
+  cinemachine: {fileID: 0}
   cc: {fileID: 8532838021014001503}
-  col: {fileID: 5329936054282224580}
-  physicMat: {fileID: 0}
+  col: {fileID: 0}
   playerInput: {fileID: 5662855281143258581}
   moveAction:
     m_Name: Move
@@ -173,56 +170,6 @@ MonoBehaviour:
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!54 &5265557136131009417
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 16883978931624676}
-  serializedVersion: 4
-  m_Mass: 10
-  m_Drag: 1
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 0
---- !u!136 &5329936054282224580
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 16883978931624676}
-  m_Material: {fileID: 13400000, guid: 67b2d4efd19518742954a91666e53dc8, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!143 &8532838021014001503
 CharacterController:
   m_ObjectHideFlags: 0

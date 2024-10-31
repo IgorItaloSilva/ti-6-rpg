@@ -5,6 +5,7 @@ using UnityEngine;
 public class WeaponManager : MonoBehaviour
 {
     private float damage;
+    [SerializeField] Enums.DamageType damageType;
     [SerializeField]private float strModifier = 0.5f;
     [SerializeField]private float dexModifier = 0.1f;
     [SerializeField]private float baseDamage = 10f;
@@ -29,7 +30,7 @@ public class WeaponManager : MonoBehaviour
         if(damagedTargets.Contains(alvo)){
             return;
         }
-        alvo.TakeDamage(damage);
+        alvo.TakeDamage(damage,damageType);
         Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
         damagedTargets.Add(alvo);
     }

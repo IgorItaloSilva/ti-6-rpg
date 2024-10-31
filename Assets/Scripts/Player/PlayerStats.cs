@@ -15,54 +15,91 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         POSSIVELMENTE ADICIONAR MANA E STAMINA AINDA
     */
     //Esses valores estão aqui para testes, depeois de definidos eles devem ser colocados no scriptableObjects
-    [SerializeField]float vidaModCons;
+    [SerializeField]float vidaConsMod;
+    [SerializeField]float manaIntMod;
+    [SerializeField]float magicDamageMod;
+    [SerializeField]float lightAttackDamageMod;
+    [SerializeField]float heavyAttackDamageMod;
     public int Con {get; private set;}
     public int Str {get; private set;}
     public int Dex {get; private set;}
     public int Int {get; private set;}
     public float Exp {get; private set;}
-    public float Level {get; private set;}
-    public float VidaAtual{get; private set;}
-    public float VidaBase{get;private set;}
-    private float vidaMax;//testar com valores 1000 + 25*Con
+    public int Level {get; private set;}
+    public float CurrentLife{get; private set;}
+    public float CurrentMana{get; private set;}
+    public float BaseLife{get;private set;}
+    public float BaseMana{get;private set;}
+    public float BaseMagicDamage{get;private set;}
+    public float BaseLightAttackDamage{get;private set;}
+    public float BaseHeavyAttackDamage{get;private set;}
+    private float maxLife;//testar com valores 1000 + 25*Con
+    private float maxMana;
+    float magicDamage;
+    float lightAttackDamage;
+    float heavyAttackDamage;
     private PlayerStatsData statsLoadados; 
-    // Start is called before the first frame update
+    //CONTROLES DOS POWER UPS
+    private bool PUArmorActive;
+    private bool PULifeRegenActive;
+    //Coisas de level up
+    public int levelUpPoints{get;private set;}//adicionar no save/load depois
+    private int spentPointsIfCancel;
+    public int[] simulatedStatChange;
+    public bool IsNearCampfire ;//{get;private set;}//adicionar no save/load depois
     void Start()
     {
-        vidaMax = VidaBase + vidaModCons * Con;
-        GameEventsManager.instance.uiEvents.UpdateSliders(0,0,vidaMax);//Essas duas funções deveriam ser chamadas
-        GameEventsManager.instance.uiEvents.LifeChange(VidaAtual);//             pra stamina e mana tambem
+        levelUpPoints=3;
+        IsNearCampfire=true;
+        simulatedStatChange = new int[4];
+        CalculateStats();
+        GameEventsManager.instance.uiEvents.UpdateSliders(0,0,maxLife);//Essas duas funções deveriam ser chamadas
+        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);//             pra stamina e mana tambem
+    }
+    void OnEnable(){
+        GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo+=SendBaseStatsInfo;
+        GameEventsManager.instance.uiEvents.onRequestExpStatsInfo+=SendExpStatsInfo;
+        GameEventsManager.instance.uiEvents.onRequestAdvancedStatsInfo+=SendAdvancedStatsInfo;
+        GameEventsManager.instance.uiEvents.onRequestLevelUpInfo+=SendLevelUpInfo;
+        GameEventsManager.instance.uiEvents.onChangeStatusButtonPressed+=SimulateStatusBuyOrSell;
+        GameEventsManager.instance.uiEvents.onConfirmLevelUp+=ConfirmChanges;
+        GameEventsManager.instance.uiEvents.onDiscardLevelUp+=DiscardChanges;
+    }
+    void OnDisable(){
+        GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo-=SendBaseStatsInfo;
+        GameEventsManager.instance.uiEvents.onRequestExpStatsInfo-=SendExpStatsInfo;
+        GameEventsManager.instance.uiEvents.onRequestAdvancedStatsInfo-=SendAdvancedStatsInfo;
+        GameEventsManager.instance.uiEvents.onRequestLevelUpInfo-=SendLevelUpInfo;
+        GameEventsManager.instance.uiEvents.onChangeStatusButtonPressed-=SimulateStatusBuyOrSell;
+        GameEventsManager.instance.uiEvents.onConfirmLevelUp-=ConfirmChanges;
+        GameEventsManager.instance.uiEvents.onDiscardLevelUp+=DiscardChanges;
     }
 
     // Update is called once per frame
     void Update()
     {
-        GameEventsManager.instance.uiEvents.UpdateSliders(0,0,vidaMax);//Essas duas funções deveriam ser chamadas
-        GameEventsManager.instance.uiEvents.LifeChange(VidaAtual);
+        GameEventsManager.instance.uiEvents.UpdateSliders(0,0,maxLife);//Essas duas funções deveriam ser chamadas
+        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
     }
-    public void TomarDano(float dano){
-        VidaAtual -= dano;
-        GameEventsManager.instance.uiEvents.LifeChange(VidaAtual);
-        if(VidaAtual<=0){
-            Morrer();
+    public void TakeDamage(float dano){
+        CurrentLife -= dano;
+        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
+        if(CurrentLife<=0){
+            Die();
         }
     }
-    public void CurarVida(float vida){
-        if(VidaAtual<vidaMax){
-            VidaAtual += vida;
-            if(VidaAtual>vidaMax)VidaAtual=vidaMax;
-            GameEventsManager.instance.uiEvents.LifeChange(VidaAtual);
+    public void HealLife(float life){
+        if(CurrentLife<maxLife){
+            CurrentLife += life;
+            if(CurrentLife>maxLife)CurrentLife=maxLife;
+            GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
         }
         
     }
-    private void Morrer(){
+    private void Die(){
         GameEventsManager.instance.playerEvents.PlayerDied();
         //Adicionar logica de reload
         //Aviso de UI
-    }
-    public void DisplayStats(){
-        //provavelmente vou mudar essa função e esse event como um todo
-        GameEventsManager.instance.uiEvents.StatsDisplay(Con,Str,Dex,Int,Level,Exp);
     }
     public void SaveData(GameData data){
         PlayerStatsData playerStatsData = new PlayerStatsData(this);
@@ -74,16 +111,137 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         this.Int = data.playerStatsData.inte;
         this.Exp = data.playerStatsData.exp;
         this.Level = data.playerStatsData.level;
-        this.VidaAtual = data.playerStatsData.vidaAtual;
-        this.VidaBase = data.playerStatsData.vidaBase;
-        UpdateStatusEvent();
+        this.CurrentLife = data.playerStatsData.currentLife;
+        this.BaseLife = data.playerStatsData.baseLife;
+        this.BaseMana = data.playerStatsData.baseMana;
+        this.CurrentMana = data.playerStatsData.currentMana;
+        this.BaseMagicDamage = data.playerStatsData.baseMagicDamage;
+        this.BaseLightAttackDamage = data.playerStatsData.baseLightAttackcDamage;
+        this.BaseHeavyAttackDamage = data.playerStatsData.baseHeavyAttackDamage;
+        CalculateStats();
     }
-    private void UpdateStatusEvent(){
-        //GameEventsManager.instance.playerEvents.onStatusChanged
-    }
-
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage,Enums.DamageType damageType)
     {
-        TomarDano(damage);
+        if(PUArmorActive) damage/=2;
+        TakeDamage(damage);
+    }
+    private void ActivatePowerUp(int id){//OBS OS IDS SÃO HARD CODED, SE MUDAR A ORDEM DELES PRECISA MUDAR AQUI!!!!!!!
+        switch(id){
+            case 3: PUArmorActive=true;Debug.Log("Ativei o powerUp armor");break;
+            case 7: PULifeRegenActive=true;InvokeRepeating("LifeRegenPowerUp",0f,5f);Debug.Log("Ativei o powerUp 7"); break;
+            default: break;
+        }
+    }
+    private void LifeRegenPowerUp(){
+        if(PUArmorActive){
+            if(CurrentLife<maxLife){
+                float lifeMissing = maxLife-CurrentLife;
+                float healRatio = lifeMissing/10;
+                if(healRatio<50f)lifeMissing=50f;
+                HealLife(healRatio);
+            }
+        }
+    }
+    void CalculateStats(){
+        maxLife = BaseLife + vidaConsMod * (Con-10);
+        maxMana = BaseMana + manaIntMod * (Int-10);
+        magicDamage = BaseMagicDamage + magicDamageMod * (Int-10);
+        lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10);
+        heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10);
+    }
+    //ADICIONAR COISAS DE GANHAR EXP E LEVEL UP
+    // EXP PARA O PROXIMO NIVEL = 100*2^(L-1) onde L é o nivel atual
+    //FUNCÕES PARA ENVIAR OS EVENTOS
+    void SendBaseStatsInfo(){
+        GameEventsManager.instance.uiEvents.ReciveBaseStatsInfo(Con,Str,Dex,Int);
+    }
+    void SendExpStatsInfo(){
+        GameEventsManager.instance.uiEvents.ReciveExpStatsInfo(Level,Exp);
+    }
+    void SendAdvancedStatsInfo(){
+        GameEventsManager.instance.uiEvents.ReciveAdvancedStatsInfo(CurrentLife,maxLife,CurrentMana,maxMana,magicDamage
+        ,lightAttackDamage,heavyAttackDamage);
+    }
+    void SendLevelUpInfo(){
+        GameEventsManager.instance.uiEvents.ReciveLevelUpInfo(levelUpPoints,IsNearCampfire);
+    }
+    //Coisas de level up
+    public void SimulateStatusBuyOrSell(int statusId,bool isBuying){
+        
+        if(isBuying){
+            if(levelUpPoints<=0)return;
+            simulatedStatChange[statusId]++;
+            levelUpPoints--;
+            spentPointsIfCancel++;
+        }
+        else{
+            if(simulatedStatChange[statusId]<1)return;
+            simulatedStatChange[statusId]--;
+            levelUpPoints++;
+            spentPointsIfCancel--;
+        }
+        SendLevelUpInfo();
+        SimulateStatusChange(statusId);
+        
+    }
+    void SimulateStatusChange(int id){
+        int displayValue = 0;
+        bool isDifferent = (simulatedStatChange[id]!=0) ? true:false;
+        switch(id){
+            case 0:
+                displayValue = Con+simulatedStatChange[id];
+            break;
+            case 1:
+                displayValue = Dex+simulatedStatChange[id];
+            break;
+            case 2:
+                displayValue = Str+simulatedStatChange[id];
+            break;
+            case 3:
+                displayValue = Int+simulatedStatChange[id];
+            break;
+        }
+        GameEventsManager.instance.uiEvents.SimulateChangeBaseValue(id,displayValue,isDifferent);
+        CalculateAdvancedInfoAndSend(id);
+    }
+    void CalculateAdvancedInfoAndSend(int id){
+        bool isDifferent = (simulatedStatChange[id]!=0) ? true:false;
+        switch(id){
+            case 0:
+                float simuMaxLife = BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10);
+                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(0,CurrentLife,simuMaxLife,isDifferent);
+            break;
+            case 1:
+                float simuLightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex+simulatedStatChange[1]-10);
+                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(2,0,simuLightAttackDamage,isDifferent);
+            break;
+            case 2:
+                float simuHeavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str+simulatedStatChange[2]-10);
+                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(3,0,simuHeavyAttackDamage,isDifferent);
+            break;
+            case 3:
+            int newIntValue = Int+simulatedStatChange[3];
+                float simuMaxMana = BaseMana + manaIntMod * newIntValue-10;
+                float simuMagicDamage = BaseMagicDamage + magicDamageMod * newIntValue-10;
+                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(1,CurrentMana,simuMaxMana,isDifferent);
+                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(4,0,simuMagicDamage,isDifferent);
+            break;
+        }
+    }
+    void ConfirmChanges(){
+        Con+=simulatedStatChange[0];
+        Dex+=simulatedStatChange[1];
+        Str+=simulatedStatChange[2];
+        Int+=simulatedStatChange[3];
+        CalculateStats();
+        SendBaseStatsInfo();
+        SendAdvancedStatsInfo();
+        for(int i=0;i<simulatedStatChange.Length;i++)simulatedStatChange[i]=0;
+        spentPointsIfCancel=0;
+        SendLevelUpInfo();
+    }
+    void DiscardChanges(){
+        levelUpPoints= levelUpPoints+spentPointsIfCancel;
+        spentPointsIfCancel=0;
     }
 }
