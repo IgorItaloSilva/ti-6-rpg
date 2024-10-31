@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class EnemyController : MonoBehaviour//, IEnemyBehave
+public class OldEnemyController : MonoBehaviour//, IEnemyBehave
 {
     Rigidbody rb;
     Animator animator;
@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour//, IEnemyBehave
     public void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
+        animator = transform.GetChild(0).GetComponent<Animator>();
 
         enemyBehave = GetComponent<AEnemyBehave>(); // Declara o "Cérebro" do persoangem
 
@@ -31,7 +31,7 @@ public class EnemyController : MonoBehaviour//, IEnemyBehave
 
     public void ChangeAction(bool haveToRest) // Muda a ação atual o personagem
     {
-        enemyBehave.Think(out currentAction, haveToRest);
+        enemyBehave.Think(out currentAction, haveToRest); // 
         currentAction.StartAction(this);
     }
 

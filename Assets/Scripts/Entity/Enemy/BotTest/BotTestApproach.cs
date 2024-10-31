@@ -8,13 +8,11 @@ public class BotTestApproach : AEnemyAction
         base.SetDistance(distance);
     }
 
-    public override void StartAction(EnemyController enemyController)
+    public override void StartAction(OldEnemyController enemyController)
     {
         base.StartAction(enemyController);
         base.enemyController.SetBoolAnimation("isRunning", true);
         Debug.Log("Approach: " + minDistanceSkill);
-        
-
     }
 
     public override void UpdateAction()

@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-[CustomEditor(typeof(EnemyController))]
+[CustomEditor(typeof(OldEnemyController))]
 public class EnemyDebug : Editor
 {
     SerializedProperty _meleeDistance, _target;

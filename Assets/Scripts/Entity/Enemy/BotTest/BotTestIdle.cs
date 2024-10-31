@@ -12,7 +12,7 @@ public class BotTestIdle : AEnemyAction
         Debug.Log("First rest time: " + this.restTime);
     }
 
-    public override void StartAction(EnemyController enemyController)
+    public override void StartAction(OldEnemyController enemyController)
     {
         base.StartAction(enemyController);
         enemyController.SetBoolAnimation("isIdle", true);
