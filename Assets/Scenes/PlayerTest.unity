@@ -641,7 +641,7 @@ Transform:
   m_GameObject: {fileID: 299110837}
   serializedVersion: 2
   m_LocalRotation: {x: -0.17864671, y: -0, z: -0, w: 0.98391324}
-  m_LocalPosition: {x: -3.38, y: 0.04, z: 29.065}
+  m_LocalPosition: {x: -3.38, y: 2.8485122, z: 28.010363}
   m_LocalScale: {x: 5.9444, y: 1.8680276, z: 23.332365}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7730,15 +7730,35 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1696352076512791695, guid: 1ae40b0921877c044b5b1b90b61b2d2d,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1696352076512791695, guid: 1ae40b0921877c044b5b1b90b61b2d2d,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4076712267597108442, guid: 1ae40b0921877c044b5b1b90b61b2d2d,
         type: 3}
       propertyPath: m_Name
       value: KitsuneYoukai
       objectReference: {fileID: 0}
+    - target: {fileID: 4487709221595037693, guid: 1ae40b0921877c044b5b1b90b61b2d2d,
+        type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 9152078400359845202}
+    - target: {fileID: 4487709221595037693, guid: 1ae40b0921877c044b5b1b90b61b2d2d,
+        type: 3}
+      propertyPath: sliderVida
+      value: 
+      objectReference: {fileID: 1914410599}
     - target: {fileID: 4662567408962748495, guid: 1ae40b0921877c044b5b1b90b61b2d2d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3.75
       objectReference: {fileID: 0}
     - target: {fileID: 4662567408962748495, guid: 1ae40b0921877c044b5b1b90b61b2d2d,
         type: 3}
@@ -8574,6 +8594,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e5ad875e0f38c747bebbdea20e1f15b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1914410599 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1431798584336282613, guid: 1ae40b0921877c044b5b1b90b61b2d2d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1421126029}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1974627765
