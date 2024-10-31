@@ -69,6 +69,49 @@ public class UIEvents
             onRequestAdvancedStatsInfo();
         }
     }
-
+    public event Action onRequestLevelUpInfo;
+    public void RequestLevelUpInfo(){
+        if(onRequestLevelUpInfo!=null){
+            onRequestLevelUpInfo();
+        }
+    }
+    
+    //COISAS LEVEL UP
+    public event Action<int,int,bool> onSimulateChangeBaseValue;
+    public void SimulateChangeBaseValue(int statId, int newValue,bool isDifferent){
+        if(onSimulateChangeBaseValue!=null){
+            onSimulateChangeBaseValue(statId,newValue,isDifferent);
+        }
+    }
+    public event Action<int,float,float,bool> onSimulateChangeAdvancedValue;
+    public void SimulateChangeAdvancedValue(int hardcodedId,float currentLifeOrMana, float newValue,bool isDifferent){
+        if(onSimulateChangeAdvancedValue!=null){
+            onSimulateChangeAdvancedValue(hardcodedId,currentLifeOrMana,newValue,isDifferent);
+        }
+    }
+    public event Action<int,bool> onReciveLevelUpInfo;
+    public void ReciveLevelUpInfo(int poitsToSpend, bool isNearCampfire){
+        if(onReciveLevelUpInfo!=null){
+            onReciveLevelUpInfo(poitsToSpend,isNearCampfire);
+        }
+    }
+    public event Action<int,bool> onChangeStatusButtonPressed;
+    public void ChangeStatusButtonPressed(int statusId,bool isBuying){
+        if(onChangeStatusButtonPressed!=null){
+            onChangeStatusButtonPressed(statusId,isBuying);
+        }
+    }
+    public event Action onConfirmLevelUp;
+    public void ConfirmLevelUp(){
+        if(onConfirmLevelUp!=null){
+            onConfirmLevelUp();
+        }
+    }
+    public event Action onDiscardLevelUp;
+    public void DiscardLevelUp(){
+        if(onDiscardLevelUp!=null){
+            onDiscardLevelUp();
+        }
+    }
 
 }

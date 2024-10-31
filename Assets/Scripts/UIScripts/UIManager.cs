@@ -163,6 +163,7 @@ public class UIManager : MonoBehaviour
                 hideblePartUI.SetActive(false);
             break;
             case UIScreens.Stats:
+                if(statsUIManager.isSimulating)statsUIManager.CancelSimulation();
                 painelStats.SetActive(false);
             break;
             case UIScreens.SkillTree:
