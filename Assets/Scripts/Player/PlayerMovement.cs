@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
+using System.Threading.Tasks;
 using Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -9,240 +8,214 @@ using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
     // Singleton publico do PlayerMovement
-    public static PlayerMovement playerMovement;
+    public static PlayerMovement Instance;
 
-    [Header("Referências: ")] [SerializeField]
-    private Rigidbody rb;
-
-    [SerializeField] private CharacterController cc;
-    [SerializeField] private CapsuleCollider col;
-    [SerializeField] private PhysicMaterial physicMat;
-
-    private CinemachineFreeLook cinemachine;
-
-    [SerializeField] private PlayerInput playerInput;
-    private InputAction moveAction;
-    private InputAction jumpAction;
-    private InputAction dodgeAction;
-    private InputAction sprintAction;
-
+    [Header("Referências: ")] 
+    
+    [HideInInspector] public CinemachineFreeLook cinemachine;
     private Camera mainCam;
-    private Animator animator;
-    [SerializeField] private MeshRenderer playerMesh;
 
-    [Header("Parametros: ")] [SerializeField]
-    private float jumpForce = 7500f;
+    private Animator animator;
+    private CharacterController cc;
+
+    [Header("Input: ")] 
+    
+    private PlayerInput playerInput;
+    private float _turnSmoothSpeed, _gravity, _initialJumpVelocity, _turnTime = TurnTime;
+    private const float MaxJumpHeight = .6f, MaxJumpTime = .75f, MoveSpeed = 10f, SprintSpeedModifier = 2f, DodgeSpeedMultiplier = 4f, GroundedGravity = -0.05f, TurnTime = 0.15f, SprintTurnTimeModifier = 3f;
+    private Vector3 _currentMovement;
+    private Vector2 _currentMovementInput;
+    private bool _hasJumped, _isMovementPressed, _isSprintPressed, _isJumpPressed, _isJumping, _isDodgePressed, _isDodging;
 
     [SerializeField] private LayerMask groundLayers;
 
-    private float moveSpeed, turnTime;
 
-    private const float
-        dodgeDuration = 0.2f, // Duration of the dodge speed
-        dodgeMoveSpeedModifier = 5f, // Multiplier for player speed when dodging
-        walkMoveSpeed = 12f,
-        sprintMoveModifier = 1.5f, // Multiplier for player speed when running
-        walkTurnTime = 0.05f, // Player default turn speed when walking
-        jumpTurnModifier = 10f; // Player turn speed when in air
+    #region InputSystemSetup
 
-    private float turnSmoothSpeed;
-    private Vector2 moveInput;
-    private bool isGrounded, hasJumped, isFalling, isSprinting, isDodging;
-
-    private enum movementSystems
+    private void SetupInputCallbackContext()
     {
-        cc,
-        rb
+        playerInput.Gameplay.Move.started += OnMovementPressed;
+        playerInput.Gameplay.Move.canceled += OnMovementPressed;
+        playerInput.Gameplay.Move.performed += OnMovementPressed;
+        playerInput.Gameplay.Sprint.started += Sprint;
+        playerInput.Gameplay.Sprint.canceled += Sprint;
+        playerInput.Gameplay.Jump.started += Jump;
+        playerInput.Gameplay.Jump.canceled += Jump;
+        playerInput.Gameplay.Dodge.started += Dodge;
     }
 
+    private void OnMovementPressed(InputAction.CallbackContext context)
+    {
+        _currentMovementInput = context.ReadValue<Vector2>();
+        _currentMovement.x = _currentMovementInput.x;
+        _currentMovement.z = _currentMovementInput.y;
+        _isMovementPressed = _currentMovementInput is not { x: 0f, y: 0f };
+    }
+
+    private void OnEnable()
+    {
+        playerInput.Gameplay.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerInput.Gameplay.Disable();
+    }
+    
+    private void Sprint(InputAction.CallbackContext context)
+    {
+        _isSprintPressed = context.ReadValueAsButton();
+    }
+
+    private void Jump(InputAction.CallbackContext context)
+    {
+        _isJumpPressed = context.ReadValueAsButton();
+    }
+
+    private void Dodge(InputAction.CallbackContext context)
+    {
+        _isDodgePressed = context.ReadValueAsButton();
+    }
+    
+    #endregion
+
+    #region Awake
+
+    private void CreateSingleton()
+    {
+        if (Instance)
+            Destroy(this); // Deletar novo objeto caso playerMovement já tenha sido instanciado
+        else
+            Instance = this; // Instanciar PlayerMovement caso não exista
+    }
+
+    private void PrepareJumpVariables()
+    {
+        var _timeToApex = MaxJumpTime / 2;
+        _gravity = (-2 * MaxJumpHeight) / Mathf.Pow(_timeToApex, 2);
+        _initialJumpVelocity = (2 * MaxJumpHeight) / _timeToApex;
+    }
+    
     private void Awake()
     {
+        CreateSingleton();
+        playerInput = new PlayerInput();
+        mainCam = Camera.main;
+        
+        SetupInputCallbackContext();
+
+        cinemachine = mainCam?.transform.parent.gameObject.GetComponent<CinemachineFreeLook>();
+        cc = GetComponent<CharacterController>();
+
+        PrepareJumpVariables();
+        
 #if UNITY_EDITOR
         if (!UIManager.instance)
             SceneManager.LoadSceneAsync("Hud", LoadSceneMode.Additive);
 #endif
-
-        CreateSingleton();
-
-        mainCam = Camera.main;
-        cinemachine = mainCam.transform.parent.gameObject.GetComponent<CinemachineFreeLook>();
-
-        HandleActions();
-
-        moveSpeed = walkMoveSpeed;
-        turnTime = walkTurnTime;
-
-        Physics.gravity *= 2.5f;
-
-        if (Debug.isDebugBuild)
-            Debug.developerConsoleVisible = true;
     }
 
-    private void CreateSingleton()
+    #endregion
+
+    
+    
+    #region Update
+    private void HandleJump()
     {
-        if (playerMovement)
-            Destroy(this); // Deletar novo objeto caso playerMovement já tenha sido instanciado
-        else
-            playerMovement = this; // Instanciar PlayerMovement caso não exista
-    }
-
-    private void HandleActions()
-    {
-        // Definir input do player:
-        moveAction = playerInput.actions.FindAction("Move");
-        jumpAction = playerInput.actions.FindAction("Jump");
-        dodgeAction = playerInput.actions.FindAction("Dodge");
-        sprintAction = playerInput.actions.FindAction("Sprint");
-    }
-
-    private void Update()
-    {
-        // Ler valores de movimento do InputActionReference 
-        moveInput = moveAction.ReadValue<Vector2>().normalized;
-        /*  ISSO TINHA SIDO REMOVIDO PELO FELIPE ANTES DO MERGE DOS 3 CODIGOS, E VOLTOU PRA CA VINDO DO SAVESYSTEM
-            // Retornar drag para o padrão quando o player cair no chão
-            if (isGrounded)
-            {
-                rb.drag = groundDrag;
-                //Debug.Log("Grounded");
-        } */
-
-        // Checar magnitude do input para aplicar movimentação
-
-
-        // Pular quando o player apertar o botão e estiver no chão
-        if (jumpAction.triggered && isGrounded && moveInput is not { x: 0f, y: 0f })
-            Jump();
-        if (Keyboard.current.lKey.wasPressedThisFrame)
-            GameEventsManager.instance.playerEvents.PlayerDied();
-        if (Keyboard.current.kKey.wasPressedThisFrame)
+        switch (_isJumpPressed)
         {
-            DataPersistenceManager.instance.SaveGame();
-            GameEventsManager.instance.uiEvents.SavedGame();
+            case true when !_isJumping && cc.isGrounded:
+                _turnTime = TurnTime * SprintTurnTimeModifier;
+                _isJumping = true;
+                _currentMovement.y += _initialJumpVelocity * 0.5f;
+                break;
+            case false when _isJumping && cc.isGrounded:
+                _turnTime = TurnTime;
+                _isJumping = false;
+                break;
         }
+    }
 
-        // Raycast para baixo para checar se o player está no chão
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, cc.height / 2 + cc.stepOffset + 0.05f,
-            groundLayers);
-
-        switch (isGrounded)
+    private async void ResetDodge(int ms = 150)
+    {
+        await Task.Delay(ms);
+        _isDodgePressed = false;
+        _isDodging = false;
+    }
+    
+    private void HandleDodge()
+    {
+        if (_isDodgePressed && (!_isSprintPressed && !_isDodging && !_isJumping && cc.isGrounded))
         {
-            // Pular quando o player apertar o botão e estiver no chão
-            case true:
-            {
-                if (jumpAction.triggered && moveInput is not { x: 0f, y: 0f } && !isDodging)
-                    StartCoroutine(nameof(Jump));
-                if (dodgeAction.triggered)
-                    StartCoroutine(nameof(Dodge));
-                break;
-            }
-            case false when !hasJumped && !isFalling:
-                isFalling = true;
-                SwitchMovements(movementSystems.rb);
-                StartCoroutine(nameof(Land));
-                break;
+            _isDodging = true;
+            ResetDodge();
         }
     }
 
     private void FixedUpdate()
     {
-        if ((moveInput.magnitude > 0.01f))
-            Move();
-
-        cinemachine.m_RecenterToTargetHeading.m_enabled = moveInput is not { x: 0f, y: < 0f };
+        cinemachine.m_RecenterToTargetHeading.m_enabled = _currentMovementInput is { x: not 0, y: > 0f };
     }
 
-    private void Move()
+    private void HandleMove()
     {
-        // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
-        var turnOrientation = Mathf.Atan2(moveInput.x, moveInput.y) * Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
-        var smoothedTurnOrientation =
-            Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref turnSmoothSpeed, turnTime);
-
-        // Aplicar movimentação multiplicando pela velocidade do player:
-        var moveDir = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
-
-        // Rotacionar a direção do player
-        transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
-
-        if (sprintAction.triggered && !isSprinting)
-            StartCoroutine(nameof(Sprint));
-
-        // Mover com character controller quando estiver no chão e com o rigidbody quando estiver no ar
-        if (isGrounded)
+        if ((_isSprintPressed || !cc.isGrounded) && _isMovementPressed)
         {
-            cc.Move(moveDir * (moveSpeed * Time.deltaTime));
+            _currentMovement.x = _isSprintPressed ? transform.forward.x * SprintSpeedModifier : transform.forward.x;
+            _currentMovement.z = _isSprintPressed ? transform.forward.z * SprintSpeedModifier : transform.forward.z;
+            _turnTime = TurnTime * SprintTurnTimeModifier;
+        }
+        else if (_isDodging)
+        {
+            _currentMovement.x *= DodgeSpeedMultiplier;
+            _currentMovement.z *= DodgeSpeedMultiplier;
         }
         else
         {
-            rb.AddForce(moveDir * (moveSpeed * 1.5f));
+            _turnTime = TurnTime;
         }
+        // Aplicar direção e rotação só caso o player esteja se movendo
+        cc.Move(_currentMovement * (MoveSpeed * Time.deltaTime));
     }
 
-    private IEnumerator Jump()
+    private void HandleGravity()
     {
-        hasJumped = true;
-        SwitchMovements(movementSystems.rb);
-        Debug.Log("Jump");
-        rb.AddForce(0f, jumpForce, 0f);
-        StartCoroutine(nameof(Land));
-        yield return null;
-    }
-
-    private IEnumerator Land()
-    {
-        yield return new WaitForSeconds(0.1f);
-        yield return new WaitUntil(() => isGrounded);
-        hasJumped = false;
-        isFalling = false;
-        SwitchMovements(movementSystems.cc);
-    }
-
-    private IEnumerator Sprint()
-    {
-        isSprinting = true;
-        moveSpeed = walkMoveSpeed * sprintMoveModifier;
-        yield return new WaitUntil(() => sprintAction.WasReleasedThisFrame());
-        isSprinting = false;
-        moveSpeed = walkMoveSpeed;
-    }
-
-    private IEnumerator Dodge()
-    {
-        isDodging = true;
-        moveSpeed = walkMoveSpeed * dodgeMoveSpeedModifier;
-        Debug.Log("Dodge");
-        yield return new WaitForSeconds(dodgeDuration);
-        moveSpeed = walkMoveSpeed;
-        isDodging = false;
-    }
-
-    private void SwitchMovements(movementSystems ms)
-    {
-        switch (ms)
+        if (cc.isGrounded) _currentMovement.y = GroundedGravity;
+        else
         {
-            case movementSystems.cc when !cc.enabled:
-                Debug.Log("SWITCHING TO: CC");
-                if(playerMesh) playerMesh.material.color = Color.red;
-                turnTime = walkTurnTime;
-                cc.enabled = true;
-                rb.isKinematic = true;
-                col.enabled = false;
-                break;
-            case movementSystems.rb when rb.isKinematic:
-                Debug.Log("SWITCHING TO: RB");
-                if(playerMesh) playerMesh.material.color = Color.blue;
-                turnTime = walkTurnTime * jumpTurnModifier;
-                rb.isKinematic = false;
-                rb.velocity = cc.velocity;
-                cc.enabled = false;
-                col.enabled = true;
-                break;
-            default:
-                Debug.LogWarning(ms + " is already enabled!");
-                return;
+            var previousYVelocity = _currentMovement.y;
+            var newYVelocity = _currentMovement.y + (_gravity * Time.deltaTime);
+            var nextYVelocity = (previousYVelocity + newYVelocity) * 0.5f;
+            _currentMovement.y = nextYVelocity;
         }
     }
+
+    private void HandleRotation()
+    {
+        // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
+        var turnOrientation = Mathf.Atan2(_currentMovementInput.x, _currentMovementInput.y) * Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
+        var smoothedTurnOrientation = Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref _turnSmoothSpeed, _turnTime);
+
+        if (!_isMovementPressed) return;
+        // Aplicar movimentação multiplicando pela velocidade do player:
+        var _targetMovement = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
+
+        _currentMovement = new Vector3(_targetMovement.x, _currentMovement.y, _targetMovement.z);
+
+        // Rotacionar a direção do player
+        transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
+    }
+
+    private void Update()
+    {
+        HandleRotation();
+        HandleDodge();
+        HandleMove();
+        HandleGravity();
+        HandleJump();
+    }
+    
+    #endregion
 
     //Chamado após a cena ser carregada
     public void LoadData(GameData gameData)
