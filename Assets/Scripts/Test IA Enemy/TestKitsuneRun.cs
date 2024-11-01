@@ -20,7 +20,7 @@ public class TestKitsuneRun : TestEnemyActions
         desiredRotation.z = 0f;
         enemyController.transform.rotation = Quaternion.Slerp(enemyController.transform.rotation, desiredRotation, 0.15f);
         if (rb.velocity.magnitude < 4)
-            rb.velocity += dir.normalized * 350 * Time.fixedDeltaTime;
+            rb.velocity += dir.normalized * 400 * Time.fixedDeltaTime;
         if((target.position - enemyController.transform.position).magnitude <= nextMinRange)
             ExitAction(enemyController.GetAttackActions());
 
@@ -28,6 +28,7 @@ public class TestKitsuneRun : TestEnemyActions
 
     public override void ExitAction(TestEnemyActions enemyAction)
     {
+        rb.velocity = Vector3.zero;
         animator.SetBool("isRunning", false);
         enemyController.SetAttack();
 
