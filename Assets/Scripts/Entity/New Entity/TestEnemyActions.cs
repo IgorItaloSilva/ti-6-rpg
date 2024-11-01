@@ -8,6 +8,7 @@ public abstract class TestEnemyActions : MonoBehaviour
     protected Rigidbody rb;
     protected Animator animator;
     protected float restTime;
+    protected Vector3 dir;
 
     protected float minRange; // Minimo de distancia entre o jogador para a ação acontecer
     protected Transform target;
@@ -33,6 +34,21 @@ public abstract class TestEnemyActions : MonoBehaviour
     // Caso tenha sido um ataque, adicionar: enemyController.EnemyAttacked();
 
     public virtual void AccelerateRest() { }
+
+    protected virtual void TrackTarget(float trackSpeed = 0.15f)
+    {
+        dir = (target.position - enemyController.transform.position); // direção onde o jogador está
+        Quaternion desiredRotation = Quaternion.LookRotation(dir); // Rotação desejada
+        desiredRotation.x = 0f;
+        desiredRotation.z = 0f;
+        enemyController.transform.rotation = Quaternion.Slerp(enemyController.transform.rotation, desiredRotation, trackSpeed);
+    }
+
+    protected virtual void GoToTarget(float speed = 400f)
+    {
+        if (rb.velocity.magnitude < 4)
+            rb.velocity += dir.normalized * (speed * Time.fixedDeltaTime);
+    }
 
     public float GetMinRange() { return minRange; }
 
