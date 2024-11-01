@@ -12,7 +12,7 @@ public class TestKitsuneHeadButt : TestEnemyActions
 
     protected override void AdditionalStart()
     {
-        restTime = 1;
+        restTime = 1f;
         canUpdate = true;
         animator.SetBool("isAttacking", true);
     }

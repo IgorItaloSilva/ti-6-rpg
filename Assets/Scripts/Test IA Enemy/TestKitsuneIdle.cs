@@ -6,8 +6,9 @@ public class TestKitsuneIdle : TestEnemyActions
 {
     float nextMinRange;
 
-    protected override void AdditionalStart() 
+    protected override void AdditionalStart()
     {
+        restTime = 0.2f;
         animator.SetBool("isIdle", true);
         nextMinRange = enemyController.GetNextMinRange();
     }
