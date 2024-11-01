@@ -12,10 +12,10 @@ public class CombatEnemy : MonoBehaviour
     }
     public void DesligarHitBox(){
         weapons[0]?.DisableCollider();
-        weapons[1]?.DisableCollider();
+        //weapons[1]?.DisableCollider();
     }
     public void LigarHitBox(){
         weapons[0]?.EnableCollider();
-        weapons[1]?.EnableCollider();
+        //weapons[1]?.EnableCollider();
     }
 }
