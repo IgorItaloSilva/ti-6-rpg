@@ -35,26 +35,26 @@ public abstract class TestEnemyActions : MonoBehaviour
 
     public virtual void AccelerateRest() { }
 
-    protected virtual void TrackTarget(float trackSpeed = 0.15f)
+    protected virtual void TrackTarget(float trackSpeed =8f)
     {
         dir = (target.position - enemyController.transform.position); // direção onde o jogador está
         Quaternion desiredRotation = Quaternion.LookRotation(dir); // Rotação desejada
         desiredRotation.x = 0f;
         desiredRotation.z = 0f;
-        enemyController.transform.rotation = Quaternion.Slerp(enemyController.transform.rotation, desiredRotation, trackSpeed);
+        enemyController.transform.rotation = Quaternion.Slerp(enemyController.transform.rotation, desiredRotation, trackSpeed * Time.deltaTime);
     }
 
-    protected virtual void GoToTarget(float speed = 400f)
+    protected virtual void GoToTarget(float speed = 4f)
     {
         if (rb.velocity.magnitude < 4)
-            rb.velocity += dir.normalized * (speed * Time.fixedDeltaTime);
+            rb.velocity += dir.normalized * ((speed * 1000f) * Time.deltaTime);
     }
 
     public float GetMinRange() { return minRange; }
 
     public bool InRestTime()
     {
-        restTime -= Time.fixedDeltaTime;
+        restTime -= Time.deltaTime;
         return restTime > 0;
     }
 
