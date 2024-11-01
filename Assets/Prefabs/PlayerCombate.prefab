@@ -50,47 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef276a02aef059042b5df3311c68059e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 0}
   cinemachine: {fileID: 0}
-  cc: {fileID: 8532838021014001503}
-  col: {fileID: 0}
-  playerInput: {fileID: 5662855281143258581}
-  moveAction:
-    m_Name: Move
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 88307b97-ae25-4dc2-b8c0-c5596e3ac6bf
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  jumpAction:
-    m_Name: Jump
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 7bc72161-314d-4655-8b1f-8eea43e233df
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  dodgeAction:
-    m_Name: Dodge
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: da658614-1b4c-43b3-9add-1821ce7c6f09
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  sprintAction:
-    m_Name: Sprint
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: a25a9f74-d30a-4570-b469-e0c3e52b707e
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
   groundLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -118,7 +78,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4014f75ade258c54bbf2cc4ad13adc9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vidaModCons: 25
+  vidaConsMod: 25
+  manaIntMod: 10
+  magicDamageMod: 10
+  lightAttackDamageMod: 5
+  heavyAttackDamageMod: 8
+  simulatedStatChange: 
+  IsNearCampfire: 0
 --- !u!114 &5662855281143258581
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,8 +158,8 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.5
   m_SlopeLimit: 45
-  m_StepOffset: 0
-  m_SkinWidth: 0.0001
+  m_StepOffset: 0.25
+  m_SkinWidth: 0.05
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!111 &7917478016269853345
@@ -581,7 +547,7 @@ Transform:
   m_Children:
   - {fileID: 6882854798519616923}
   m_Father: {fileID: 5733524216205197076}
-  m_LocalEulerAnglesHint: {x: -43.749, y: -363.252, z: 330.75}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4632895137591553006
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -648,7 +614,7 @@ PrefabInstance:
     - target: {fileID: 1795645005893398095, guid: b67737743582100408cdc1307cace04b,
         type: 3}
       propertyPath: m_Layer
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1795645005893398095, guid: b67737743582100408cdc1307cace04b,
         type: 3}
