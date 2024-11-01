@@ -170,7 +170,7 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
         _appliedMovement.x = _currentMovement.x;
         _appliedMovement.z = _currentMovement.z;
         
-        if ((_isSprintPressed || !cc.isGrounded) && _isMovementPressed)
+        if ((_isSprintPressed || _isJumping) && _isMovementPressed)
         {
             _appliedMovement.x = _isSprintPressed ? transform.forward.x * SprintSpeedModifier : transform.forward.x;
             _appliedMovement.z = _isSprintPressed ? transform.forward.z * SprintSpeedModifier : transform.forward.z;
