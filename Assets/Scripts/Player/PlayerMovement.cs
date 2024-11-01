@@ -97,9 +97,9 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
 
     private void PrepareJumpVariables()
     {
-        var _timeToApex = MaxJumpTime / 2;
-        _gravity = (-2 * MaxJumpHeight) / Mathf.Pow(_timeToApex, 2);
-        _initialJumpVelocity = (2 * MaxJumpHeight) / _timeToApex;
+        const float TimeToApex = MaxJumpTime / 2;
+        _gravity = (-2 * MaxJumpHeight) / Mathf.Pow(TimeToApex, 2);
+        _initialJumpVelocity = (2 * MaxJumpHeight) / TimeToApex;
     }
     
     private void Awake()
@@ -208,9 +208,9 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
 
         if (!_isMovementPressed) return;
         // Aplicar movimentação multiplicando pela velocidade do player:
-        var _targetMovement = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
+        var groundedMovement = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
 
-        _currentMovement = new Vector3(_targetMovement.x, _currentMovement.y, _targetMovement.z);
+        _currentMovement = new Vector3(groundedMovement.x, _currentMovement.y, groundedMovement.z);
 
         // Rotacionar a direção do player
         transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
