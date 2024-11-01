@@ -79,6 +79,12 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
     
     #endregion
 
+    private void Start()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
     #region Awake
 
     private void CreateSingleton()

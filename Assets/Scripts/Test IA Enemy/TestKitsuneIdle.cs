@@ -24,10 +24,10 @@ public class TestKitsuneIdle : TestEnemyActions
             ExitAction(enemyController.GetAttackActions());
         }
         //Debug.Log(target);
-        ////  -----   Checar se est· olhando para o alvo   -----  \\
+        ////  -----   Checar se est√° olhando para o alvo   -----  \\
         //Vector3 dir = (target.position - enemyController.transform.position).normalized;
         //dir.y = 0;
-        //if (Vector3.Angle(transform.forward, dir) > 60f) // Checar se o jogador est· em um determinado angulo de vis„o
+        //if (Vector3.Angle(transform.forward, dir) > 60f) // Checar se o jogador est√° em um determinado angulo de vis√£o
         //    Debug.Log(Vector3.Angle(enemyController.transform.forward, dir)); //currentAction.ExitAction(movementActions[3]);
 
     }

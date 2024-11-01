@@ -9,7 +9,7 @@ public abstract class TestEnemyActions : MonoBehaviour
     protected Animator animator;
     protected float restTime;
 
-    protected float minRange; // Minimo de distancia entre o jogador para a ação acontecer
+    protected float minRange; // Minimo de distancia entre o jogador para a aÃ§Ã£o acontecer
     protected Transform target;
 
     public void StartAction(TestEnemyController enemyController)
@@ -22,14 +22,14 @@ public abstract class TestEnemyActions : MonoBehaviour
         AdditionalStart();
     }
 
-    protected virtual void AdditionalStart() { } // Caso precise de declarar algo a mais no começo da ação
+    protected virtual void AdditionalStart() { } // Caso precise de declarar algo a mais no comeÃ§o da aÃ§Ã£o
     // Recomendado:
     // Declarar minRange de acordo com a skill
-    // Declarar qual animação deve realizar
+    // Declarar qual animaÃ§Ã£o deve realizar
 
     public abstract void UpdateAction(); // Atualiza Todo frame
 
-    public abstract void ExitAction(TestEnemyActions enemyAction); // Chamado no final da ação 
+    public abstract void ExitAction(TestEnemyActions enemyAction); // Chamado no final da aÃ§Ã£o 
     // Caso tenha sido um ataque, adicionar: enemyController.EnemyAttacked();
 
     public virtual void AccelerateRest() { }

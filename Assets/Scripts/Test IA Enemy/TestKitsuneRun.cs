@@ -14,13 +14,13 @@ public class TestKitsuneRun : TestEnemyActions
 
     public override void UpdateAction()
     {
-        Vector3 dir = (target.position - enemyController.transform.position); // direÁ„o onde o jogador est·
-        Quaternion desiredRotation = Quaternion.LookRotation(dir); // RotaÁ„o desejada
+        Vector3 dir = (target.position - enemyController.transform.position); // dire√ß√£o onde o jogador est√°
+        Quaternion desiredRotation = Quaternion.LookRotation(dir); // Rota√ß√£o desejada
         desiredRotation.x = 0f;
         desiredRotation.z = 0f;
         enemyController.transform.rotation = Quaternion.Slerp(enemyController.transform.rotation, desiredRotation, 0.15f);
         if (rb.velocity.magnitude < 4)
-            rb.velocity += dir.normalized * 55 * Time.fixedDeltaTime;
+            rb.velocity += dir.normalized * 350 * Time.fixedDeltaTime;
         if((target.position - enemyController.transform.position).magnitude <= nextMinRange)
             ExitAction(enemyController.GetAttackActions());
 

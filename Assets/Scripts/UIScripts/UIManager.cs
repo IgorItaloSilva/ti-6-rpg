@@ -113,6 +113,7 @@ public class UIManager : MonoBehaviour
     public void VoltarMainMenu(){
         //MUDAR PARA O GAME MANAGER DEPOIS. time scale e laod de cena não são responsabilidade da UI
         Time.timeScale=1f;
+        DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadScene(0);
         Destroy(gameObject);
     }
