@@ -15,11 +15,11 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         POSSIVELMENTE ADICIONAR MANA E STAMINA AINDA
     */
     //Esses valores estão aqui para testes, depeois de definidos eles devem ser colocados no scriptableObjects
-    [SerializeField]float vidaConsMod;
-    [SerializeField]float manaIntMod;
-    [SerializeField]float magicDamageMod;
-    [SerializeField]float lightAttackDamageMod;
-    [SerializeField]float heavyAttackDamageMod;
+    [SerializeField]float vidaConsMod = 25;
+    [SerializeField]float manaIntMod = 10;
+    [SerializeField]float magicDamageMod = 10;
+    [SerializeField]float lightAttackDamageMod = 5;
+    [SerializeField]float heavyAttackDamageMod = 8;
     public int Con {get; private set;}
     public int Str {get; private set;}
     public int Dex {get; private set;}
@@ -103,6 +103,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     }
     public void SaveData(GameData data){
         PlayerStatsData playerStatsData = new PlayerStatsData(this);
+        data.playerStatsData = playerStatsData;
     }
     public void LoadData(GameData data){
         this.Con = data.playerStatsData.con;

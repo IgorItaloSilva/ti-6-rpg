@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour,IDataPersistence
 {
     // Singleton publico do PlayerMovement
     public static PlayerMovement Instance;
@@ -22,10 +22,10 @@ public class PlayerMovement : MonoBehaviour
     
     private PlayerInput playerInput;
     private float _turnSmoothSpeed, _gravity, _initialJumpVelocity, _turnTime = TurnTime;
-    private const float MaxJumpHeight = .6f, MaxJumpTime = .75f, MoveSpeed = 10f, SprintSpeedModifier = 2f, DodgeSpeedMultiplier = 4f, GroundedGravity = -0.05f, TurnTime = 0.15f, SprintTurnTimeModifier = 3f;
+    private const float MaxJumpHeight = .6f, MaxJumpTime = .75f, MoveSpeed = 8f, SprintSpeedModifier = 1.5f, DodgeSpeedMultiplier = 4f, GroundedGravity = -0.05f, TurnTime = 0.15f, SprintTurnTimeModifier = 3f;
     private Vector3 _currentMovement;
     private Vector2 _currentMovementInput;
-    private bool _hasJumped, _isMovementPressed, _isSprintPressed, _isJumpPressed, _isJumping, _isDodgePressed, _isDodging;
+    private bool _hasJumped, _isMovementPressed, _isSprintPressed, _isJumpPressed, _isJumping, _isDodgePressed, _isDodging, _canDodge = true;
 
     [SerializeField] private LayerMask groundLayers;
 
@@ -79,6 +79,12 @@ public class PlayerMovement : MonoBehaviour
     
     #endregion
 
+    private void Start()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
     #region Awake
 
     private void CreateSingleton()
@@ -116,8 +122,6 @@ public class PlayerMovement : MonoBehaviour
     }
 
     #endregion
-
-    
     
     #region Update
     private void HandleJump()
@@ -141,12 +145,15 @@ public class PlayerMovement : MonoBehaviour
         await Task.Delay(ms);
         _isDodgePressed = false;
         _isDodging = false;
+        await Task.Delay(ms * 4);
+        _canDodge = true;
     }
     
     private void HandleDodge()
     {
-        if (_isDodgePressed && (!_isSprintPressed && !_isDodging && !_isJumping && cc.isGrounded))
+        if (_isDodgePressed && !_isSprintPressed && !_isDodging && !_isJumping && _canDodge)
         {
+            _canDodge = false;
             _isDodging = true;
             ResetDodge();
         }
@@ -165,14 +172,14 @@ public class PlayerMovement : MonoBehaviour
             _currentMovement.z = _isSprintPressed ? transform.forward.z * SprintSpeedModifier : transform.forward.z;
             _turnTime = TurnTime * SprintTurnTimeModifier;
         }
-        else if (_isDodging)
-        {
-            _currentMovement.x *= DodgeSpeedMultiplier;
-            _currentMovement.z *= DodgeSpeedMultiplier;
-        }
         else
         {
             _turnTime = TurnTime;
+        }
+        if (_isDodging)
+        {
+            _currentMovement.x *= DodgeSpeedMultiplier;
+            _currentMovement.z *= DodgeSpeedMultiplier;
         }
         // Aplicar direção e rotação só caso o player esteja se movendo
         cc.Move(_currentMovement * (MoveSpeed * Time.deltaTime));

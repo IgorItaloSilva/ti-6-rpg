@@ -24,7 +24,15 @@ public class CombatManagerProvisorio : MonoBehaviour
             }
         }
     }
-
+    void Update(){
+        if(Keyboard.current.lKey.wasPressedThisFrame){
+            DataPersistenceManager.instance.LoadGame();
+        }
+        if(Keyboard.current.kKey.wasPressedThisFrame){
+            GameEventsManager.instance.uiEvents.SavedGame();
+            DataPersistenceManager.instance.SaveGame();
+        }
+    }
     private void Atacar(InputAction.CallbackContext callbackContext){
         if(anim!=null)anim?.Play();
     }
