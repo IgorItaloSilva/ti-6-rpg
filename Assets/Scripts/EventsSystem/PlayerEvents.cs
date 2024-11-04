@@ -34,6 +34,12 @@ public class PlayerEvents
             onPlayerDied();
         }
     }
+    public event Action onPlayerRespawned;
+    public void PlayerRespawn(){
+        if(onPlayerRespawned!=null){
+            onPlayerRespawned();
+        }
+    }
     /* Um Evento com parametros tem a forma
     public event Action<int,float> onEventoOcorreu;
     public void EventoOcorreu(int inteiro, float flutuante){

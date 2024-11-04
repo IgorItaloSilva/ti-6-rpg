@@ -97,11 +97,9 @@ public class DataPersistenceManager : MonoBehaviour
     }
     void OnEnable(){
         SceneManager.sceneLoaded +=OnSceneLoaded;
-        GameEventsManager.instance.playerEvents.onPlayerDied+=LoadGame;
     }
     void OnDisable(){
         SceneManager.sceneLoaded -=OnSceneLoaded;
-        GameEventsManager.instance.playerEvents.onPlayerDied-=LoadGame;
     }
 
     public bool HasData(){

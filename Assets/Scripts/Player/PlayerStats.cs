@@ -47,6 +47,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     private int spentPointsIfCancel;
     public int[] simulatedStatChange;
     public bool IsNearCampfire ;//{get;private set;}//adicionar no save/load depois
+    private bool playerIsDead; //Talvez Adicionar no save e load depois
     void Start()
     {
         levelUpPoints=3;
@@ -64,6 +65,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.uiEvents.onChangeStatusButtonPressed+=SimulateStatusBuyOrSell;
         GameEventsManager.instance.uiEvents.onConfirmLevelUp+=ConfirmChanges;
         GameEventsManager.instance.uiEvents.onDiscardLevelUp+=DiscardChanges;
+        GameEventsManager.instance.playerEvents.onPlayerRespawned+=PlayerRespawn;
     }
     void OnDisable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo-=SendBaseStatsInfo;
@@ -73,6 +75,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.uiEvents.onChangeStatusButtonPressed-=SimulateStatusBuyOrSell;
         GameEventsManager.instance.uiEvents.onConfirmLevelUp-=ConfirmChanges;
         GameEventsManager.instance.uiEvents.onDiscardLevelUp+=DiscardChanges;
+        GameEventsManager.instance.playerEvents.onPlayerRespawned-=PlayerRespawn;
     }
 
     // Update is called once per frame
@@ -80,13 +83,6 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     {
         GameEventsManager.instance.uiEvents.UpdateSliders(0,0,maxLife);//Essas duas funções deveriam ser chamadas
         GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
-    }
-    public void TakeDamage(float dano){
-        CurrentLife -= dano;
-        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
-        if(CurrentLife<=0){
-            Die();
-        }
     }
     public void HealLife(float life){
         if(CurrentLife<maxLife){
@@ -98,8 +94,11 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     }
     private void Die(){
         GameEventsManager.instance.playerEvents.PlayerDied();
-        //Adicionar logica de reload
-        //Aviso de UI
+        playerIsDead = true;
+        //DesativarInputs
+    }
+    private void PlayerRespawn(){
+        playerIsDead=false;
     }
     public void SaveData(GameData data){
         PlayerStatsData playerStatsData = new PlayerStatsData(this);
@@ -124,7 +123,11 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     public void TakeDamage(float damage,Enums.DamageType damageType)
     {
         if(PUArmorActive) damage/=2;
-        TakeDamage(damage);
+        CurrentLife -= damage;
+        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
+        if(CurrentLife<=0&&!playerIsDead){
+            Die();
+        }
     }
     private void ActivatePowerUp(int id){//OBS OS IDS SÃO HARD CODED, SE MUDAR A ORDEM DELES PRECISA MUDAR AQUI!!!!!!!
         switch(id){
