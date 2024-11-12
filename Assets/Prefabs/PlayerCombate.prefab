@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4133643009367029584}
-  - component: {fileID: 6783019600933817145}
-  - component: {fileID: 662831836097041185}
+  - component: {fileID: 2998542213145736662}
   - component: {fileID: 7001136559969210805}
   - component: {fileID: 5662855281143258581}
   - component: {fileID: 8532838021014001503}
@@ -38,7 +37,7 @@ Transform:
   - {fileID: 5733524216205197076}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6783019600933817145
+--- !u!114 &2998542213145736662
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -47,25 +46,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 16883978931624676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef276a02aef059042b5df3311c68059e, type: 3}
+  m_Script: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cinemachine: {fileID: 0}
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 128
---- !u!114 &662831836097041185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 16883978931624676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 47b5fc619dd4e5044877128b00f539f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7001136559969210805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +116,7 @@ MonoBehaviour:
     m_ActionId: 44a8f965-1650-493c-8b8f-c547fcf2d45b
     m_ActionName: Gameplay/Toggle Cursor[/Keyboard/c]
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: Keyboard + Mouse
+  m_DefaultControlScheme: Controller
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
