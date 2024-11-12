@@ -40,10 +40,8 @@ public abstract class TestEnemyController : MonoBehaviour
     public void EnemyAttacked() // Ativado quando a ação do inimigo é um ataque
     {
         queueAttacks.Dequeue(); // Retira a ação realizada
-        Debug.Log("Antes " + queueAttacks.Count);
         if (queueAttacks.Count == 0) // Checa se ja utilizou todos os ataques randomizados
             ShuffleAttacks(); // Randomiza os próximos ataques
-        Debug.Log("Depois " + queueAttacks.Count);
     }
 
 
