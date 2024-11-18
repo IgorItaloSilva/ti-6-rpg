@@ -5,7 +5,7 @@ using Debug = UnityEngine.Debug;
 public class PlayerGroundedState : PlayerBaseState
 {
     private float smoothTime;
-    protected const float MoveSpeed = 8f;
+    protected const float MoveSpeed = 6f;
 
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)

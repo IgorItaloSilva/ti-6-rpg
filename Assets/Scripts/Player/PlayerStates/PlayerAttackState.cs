@@ -12,6 +12,7 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void EnterState()
     {
+        _ctx.TurnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
         Debug.Log("Attacking!");
         _ctx.HandleAttack();
     }
