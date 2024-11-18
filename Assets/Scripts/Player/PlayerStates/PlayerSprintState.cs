@@ -56,8 +56,4 @@ public class PlayerSprintState : PlayerBaseState
         _ctx.CurrentMovementY = _ctx.BaseGravity;
     }
 
-    public override void InitializeSubState()
-    {
-        
-    }
 }

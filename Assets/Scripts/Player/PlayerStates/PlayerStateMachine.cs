@@ -14,7 +14,6 @@ public class PlayerStateMachine : MonoBehaviour
     private Camera mainCam;
     private Animator animator;
     private CharacterController cc;
-
     [Header("Input: ")] private PlayerInput playerInput;
     private float _turnSmoothSpeed, _gravity, _turnTime, _initialJumpVelocity;
 
@@ -36,25 +35,47 @@ public class PlayerStateMachine : MonoBehaviour
         _isJumping,
         _isJumpPressed,
         _isDodgePressed,
+        _isAttackPressed,
+        _isAttacking,
         _isDodging,
-        _canDodge = true;
+        _canDodge = true,
+        _canJump = true,
+        _canAttack = true;
+
+    private byte _attackCount, _currentAttack;
 
     // variáveis dos estados:
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
+    private static readonly int IsWalking = Animator.StringToHash("isWalking");
+    private static readonly int IsRunning = Animator.StringToHash("isRunning");
+    private static readonly int AttackCountHash = Animator.StringToHash("AttackCount");
 
     // GETTERS E SETTERS:
     public CharacterController CC => cc;
+
+    public Animator Animator => animator;
 
     public PlayerBaseState CurrentState
     {
         get => _currentState;
         set => _currentState = value;
     }
+    
+    
 
-    public bool IsJumpPressed => _isJumpPressed;
-    public bool IsDodgePressed => _isDodgePressed;
+    public bool IsJumpPressed => _isJumpPressed && _canJump;
+    public bool IsDodgePressed => _isDodgePressed && _canDodge;
+    public bool IsAttackPressed => _isAttackPressed && _canAttack;
     public bool IsSprintPressed => _isSprintPressed;
+
+    public bool IsAttacking => _isAttacking;
+    
+    public bool CanJump
+    {
+        get => _canJump;
+        set => _canJump = value;
+    }
 
     public bool CanDodge
     {
@@ -62,7 +83,11 @@ public class PlayerStateMachine : MonoBehaviour
         set => _canDodge = value;
     }
 
-    public bool IsJumping { get; set; }
+    public bool CanAttack
+    {
+        get => _canAttack;
+        set => _canAttack = value;
+    }
 
     public float TurnTime
     {
@@ -88,6 +113,13 @@ public class PlayerStateMachine : MonoBehaviour
         get => _appliedMovement.y;
         set => _appliedMovement.y = value;
     }
+
+    public int AttackCount
+    {
+        get => _attackCount;
+    }
+
+    public int CurrentAttack => _currentAttack;
 
     public float InitialJumpVelocity => _initialJumpVelocity;
 
@@ -122,6 +154,8 @@ public class PlayerStateMachine : MonoBehaviour
         playerInput.Gameplay.Jump.canceled += Jump;
         playerInput.Gameplay.Dodge.started += Dodge;
         playerInput.Gameplay.Dodge.canceled += Dodge;
+        playerInput.Gameplay.Attack.started += Attack;
+        playerInput.Gameplay.Attack.canceled += Attack;
     }
 
     private void OnMovementPressed(InputAction.CallbackContext context)
@@ -132,6 +166,12 @@ public class PlayerStateMachine : MonoBehaviour
         _isMovementPressed = _currentMovementInput is not { x: 0f, y: 0f };
     }
 
+    private void Attack(InputAction.CallbackContext context)
+    {
+        _isAttackPressed = context.ReadValueAsButton();
+        _canAttack = true; 
+    }
+
     private void Sprint(InputAction.CallbackContext context)
     {
         _isSprintPressed = context.ReadValueAsButton();
@@ -140,6 +180,7 @@ public class PlayerStateMachine : MonoBehaviour
     private void Jump(InputAction.CallbackContext context)
     {
         _isJumpPressed = context.ReadValueAsButton();
+        _canJump = true;
     }
 
     private void Dodge(InputAction.CallbackContext context)
@@ -158,10 +199,8 @@ public class PlayerStateMachine : MonoBehaviour
     private void Awake()
     {
         CreateSingleton();
-        playerInput = new PlayerInput();
-        mainCam = Camera.main;
-        cinemachine = mainCam?.transform.parent.gameObject.GetComponent<CinemachineFreeLook>();
-        cc = GetComponent<CharacterController>();
+
+        SetupReferences();
 
         SetupPlayerStates();
 
@@ -171,6 +210,16 @@ public class PlayerStateMachine : MonoBehaviour
 
         SceneManager.LoadSceneAsync("Hud", LoadSceneMode.Additive);
     }
+
+    private void SetupReferences()
+    {
+        playerInput = new PlayerInput();
+        mainCam = Camera.main;
+        cinemachine = mainCam?.transform.parent.gameObject.GetComponent<CinemachineFreeLook>();
+        cc = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+    }
+
 
     private void SetupPlayerStates()
     {
@@ -205,8 +254,51 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Update()
     {
+        HandleAnimations();
         HandleRotation();
         _currentState.UpdateState();
+    }
+    
+    public void HandleAttack()
+    {
+        if (!_canAttack) return;
+
+        _isAttacking = true;
+            
+        _currentMovement = Vector3.zero;        
+        
+        _canAttack = false;
+        
+        if (_attackCount == 3 && _currentAttack == 3) return;
+
+        if(_attackCount == _currentAttack)
+            _attackCount++;
+        ApplyAttackCount();
+    }
+
+    public void ResetAttacks()
+    {
+        if (_attackCount > _currentAttack) return;
+        _isAttacking = false;
+        _attackCount = 0;
+        _currentAttack = 0;
+        ApplyAttackCount();
+    }
+
+    private void ApplyAttackCount()
+    {
+        animator.SetInteger(AttackCountHash,_attackCount);
+    }
+
+    public void AttackStarted()
+    {
+        _currentAttack++;
+    }
+
+    private void HandleAnimations()
+    {
+        animator.SetBool(IsWalking, _isMovementPressed);
+        animator.SetBool(IsRunning, _isSprintPressed);
     }
 
     public void LoadData(GameData gameData)

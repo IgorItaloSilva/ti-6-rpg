@@ -4,9 +4,9 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerGroundedState : PlayerBaseState
 {
-
     private float smoothTime;
     protected const float MoveSpeed = 8f;
+
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
@@ -20,8 +20,8 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void UpdateState()
     {
-        HandleMove();
         HandleGravity();
+        HandleMove();
         CheckSwitchStates();
     }
 
@@ -36,21 +36,26 @@ public class PlayerGroundedState : PlayerBaseState
             SwitchState(_factory.InAir());
             return;
         }
-        
+
         if (_ctx.IsJumpPressed)
         {
             HandleJump();
             SwitchState(_factory.InAir());
         }
-        
+
         if (_ctx.IsSprintPressed)
         {
             SwitchState(_factory.Sprint());
         }
 
-        if (_ctx.IsDodgePressed && _ctx.CanDodge)
+        if (_ctx.IsDodgePressed)
         {
             SwitchState(_factory.Dodge());
+        }
+
+        if (_ctx.IsAttackPressed)
+        {
+            SwitchState(_factory.Attack());
         }
     }
 
@@ -63,9 +68,5 @@ public class PlayerGroundedState : PlayerBaseState
     private void HandleGravity()
     {
         _ctx.CurrentMovementY = _ctx.BaseGravity;
-    }
-
-    public override void InitializeSubState()
-    {
     }
 }

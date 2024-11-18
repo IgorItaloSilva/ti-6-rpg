@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerAttackState : PlayerBaseState
 {
-    private Collider hitBox;
-    public float AttackDamage { get; private set; }
     
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
@@ -14,23 +12,28 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void EnterState()
     {
-        
+        Debug.Log("Attacking!");
+        _ctx.HandleAttack();
     }
 
     public override void UpdateState()
     {
+        if(_ctx.IsAttackPressed)
+        {
+            _ctx.HandleAttack();
+            return;
+        }
         CheckSwitchStates();
     }
 
     public override void ExitState()
     {
     }
-
     public override void CheckSwitchStates()
     {
-    }
-
-    public override void InitializeSubState()
-    {
+        if(_ctx.AttackCount == 0)
+        {
+            SwitchState(_factory.Grounded());
+        }
     }
 }

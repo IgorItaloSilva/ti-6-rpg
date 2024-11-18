@@ -7,16 +7,6 @@ public class PlayerStateFactory
         _context = currentContext;
     }
 
-    public PlayerBaseState Idle()
-    {
-        return new PlayerIdleState(_context, this);
-    }
-
-    public PlayerBaseState Walk()
-    {
-        return new PlayerWalkState(_context, this);
-    }
-
     public PlayerBaseState Sprint()
     {
         return new PlayerSprintState(_context, this);

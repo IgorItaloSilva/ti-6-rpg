@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class PlayerInAirState : PlayerBaseState
 {
-    protected const float MoveSpeed = 8f;
+    protected const float MoveSpeed = 8f, SprintSpeed = 12f;
+
     public PlayerInAirState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
@@ -16,14 +17,13 @@ public class PlayerInAirState : PlayerBaseState
 
     public override void UpdateState()
     {
-        HandleAirMove();
         HandleGravity();
+        HandleAirMove();
         CheckSwitchStates();
     }
 
     public override void ExitState()
     {
-        _ctx.IsJumping = false;
     }
 
     public override void CheckSwitchStates()
@@ -38,15 +38,11 @@ public class PlayerInAirState : PlayerBaseState
         _ctx.CurrentMovementY += (_ctx.Gravity * Time.deltaTime);
         _ctx.AppliedMovementY = ((previousYVelocity + _ctx.CurrentMovementY));
     }
-    
+
     private void HandleAirMove()
     {
         _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x, _ctx.AppliedMovementY, _ctx.transform.forward.z);
-        
-        _ctx.CC.Move(_ctx.AppliedMovement * (MoveSpeed * Time.deltaTime));
-    }
 
-    public override void InitializeSubState()
-    {
+        _ctx.CC.Move(_ctx.AppliedMovement * ((_ctx.IsSprintPressed ? SprintSpeed : MoveSpeed) * Time.deltaTime));
     }
 }

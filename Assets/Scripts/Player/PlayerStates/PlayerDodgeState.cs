@@ -53,6 +53,7 @@ public class PlayerDodgeState : PlayerBaseState
         {
             await Task.Yield();
         }
+
         _ctx.CanDodge = true;
     }
 
@@ -65,10 +66,5 @@ public class PlayerDodgeState : PlayerBaseState
     private void HandleGravity()
     {
         _ctx.CurrentMovementY = _ctx.BaseGravity;
-    }
-
-    public override void InitializeSubState()
-    {
-        
     }
 }
