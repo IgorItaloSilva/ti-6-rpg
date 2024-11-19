@@ -9,6 +9,9 @@ public class Inimigo : MonoBehaviour,IDamagable
     {
         Debug.Log($"Eu {name} recebi {damage} de dano");
     }
+    public void Die(){
+        
+    }
 
     // Start is called before the first frame update
     void Start()

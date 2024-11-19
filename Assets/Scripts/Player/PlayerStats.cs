@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +25,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     public int Str {get; private set;}
     public int Dex {get; private set;}
     public int Int {get; private set;}
-    public float Exp {get; private set;}
+    public int Exp {get; private set;}
     public int Level {get; private set;}
     public float CurrentLife{get; private set;}
     public float CurrentMana{get; private set;}
@@ -43,13 +44,13 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     private bool PUArmorActive;
     private bool PULifeRegenActive;
     //Coisas de level up
-    public int levelUpPoints{get;private set;}//adicionar no save/load depois
+    public int LevelUpPoints{get;private set;}//adicionar no save/load depois
     private int spentPointsIfCancel;
     public int[] simulatedStatChange;
     public bool IsNearCampfire ;//{get;private set;}//adicionar no save/load depois
+    private bool playerIsDead; //Talvez Adicionar no save e load depois
     void Start()
     {
-        levelUpPoints=3;
         IsNearCampfire=true;
         simulatedStatChange = new int[4];
         CalculateStats();
@@ -64,6 +65,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.uiEvents.onChangeStatusButtonPressed+=SimulateStatusBuyOrSell;
         GameEventsManager.instance.uiEvents.onConfirmLevelUp+=ConfirmChanges;
         GameEventsManager.instance.uiEvents.onDiscardLevelUp+=DiscardChanges;
+        GameEventsManager.instance.playerEvents.onPlayerRespawned+=PlayerRespawn;
+        GameEventsManager.instance.playerEvents.onPlayerGainExp+=GainExp;
+        GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUp;
     }
     void OnDisable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo-=SendBaseStatsInfo;
@@ -73,6 +77,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.uiEvents.onChangeStatusButtonPressed-=SimulateStatusBuyOrSell;
         GameEventsManager.instance.uiEvents.onConfirmLevelUp-=ConfirmChanges;
         GameEventsManager.instance.uiEvents.onDiscardLevelUp+=DiscardChanges;
+        GameEventsManager.instance.playerEvents.onPlayerRespawned-=PlayerRespawn;
+        GameEventsManager.instance.playerEvents.onPlayerGainExp-=GainExp;
+        GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUp;
     }
 
     // Update is called once per frame
@@ -80,13 +87,6 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     {
         GameEventsManager.instance.uiEvents.UpdateSliders(0,0,maxLife);//Essas duas funções deveriam ser chamadas
         GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
-    }
-    public void TakeDamage(float dano){
-        CurrentLife -= dano;
-        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
-        if(CurrentLife<=0){
-            Die();
-        }
     }
     public void HealLife(float life){
         if(CurrentLife<maxLife){
@@ -96,10 +96,14 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         }
         
     }
-    private void Die(){
+    public void Die(){
         GameEventsManager.instance.playerEvents.PlayerDied();
-        //Adicionar logica de reload
-        //Aviso de UI
+        Debug.Log("Player morreu!");
+        playerIsDead = true;
+        //DesativarInputs
+    }
+    private void PlayerRespawn(){
+        playerIsDead=false;
     }
     public void SaveData(GameData data){
         PlayerStatsData playerStatsData = new PlayerStatsData(this);
@@ -124,7 +128,11 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     public void TakeDamage(float damage,Enums.DamageType damageType)
     {
         if(PUArmorActive) damage/=2;
-        TakeDamage(damage);
+        CurrentLife -= damage;
+        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
+        if(CurrentLife<=0&&!playerIsDead){
+            Die();
+        }
     }
     private void ActivatePowerUp(int id){//OBS OS IDS SÃO HARD CODED, SE MUDAR A ORDEM DELES PRECISA MUDAR AQUI!!!!!!!
         switch(id){
@@ -134,7 +142,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         }
     }
     private void LifeRegenPowerUp(){
-        if(PUArmorActive){
+        if(PULifeRegenActive){
             if(CurrentLife<maxLife){
                 float lifeMissing = maxLife-CurrentLife;
                 float healRatio = lifeMissing/10;
@@ -150,9 +158,23 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10);
         heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10);
     }
-    //ADICIONAR COISAS DE GANHAR EXP E LEVEL UP
-    // EXP PARA O PROXIMO NIVEL = 100*2^(L-1) onde L é o nivel atual
-    //FUNCÕES PARA ENVIAR OS EVENTOS
+    void GainExp(int exp){
+        int expToNextLevel = ExpToNextLevel(Level);
+        Exp+=exp;
+        if(Exp>expToNextLevel){
+            LevelUp();
+        } 
+    }
+    void LevelUp(){
+        Level+=1;
+        LevelUpPoints+=3;
+    }
+    int ExpToNextLevel(int level){
+        if(level==0){
+            return 0;
+        }
+        else return 100*(int)Mathf.Pow(2,Level-1);
+    }
     void SendBaseStatsInfo(){
         GameEventsManager.instance.uiEvents.ReciveBaseStatsInfo(Con,Str,Dex,Int);
     }
@@ -164,21 +186,21 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         ,lightAttackDamage,heavyAttackDamage);
     }
     void SendLevelUpInfo(){
-        GameEventsManager.instance.uiEvents.ReciveLevelUpInfo(levelUpPoints,IsNearCampfire);
+        GameEventsManager.instance.uiEvents.ReciveLevelUpInfo(LevelUpPoints,IsNearCampfire);
     }
-    //Coisas de level up
+    //Coisas de UI do level up
     public void SimulateStatusBuyOrSell(int statusId,bool isBuying){
         
         if(isBuying){
-            if(levelUpPoints<=0)return;
+            if(LevelUpPoints<=0)return;
             simulatedStatChange[statusId]++;
-            levelUpPoints--;
+            LevelUpPoints--;
             spentPointsIfCancel++;
         }
         else{
             if(simulatedStatChange[statusId]<1)return;
             simulatedStatChange[statusId]--;
-            levelUpPoints++;
+            LevelUpPoints++;
             spentPointsIfCancel--;
         }
         SendLevelUpInfo();
@@ -242,7 +264,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         SendLevelUpInfo();
     }
     void DiscardChanges(){
-        levelUpPoints= levelUpPoints+spentPointsIfCancel;
+        LevelUpPoints= LevelUpPoints+spentPointsIfCancel;
         spentPointsIfCancel=0;
     }
 }

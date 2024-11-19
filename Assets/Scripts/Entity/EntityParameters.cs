@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class EntityParameters : MonoBehaviour,IDamagable
+public class EntityParameters : MonoBehaviour
 {
     [SerializeField] SO_Entity entity;
 

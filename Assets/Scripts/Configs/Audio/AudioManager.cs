@@ -17,9 +17,9 @@ public class AudioManager : MonoBehaviour
 
     void Start()
     {
-        if (!GameManager.gm.audioManager)
+        if (!GameManager.instance.audioManager)
         {
-            GameManager.gm.audioManager = this;
+            GameManager.instance.audioManager = this;
             DontDestroyOnLoad(gameObject);
         }
         else

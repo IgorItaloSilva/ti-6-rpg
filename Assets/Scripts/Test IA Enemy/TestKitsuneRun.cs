@@ -18,14 +18,11 @@ public class TestKitsuneRun : TestEnemyActions
         GoToTarget();
         if((target.position - enemyController.transform.position).magnitude <= nextMinRange)
             ExitAction(enemyController.GetAttackActions());
-
     }
-
     public override void ExitAction(TestEnemyActions enemyAction)
     {
         rb.velocity = Vector3.zero;
         animator.SetBool("isRunning", false);
         enemyController.SetAttack();
-
     }
 }

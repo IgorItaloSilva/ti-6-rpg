@@ -11,7 +11,7 @@ public class SetVolumeSlider : MonoBehaviour
 
     void Start()
     {
-        GameManager.gm.audioManager.SetSliders(volumeSliders, btnShake);
+        GameManager.instance.audioManager.SetSliders(volumeSliders, btnShake);
         Destroy(this);
     }
 

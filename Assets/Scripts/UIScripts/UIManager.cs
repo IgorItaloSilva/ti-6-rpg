@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,8 +15,19 @@ public class UIManager : MonoBehaviour
     [SerializeField]private Slider lifeSlider;
     [SerializeField]private Image saveIcon;
     [SerializeField]private GameObject painelPause;
+    [SerializeField]private GameObject hideblePausePartUI;
     [SerializeField]private GameObject painelStats;
-    [SerializeField]private GameObject hideblePartUI;
+    [SerializeField]private GameObject painelDeath;
+    [Header("Coisas do VFX de You Died ")]
+    [SerializeField]private GameObject youDiedVFXParent;
+    [SerializeField]private GameObject youDiedVFXBackgroundGO;
+    [SerializeField]private GameObject youDiedVFXTextGO;
+    private Text youDiedVFXText;
+    private Image youDiedVFXImage;
+    private const float transparencyRatioYouDiedVfx = 0.05f;
+    private const float transparencyRatioYouDiedBackgroundVfx = 0.1f;
+    private const float secondsBeforeYouDiedVfxAppears = 2f;
+    private const float tranparacyTimeRatioDivideByTen = 0.05f;
     private UIScreens currentUIScreen;
     public enum UIScreens{
         Closed = -1,
@@ -23,7 +35,8 @@ public class UIManager : MonoBehaviour
         Stats,
         SkillTree,
         Weapon,
-        System
+        System,
+        Death
     }
     
     
@@ -31,6 +44,7 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onUpdateSliders+=UpdateSliders;
         GameEventsManager.instance.uiEvents.onLifeChange+=UpdateHealth;
         GameEventsManager.instance.uiEvents.onSavedGame+=FeedBackSave;
+        GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
     }
 
     void OnDisable()
@@ -38,6 +52,7 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onUpdateSliders -= UpdateSliders;
         GameEventsManager.instance.uiEvents.onLifeChange -= UpdateHealth;
         GameEventsManager.instance.uiEvents.onSavedGame -= FeedBackSave;
+        GameEventsManager.instance.playerEvents.onPlayerDied-=PlayerDied;
     }
 
     void Start()
@@ -61,6 +76,9 @@ public class UIManager : MonoBehaviour
         }
         currentUIScreen = UIScreens.Closed;
         AjustUiOnStart();
+        youDiedVFXText = youDiedVFXTextGO.GetComponent<Text>();
+        youDiedVFXImage = youDiedVFXBackgroundGO.GetComponentInChildren<Image>();
+        //youDiedVFXText.color = new Color32(255,0,0,0);
     }
     
 
@@ -78,6 +96,10 @@ public class UIManager : MonoBehaviour
                 SwitchToScreen((int)UIScreens.MainPause);
             }
         }
+        if(Keyboard.current.enterKey.wasPressedThisFrame){
+            PlayerDied();
+        }
+    
         /* if(Mouse.current.leftButton.wasPressedThisFrame){
             Debug.Log($"pos do mouse = {Mouse.current.position.ReadValue()}");
         } */
@@ -127,23 +149,6 @@ public class UIManager : MonoBehaviour
 
         saveIcon.gameObject.SetActive(false);
     }
-    private void UnpauseGame(){
-        //Mudar isso quando começar a usar um game manager. Essa função deveria fazer só a parte da UI, e se pa nem existir
-        //Mudar a time scale não é responsabilidade de um manager de UI
-        Time.timeScale=1f;
-        Cursor.lockState=CursorLockMode.Locked;
-        Cursor.visible=false;
-        painelPause.SetActive(false);
-    }
-    private void PauseGame(){
-        //Mudar isso quando começar a usar um game manager. Essa função deveria fazer só a parte da UI, e se pa nem existir
-        //Mudar a time scale não é responsabilidade de um manager de UI
-        Time.timeScale=0f;
-        Cursor.lockState=CursorLockMode.Confined;
-        Cursor.visible=true;
-        painelPause.SetActive(true);
-        hideblePartUI.SetActive(true);
-    }
     private void AjustUiOnStart(){
         if(!painelPause){
             Debug.LogWarning("O nosso uiManager não tem referencia ao menu de pause");
@@ -154,6 +159,38 @@ public class UIManager : MonoBehaviour
         }
         skillTreeUIManager?.AjustUiOnStart();
         painelStats.SetActive(false);
+        painelDeath.SetActive(false);
+        youDiedVFXParent.SetActive(false);
+    }
+    void PlayerDied(){
+        StartCoroutine("PlayYouDiedAnimation");
+    }
+    IEnumerator PlayYouDiedAnimation(){
+        yield return new WaitForSecondsRealtime(secondsBeforeYouDiedVfxAppears);
+        youDiedVFXParent.SetActive(true);
+        byte youDiedTextColor = 0;
+        float youDiedImageColor= 1;
+        youDiedVFXText.color= new Color32(255,0,0,youDiedTextColor);
+        youDiedVFXImage.color = new Color(0,0,0,youDiedImageColor);
+        for(int i=0;i<20;i++){
+            youDiedTextColor+=(byte)(transparencyRatioYouDiedVfx*255);
+            if(i%4==0)youDiedTextColor+=3;//correção do erro de arredondamendo de float pra byte
+            //Debug.Log(youDiedTextColor);
+            youDiedVFXText.color= new Color32(255,0,0,youDiedTextColor);
+            yield return new WaitForSecondsRealtime(tranparacyTimeRatioDivideByTen);
+        }
+        yield return new WaitForSecondsRealtime(2);
+        for(int i=10;i>0;i--){
+            youDiedTextColor-=(byte)(transparencyRatioYouDiedVfx*2*255);
+            //Debug.Log(youDiedTextColor);
+            youDiedVFXText.color= new Color32(255,0,0,youDiedTextColor);
+            youDiedImageColor-=transparencyRatioYouDiedBackgroundVfx;
+            youDiedVFXImage.color=new Color(0,0,0,youDiedImageColor);
+            yield return new WaitForSecondsRealtime(tranparacyTimeRatioDivideByTen);
+        }
+        youDiedVFXParent.SetActive(false);
+        SwitchToScreen((int)UIScreens.Death);
+
     }
     public void SwitchToScreen(int destinationUiScreen){
         Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");
@@ -161,7 +198,7 @@ public class UIManager : MonoBehaviour
         switch(currentUIScreen){
             case UIScreens.Closed: break;
             case UIScreens.MainPause:
-                hideblePartUI.SetActive(false);
+                hideblePausePartUI.SetActive(false);
             break;
             case UIScreens.Stats:
                 if(statsUIManager.isSimulating)statsUIManager.CancelSimulation();
@@ -172,16 +209,23 @@ public class UIManager : MonoBehaviour
             break;
             case UIScreens.Weapon: break;
             case UIScreens.System: break;
+            case UIScreens.Death:
+                GameManager.instance.ReturnFromDeath();
+                painelDeath.SetActive(false);
+            break;
             default: Debug.LogWarning("A tela atual é indefinida"); break;
         }
         //ativa a tela de destino
         switch((UIScreens)destinationUiScreen){
             case UIScreens.Closed:
-                UnpauseGame();
+                GameManager.instance.UnpauseGameAndLockCursor();
+                painelPause.SetActive(false);
                 currentUIScreen=UIScreens.Closed;
             break;
             case UIScreens.MainPause:
-                PauseGame();
+                GameManager.instance.PauseGameAndUnlockCursor();
+                painelPause.SetActive(true);
+                hideblePausePartUI.SetActive(true);
                 currentUIScreen=UIScreens.MainPause;
             break;
             case UIScreens.SkillTree:
@@ -199,6 +243,11 @@ public class UIManager : MonoBehaviour
             break;
             case UIScreens.System: 
                 currentUIScreen=UIScreens.System;
+            break;
+            case UIScreens.Death:
+                GameManager.instance.PauseGameAndUnlockCursor();
+                painelDeath.SetActive(true);
+                currentUIScreen=UIScreens.Death;
             break;
             default: Debug.LogWarning("A tela destino é indefinida"); break;
         }

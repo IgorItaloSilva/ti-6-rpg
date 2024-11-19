@@ -23,7 +23,6 @@ public abstract class TestEnemyController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         StartEnemy(); 
     }
-
     private void Update() { currentAction?.UpdateAction(); }
 
 
@@ -35,6 +34,7 @@ public abstract class TestEnemyController : MonoBehaviour
         // CurrentAction = movementActions[0];
         // bkRestTime = queueAttacks[0].restTime;
         // CurrentAction.StartAction(this, rb,);
+
 
 
     public void EnemyAttacked() // Ativado quando a ação do inimigo é um ataque
@@ -63,6 +63,7 @@ public abstract class TestEnemyController : MonoBehaviour
     public Rigidbody GetRigidbody() { return rb; }
     public Animator GetAnimator() { return animator; }
     public float GetRestTime() { return bkRestTime; }
+
     public float GetNextMinRange() { return queueAttacks.Peek().GetMinRange(); } // pega o minimo de range do próximo ataque do inimigo
     public TestEnemyActions GetMoveActions(int index) { return movementActions[index]; }
     public TestEnemyActions GetAttackActions() { return queueAttacks.Peek(); }
@@ -84,14 +85,18 @@ public abstract class TestEnemyController : MonoBehaviour
 
 
 //// Parado:
+
 // - no momento que ir para o idle, checar se consegue olhar para o jogador, caso não consiga diminuir o tempo de espera pela metade e chamar ação de se virar e diminuir o tempo novamente pela metade
+
 
 //// End Parado
 
 
 //// Movimento:
 
+
 // -Adicionar aleatoriamente um movimento de acordo com a ação, Exe: chance de 7 walk, 3 run
 // -Caso rest da ação chegue a 0 e não conseguiu chegar no minimo da próxima ação, se a ação atual é caminhada, ele passa para a de corrida
+
 
 //// End Movimento

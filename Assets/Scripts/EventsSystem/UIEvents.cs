@@ -39,7 +39,7 @@ public class UIEvents
         }
     }
     public event Action<int,float> onReviceExpStatsInfo;
-    public void ReciveExpStatsInfo(int level,float currentExp){
+    public void ReciveExpStatsInfo(int level,int currentExp){
         if(onReviceExpStatsInfo!=null){
             onReviceExpStatsInfo(level,currentExp);
         }
