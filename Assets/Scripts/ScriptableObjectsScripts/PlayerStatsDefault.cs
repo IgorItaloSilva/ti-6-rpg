@@ -8,7 +8,7 @@ public class PlayerStatsDefaultSO : ScriptableObject
     public int baseStr;
     public int baseDex;
     public int baseInt;
-    public float baseExp;
+    public int baseExp;
     public int baseLevel;
     public float baseLife;
     public float baseMana;

@@ -11,8 +11,8 @@ public abstract class TestEnemyController : MonoBehaviour
 
     [SerializeField] protected List<TestEnemyActions> movementActions = new List<TestEnemyActions>(); // 0 - idle | 1 - walk | 2 - Run | 3 - Turn Around
     [SerializeField] protected List<TestEnemyActions> attackActions = new List<TestEnemyActions>(); // Lista com todos os ataques
-    [SerializeField] protected Queue<TestEnemyActions> queueAttacks = new Queue<TestEnemyActions>(); // Fila com ordem de ataque do inimigo aleatória
-    [SerializeField] protected TestEnemyActions currentAction; // Ação atual do inimigo
+    [SerializeField] protected Queue<TestEnemyActions> queueAttacks = new Queue<TestEnemyActions>(); // Fila com ordem de ataque do inimigo aleatï¿½ria
+    [SerializeField] protected TestEnemyActions currentAction; // Aï¿½ï¿½o atual do inimigo
 
     [SerializeField] protected Transform target; // Jogador
     private float bkRestTime = 2f;
@@ -24,10 +24,10 @@ public abstract class TestEnemyController : MonoBehaviour
         StartEnemy(); 
     }
 
-    private void FixedUpdate() { currentAction?.UpdateAction(); }
-
-
-    protected abstract void StartEnemy(); // Começo do inimigo
+    private void FixedUpdate() {
+        currentAction?.UpdateAction(); 
+    }
+    protected abstract void StartEnemy(); // Comeï¿½o do inimigo
         // Template:
         // movementActions.Add();
         // attackActions.Add();
@@ -37,20 +37,20 @@ public abstract class TestEnemyController : MonoBehaviour
         // CurrentAction.StartAction(this, rb,);
 
 
-    public void EnemyAttacked() // Ativado quando a ação do inimigo é um ataque
+    public void EnemyAttacked() // Ativado quando a aï¿½ï¿½o do inimigo ï¿½ um ataque
     {
-        queueAttacks.Dequeue(); // Retira a ação realizada
+        queueAttacks.Dequeue(); // Retira a aï¿½ï¿½o realizada
         Debug.Log("Antes " + queueAttacks.Count);
         if (queueAttacks.Count == 0) // Checa se ja utilizou todos os ataques randomizados
-            ShuffleAttacks(); // Randomiza os próximos ataques
+            ShuffleAttacks(); // Randomiza os prï¿½ximos ataques
         Debug.Log("Depois " + queueAttacks.Count);
     }
 
 
-    protected void ShuffleAttacks()// Randomiza os próximos ataques
+    protected void ShuffleAttacks()// Randomiza os prï¿½ximos ataques
     {
         List<TestEnemyActions> shuffleList = new();
-        shuffleList.AddRange(attackActions); // Lista para randomizar a fila de ações
+        shuffleList.AddRange(attackActions); // Lista para randomizar a fila de aï¿½ï¿½es
         while(shuffleList.Count > 0)
         {
             int value = Random.Range(0, shuffleList.Count);
@@ -65,7 +65,7 @@ public abstract class TestEnemyController : MonoBehaviour
     public Rigidbody GetRigidbody() { return rb; }
     public Animator GetAnimator() { return animator; }
     public float GetRestTime() { return bkRestTime; }
-    public float GetNextMinRange() { return queueAttacks.Peek().GetMinRange(); } // pega o minimo de range do próximo ataque do inimigo
+    public float GetNextMinRange() { return queueAttacks.Peek().GetMinRange(); } // pega o minimo de range do prï¿½ximo ataque do inimigo
     public TestEnemyActions GetMoveActions(int index) { return movementActions[index]; }
     public TestEnemyActions GetAttackActions() { return queueAttacks.Peek(); }
     public Transform GetTarget() { return target; }
@@ -86,14 +86,14 @@ public abstract class TestEnemyController : MonoBehaviour
 
 
 //// Parado:
-// - no momento que ir para o idle, checar se consegue olhar para o jogador, caso não consiga diminuir o tempo de espera pela metade e chamar ação de se virar e diminuir o tempo novamente pela metade
+// - no momento que ir para o idle, checar se consegue olhar para o jogador, caso nï¿½o consiga diminuir o tempo de espera pela metade e chamar aï¿½ï¿½o de se virar e diminuir o tempo novamente pela metade
 
 //// End Parado
 
 
 //// Movimento:
 
-// -Adicionar aleatoriamente um movimento de acordo com a ação, Exe: chance de 7 walk, 3 run
-// -Caso rest da ação chegue a 0 e não conseguiu chegar no minimo da próxima ação, se a ação atual é caminhada, ele passa para a de corrida
+// -Adicionar aleatoriamente um movimento de acordo com a aï¿½ï¿½o, Exe: chance de 7 walk, 3 run
+// -Caso rest da aï¿½ï¿½o chegue a 0 e nï¿½o conseguiu chegar no minimo da prï¿½xima aï¿½ï¿½o, se a aï¿½ï¿½o atual ï¿½ caminhada, ele passa para a de corrida
 
 //// End Movimento

@@ -40,6 +40,12 @@ public class PlayerEvents
             onPlayerRespawned();
         }
     }
+    public event Action<int> onPlayerGainExp;
+    public void PlayerGainExp(int exp){
+        if(onPlayerGainExp!=null){
+            onPlayerGainExp(exp);
+        }
+    }
     /* Um Evento com parametros tem a forma
     public event Action<int,float> onEventoOcorreu;
     public void EventoOcorreu(int inteiro, float flutuante){

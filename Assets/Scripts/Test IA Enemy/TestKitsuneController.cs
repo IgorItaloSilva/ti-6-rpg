@@ -21,10 +21,10 @@ public class TestKitsuneController : TestEnemyController,IDamagable
         currentHp -= damage;
         sliderVida.value = currentHp;
         if(currentHp<=0){
-            Morrer();
+            Die();
         }
     }
-    void Morrer(){
+    public void Die(){
         Destroy(gameObject);
     }
 

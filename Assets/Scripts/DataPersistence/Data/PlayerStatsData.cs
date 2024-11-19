@@ -8,7 +8,7 @@ public class PlayerStatsData
     public int str;
     public int dex;
     public int inte;
-    public float exp;
+    public int exp;
     public int level;
     public float currentLife;
     public float baseLife;
@@ -60,7 +60,7 @@ public class PlayerStatsData
         this.baseLightAttackcDamage = playerStats.BaseLightAttackDamage;
         this.baseHeavyAttackDamage = playerStats.BaseHeavyAttackDamage;
     }
-    public PlayerStatsData(int con, int str,int dex, int inte, float exp, int level, float currentLife,float baseLife){
+    public PlayerStatsData(int con, int str,int dex, int inte, int exp, int level, float currentLife,float baseLife){
         this.con = con;
         this.str = str;
         this.dex = dex;

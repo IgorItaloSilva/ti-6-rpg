@@ -1,0 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class KitsuneBasicAttack : EnemyActions
+{
+    float time;
+    float animationDuration;
+    public override void EnterAction()
+    {
+        actualEnemyController.animator.CrossFade("Fox_Attack1",0.1f);
+        time=0;
+        actualEnemyController.rb.constraints=RigidbodyConstraints.FreezeAll;
+    }
+
+    public override void ExitAction()
+    {
+        actualEnemyController.rb.constraints=RigidbodyConstraints.FreezeRotation;
+    }
+
+    public override void UpdateAction()
+    {
+        time+=Time.fixedDeltaTime;
+        Vector3 target = actualEnemyController.target.GetPosition();
+        target.y=actualEnemyController.transform.position.y;
+        actualEnemyController.transform.LookAt(target);
+        if(time>animationDuration){
+            actualEnemyController.ChangeAction(new nullAction());
+        } 
+    }
+    public KitsuneBasicAttack(float attackTime,float minDistToAttack,ActualEnemyController actualEnemyController){
+        animationDuration=attackTime;
+        distToAttack=minDistToAttack;
+        this.actualEnemyController=actualEnemyController;
+    }
+}
