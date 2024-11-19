@@ -20,7 +20,7 @@ public class WeaponManager : MonoBehaviour
     }
     List<IDamagable>damagedTargets = new List<IDamagable>();
     private void OnTriggerEnter(Collider collider){
-        Debug.Log("A arma colidiu com algo");
+        //Debug.Log("A arma colidiu com algo");
         IDamagable alvoAtacado = collider.gameObject.GetComponentInParent<IDamagable>();
         if(alvoAtacado!=null){
             DealDamage(alvoAtacado,damage);
@@ -31,7 +31,7 @@ public class WeaponManager : MonoBehaviour
             return;
         }
         alvo.TakeDamage(damage,damageType);
-        Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
+        //Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
         damagedTargets.Add(alvo);
     }
     public void EnableCollider(){

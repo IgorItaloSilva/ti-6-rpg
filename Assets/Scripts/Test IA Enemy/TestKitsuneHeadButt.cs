@@ -19,6 +19,7 @@ public class TestKitsuneHeadButt : TestEnemyActions
 
     public override void UpdateAction()
     {
+        TrackTarget(trackSpeed:6f);
         if (InRestTime())
             return;
         if(canUpdate)

@@ -22,8 +22,8 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
     
     private PlayerInput playerInput;
     private float _turnSmoothSpeed, _gravity, _initialJumpVelocity, _turnTime = TurnTime;
-    private const float MaxJumpHeight = .6f, MaxJumpTime = .75f, MoveSpeed = 8f, SprintSpeedModifier = 1.5f, DodgeSpeedMultiplier = 4f, GroundedGravity = -0.05f, TurnTime = 0.15f, SprintTurnTimeModifier = 3f;
-    private Vector3 _currentMovement;
+    private const float MaxJumpHeight = .15f, MaxJumpTime = .6f, MoveSpeed = 8f, SprintSpeedModifier = 1.5f, DodgeSpeedMultiplier = 4f, GroundedGravity = -0.05f, TurnTime = 0.15f, SprintTurnTimeModifier = 3f;
+    private Vector3 _currentMovement, _appliedMovement;
     private Vector2 _currentMovementInput;
     private bool _hasJumped, _isMovementPressed, _isSprintPressed, _isJumpPressed, _isJumping, _isDodgePressed, _isDodging, _canDodge = true;
 
@@ -97,9 +97,9 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
 
     private void PrepareJumpVariables()
     {
-        var _timeToApex = MaxJumpTime / 2;
-        _gravity = (-2 * MaxJumpHeight) / Mathf.Pow(_timeToApex, 2);
-        _initialJumpVelocity = (2 * MaxJumpHeight) / _timeToApex;
+        const float TimeToApex = MaxJumpTime / 2;
+        _gravity = (-2 * MaxJumpHeight) / Mathf.Pow(TimeToApex, 2);
+        _initialJumpVelocity = (2 * MaxJumpHeight) / TimeToApex;
     }
     
     private void Awake()
@@ -131,7 +131,8 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
             case true when !_isJumping && cc.isGrounded:
                 _turnTime = TurnTime * SprintTurnTimeModifier;
                 _isJumping = true;
-                _currentMovement.y += _initialJumpVelocity * 0.5f;
+                _currentMovement.y = _initialJumpVelocity;
+                _appliedMovement.y = _initialJumpVelocity;
                 break;
             case false when _isJumping && cc.isGrounded:
                 _turnTime = TurnTime;
@@ -166,10 +167,13 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
 
     private void HandleMove()
     {
-        if ((_isSprintPressed || !cc.isGrounded) && _isMovementPressed)
+        _appliedMovement.x = _currentMovement.x;
+        _appliedMovement.z = _currentMovement.z;
+        
+        if ((_isSprintPressed || _isJumping) && _isMovementPressed)
         {
-            _currentMovement.x = _isSprintPressed ? transform.forward.x * SprintSpeedModifier : transform.forward.x;
-            _currentMovement.z = _isSprintPressed ? transform.forward.z * SprintSpeedModifier : transform.forward.z;
+            _appliedMovement.x = _isSprintPressed ? transform.forward.x * SprintSpeedModifier : transform.forward.x;
+            _appliedMovement.z = _isSprintPressed ? transform.forward.z * SprintSpeedModifier : transform.forward.z;
             _turnTime = TurnTime * SprintTurnTimeModifier;
         }
         else
@@ -178,11 +182,11 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
         }
         if (_isDodging)
         {
-            _currentMovement.x *= DodgeSpeedMultiplier;
-            _currentMovement.z *= DodgeSpeedMultiplier;
+            _appliedMovement.x *= DodgeSpeedMultiplier;
+            _appliedMovement.z *= DodgeSpeedMultiplier;
         }
         // Aplicar direção e rotação só caso o player esteja se movendo
-        cc.Move(_currentMovement * (MoveSpeed * Time.deltaTime));
+        cc.Move(_appliedMovement * (MoveSpeed * Time.deltaTime));
     }
 
     private void HandleGravity()
@@ -191,9 +195,8 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
         else
         {
             var previousYVelocity = _currentMovement.y;
-            var newYVelocity = _currentMovement.y + (_gravity * Time.deltaTime);
-            var nextYVelocity = (previousYVelocity + newYVelocity) * 0.5f;
-            _currentMovement.y = nextYVelocity;
+            _currentMovement.y += (_gravity * Time.deltaTime);
+            _appliedMovement.y = ((previousYVelocity + _currentMovement.y));
         }
     }
 
@@ -205,9 +208,9 @@ public class PlayerMovement : MonoBehaviour,IDataPersistence
 
         if (!_isMovementPressed) return;
         // Aplicar movimentação multiplicando pela velocidade do player:
-        var _targetMovement = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
+        var groundedMovement = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
 
-        _currentMovement = new Vector3(_targetMovement.x, _currentMovement.y, _targetMovement.z);
+        _currentMovement = new Vector3(groundedMovement.x, _currentMovement.y, groundedMovement.z);
 
         // Rotacionar a direção do player
         transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
