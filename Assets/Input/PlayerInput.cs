@@ -74,7 +74,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Look"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""93b95837-8c7f-42cd-bb89-b6de6c1afe3a"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
@@ -251,8 +251,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""id"": ""03e50969-a25f-4b33-8fea-2e29cae0ef0b"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Controller"",
+                    ""processors"": ""NormalizeVector2"",
+                    ""groups"": ""Controller;Keyboard + Mouse"",
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
