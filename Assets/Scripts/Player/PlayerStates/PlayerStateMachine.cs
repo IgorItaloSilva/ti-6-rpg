@@ -8,13 +8,14 @@ public class PlayerStateMachine : MonoBehaviour
     // Singleton publico do PlayerMovement
     public static PlayerStateMachine Instance;
 
-    [Header("Referências: ")] [HideInInspector]
+    [HideInInspector]
     public CinemachineFreeLook cinemachine;
 
     private Camera mainCam;
     private Animator animator;
     private CharacterController cc;
-    [Header("Input: ")] private PlayerInput playerInput;
+    [SerializeField] private WeaponManager swordWeaponManager;
+    private PlayerInput playerInput;
     private float _turnSmoothSpeed, _gravity, _turnTime, _initialJumpVelocity;
 
     public readonly float MaxJumpHeight = .15f,
@@ -293,6 +294,16 @@ public class PlayerStateMachine : MonoBehaviour
     public void AttackStarted()
     {
         _currentAttack++;
+    }
+
+    private void EnableSwordCollider()
+    {
+        swordWeaponManager.EnableCollider();
+    }
+    
+    private void DisableSwordCollider()
+    {
+        swordWeaponManager.DisableCollider();
     }
 
     private void HandleAnimations()
