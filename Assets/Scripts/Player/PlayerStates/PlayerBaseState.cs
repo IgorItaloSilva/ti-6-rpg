@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public abstract class PlayerBaseState
@@ -11,6 +12,8 @@ public abstract class PlayerBaseState
         _ctx = currentContext;
         _factory = playerStateFactory;
     }
+
+    public abstract void HandleAnimatorParameters();
     public abstract void EnterState();
     public abstract void UpdateState();
     public abstract void ExitState();
@@ -22,12 +25,5 @@ public abstract class PlayerBaseState
         newState.EnterState();
 
         _ctx.CurrentState = newState;
-    }
-    
-    protected void HandleJump()
-    {
-        _ctx.CanJump = false;
-        _ctx.CurrentMovementY = _ctx.InitialJumpVelocity;
-        _ctx.AppliedMovementY = _ctx.InitialJumpVelocity;
     }
 }

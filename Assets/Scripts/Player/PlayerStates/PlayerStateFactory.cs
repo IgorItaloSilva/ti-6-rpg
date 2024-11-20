@@ -1,3 +1,6 @@
+using System.Numerics;
+using Player.PlayerStates;
+
 public class PlayerStateFactory
 {
     private PlayerStateMachine _context;
@@ -29,6 +32,11 @@ public class PlayerStateFactory
     public PlayerBaseState InAir()
     {
         return new PlayerInAirState(_context, this);
+    }
+
+    public PlayerBaseState Climb()
+    {
+        return new PlayerClimbState(_context, this);
     }
 
 }

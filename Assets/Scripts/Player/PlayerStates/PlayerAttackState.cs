@@ -8,14 +8,19 @@ public class PlayerAttackState : PlayerBaseState
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
+        
     }
-
     public override void EnterState()
     {
         _ctx.TurnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
         Debug.Log("Attacking!");
         _ctx.HandleAttack();
     }
+
+    public sealed override void HandleAnimatorParameters()
+    {
+    }
+
 
     public override void UpdateState()
     {
@@ -34,7 +39,10 @@ public class PlayerAttackState : PlayerBaseState
     {
         if(_ctx.AttackCount == 0)
         {
-            SwitchState(_factory.Grounded());
+            if(_ctx.IsSprintPressed)
+                SwitchState(_factory.Sprint());
+            else
+                SwitchState(_factory.Grounded());
         }
     }
 }

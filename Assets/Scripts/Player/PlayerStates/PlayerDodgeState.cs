@@ -8,6 +8,7 @@ public class PlayerDodgeState : PlayerBaseState
     public PlayerDodgeState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
+        HandleAnimatorParameters();
     }
 
     public override void EnterState()
@@ -16,6 +17,15 @@ public class PlayerDodgeState : PlayerBaseState
         Debug.Log("Dodging");
         _ctx.TurnTime = float.MaxValue;
         HandleDodgeDurationAsync();
+    }
+    
+
+    public sealed override void HandleAnimatorParameters()
+    {
+        _ctx.Animator.SetBool(_ctx.IsWalkingHash, false);
+        _ctx.Animator.SetBool(_ctx.IsRunningHash, false);
+        _ctx.Animator.SetBool(_ctx.IsClimbingHash, false);
+        _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
     }
 
     public override void UpdateState()
@@ -59,9 +69,9 @@ public class PlayerDodgeState : PlayerBaseState
 
     private void HandleDodgeMove()
     {
-        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x, _ctx.AppliedMovementY, _ctx.transform.forward.z);
+        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * DodgeSpeed, _ctx.AppliedMovementY, _ctx.transform.forward.z * DodgeSpeed);
         
-        _ctx.CC.Move(_ctx.AppliedMovement * (DodgeSpeed * Time.deltaTime));
+        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
     private void HandleGravity()
     {

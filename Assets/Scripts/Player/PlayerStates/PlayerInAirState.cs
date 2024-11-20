@@ -7,6 +7,7 @@ public class PlayerInAirState : PlayerBaseState
     public PlayerInAirState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
+        HandleAnimatorParameters();
     }
 
     public override void EnterState()
@@ -15,10 +16,17 @@ public class PlayerInAirState : PlayerBaseState
         _ctx.TurnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
     }
 
+    public sealed override void HandleAnimatorParameters()
+    {
+        _ctx.Animator.SetBool(_ctx.IsGroundedHash, false);
+        _ctx.Animator.SetBool(_ctx.IsWalkingHash, false);
+        _ctx.Animator.SetBool(_ctx.IsRunningHash, false);
+    }
+
     public override void UpdateState()
     {
-        HandleGravity();
         HandleAirMove();
+        HandleGravity();
         CheckSwitchStates();
     }
 
@@ -29,14 +37,19 @@ public class PlayerInAirState : PlayerBaseState
     public override void CheckSwitchStates()
     {
         if (_ctx.CC.isGrounded)
-            SwitchState(_factory.Grounded());
+        {
+            SwitchState(_ctx.IsSprintPressed ? _factory.Sprint() : _factory.Grounded());
+        }
+
+        if (_ctx.IsClimbing && _ctx.CanMount)
+            SwitchState(_factory.Climb());
     }
 
     private void HandleGravity()
     {
         var previousYVelocity = _ctx.CurrentMovementY;
         _ctx.CurrentMovementY += (_ctx.Gravity * Time.deltaTime);
-        _ctx.AppliedMovementY = ((previousYVelocity + _ctx.CurrentMovementY));
+        _ctx.AppliedMovementY = previousYVelocity + _ctx.CurrentMovementY;
     }
 
     private void HandleAirMove()
