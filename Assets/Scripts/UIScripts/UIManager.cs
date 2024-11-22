@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]private GameObject painelStats;
     [SerializeField]private GameObject painelDeath;
     [SerializeField]private GameObject painelDialog;
+    [SerializeField]private GameObject painelTutorial;
     [Header("Coisas do VFX de You Died ")]
     [SerializeField]private GameObject youDiedVFXParent;
     [SerializeField]private GameObject youDiedVFXBackgroundGO;
@@ -38,7 +39,8 @@ public class UIManager : MonoBehaviour
         Weapon,
         System,
         Death,
-        Dialog
+        Dialog,
+        Tutorial
     }
     
     
@@ -48,6 +50,7 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onSavedGame+=FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened+=OpenDialogPanel;
+        GameEventsManager.instance.uiEvents.OnTutorialOpened+=OpenTutorialPanel;
     }
 
     void OnDisable()
@@ -57,6 +60,7 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onSavedGame -= FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied-=PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened-=OpenDialogPanel;
+        GameEventsManager.instance.uiEvents.OnTutorialOpened-=OpenTutorialPanel;
     }
 
     void Start()
@@ -99,16 +103,21 @@ public class UIManager : MonoBehaviour
                 SwitchToScreen((int)UIScreens.MainPause);
             }
         }
-        if(Keyboard.current.enterKey.wasPressedThisFrame){
-            PlayerDied();
-        }
         if(Keyboard.current.eKey.wasPressedThisFrame){
             if(currentUIScreen==UIScreens.Dialog){
                 SwitchToScreen((int)UIScreens.Closed);
             }
         }
+        if(Keyboard.current.eKey.wasPressedThisFrame){
+            if(currentUIScreen==UIScreens.Tutorial){
+                SwitchToScreen((int)UIScreens.Closed);
+            }
+        }
         if(Keyboard.current.numpad1Key.wasPressedThisFrame){
             GameEventsManager.instance.uiEvents.DialogOpen();
+        }
+        if(Keyboard.current.numpad2Key.wasPressedThisFrame){
+            GameEventsManager.instance.uiEvents.OpenTutorial();
         }
     
         /* if(Mouse.current.leftButton.wasPressedThisFrame){
@@ -162,14 +171,17 @@ public class UIManager : MonoBehaviour
         painelStats.SetActive(false);
         painelDeath.SetActive(false);
         youDiedVFXParent.SetActive(false);
-        painelDialog
-.SetActive(false);
+        painelDialog.SetActive(false);
+        painelTutorial.SetActive(false);
     }
     void PlayerDied(){
         StartCoroutine("PlayYouDiedAnimation");
     }
     void OpenDialogPanel(){
         SwitchToScreen((int)UIScreens.Dialog);
+    }
+    void OpenTutorialPanel(){
+        SwitchToScreen((int)UIScreens.Tutorial);
     }
     IEnumerator SpinSaveIcon(){//OK
         float timerTotal=5f;
@@ -230,8 +242,10 @@ public class UIManager : MonoBehaviour
                 painelDeath.SetActive(false);
             break;
             case UIScreens.Dialog:
-                painelDialog
-        .SetActive(false);
+                painelDialog.SetActive(false);
+            break;
+            case UIScreens.Tutorial:
+                painelTutorial.SetActive(false);
             break;
             default: Debug.LogWarning("A tela atual é indefinida"); break;
         }
@@ -271,9 +285,13 @@ public class UIManager : MonoBehaviour
             break;
             case UIScreens.Dialog:
                 GameManager.instance.PauseGameAndUnlockCursor();
-                painelDialog
-        .SetActive(true);
+                painelDialog.SetActive(true);
                 currentUIScreen=UIScreens.Dialog;
+            break;
+            case UIScreens.Tutorial:
+                GameManager.instance.PauseGameAndUnlockCursor();
+                painelTutorial.SetActive(true);
+                currentUIScreen=UIScreens.Tutorial;
             break;
             default: Debug.LogWarning("A tela destino é indefinida"); break;
         }
