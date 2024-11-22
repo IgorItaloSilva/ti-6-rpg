@@ -5,8 +5,7 @@ public abstract class PlayerBaseState
 {
     protected PlayerStateMachine _ctx;
     protected PlayerStateFactory _factory;
-    protected float _turnTime;
-    private float _turnSmoothSpeed;
+    protected float _turnTime, _turnSmoothSpeed;
 
     public PlayerBaseState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
     {
@@ -20,7 +19,7 @@ public abstract class PlayerBaseState
     public abstract void ExitState();
     public abstract void CheckSwitchStates();
 
-    public void HandleRotation()
+    protected void HandleRotation()
     {
         // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
         var turnOrientation = Mathf.Atan2(_ctx.CurrentMovementInput.x, _ctx.CurrentMovementInput.y) * Mathf.Rad2Deg +

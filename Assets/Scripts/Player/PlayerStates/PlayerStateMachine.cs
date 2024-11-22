@@ -23,7 +23,7 @@ public class PlayerStateMachine : MonoBehaviour
         MaxJumpTime = .8f,
         BaseGravity = -9.8f,
         BaseTurnTime = 0.15f,
-        SlowTurnTimeModifier = 2f;
+        SlowTurnTimeModifier = 1.5f;
 
     public readonly int DodgeCooldownMs = 600;
 
@@ -229,7 +229,6 @@ public class PlayerStateMachine : MonoBehaviour
         SetupPlayerStates();
         SetupInputCallbackContext();
         SetupJumpVariables();
-        SceneManager.LoadSceneAsync("Hud", LoadSceneMode.Additive);
         camXSpeed = cinemachine.m_XAxis.m_MaxSpeed;
         camYSpeed = cinemachine.m_YAxis.m_MaxSpeed;
     }
@@ -299,15 +298,13 @@ public class PlayerStateMachine : MonoBehaviour
         _canAttack = false;
 
         if (_attackCount == 3 && _currentAttack == 3) return;
-
-        if (_attackCount == _currentAttack)
-            _attackCount++;
+        
+        _attackCount++;
         ApplyAttackCount();
     }
 
     public void ResetAttacks()
     {
-        if (_attackCount > _currentAttack) return;
         _isAttacking = false;
         _attackCount = 0;
         _currentAttack = 0;
@@ -366,7 +363,7 @@ public class PlayerStateMachine : MonoBehaviour
         cinemachine.m_YAxis.m_MaxSpeed = 0f;
         cinemachine.m_XAxis.m_MaxSpeed = 0f;
     }
-    
+
     private void UnlockCam()
     {
         cinemachine.m_YAxis.m_MaxSpeed = camYSpeed;

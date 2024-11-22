@@ -27,7 +27,6 @@ public class PlayerDodgeState : PlayerBaseState
         _ctx.Animator.ResetTrigger(_ctx.HasDodgedHash);
         _ctx.Animator.SetTrigger(_ctx.HasDodgedHash);
         _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
-        _ctx.ResetAttacks();
     }
 
     public override void UpdateState()
