@@ -1,9 +1,11 @@
 using System.Numerics;
 using Player.PlayerStates;
+using UnityEngine;
 
 public class PlayerStateFactory
 {
     private PlayerStateMachine _context;
+    public Camera mainCam;
 
     public PlayerStateFactory(PlayerStateMachine currentContext)
     {
@@ -25,13 +27,18 @@ public class PlayerStateFactory
         return new PlayerAttackState(_context, this);
     }
 
+    public PlayerBaseState Dead()
+    {
+        return new PlayerDeadState(_context, this);
+    }
+
     public PlayerBaseState Grounded()
     {
         return new PlayerGroundedState(_context, this);
     }
-    public PlayerBaseState InAir()
+    public PlayerBaseState InAir(float airMoveSpeedOverride = 0f)
     {
-        return new PlayerInAirState(_context, this);
+        return new PlayerInAirState(_context, this, airMoveSpeedOverride);
     }
 
     public PlayerBaseState Climb()

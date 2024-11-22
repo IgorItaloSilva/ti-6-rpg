@@ -3,7 +3,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance {get;private set;}
-    public AudioManager audioManager;//negocio do igor
+    [HideInInspector] public AudioManager audioManager;//negocio do igor
 
     void OnEnable(){
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
@@ -25,11 +25,13 @@ public class GameManager : MonoBehaviour
         Time.timeScale=0f;
         Cursor.lockState=CursorLockMode.Confined;
         Cursor.visible=true;
+        GameEventsManager.instance.uiEvents.PauseGame();
     }
     public void UnpauseGameAndLockCursor(){
         Time.timeScale=1f;
         Cursor.lockState=CursorLockMode.Locked;
         Cursor.visible=false;
+        GameEventsManager.instance.uiEvents.UnpauseGame();
     }
     private void PlayerDied(){
         //A ui vai pausar o jogo apos o vfx

@@ -104,6 +104,9 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     //Metodos das interfaces
     public void TakeDamage(float damage, Enums.DamageType damageType)
     {
+        animator.ResetTrigger("tookDamage");
+        animator.SetTrigger("tookDamage");
+        animator.SetBool("damageMirror", !animator.GetBool("damageMirror"));
         switch(damageType){
             case Enums.DamageType.Regular:
                 currentHp-=damage;

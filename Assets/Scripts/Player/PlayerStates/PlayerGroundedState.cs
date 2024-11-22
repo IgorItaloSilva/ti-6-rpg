@@ -16,7 +16,7 @@ public class PlayerGroundedState : PlayerBaseState
     public override void EnterState()
     {
         Debug.Log("Grounded");
-        _ctx.TurnTime = _ctx.BaseTurnTime;
+        _turnTime = _ctx.BaseTurnTime;
     }
 
     public sealed override void HandleAnimatorParameters()
@@ -29,6 +29,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void UpdateState()
     {
+        HandleRotation();
         HandleMove();
         CheckSwitchStates();
     }
@@ -75,6 +76,8 @@ public class PlayerGroundedState : PlayerBaseState
         _ctx.Animator.ResetTrigger(_ctx.HasJumpedHash);
         _ctx.Animator.SetTrigger(_ctx.HasJumpedHash);
         _ctx.CanJump = false;
+        if (!_ctx.IsMovementPressed)
+            _ctx.AppliedMovement = Vector3.zero;
         _ctx.CurrentMovementY = _ctx.InitialJumpVelocity;
         _ctx.AppliedMovementY = _ctx.InitialJumpVelocity;
     }

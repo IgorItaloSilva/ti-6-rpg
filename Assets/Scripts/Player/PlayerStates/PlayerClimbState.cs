@@ -5,21 +5,12 @@ namespace Player.PlayerStates
 {
     public class PlayerClimbState : PlayerBaseState
     {
-        protected const float ClimbSpeed = 2f;
-        private readonly Transform _colliderTransform;
+        protected const float ClimbSpeed = 4f;
 
         public PlayerClimbState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
             currentContext, playerStateFactory)
         {
             HandleAnimatorParameters();
-            _ctx.CanMount = false;
-            RaycastHit hit;
-            if(Physics.Raycast(_ctx.transform.position, _ctx.transform.forward, out hit))
-            {
-                _colliderTransform = hit.collider.gameObject.transform;
-                _ctx.TurnTime = float.MaxValue;
-                _ctx.transform.rotation = _colliderTransform.rotation;
-            }
         }
 
         public override void EnterState()
@@ -36,7 +27,6 @@ namespace Player.PlayerStates
 
         public override void UpdateState()
         {
-            HandleClimbJump();
             HandleClimb();
             CheckSwitchStates();
         }
@@ -48,13 +38,13 @@ namespace Player.PlayerStates
             _ctx.CC.Move(_ctx.AppliedMovement * (ClimbSpeed * Time.deltaTime));
         }
 
-        private void HandleClimbJump()
+        public void HandleJump(float jumpStrength = 1f)
         {
-            if (_ctx.IsJumpPressed)
-            {
-                _ctx.transform.Rotate(0f,180f,0f);
-                SwitchState(_factory.InAir());
-            }
+            _ctx.CanJump = false;
+            if (!_ctx.IsMovementPressed)
+                _ctx.AppliedMovement = Vector3.zero;
+            _ctx.CurrentMovementY = _ctx.InitialJumpVelocity * jumpStrength;
+            _ctx.AppliedMovementY = _ctx.InitialJumpVelocity * jumpStrength;
         }
 
         public override void ExitState()
@@ -64,17 +54,33 @@ namespace Player.PlayerStates
 
         public override void CheckSwitchStates()
         {
-            if (!_ctx.IsClimbing || (_ctx.CC.isGrounded && _ctx.CC.velocity.y < 0f))
+            if (!_ctx.IsClimbing || (_ctx.CC.isGrounded && _ctx.CC.velocity.y < 0f) || _ctx.IsJumpPressed)
             {
-                if(_ctx.CC.isGrounded)
+                if (_ctx.CC.isGrounded)
                 {
-                    _ctx.transform.Rotate(0f,180f,0f);
                     SwitchState(_factory.Grounded());
                 }
                 else
-                    SwitchState(_factory.InAir());
+                {
+                    if (_ctx.IsJumpPressed)
+                    {
+                        _ctx.transform.Rotate(0f, 180f, 0f);
+                        if(_ctx.IsMovementPressed)
+                        {
+                            HandleJump();
+                            SwitchState(_factory.InAir(airMoveSpeedOverride: 15f));
+                        }
+                        SwitchState(_factory.InAir());
+                    }
+                    else
+                    {
+                        HandleJump(0.75f);
+                        SwitchState(_factory.InAir());
+                    }
+
+                    
+                }
             }
-            
         }
     }
 }

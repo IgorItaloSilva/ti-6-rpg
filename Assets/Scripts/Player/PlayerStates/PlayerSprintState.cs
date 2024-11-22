@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerSprintState : PlayerBaseState
 {
     protected const float SprintSpeed = 12f;
-    
+
     public PlayerSprintState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
@@ -13,9 +13,9 @@ public class PlayerSprintState : PlayerBaseState
     {
         HandleAnimatorParameters();
         Debug.Log("Sprinting");
-        _ctx.TurnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
+        _turnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
     }
-    
+
 
     public override void HandleAnimatorParameters()
     {
@@ -26,13 +26,13 @@ public class PlayerSprintState : PlayerBaseState
 
     public override void UpdateState()
     {
+        HandleRotation();
         HandleSprintMove();
         CheckSwitchStates();
     }
 
     public override void ExitState()
     {
-        _ctx.TurnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
     }
 
     public override void CheckSwitchStates()
@@ -64,9 +64,9 @@ public class PlayerSprintState : PlayerBaseState
 
     private void HandleSprintMove()
     {
-        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * SprintSpeed, _ctx.BaseGravity, _ctx.transform.forward.z * SprintSpeed);
-        
+        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * SprintSpeed, _ctx.BaseGravity,
+            _ctx.transform.forward.z * SprintSpeed);
+
         _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
-
 }

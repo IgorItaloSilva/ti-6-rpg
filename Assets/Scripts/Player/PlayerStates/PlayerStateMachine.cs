@@ -17,11 +17,11 @@ public class PlayerStateMachine : MonoBehaviour
     private CharacterController cc;
     [SerializeField] private WeaponManager swordWeaponManager;
     private PlayerInput playerInput;
-    private float _turnSmoothSpeed, _gravity, _turnTime, _initialJumpVelocity;
+    private float _gravity, _initialJumpVelocity, camYSpeed, camXSpeed;
 
     public readonly float MaxJumpHeight = .25f,
         MaxJumpTime = .8f,
-        BaseGravity = -0.05f,
+        BaseGravity = -9.8f,
         BaseTurnTime = 0.15f,
         SlowTurnTimeModifier = 2f;
 
@@ -57,24 +57,30 @@ public class PlayerStateMachine : MonoBehaviour
     public readonly int AttackCountHash = Animator.StringToHash("AttackCount");
     public readonly int IsClimbingHash = Animator.StringToHash("isClimbing");
     public readonly int HasJumpedHash = Animator.StringToHash("hasJumped");
+    public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
+    public readonly int HasDiedHash = Animator.StringToHash("hasDied");
+    public readonly int HasRespawnedHash = Animator.StringToHash("hasRespawned");
     public readonly int PlayerVelocity = Animator.StringToHash("playerVelocity");
 
     // GETTERS E SETTERS:
     public CharacterController CC => cc;
 
     public Animator Animator => animator;
+    public Camera MainCam => mainCam;
 
     public PlayerBaseState CurrentState
     {
         get => _currentState;
         set => _currentState = value;
     }
+
     public bool IsMovementPressed => _isMovementPressed;
     public bool IsJumpPressed => _isJumpPressed && _canJump;
     public bool IsDodgePressed => _isDodgePressed && _canDodge;
     public bool IsAttackPressed => _isAttackPressed && _canAttack;
     public bool IsSprintPressed => _isSprintPressed;
     public bool IsClimbing => _isClimbing;
+
     public bool CanMount
     {
         get => _canMount;
@@ -99,12 +105,11 @@ public class PlayerStateMachine : MonoBehaviour
         set => _canAttack = value;
     }
 
-    public float TurnTime
+    public Vector3 CurrentMovement
     {
-        set => _turnTime = value;
+        get => _currentMovement;
+        set => _currentMovement = value;
     }
-
-    public Vector3 CurrentMovement => _currentMovement;
 
     public Vector3 CurrentMovementInput => _currentMovementInput;
 
@@ -126,10 +131,7 @@ public class PlayerStateMachine : MonoBehaviour
         set => _appliedMovement.y = value;
     }
 
-    public int AttackCount
-    {
-        get => _attackCount;
-    }
+    public int AttackCount => _attackCount;
 
     public int CurrentAttack => _currentAttack;
 
@@ -148,11 +150,19 @@ public class PlayerStateMachine : MonoBehaviour
     private void OnEnable()
     {
         playerInput.Gameplay.Enable();
+        GameEventsManager.instance.playerEvents.onPlayerDied += PlayerDied;
+        GameEventsManager.instance.playerEvents.onPlayerRespawned += PlayerRespawned;
+        GameEventsManager.instance.uiEvents.onPauseGame += LockCam;
+        GameEventsManager.instance.uiEvents.onUnpauseGame += UnlockCam;
     }
 
     private void OnDisable()
     {
         playerInput.Gameplay.Disable();
+        GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
+        GameEventsManager.instance.playerEvents.onPlayerRespawned -= PlayerRespawned;
+        GameEventsManager.instance.uiEvents.onPauseGame -= LockCam;
+        GameEventsManager.instance.uiEvents.onUnpauseGame -= UnlockCam;
     }
 
     private void SetupInputCallbackContext()
@@ -176,11 +186,6 @@ public class PlayerStateMachine : MonoBehaviour
         _currentMovement.x = _currentMovementInput.x;
         _currentMovement.z = _currentMovementInput.y;
         _isMovementPressed = _currentMovementInput is not { x: 0f, y: 0f };
-        HandleMovementAnimatorParameters();
-    }
-    
-    private void HandleMovementAnimatorParameters()
-    {
         Animator.SetBool(IsWalkingHash, IsMovementPressed);
     }
 
@@ -193,6 +198,7 @@ public class PlayerStateMachine : MonoBehaviour
     private void Sprint(InputAction.CallbackContext context)
     {
         _isSprintPressed = context.ReadValueAsButton();
+        Animator.SetBool(IsRunningHash, IsSprintPressed);
     }
 
     private void Jump(InputAction.CallbackContext context)
@@ -216,12 +222,16 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         CreateSingleton();
         SetupReferences();
         SetupPlayerStates();
         SetupInputCallbackContext();
         SetupJumpVariables();
         SceneManager.LoadSceneAsync("Hud", LoadSceneMode.Additive);
+        camXSpeed = cinemachine.m_XAxis.m_MaxSpeed;
+        camYSpeed = cinemachine.m_YAxis.m_MaxSpeed;
     }
 
     private void SetupReferences()
@@ -237,25 +247,13 @@ public class PlayerStateMachine : MonoBehaviour
     private void SetupPlayerStates()
     {
         _states = new PlayerStateFactory(this);
-        _currentState = _states.Grounded();
-        _currentState.EnterState();
+        InitializeGroundedState();
     }
 
-    private void HandleRotation()
+    private void InitializeGroundedState()
     {
-        // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
-        var turnOrientation = Mathf.Atan2(_currentMovementInput.x, _currentMovementInput.y) * Mathf.Rad2Deg + mainCam.transform.eulerAngles.y;
-        var smoothedTurnOrientation = Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref _turnSmoothSpeed, _turnTime);
-        
-        if (!_isMovementPressed) return;
-        
-        // Aplicar movimentação baseado na rotação do 
-        var groundedMovement = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
-
-        _currentMovement = new Vector3(groundedMovement.x, _currentMovement.y, groundedMovement.z);
-
-        // Rotacionar a direção do player
-        transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
+        _currentState = _states.Grounded();
+        _currentState.EnterState();
     }
 
     // PRECISA SAIR DAQUI E IR PARA O MOVESTATE!!!!
@@ -266,16 +264,17 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Update()
     {
-        
-        
-        if (!_isClimbing) HandleRotation();
         _currentState.UpdateState();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Climbable") && _canMount && other.transform.position.y > transform.position.y)
+        if (other.CompareTag("Climbable") && _canMount)
         {
+            RaycastHit hit;
+            if (!Physics.Raycast(transform.position, transform.forward, out hit, 1f)) return;
+            var colliderTransform = hit.collider.gameObject.transform;
+            transform.rotation = colliderTransform.rotation;
             _isClimbing = true;
         }
     }
@@ -345,5 +344,32 @@ public class PlayerStateMachine : MonoBehaviour
     public void SaveData(GameData gameData)
     {
         gameData.pos = transform.position;
+    }
+
+    private void PlayerDied()
+    {
+        _currentState.ExitState();
+        _currentState = _states.Dead();
+        _currentState.EnterState();
+    }
+
+    private void PlayerRespawned()
+    {
+        Debug.Log("Player respawnou");
+        animator.ResetTrigger(HasRespawnedHash);
+        animator.SetTrigger(HasRespawnedHash);
+        InitializeGroundedState();
+    }
+
+    private void LockCam()
+    {
+        cinemachine.m_YAxis.m_MaxSpeed = 0f;
+        cinemachine.m_XAxis.m_MaxSpeed = 0f;
+    }
+    
+    private void UnlockCam()
+    {
+        cinemachine.m_YAxis.m_MaxSpeed = camYSpeed;
+        cinemachine.m_XAxis.m_MaxSpeed = camXSpeed;
     }
 }
