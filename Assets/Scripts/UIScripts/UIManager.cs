@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]private GameObject painelDeath;
     [SerializeField]private GameObject painelDialog;
     [SerializeField]private GameObject painelTutorial;
+    [SerializeField]private TextMeshProUGUI textTituloTutorial;
     [Header("Coisas do VFX de You Died ")]
     [SerializeField]private GameObject youDiedVFXParent;
     [SerializeField]private GameObject youDiedVFXBackgroundGO;
@@ -84,6 +85,8 @@ public class UIManager : MonoBehaviour
         }
         currentUIScreen = UIScreens.Closed;
         AjustUiOnStart();
+        Cursor.lockState=CursorLockMode.Confined;
+        Cursor.visible=false;
         youDiedVFXText = youDiedVFXTextGO.GetComponent<Text>();
         youDiedVFXImage = youDiedVFXBackgroundGO.GetComponentInChildren<Image>();
         //youDiedVFXText.color = new Color32(255,0,0,0);
@@ -117,7 +120,7 @@ public class UIManager : MonoBehaviour
             GameEventsManager.instance.uiEvents.DialogOpen();
         }
         if(Keyboard.current.numpad2Key.wasPressedThisFrame){
-            GameEventsManager.instance.uiEvents.OpenTutorial();
+            GameEventsManager.instance.uiEvents.OpenTutorial("Default text: Seu Tutorial aqui!");
         }
     
         /* if(Mouse.current.leftButton.wasPressedThisFrame){
@@ -180,7 +183,8 @@ public class UIManager : MonoBehaviour
     void OpenDialogPanel(){
         SwitchToScreen((int)UIScreens.Dialog);
     }
-    void OpenTutorialPanel(){
+    void OpenTutorialPanel(string texttitulo){
+        textTituloTutorial.text=texttitulo;
         SwitchToScreen((int)UIScreens.Tutorial);
     }
     IEnumerator SpinSaveIcon(){//OK

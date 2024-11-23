@@ -13,6 +13,7 @@ public class EnviromentController : MonoBehaviour
     void Start(){
         RenderSettings.skybox = skyboxBoa;
         sun.intensity=1;
+        GameEventsManager.instance.mapaTiagoEvents.ActivateQuest(0);
     }
     void Update(){
         if(Keyboard.current.numpad3Key.wasPressedThisFrame){
@@ -28,5 +29,6 @@ public class EnviromentController : MonoBehaviour
         RenderSettings.fog=true;
         cinemachineFreeLook.m_Lens.FarClipPlane=50;
         GameEventsManager.instance.mapaTiagoEvents.PlayCutScene();
+        GameEventsManager.instance.mapaTiagoEvents.ActivateQuest(2);
     }
 }

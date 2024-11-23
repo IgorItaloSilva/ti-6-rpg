@@ -15,7 +15,7 @@ public class TreeFall : ColliderActivateEvent
         if(collider.CompareTag("Player")){
             if(isActive){
                 myEvent.Invoke();
-                GameEventsManager.instance.uiEvents.OpenTutorial();
+                GameEventsManager.instance.uiEvents.OpenTutorial("Tutorial ataque Especial");
                 isActive=false;
             }
         }

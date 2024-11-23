@@ -31,10 +31,10 @@ public class UIEvents
             OnDialogOpened();
         }
     }
-    public event Action OnTutorialOpened;
-    public void OpenTutorial(){
+    public event Action<string> OnTutorialOpened;
+    public void OpenTutorial(string texttitulo){
         if(OnTutorialOpened!=null){
-            OnTutorialOpened();
+            OnTutorialOpened(texttitulo);
         }
     }
     public event Action<int,int> onSkillTreeMoneyChange;
