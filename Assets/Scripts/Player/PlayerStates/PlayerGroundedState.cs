@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using Unity.VisualScripting;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -10,17 +10,26 @@ public class PlayerGroundedState : PlayerBaseState
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
+        HandleAnimatorParameters();
     }
 
     public override void EnterState()
     {
         Debug.Log("Grounded");
-        _ctx.TurnTime = _ctx.BaseTurnTime;
+        _turnTime = _ctx.BaseTurnTime;
     }
+
+    public sealed override void HandleAnimatorParameters()
+    {
+        _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
+        _ctx.Animator.SetBool(_ctx.IsRunningHash, false);
+        _ctx.Animator.SetBool(_ctx.IsWalkingHash, _ctx.IsMovementPressed);
+    }
+
 
     public override void UpdateState()
     {
-        HandleGravity();
+        HandleRotation();
         HandleMove();
         CheckSwitchStates();
     }
@@ -57,16 +66,26 @@ public class PlayerGroundedState : PlayerBaseState
         {
             SwitchState(_factory.Attack());
         }
+
+        if (_ctx.IsClimbing && _ctx.CanMount)
+            SwitchState(_factory.Climb());
+    }
+
+    public void HandleJump()
+    {
+        _ctx.Animator.ResetTrigger(_ctx.HasJumpedHash);
+        _ctx.Animator.SetTrigger(_ctx.HasJumpedHash);
+        _ctx.CanJump = false;
+        if (!_ctx.IsMovementPressed)
+            _ctx.AppliedMovement = Vector3.zero;
+        _ctx.CurrentMovementY = _ctx.InitialJumpVelocity;
+        _ctx.AppliedMovementY = _ctx.InitialJumpVelocity;
     }
 
     private void HandleMove()
     {
-        _ctx.AppliedMovement = new Vector3(_ctx.CurrentMovement.x, _ctx.AppliedMovementY, _ctx.CurrentMovement.z);
+        _ctx.AppliedMovement = new Vector3(_ctx.CurrentMovement.x, _ctx.BaseGravity, _ctx.CurrentMovement.z);
         _ctx.CC.Move(_ctx.AppliedMovement * (MoveSpeed * Time.deltaTime));
     }
 
-    private void HandleGravity()
-    {
-        _ctx.CurrentMovementY = _ctx.BaseGravity;
-    }
 }

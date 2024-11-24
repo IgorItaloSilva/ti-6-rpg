@@ -3,22 +3,34 @@ using UnityEngine;
 public class PlayerInAirState : PlayerBaseState
 {
     protected const float MoveSpeed = 8f, SprintSpeed = 12f;
+    private readonly float _currentMoveSpeed;
 
-    public PlayerInAirState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
+    public PlayerInAirState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, float airMoveSpeedOverride) : base(
         currentContext, playerStateFactory)
     {
+        HandleAnimatorParameters();
+        if (airMoveSpeedOverride != 0)
+            _currentMoveSpeed = airMoveSpeedOverride;
+        else
+            _currentMoveSpeed = _ctx.IsSprintPressed ? SprintSpeed : MoveSpeed;
     }
 
     public override void EnterState()
     {
         Debug.Log("In Air");
-        _ctx.TurnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
+        _turnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
+    }
+
+    public sealed override void HandleAnimatorParameters()
+    {
+        _ctx.Animator.SetBool(_ctx.IsGroundedHash, false);
     }
 
     public override void UpdateState()
     {
-        HandleGravity();
+        HandleRotation();
         HandleAirMove();
+        HandleAirGravity();
         CheckSwitchStates();
     }
 
@@ -29,20 +41,28 @@ public class PlayerInAirState : PlayerBaseState
     public override void CheckSwitchStates()
     {
         if (_ctx.CC.isGrounded)
-            SwitchState(_factory.Grounded());
+        {
+            SwitchState(_ctx.IsSprintPressed ? _factory.Sprint() : _factory.Grounded());
+        }
+
+        if (_ctx.IsClimbing && _ctx.CanMount)
+        {
+            SwitchState(_factory.Climb());
+        }
+            
     }
 
-    private void HandleGravity()
+    private void HandleAirGravity()
     {
         var previousYVelocity = _ctx.CurrentMovementY;
         _ctx.CurrentMovementY += (_ctx.Gravity * Time.deltaTime);
-        _ctx.AppliedMovementY = ((previousYVelocity + _ctx.CurrentMovementY));
+        _ctx.AppliedMovementY = previousYVelocity + _ctx.CurrentMovementY;
     }
 
     private void HandleAirMove()
     {
-        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x, _ctx.AppliedMovementY, _ctx.transform.forward.z);
+        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _currentMoveSpeed * _ctx.CurrentMovementInput.magnitude, _ctx.AppliedMovementY * MoveSpeed, _ctx.transform.forward.z * _currentMoveSpeed * _ctx.CurrentMovementInput.magnitude);
 
-        _ctx.CC.Move(_ctx.AppliedMovement * ((_ctx.IsSprintPressed ? SprintSpeed : MoveSpeed) * Time.deltaTime));
+        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
 }

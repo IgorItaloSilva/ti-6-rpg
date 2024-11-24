@@ -53,7 +53,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cinemachine: {fileID: 0}
-  swordCollider: {fileID: 973072017076873094}
+  swordWeaponManager: {fileID: 6130271874910173869}
 --- !u!114 &7001136559969210805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,9 +145,9 @@ CharacterController:
   serializedVersion: 3
   m_Height: 1.9
   m_Radius: 0.27
-  m_SlopeLimit: 45
-  m_StepOffset: 0
-  m_SkinWidth: 0.02
+  m_SlopeLimit: 60
+  m_StepOffset: 0.25
+  m_SkinWidth: 0.05
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.95, z: -0.12}
 --- !u!95 &1053543073317494907
@@ -1432,6 +1432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6397887809726942325}
   - component: {fileID: 973072017076873094}
+  - component: {fileID: 6130271874910173869}
   m_Layer: 8
   m_Name: Sword
   m_TagString: Untagged
@@ -1475,6 +1476,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0006196696, y: 0.00915733, z: 0.00094688527}
   m_Center: {x: 0.00000083161615, y: -0.0047680805, z: -0.000027490505}
+--- !u!114 &6130271874910173869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5997854994694731740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8079176dc091b947847866f831db827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageType: 0
+  strModifier: 0.5
+  dexModifier: 0.1
+  baseDamage: 10
 --- !u!1 &6704202763515187719
 GameObject:
   m_ObjectHideFlags: 0
@@ -1595,7 +1612,7 @@ Transform:
   m_GameObject: {fileID: 6801011566907652058}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.00000023841858, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1734,7 +1751,7 @@ Transform:
   m_GameObject: {fileID: 7199110629348376463}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.00000023841858, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -102,7 +102,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         playerIsDead = true;
         //DesativarInputs
     }
-    private void PlayerRespawn(){
+    private void PlayerRespawn()
+    {
+        CurrentLife = maxLife;
         playerIsDead=false;
     }
     public void SaveData(GameData data){

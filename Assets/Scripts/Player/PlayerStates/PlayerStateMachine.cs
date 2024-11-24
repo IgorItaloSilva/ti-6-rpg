@@ -1,4 +1,6 @@
+using System;
 using Cinemachine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -8,21 +10,20 @@ public class PlayerStateMachine : MonoBehaviour
     // Singleton publico do PlayerMovement
     public static PlayerStateMachine Instance;
 
-    [HideInInspector]
-    public CinemachineFreeLook cinemachine;
+    [HideInInspector] public CinemachineFreeLook cinemachine;
 
     private Camera mainCam;
     private Animator animator;
     private CharacterController cc;
     [SerializeField] private WeaponManager swordWeaponManager;
     private PlayerInput playerInput;
-    private float _turnSmoothSpeed, _gravity, _turnTime, _initialJumpVelocity;
+    private float _gravity, _initialJumpVelocity, camYSpeed, camXSpeed;
 
-    public readonly float MaxJumpHeight = .15f,
-        MaxJumpTime = .6f,
-        BaseGravity = -0.05f,
+    public readonly float MaxJumpHeight = .25f,
+        MaxJumpTime = .8f,
+        BaseGravity = -9.8f,
         BaseTurnTime = 0.15f,
-        SlowTurnTimeModifier = 2f;
+        SlowTurnTimeModifier = 1.5f;
 
     public readonly int DodgeCooldownMs = 600;
 
@@ -41,37 +42,51 @@ public class PlayerStateMachine : MonoBehaviour
         _isDodging,
         _canDodge = true,
         _canJump = true,
-        _canAttack = true;
+        _canAttack = true,
+        _isClimbing,
+        _canMount = true;
 
     private byte _attackCount, _currentAttack;
 
     // variáveis dos estados:
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
-    private static readonly int IsWalking = Animator.StringToHash("isWalking");
-    private static readonly int IsRunning = Animator.StringToHash("isRunning");
-    private static readonly int AttackCountHash = Animator.StringToHash("AttackCount");
+    public readonly int IsWalkingHash = Animator.StringToHash("isWalking");
+    public readonly int IsRunningHash = Animator.StringToHash("isRunning");
+    public readonly int IsGroundedHash = Animator.StringToHash("isGrounded");
+    public readonly int AttackCountHash = Animator.StringToHash("AttackCount");
+    public readonly int IsClimbingHash = Animator.StringToHash("isClimbing");
+    public readonly int HasJumpedHash = Animator.StringToHash("hasJumped");
+    public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
+    public readonly int HasDiedHash = Animator.StringToHash("hasDied");
+    public readonly int HasRespawnedHash = Animator.StringToHash("hasRespawned");
+    public readonly int PlayerVelocity = Animator.StringToHash("playerVelocity");
 
     // GETTERS E SETTERS:
     public CharacterController CC => cc;
 
     public Animator Animator => animator;
+    public Camera MainCam => mainCam;
 
     public PlayerBaseState CurrentState
     {
         get => _currentState;
         set => _currentState = value;
     }
-    
-    
 
+    public bool IsMovementPressed => _isMovementPressed;
     public bool IsJumpPressed => _isJumpPressed && _canJump;
     public bool IsDodgePressed => _isDodgePressed && _canDodge;
     public bool IsAttackPressed => _isAttackPressed && _canAttack;
     public bool IsSprintPressed => _isSprintPressed;
+    public bool IsClimbing => _isClimbing;
 
-    public bool IsAttacking => _isAttacking;
-    
+    public bool CanMount
+    {
+        get => _canMount;
+        set => _canMount = value;
+    }
+
     public bool CanJump
     {
         get => _canJump;
@@ -90,12 +105,13 @@ public class PlayerStateMachine : MonoBehaviour
         set => _canAttack = value;
     }
 
-    public float TurnTime
+    public Vector3 CurrentMovement
     {
-        set => _turnTime = value;
+        get => _currentMovement;
+        set => _currentMovement = value;
     }
 
-    public Vector3 CurrentMovement => _currentMovement;
+    public Vector3 CurrentMovementInput => _currentMovementInput;
 
     public Vector3 AppliedMovement
     {
@@ -115,10 +131,7 @@ public class PlayerStateMachine : MonoBehaviour
         set => _appliedMovement.y = value;
     }
 
-    public int AttackCount
-    {
-        get => _attackCount;
-    }
+    public int AttackCount => _attackCount;
 
     public int CurrentAttack => _currentAttack;
 
@@ -137,11 +150,19 @@ public class PlayerStateMachine : MonoBehaviour
     private void OnEnable()
     {
         playerInput.Gameplay.Enable();
+        GameEventsManager.instance.playerEvents.onPlayerDied += PlayerDied;
+        GameEventsManager.instance.playerEvents.onPlayerRespawned += PlayerRespawned;
+        GameEventsManager.instance.uiEvents.onPauseGame += LockCam;
+        GameEventsManager.instance.uiEvents.onUnpauseGame += UnlockCam;
     }
 
     private void OnDisable()
     {
         playerInput.Gameplay.Disable();
+        GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
+        GameEventsManager.instance.playerEvents.onPlayerRespawned -= PlayerRespawned;
+        GameEventsManager.instance.uiEvents.onPauseGame -= LockCam;
+        GameEventsManager.instance.uiEvents.onUnpauseGame -= UnlockCam;
     }
 
     private void SetupInputCallbackContext()
@@ -165,17 +186,19 @@ public class PlayerStateMachine : MonoBehaviour
         _currentMovement.x = _currentMovementInput.x;
         _currentMovement.z = _currentMovementInput.y;
         _isMovementPressed = _currentMovementInput is not { x: 0f, y: 0f };
+        Animator.SetBool(IsWalkingHash, IsMovementPressed);
     }
 
     private void Attack(InputAction.CallbackContext context)
     {
         _isAttackPressed = context.ReadValueAsButton();
-        _canAttack = true; 
+        _canAttack = true;
     }
 
     private void Sprint(InputAction.CallbackContext context)
     {
         _isSprintPressed = context.ReadValueAsButton();
+        Animator.SetBool(IsRunningHash, IsSprintPressed);
     }
 
     private void Jump(InputAction.CallbackContext context)
@@ -199,17 +222,15 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Awake()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         CreateSingleton();
-
         SetupReferences();
-
         SetupPlayerStates();
-
         SetupInputCallbackContext();
-
         SetupJumpVariables();
-
-        SceneManager.LoadSceneAsync("Hud", LoadSceneMode.Additive);
+        camXSpeed = cinemachine.m_XAxis.m_MaxSpeed;
+        camYSpeed = cinemachine.m_YAxis.m_MaxSpeed;
     }
 
     private void SetupReferences()
@@ -225,26 +246,13 @@ public class PlayerStateMachine : MonoBehaviour
     private void SetupPlayerStates()
     {
         _states = new PlayerStateFactory(this);
-        _currentState = _states.Grounded();
-        _currentState.EnterState();
+        InitializeGroundedState();
     }
 
-    private void HandleRotation()
+    private void InitializeGroundedState()
     {
-        // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
-        var turnOrientation = Mathf.Atan2(_currentMovementInput.x, _currentMovementInput.y) * Mathf.Rad2Deg +
-                              mainCam.transform.eulerAngles.y;
-        var smoothedTurnOrientation =
-            Mathf.SmoothDampAngle(transform.eulerAngles.y, turnOrientation, ref _turnSmoothSpeed, _turnTime);
-
-        if (!_isMovementPressed) return;
-        // Aplicar movimentação multiplicando pela velocidade do player:
-        var groundedMovement = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
-
-        _currentMovement = new Vector3(groundedMovement.x, _currentMovement.y, groundedMovement.z);
-
-        // Rotacionar a direção do player
-        transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
+        _currentState = _states.Grounded();
+        _currentState.EnterState();
     }
 
     // PRECISA SAIR DAQUI E IR PARA O MOVESTATE!!!!
@@ -255,31 +263,48 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Update()
     {
-        HandleAnimations();
-        HandleRotation();
         _currentState.UpdateState();
     }
-    
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Climbable") && _canMount)
+        {
+            RaycastHit hit;
+            if (!Physics.Raycast(transform.position, transform.forward, out hit, 1f)) return;
+            var colliderTransform = hit.collider.gameObject.transform;
+            transform.rotation = colliderTransform.rotation;
+            _isClimbing = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Climbable"))
+        {
+            _canMount = true;
+            _isClimbing = false;
+        }
+    }
+
     public void HandleAttack()
     {
         if (!_canAttack) return;
 
         _isAttacking = true;
-            
-        _currentMovement = Vector3.zero;        
-        
-        _canAttack = false;
-        
-        if (_attackCount == 3 && _currentAttack == 3) return;
 
-        if(_attackCount == _currentAttack)
-            _attackCount++;
+        _currentMovement = Vector3.zero;
+
+        _canAttack = false;
+
+        if (_attackCount == 3 && _currentAttack == 3) return;
+        
+        _attackCount++;
         ApplyAttackCount();
     }
 
     public void ResetAttacks()
     {
-        if (_attackCount > _currentAttack) return;
         _isAttacking = false;
         _attackCount = 0;
         _currentAttack = 0;
@@ -288,7 +313,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void ApplyAttackCount()
     {
-        animator.SetInteger(AttackCountHash,_attackCount);
+        animator.SetInteger(AttackCountHash, _attackCount);
     }
 
     public void AttackStarted()
@@ -300,16 +325,10 @@ public class PlayerStateMachine : MonoBehaviour
     {
         swordWeaponManager.EnableCollider();
     }
-    
+
     private void DisableSwordCollider()
     {
         swordWeaponManager.DisableCollider();
-    }
-
-    private void HandleAnimations()
-    {
-        animator.SetBool(IsWalking, _isMovementPressed);
-        animator.SetBool(IsRunning, _isSprintPressed);
     }
 
     public void LoadData(GameData gameData)
@@ -322,5 +341,32 @@ public class PlayerStateMachine : MonoBehaviour
     public void SaveData(GameData gameData)
     {
         gameData.pos = transform.position;
+    }
+
+    private void PlayerDied()
+    {
+        _currentState.ExitState();
+        _currentState = _states.Dead();
+        _currentState.EnterState();
+    }
+
+    private void PlayerRespawned()
+    {
+        Debug.Log("Player respawnou");
+        animator.ResetTrigger(HasRespawnedHash);
+        animator.SetTrigger(HasRespawnedHash);
+        InitializeGroundedState();
+    }
+
+    private void LockCam()
+    {
+        cinemachine.m_YAxis.m_MaxSpeed = 0f;
+        cinemachine.m_XAxis.m_MaxSpeed = 0f;
+    }
+
+    private void UnlockCam()
+    {
+        cinemachine.m_YAxis.m_MaxSpeed = camYSpeed;
+        cinemachine.m_XAxis.m_MaxSpeed = camXSpeed;
     }
 }

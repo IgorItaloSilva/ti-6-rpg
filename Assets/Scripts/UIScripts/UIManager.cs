@@ -182,6 +182,7 @@ public class UIManager : MonoBehaviour
         saveIcon.gameObject.SetActive(false);
     }
     IEnumerator PlayYouDiedAnimation(){
+        
         yield return new WaitForSecondsRealtime(secondsBeforeYouDiedVfxAppears);
         youDiedVFXParent.SetActive(true);
         byte youDiedTextColor = 0;

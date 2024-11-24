@@ -3,25 +3,35 @@ using UnityEngine;
 
 public class PlayerDodgeState : PlayerBaseState
 {
-    protected const float DodgeSpeed = 30f;
-    private int dodgeDurationMs = 200;
+    protected const float DodgeSpeed = 20f;
+    private int dodgeDurationMs = 300;
+    
     public PlayerDodgeState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
+        HandleAnimatorParameters();
     }
 
     public override void EnterState()
     {
+        _turnTime = 0f;
+        HandleRotation();
         _ctx.CanDodge = false;
         Debug.Log("Dodging");
-        _ctx.TurnTime = float.MaxValue;
         HandleDodgeDurationAsync();
+    }
+    
+
+    public sealed override void HandleAnimatorParameters()
+    {
+        _ctx.Animator.ResetTrigger(_ctx.HasDodgedHash);
+        _ctx.Animator.SetTrigger(_ctx.HasDodgedHash);
+        _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
     }
 
     public override void UpdateState()
     {
         HandleDodgeMove();
-        HandleGravity();
         CheckSwitchStates();
     }
 
@@ -36,14 +46,13 @@ public class PlayerDodgeState : PlayerBaseState
         {
             SwitchState(_factory.InAir());
         }
-
     }
 
     private async void HandleDodgeDurationAsync()
     {
         HandleDodgeCooldownAsync();
         await Task.Delay(dodgeDurationMs);
-        SwitchState(_factory.Grounded());
+        SwitchState(_ctx.IsSprintPressed ? _factory.Sprint() : _factory.Grounded());
     }
     
     private async void HandleDodgeCooldownAsync()
@@ -59,12 +68,8 @@ public class PlayerDodgeState : PlayerBaseState
 
     private void HandleDodgeMove()
     {
-        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x, _ctx.AppliedMovementY, _ctx.transform.forward.z);
+        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * DodgeSpeed, _ctx.BaseGravity, _ctx.transform.forward.z * DodgeSpeed);
         
-        _ctx.CC.Move(_ctx.AppliedMovement * (DodgeSpeed * Time.deltaTime));
-    }
-    private void HandleGravity()
-    {
-        _ctx.CurrentMovementY = _ctx.BaseGravity;
+        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
 }
