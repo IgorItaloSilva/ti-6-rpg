@@ -89,7 +89,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
     }
     public void HealLife(float life){
-        if((CurrentLife<maxLife)&&(!playerIsDead)){
+        if(CurrentLife<maxLife){
             CurrentLife += life;
             if(CurrentLife>maxLife)CurrentLife=maxLife;
             GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
@@ -100,7 +100,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.playerEvents.PlayerDied();
         Debug.Log("Player morreu!");
         playerIsDead = true;
-        
+        //DesativarInputs
     }
     private void PlayerRespawn(){
         playerIsDead=false;

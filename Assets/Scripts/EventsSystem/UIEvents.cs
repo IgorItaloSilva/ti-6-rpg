@@ -31,12 +31,6 @@ public class UIEvents
             OnDialogOpened();
         }
     }
-    public event Action OnTutorialOpened;
-    public void OpenTutorial(){
-        if(OnTutorialOpened!=null){
-            OnTutorialOpened();
-        }
-    }
     public event Action<int,int> onSkillTreeMoneyChange;
     public void SkillTreeMoneyChange(int index,int value){
         if(onSkillTreeMoneyChange!=null){

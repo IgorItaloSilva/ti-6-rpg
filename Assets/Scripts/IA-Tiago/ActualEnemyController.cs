@@ -70,10 +70,10 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         }
     }
     public virtual void ChangeAction(EnemyActions newAction){
+        ResetControlBooleans();
         currentAction?.ExitAction();
         currentAction = newAction;
         currentAction.EnterAction();
-        ResetControlBooleans();
     }
     //Defines wich action will be the current, and also sets targets and weights for steeringBehaviour
     public void FixedUpdate(){
