@@ -28,6 +28,8 @@ public class SkillTree : MonoBehaviour,IDataPersistence
         currentMoney = new int[tamanhoTiposPU];
         totalMoneyGotten = new int[tamanhoTiposPU];
         LoadData();
+        GainMoney(1);
+        GainMoney(0);
     }
     void OnEnable(){
         GameEventsManager.instance.skillTreeEvents.onPlayerGetsPowerUpMoney+=GainMoney;
