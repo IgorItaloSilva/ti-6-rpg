@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
         else{
             Debug.Log("Temos 2 gameManagers, estou me destruindo");
             Destroy(gameObject);
+            
         }
     }
     public void PauseGameAndUnlockCursor(){

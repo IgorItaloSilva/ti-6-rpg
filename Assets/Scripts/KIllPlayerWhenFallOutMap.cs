@@ -8,6 +8,7 @@ public class KIllPlayerWhenFallOutMap : MonoBehaviour
             if(playerStats!=null){
                 playerStats.TakeDamage(99999,Enums.DamageType.Regular);
             }
+            
         }
     }
 }
