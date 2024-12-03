@@ -1,8 +1,11 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance {get;private set;}
+    bool hudIsOpen;
     [HideInInspector] public AudioManager audioManager;//negocio do igor
 
     void OnEnable(){
@@ -20,6 +23,14 @@ public class GameManager : MonoBehaviour
             Debug.Log("Temos 2 gameManagers, estou me destruindo");
             Destroy(gameObject);
             
+        }
+    }
+    void Update(){
+        if(Keyboard.current.hKey.wasPressedThisFrame){
+            if(hudIsOpen==false){
+                SceneManager.LoadScene("Hud",LoadSceneMode.Additive);
+                hudIsOpen=true;
+            }
         }
     }
     public void PauseGameAndUnlockCursor(){
