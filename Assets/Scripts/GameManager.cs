@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance {get;private set;}
     bool hudIsOpen;
+    public bool shouldLoadTutorial;
     [HideInInspector] public AudioManager audioManager;//negocio do igor
 
     void OnEnable(){

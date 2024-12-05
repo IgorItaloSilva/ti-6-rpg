@@ -84,8 +84,10 @@ public class UIManager : MonoBehaviour
         AjustUiOnStart();
         youDiedVFXText = youDiedVFXTextGO.GetComponent<Text>();
         youDiedVFXImage = youDiedVFXBackgroundGO.GetComponentInChildren<Image>();
-        SwitchToScreen((int)UIScreens.Tutorial);
-        GameManager.instance.PauseGameAndUnlockCursor();
+        if(GameManager.instance.shouldLoadTutorial){
+            SwitchToScreen((int)UIScreens.Tutorial);
+            GameManager.instance.PauseGameAndUnlockCursor();
+        }
         //youDiedVFXText.color = new Color32(255,0,0,0);
     }
 
