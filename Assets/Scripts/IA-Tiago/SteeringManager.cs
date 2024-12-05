@@ -110,23 +110,41 @@ public class SteeringManager{
         Debug.DrawRay(rb.transform.position,rightVel*raycastDist,Color.yellow);
         Debug.DrawRay(rb.transform.position,rb.transform.forward*raycastDist,Color.blue);
         Debug.DrawRay(rb.transform.position,leftVel*raycastDist,Color.green);
-        if(Physics.SphereCast(sphereCastOrigin,sphereRadius,rb.transform.forward,out hit,raycastDist,obstaclesLayerMask)){
-            //Debug.Log("Açgp na minha frent");
-            Vector3 target = hit.point + hit.normal*(sphereRadius+1);
-            Debug.DrawLine(hit.point,target);
-            desiredVel += target - steeringAgent.GetPosition();
-        }
-        if(Physics.SphereCast(sphereCastOrigin,sphereRadius,rightVel,out hit,raycastDist,obstaclesLayerMask)){
-            //Debug.Log("Açgp na minha dir");
-            Vector3 target = hit.point + hit.normal*(sphereRadius+1);
-            Debug.DrawLine(hit.point,target);
-            desiredVel += target - steeringAgent.GetPosition();
-        }
-        if(Physics.SphereCast(sphereCastOrigin,sphereRadius,leftVel,out hit,raycastDist,obstaclesLayerMask)){
-            //Debug.Log("Açgp na minha esq");
-            Vector3 target = hit.point + hit.normal*(sphereRadius+1);
-            Debug.DrawLine(hit.point,target);
-            desiredVel += target - steeringAgent.GetPosition();
+        //if(Physics.CheckSphere(sphereCastOrigin,sphereRadius,obstaclesLayerMask)){
+            //Debug.Log("O checkSphere deu positivo");
+            Collider[] overlapColliders = new Collider[3];
+            int numOverlap;
+            if((numOverlap=Physics.OverlapSphereNonAlloc(sphereCastOrigin,sphereRadius,overlapColliders,obstaclesLayerMask))>0){
+                for(int i =0;i<numOverlap;i++){
+                    Debug.Log("Algo dentro de mim");
+                    Vector3 colliderPos = new Vector3(overlapColliders[i].transform.position.x,rb.transform.position.y+charHeight/2,overlapColliders[i].transform.position.z);
+                    Vector3 myTranform = new Vector3(rb.transform.position.x,rb.transform.position.y+charHeight/2,rb.transform.position.z);
+                    Vector3 touchDir=myTranform-colliderPos;
+                    Vector3 target = colliderPos+ touchDir.normalized*(sphereRadius*1.5f);
+                    Debug.DrawLine(colliderPos,target);
+                    desiredVel += target - steeringAgent.GetPosition();
+                }
+            }
+        //}
+        else{
+            if(Physics.SphereCast(sphereCastOrigin,sphereRadius,rb.transform.forward,out hit,raycastDist,obstaclesLayerMask)){
+                //Debug.Log("Açgp na minha frent");
+                Vector3 target = hit.point + hit.normal*(sphereRadius+1);
+                Debug.DrawLine(hit.point,target);
+                desiredVel += target - steeringAgent.GetPosition();
+            }
+            if(Physics.SphereCast(sphereCastOrigin,sphereRadius,rightVel,out hit,raycastDist,obstaclesLayerMask)){
+                //Debug.Log("Açgp na minha dir");
+                Vector3 target = hit.point + hit.normal*(sphereRadius+1);
+                Debug.DrawLine(hit.point,target);
+                desiredVel += target - steeringAgent.GetPosition();
+            }
+            if(Physics.SphereCast(sphereCastOrigin,sphereRadius,leftVel,out hit,raycastDist,obstaclesLayerMask)){
+                //Debug.Log("Açgp na minha esq");
+                Vector3 target = hit.point + hit.normal*(sphereRadius+1);
+                Debug.DrawLine(hit.point,target);
+                desiredVel += target - steeringAgent.GetPosition();
+            }
         }
         desiredVel=desiredVel.normalized*steeringAgent.GetMaxVelocity();
         steeringForce = desiredVel*10 - steeringAgent.GetVelocity();

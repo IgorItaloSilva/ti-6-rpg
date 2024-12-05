@@ -1,20 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class KitsuneController : ActualEnemyController
+public class KitsuneBoss : ActualEnemyController
 {
     EnemyActions basicAttack;
+    EnemyActions rangedAttack;
     [SerializeField]float basicAttackDist;
+    [SerializeField]float minDistToRangedAttack;
     [SerializeField]float attackTime;
+    [SerializeField]float rangedattackTime;
     [SerializeField]float restTime;
+    [SerializeField]GameObject prefabRangedAttack;
     bool isAttacking;
     bool isResting;
     protected override void CreateActions()
     {
         basicAttack = new KitsuneBasicAttack(attackTime,basicAttackDist,this);
         restAction = new KitsuneRestAction(restTime,this);
+        rangedAttack = new KitSuneRangedAttack(rangedattackTime,prefabRangedAttack,this);
     }
     protected override void AdditionalStart()
     {
@@ -25,9 +29,7 @@ public class KitsuneController : ActualEnemyController
         if(isAttacking)return;
         if(isResting)return;
         if(target==null){
-            //Debug.Log("wander");
-            //adicionar depois logica de patrulha
-            //steeringManager.Wander();
+            ;
         }
         else{
             steeringManager?.AvoidObstacle();
@@ -38,16 +40,24 @@ public class KitsuneController : ActualEnemyController
                 actionsPerformed=0;
             }
             else{
-                if(Vector3.SqrMagnitude(target.GetPosition()-transform.position)>minDistToAttack*minDistToAttack){
-                    steeringManager.Seek(target.GetPosition());
-                    //Debug.Log("Seek");
-                }
-                else{
-                    if(!isAttacking){
-                        Debug.Log("troquei a ação pra ataque");
-                        ChangeAction(basicAttack);
-                        actionsPerformed++;
-                        isAttacking=true;
+                float sqrDistToPlayer = Vector3.SqrMagnitude(target.GetPosition()-transform.position);
+                if(sqrDistToPlayer>minDistToRangedAttack*minDistToAttack){
+                    Debug.Log("troquei a ação pra ataque ranged");
+                    ChangeAction(rangedAttack);
+                    actionsPerformed+=3;
+                    isAttacking=true;
+                }else{
+                    if(sqrDistToPlayer>basicAttackDist*basicAttackDist){
+                        steeringManager.Seek(target.GetPosition());
+                        //Debug.Log("Seek");
+                    }
+                    else{
+                        if(!isAttacking){
+                            Debug.Log("troquei a ação pra ataque");
+                            ChangeAction(basicAttack);
+                            actionsPerformed++;
+                            isAttacking=true;
+                        }
                     }
                 }
             }
@@ -66,3 +76,4 @@ public class KitsuneController : ActualEnemyController
         isResting=false;
     }
 }
+

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class PlayerStateMachine : MonoBehaviour
+public class PlayerStateMachine : MonoBehaviour,IDataPersistence
 {
     // Singleton publico do PlayerMovement
     public static PlayerStateMachine Instance;
