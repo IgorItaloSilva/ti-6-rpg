@@ -39,7 +39,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     float magicDamage;
     float lightAttackDamage;
     float heavyAttackDamage;
-    private PlayerStatsData statsLoadados; 
+    //private PlayerStatsData statsLoadados; 
     //CONTROLES DOS POWER UPS
     private bool PUArmorActive;
     private bool PULifeRegenActive;
@@ -175,7 +175,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         if(level==0){
             return 0;
         }
-        else return 100*(int)Mathf.Pow(2,Level-1);
+        else return 100*(int)Mathf.Pow(2,level-1);
     }
     void SendBaseStatsInfo(){
         GameEventsManager.instance.uiEvents.ReciveBaseStatsInfo(Con,Str,Dex,Int);
