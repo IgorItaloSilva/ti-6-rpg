@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RunesPanel : MonoBehaviour
+public class RunesUiManager : MonoBehaviour
 {
     [SerializeField]GameObject scrollContent;
     [SerializeField]GameObject runeButtonprefab;

@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     [Header("Outros scripts de UI")]
     public SkillTreeUIManager skillTreeUIManager;
     public StatsUIManager statsUIManager;
+    public RunesUiManager runesUiManager;
     [Header("Referencias Internas")]
     [SerializeField]private Slider lifeSlider;
     [SerializeField]private Image saveIcon;
@@ -20,6 +21,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]private GameObject painelDeath;
     [SerializeField]private GameObject painelDialog;
     [SerializeField]private GameObject painelTutorial;
+    [SerializeField]private GameObject painelWeapon;
     [Header("Coisas do VFX de You Died ")]
     [SerializeField]private GameObject youDiedVFXParent;
     [SerializeField]private GameObject youDiedVFXBackgroundGO;
@@ -81,6 +83,7 @@ public class UIManager : MonoBehaviour
             statsUIManager=GetComponent<StatsUIManager>();
         }
         currentUIScreen = UIScreens.Closed;
+        runesUiManager.Setup();
         AjustUiOnStart();
         youDiedVFXText = youDiedVFXTextGO.GetComponent<Text>();
         youDiedVFXImage = youDiedVFXBackgroundGO.GetComponentInChildren<Image>();
@@ -173,6 +176,7 @@ public class UIManager : MonoBehaviour
         youDiedVFXParent.SetActive(false);
         painelDialog.SetActive(false);
         painelTutorial.SetActive(false);
+        painelWeapon.SetActive(false);
     }
     void PlayerDied(){
         StartCoroutine("PlayYouDiedAnimation");
@@ -233,7 +237,9 @@ public class UIManager : MonoBehaviour
             case UIScreens.SkillTree:
                 skillTreeUIManager?.AlternarPainelSkillTree();
             break;
-            case UIScreens.Weapon: break;
+            case UIScreens.Weapon: 
+                painelWeapon.SetActive(false);
+            break;
             case UIScreens.System: break;
             case UIScreens.Death:
                 GameManager.instance.ReturnFromDeath();
@@ -270,7 +276,9 @@ public class UIManager : MonoBehaviour
                 statsUIManager.UpdateValues();
                 currentUIScreen=UIScreens.Stats;
             break;
-            case UIScreens.Weapon: 
+            case UIScreens.Weapon:
+                painelWeapon.SetActive(true);
+                runesUiManager.Update();
                 currentUIScreen=UIScreens.Weapon;
             break;
             case UIScreens.System: 
