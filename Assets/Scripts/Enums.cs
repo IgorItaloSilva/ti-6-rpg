@@ -9,5 +9,10 @@ public class Enums {
         Regular,
         Magic
     }
+    public enum RuneType{
+        Blade,
+        Guard,
+        Handle
+    }
     
 }
