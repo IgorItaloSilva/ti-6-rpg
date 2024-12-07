@@ -14,18 +14,18 @@ public class RuneButton : MonoBehaviour ,IPointerDownHandler
         this.rune=rune;
         nameText.text=rune.Nome;
         descriptionText.text=rune.DescriptionText;
-        typeText.text=GetTypeText(rune.Type);
+        typeText.text=GetTypeText(rune.Part);
         SetQualityText(rune.Quality);
     }
     public void OnPointerDown(PointerEventData eventData)
     {
         RunesUiManager.instance.EquipRune(id);
     }
-    string GetTypeText(Enums.RuneType runeType){
+    string GetTypeText(Enums.KatanaPart runeType){
         switch(runeType){
-            case Enums.RuneType.Blade: return "Blade";
-            case Enums.RuneType.Guard: return "Guard";
-            case Enums.RuneType.Handle: return "Handle";
+            case Enums.KatanaPart.Blade: return "Blade";
+            case Enums.KatanaPart.Guard: return "Guard";
+            case Enums.KatanaPart.Handle: return "Handle";
         }
         Debug.LogWarning("Uma runa sem tipo foi setada");
         return "Error Type Not Found";

@@ -11,7 +11,7 @@ public class RunesUiManager : MonoBehaviour
     [SerializeField]HorizontalLayoutGroup equipedRunesLayout;
     [SerializeField]GameObject scrollContent;
     [SerializeField]GameObject runeButtonprefab;
-    RuneButton[]equipedRunes = new RuneButton[Enum.GetNames(typeof(Enums.RuneType)).Length];
+    RuneButton[]equipedRunes = new RuneButton[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
     List<RuneButton> allRunesButtons = new();
     int equipedRunesAmmount;
     static int index;
@@ -52,19 +52,21 @@ public class RunesUiManager : MonoBehaviour
     }
     public void EquipRune(int runeButtonindex){//esse parametro é o index que nos passamos pro runeButton ao criar ele
         RuneSO rune = allRunesButtons[runeButtonindex].rune;
-        if(equipedRunes[(int)rune.Type]==null){
+        if(equipedRunes[(int)rune.Part]==null){
             GameObject newRuneButtonGO=Instantiate(runeButtonprefab,equipedRunesLayout.transform);
             RuneButton runeButton = newRuneButtonGO.GetComponent<RuneButton>();
             runeButton.SetRuneAndTexts(rune);
-            equipedRunes[(int)rune.Type]=runeButton;
+            equipedRunes[(int)rune.Part]=runeButton;
             equipedRunesAmmount++;
+            RuneManager.instance.EquipRune(runeButtonindex);
         }else{
-            Destroy(equipedRunes[(int)rune.Type].gameObject);
+            Destroy(equipedRunes[(int)rune.Part].gameObject);
             GameObject newRuneButtonGO=Instantiate(runeButtonprefab,equipedRunesLayout.transform);
-            newRuneButtonGO.transform.SetSiblingIndex((int)rune.Type);
+            newRuneButtonGO.transform.SetSiblingIndex((int)rune.Part);
             RuneButton runeButton = newRuneButtonGO.GetComponent<RuneButton>();
             runeButton.SetRuneAndTexts(rune);
-            equipedRunes[(int)rune.Type]=runeButton;
+            equipedRunes[(int)rune.Part]=runeButton;
+            RuneManager.instance.EquipRune(runeButtonindex);
         }
         if(equipedRunesAmmount>=3){
             equipedRunesLayout.childControlWidth=true;

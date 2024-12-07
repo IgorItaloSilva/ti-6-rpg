@@ -238,7 +238,8 @@ public class UIManager : MonoBehaviour
             case UIScreens.SkillTree:
                 skillTreeUIManager?.AlternarPainelSkillTree();
             break;
-            case UIScreens.Weapon: 
+            case UIScreens.Weapon:
+                RuneManager.instance?.ApplySelectedRunes();
                 painelWeapon.SetActive(false);
             break;
             case UIScreens.System: break;

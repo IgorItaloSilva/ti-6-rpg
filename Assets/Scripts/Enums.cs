@@ -1,15 +1,18 @@
 
 
 public class Enums {
+    //COISAS DE POWER UPS
     public enum PowerUpType{
         Light,
         Dark
     }
+    //COISAS DE DANO
     public enum DamageType{
         Regular,
         Magic
     }
-    public enum RuneType{
+    //COISAS DAS RUNAS
+    public enum KatanaPart{
         Blade =0,
         Guard,
         Handle
@@ -19,6 +22,12 @@ public class Enums {
         Rare,
         Epic,
         Legendary
+    }
+    public enum RuneActivationCode{
+        DamageBuff,
+        StatsBuff,
+        TradeOff,
+        OtherBonus
     }
     
 }
