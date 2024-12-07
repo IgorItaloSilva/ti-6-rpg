@@ -1145,7 +1145,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6635154780482274461}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: ca83f547ed5f10b429d1428c0f83cb78, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1157,10 +1157,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.5261341
-  m_Height: 3.5085087
-  m_Direction: 1
-  m_Center: {x: 0.22146575, y: 0.48021257, z: -0.000000008035415}
+  m_Radius: 0.87
+  m_Height: 2.84
+  m_Direction: 0
+  m_Center: {x: 0.22146575, y: -0.18, z: -0.000000008035415}
 --- !u!1 &6758211375631742107
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,7 +1479,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7130622063641161249}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.00000058114523, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.6799991, y: -3.81, z: -46.89}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1531,7 +1531,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obstaclesLayerMask:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 1
   maxVelocity: 5
   maxForce: 400
   charWidth: 1.5
@@ -1539,13 +1539,13 @@ MonoBehaviour:
   maxHp: 100
   currentHp: 0
   minDistToAttack: 2
-  numberOfActionsBeforeRest: 3
+  numberOfActionsBeforeRest: 1000
   exp: 100
   rb: {fileID: 0}
   animator: {fileID: 0}
   basicAttackDist: 2
   attackTime: 1
-  restTime: 5
+  restTime: 0
 --- !u!1 &7208865767583666691
 GameObject:
   m_ObjectHideFlags: 0

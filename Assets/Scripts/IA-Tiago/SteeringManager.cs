@@ -116,7 +116,7 @@ public class SteeringManager{
             int numOverlap;
             if((numOverlap=Physics.OverlapSphereNonAlloc(sphereCastOrigin,sphereRadius,overlapColliders,obstaclesLayerMask))>0){
                 for(int i =0;i<numOverlap;i++){
-                    Debug.Log("Algo dentro de mim");
+                    Debug.Log($"Algo dentro de mim, um {overlapColliders[0].name}");
                     Vector3 colliderPos = new Vector3(overlapColliders[i].transform.position.x,rb.transform.position.y+charHeight/2,overlapColliders[i].transform.position.z);
                     Vector3 myTranform = new Vector3(rb.transform.position.x,rb.transform.position.y+charHeight/2,rb.transform.position.z);
                     Vector3 touchDir=myTranform-colliderPos;

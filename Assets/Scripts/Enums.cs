@@ -10,9 +10,15 @@ public class Enums {
         Magic
     }
     public enum RuneType{
-        Blade,
+        Blade =0,
         Guard,
         Handle
+    }
+    public enum ItemQuality{
+        Common,
+        Rare,
+        Epic,
+        Legendary
     }
     
 }

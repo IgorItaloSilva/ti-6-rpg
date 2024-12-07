@@ -83,6 +83,7 @@ public class UIManager : MonoBehaviour
             statsUIManager=GetComponent<StatsUIManager>();
         }
         currentUIScreen = UIScreens.Closed;
+        runesUiManager=RunesUiManager.instance;
         runesUiManager.Setup();
         AjustUiOnStart();
         youDiedVFXText = youDiedVFXTextGO.GetComponent<Text>();
@@ -278,7 +279,7 @@ public class UIManager : MonoBehaviour
             break;
             case UIScreens.Weapon:
                 painelWeapon.SetActive(true);
-                runesUiManager.Update();
+                runesUiManager.UpdateRunes();
                 currentUIScreen=UIScreens.Weapon;
             break;
             case UIScreens.System: 
