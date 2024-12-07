@@ -23,7 +23,8 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
         MaxJumpTime = .8f,
         BaseGravity = -9.8f,
         BaseTurnTime = 0.15f,
-        SlowTurnTimeModifier = 1.5f;
+        SlowTurnTimeModifier = 1.5f,
+        AttackTurnTimeModifier = 3f;
 
     public readonly int DodgeCooldownMs = 600;
 
