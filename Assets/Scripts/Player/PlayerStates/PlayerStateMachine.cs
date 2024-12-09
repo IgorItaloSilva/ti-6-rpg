@@ -2,7 +2,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerStateMachine : MonoBehaviour,IDataPersistence
+public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 {
     // Singleton publico do PlayerMovement
     public static PlayerStateMachine Instance;
@@ -190,8 +190,8 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
         _isMovementPressed = _currentMovementInput is not { x: 0f, y: 0f };
         Animator.SetBool(IsWalkingHash, IsMovementPressed);
     }
-    
-    
+
+
     private void OnInteractPressed(InputAction.CallbackContext context)
     {
         _isInteractPressed = context.ReadValueAsButton();
@@ -279,10 +279,11 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
     {
         if (other.CompareTag("Climbable") && _canMount)
         {
-            RaycastHit hit;
-            if (!Physics.Raycast(transform.position, transform.forward, out hit, 1f)) return;
-            var colliderTransform = hit.collider.gameObject.transform;
+            if (!Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z),
+                    transform.forward, 1f)) return;
+            var colliderTransform = other.gameObject.transform;
             transform.rotation = colliderTransform.rotation;
+            transform.position = new Vector3(colliderTransform.position.x, transform.position.y, transform.position.z);
             _isClimbing = true;
         }
     }
@@ -305,7 +306,7 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
         _canAttack = false;
 
         if (_attackCount == 3 && _currentAttack == 3) return;
-        
+
         _attackCount++;
         ApplyAttackCount();
     }
