@@ -73,6 +73,7 @@ public class DataPersistenceManager : MonoBehaviour
             Debug.LogWarning("No data was Found, must start a new save before saving");
             return;
         }
+        Debug.LogWarning("We are saving the game!");
         //pass data to other scripts so they can update it
         foreach (IDataPersistence dataPersistenceObj in  dataPersistenceObjects){
             dataPersistenceObj.SaveData(gameData);
@@ -84,7 +85,7 @@ public class DataPersistenceManager : MonoBehaviour
         dataHandler.Save(gameData,selectedProfileId);
     }
     void OnApplicationQuit(){
-        SaveGame();
+        //SaveGame();
     }
     private List<IDataPersistence> FindAllDataPersistenceObjects(){
         IEnumerable<IDataPersistence> dataPersistenceObjects = FindObjectsOfType<MonoBehaviour>(true).OfType<IDataPersistence>();
