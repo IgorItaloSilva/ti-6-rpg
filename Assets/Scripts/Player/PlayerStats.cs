@@ -176,6 +176,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     void LevelUp(){
         Level+=1;
         LevelUpPoints+=3;
+        GameEventsManager.instance.uiEvents.NotificationPlayed("Você upou de nível!");
     }
     int ExpToNextLevel(int level){
         if(level==0){

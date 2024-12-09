@@ -28,6 +28,7 @@ public class RuneManager : MonoBehaviour
         hasChanged = new bool[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
     }
     public void GainRune(RuneSO newRune){
+        GameEventsManager.instance.uiEvents.NotificationPlayed("Você coletou a rune: "+newRune.Nome);
         runeInventory.Add(newRune);
     }
     public void EquipRune(int id){//NOssa Ui passa o Id do array de runas dela, que é igual ao nosso, por isso usado o ID diretamente
