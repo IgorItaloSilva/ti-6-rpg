@@ -21,12 +21,18 @@ public class KitsuneBasicAttack : EnemyActions
     public override void UpdateAction()
     {
         time+=Time.fixedDeltaTime;
-        Vector3 target = actualEnemyController.target.GetPosition();
-        target.y=actualEnemyController.transform.position.y;
-        actualEnemyController.transform.LookAt(target);
-        if(time>animationDuration){
+        ISteeringAgent steeringAgent = actualEnemyController.target;
+        if(steeringAgent==null){
             actualEnemyController.ChangeAction(new nullAction());
-        } 
+        }
+        else{
+            Vector3 target = steeringAgent.GetPosition();
+            target.y=actualEnemyController.transform.position.y;
+            actualEnemyController.transform.LookAt(target);
+            if(time>animationDuration){
+                actualEnemyController.ChangeAction(new nullAction());
+            }
+        }
     }
     public KitsuneBasicAttack(float attackTime,float minDistToAttack,ActualEnemyController actualEnemyController){
         animationDuration=attackTime;

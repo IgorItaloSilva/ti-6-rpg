@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class Interactable : MonoBehaviour
+public class InteractableIgor : MonoBehaviour
 {
     [SerializeField] GameObject canvas;
     [SerializeField] GameObject[] doors;

@@ -136,4 +136,10 @@ public class UIEvents
             onUnpauseGame();
         }
     }
+    public event Action<string> OnNotificationPlayed;
+    public void NotificationPlayed(string text){
+        if(OnNotificationPlayed!=null){
+            OnNotificationPlayed(text);
+        }
+    }
 }
