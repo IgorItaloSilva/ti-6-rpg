@@ -12,6 +12,7 @@ public class KitsuneBoss : ActualEnemyController
     [SerializeField]float rangedattackTime;
     [SerializeField]float restTime;
     [SerializeField]GameObject prefabRangedAttack;
+    [SerializeField]public Transform[] rangedAttackPos;
     bool isAttacking;
     bool isResting;
     protected override void CreateActions()

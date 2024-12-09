@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class KitsuneBullet : MonoBehaviour
 {
-    Transform player;
+    Vector3 player;
     [SerializeField] Rigidbody rb;
 
     float timer = 3f;
@@ -20,15 +20,15 @@ public class KitsuneBullet : MonoBehaviour
     {
         if(timer <= 0)
         {
-            Vector3 dir = Vector3.Slerp(transform.position, player.position, 0.85f);
+            Vector3 dir = Vector3.Slerp(transform.position, player, 0.85f);
             transform.LookAt(dir);
-            rb.velocity = transform.forward * 7f;
+            rb.velocity = transform.forward * 20f;
             return;
         }
         timer -= Time.fixedDeltaTime;
     }
 
-    public void SetPlayer(Transform _player)
+    public void SetPlayer(Vector3 _player)
     {
         player = _player;
     }

@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEditor.PackageManager;
+using UnityEngine.Playables;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -26,6 +29,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]private GameObject youDiedVFXParent;
     [SerializeField]private GameObject youDiedVFXBackgroundGO;
     [SerializeField]private GameObject youDiedVFXTextGO;
+    [Header("Coisas da notification box")]
+    [SerializeField]private GameObject notificationBox;
+    [SerializeField]private TextMeshProUGUI notificationText;
+    [SerializeField]private int iterationSteps;
+    [SerializeField]private float totalTime;
     private Text youDiedVFXText;
     private Image youDiedVFXImage;
     private const float transparencyRatioYouDiedVfx = 0.05f;
@@ -52,6 +60,7 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onSavedGame+=FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened+=OpenDialogPanel;
+        GameEventsManager.instance.uiEvents.OnNotificationPlayed+=PlayNotification;
     }
 
     void OnDisable()
@@ -61,6 +70,7 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onSavedGame -= FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened -= OpenDialogPanel;
+       GameEventsManager.instance.uiEvents.OnNotificationPlayed-=PlayNotification;
     }
 
     void Start()
@@ -123,6 +133,9 @@ public class UIManager : MonoBehaviour
         if(Keyboard.current.numpad1Key.wasPressedThisFrame){
             GameEventsManager.instance.uiEvents.DialogOpen();
         }
+        if(Keyboard.current.pKey.wasPressedThisFrame){
+            PlayNotification("teste");
+        }
     
         /* if(Mouse.current.leftButton.wasPressedThisFrame){
             Debug.Log($"pos do mouse = {Mouse.current.position.ReadValue()}");
@@ -152,6 +165,11 @@ public class UIManager : MonoBehaviour
             StartCoroutine(SpinSaveIcon());
         }
     }
+    void PlayNotification(string text){
+        notificationBox.SetActive(true);
+        notificationText.text=text;
+        StartCoroutine("PlayNotificationVFX");
+    }
     public void QuitGame(){
         //MUDAR PARA O GAME MANAGER DEPOIS. FECHAR O JOGO NÃO É RESPONSABILIDADE DO UI MANAGER
         Application.Quit();
@@ -170,6 +188,13 @@ public class UIManager : MonoBehaviour
         else{
             painelPause.SetActive(false);
             currentUIScreen=UIScreens.Closed;
+        }
+        if(notificationBox==null){
+            Debug.LogWarning("Não temos a caixa de notificação");
+        }
+        else{
+            notificationBox.transform.localPosition=new Vector3(960,0,0);
+            notificationBox.SetActive(false);
         }
         skillTreeUIManager?.AjustUiOnStart();
         painelStats.SetActive(false);
@@ -221,7 +246,20 @@ public class UIManager : MonoBehaviour
         }
         youDiedVFXParent.SetActive(false);
         SwitchToScreen((int)UIScreens.Death);
-
+    }
+    IEnumerator PlayNotificationVFX(){
+        //valor x no local position, inicial = 960, valor final = 560
+        int ratio = 400/iterationSteps;
+        float yCoor= 0;//notificationBox.transform.localPosition.y;
+        for(int i=0,x=960;i<=iterationSteps;i++,x-=ratio){
+            notificationBox.transform.localPosition=new Vector3(x,yCoor,0);
+            yield return new WaitForSecondsRealtime(totalTime/iterationSteps);
+        }
+        yield return new WaitForSecondsRealtime(2);
+        for(int i=0,x=560;i<=iterationSteps;i++,x+=ratio){
+            notificationBox.transform.localPosition=new Vector3(x,yCoor,0);
+            yield return new WaitForSecondsRealtime(totalTime/iterationSteps);
+        }
     }
     public void SwitchToScreen(int destinationUiScreen){
         Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");

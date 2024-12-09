@@ -14,7 +14,7 @@ public class KitsuneRangeAttack : MonoBehaviour
         for(int i = 0;  i < bulletPos.Length; i++)
         {
             GameObject clone = Instantiate(rangeBullet, bulletPos[i].position, bulletPos[i].rotation);
-            clone.GetComponent<KitsuneBullet>().SetPlayer(player);
+            //clone.GetComponent<KitsuneBullet>().SetPlayer(player);
 
 
         }
