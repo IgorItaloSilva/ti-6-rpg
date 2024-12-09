@@ -5,6 +5,7 @@ public class KitsuneBullet : MonoBehaviour
 {
     Vector3 player;
     [SerializeField] Rigidbody rb;
+    [SerializeField]float damage;
 
     float timer = 3f;
 
@@ -14,6 +15,7 @@ public class KitsuneBullet : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.velocity = transform.forward * 10f;
+        Destroy(gameObject,5f);
     }
 
     void FixedUpdate()
@@ -31,6 +33,18 @@ public class KitsuneBullet : MonoBehaviour
     public void SetPlayer(Vector3 _player)
     {
         player = _player;
+    }
+    public void OnTriggerEnter(Collider collider){
+        if(collider.CompareTag("Player")){
+            IDamagable damagable = collider.GetComponent<IDamagable>();
+            if(damagable==null){
+                Debug.Log("a bullet n conseguiu dar dano no player");
+            }
+            else{
+                damagable.TakeDamage(damage,Enums.DamageType.Magic);
+                Destroy(gameObject);
+            }
+        }
     }
 
 }
