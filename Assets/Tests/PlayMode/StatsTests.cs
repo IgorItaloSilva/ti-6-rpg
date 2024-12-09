@@ -92,7 +92,7 @@ public class StatsTests
     public IEnumerator Gaininglevel(){
         GameObject gameObject = new();
         PlayerStats stats = gameObject.AddComponent<PlayerStats>();
-        //Como não temos podemos iniciar com o valor correto, o nivel começa
+        //Como não podemos iniciar com o valor correto, o nivel começa
         //no 0, ao invés do 1, então estamos dando 1 de exp para forçar um level up
         //para poder simular o estado inicial do codigo
         GameEventsManager.instance.playerEvents.PlayerGainExp(1);

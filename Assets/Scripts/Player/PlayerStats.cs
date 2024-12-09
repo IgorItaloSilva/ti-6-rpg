@@ -49,14 +49,6 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     public int[] simulatedStatChange;
     public bool IsNearCampfire ;//{get;private set;}//adicionar no save/load depois
     private bool playerIsDead; //Talvez Adicionar no save e load depois
-    void Start()
-    {
-        IsNearCampfire=true;
-        simulatedStatChange = new int[4];
-        CalculateStats();
-        GameEventsManager.instance.uiEvents.UpdateSliders(0,0,maxLife);//Essas duas funções deveriam ser chamadas
-        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);//             pra stamina e mana tambem
-    }
     void OnEnable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo+=SendBaseStatsInfo;
         GameEventsManager.instance.uiEvents.onRequestExpStatsInfo+=SendExpStatsInfo;
@@ -81,8 +73,14 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.playerEvents.onPlayerGainExp-=GainExp;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUp;
     }
-
-    // Update is called once per frame
+    void Start()
+    {
+        IsNearCampfire=true;
+        simulatedStatChange = new int[4];
+        CalculateStats();
+        GameEventsManager.instance.uiEvents.UpdateSliders(0,0,maxLife);//Essas duas funções deveriam ser chamadas
+        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);//             pra stamina e mana tambem
+    }
     void Update()
     {
         GameEventsManager.instance.uiEvents.UpdateSliders(0,0,maxLife);//Essas duas funções deveriam ser chamadas
@@ -153,12 +151,20 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             }
         }
     }
+    void CalculateWeaponDamage(){
+        WeaponManager katana = GetComponentInChildren<WeaponManager>();
+        if(katana!=null){
+            Debug.Log("O player achou uma arma para setar o dano dela");
+            katana.SetDamage(Str,Dex);
+        }
+    }
     void CalculateStats(){
         maxLife = BaseLife + vidaConsMod * (Con-10);
         maxMana = BaseMana + manaIntMod * (Int-10);
         magicDamage = BaseMagicDamage + magicDamageMod * (Int-10);
         lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10);
         heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10);
+        CalculateWeaponDamage();
     }
     void GainExp(int exp){
         int expToNextLevel = ExpToNextLevel(Level);

@@ -1,0 +1,91 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+public class RuneManager : MonoBehaviour
+{
+    public static RuneManager instance;
+    public RuneSO[] equipedRunes;
+    public RuneSO[] unequipedRunes;
+    public List<RuneSO> runeInventory;
+    bool[] hasChanged;
+
+    void OnEnable(){
+
+    }
+    void OnDisable(){
+
+    }
+    void Awake(){
+        if(instance==null){
+            instance=this;
+        }
+        else{
+            Destroy(this.gameObject);
+        }
+        //runeInventory = new List<RuneSO>();
+        equipedRunes = new RuneSO[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
+        unequipedRunes = new RuneSO[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
+        hasChanged = new bool[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
+    }
+    public void GainRune(RuneSO newRune){
+        runeInventory.Add(newRune);
+    }
+    public void EquipRune(int id){//NOssa Ui passa o Id do array de runas dela, que é igual ao nosso, por isso usado o ID diretamente
+        Debug.Log($"Vou equipar a runa de {id}, que é a {runeInventory[id]}");
+        RuneSO rune = runeInventory[id];
+        if(equipedRunes[(int)rune.Part]==null){
+            equipedRunes[(int)rune.Part]=runeInventory[id];
+        }
+        else{
+            unequipedRunes[(int)rune.Part]=equipedRunes[(int)rune.Part];
+            equipedRunes[(int)rune.Part]=runeInventory[id];
+        }
+        hasChanged[(int)rune.Part]=true;
+    }
+    public void ApplySelectedRunes(){//Called when we close the UI, applyes the buffs from the selected Runes
+        for(int i =0;i<hasChanged.Length;i++){
+            if(hasChanged[i]){
+                //Deactivate a que estava esquipada
+                RuneSO rune = unequipedRunes[i];
+                if(rune!=null){
+                    Debug.Log($"Estou dando deapply na runa {rune}");
+                    ActivateDeactivateRune(rune,false);
+                }
+                //Activate a nova esquipada
+                rune = equipedRunes[i];
+                if(rune!=null){
+                    Debug.Log($"Estou dando apply na runa {rune}");
+                    ActivateDeactivateRune(rune,true);
+                }
+                hasChanged[i]=false;
+            }
+        }
+    }
+    void ActivateDeactivateRune(RuneSO rune,bool isActivate){
+        Debug.Log($"Vou ativar a runa {rune.name}");
+        bool parseResult;
+        switch(rune.runeActivationCode){
+            case Enums.RuneActivationCode.DamageBuff:
+                int dano = 0;
+                parseResult = false;
+                string[] strings = rune.DescriptionText.Split(" ");
+                Debug.Log(strings.Length);
+                foreach(string s in strings){
+                    parseResult = int.TryParse(s,out dano);
+                    //parseResult= float.TryParse(s,System.Globalization.NumberStyles.AllowLeadingSign,System.Globalization.CultureInfo.CurrentCulture,out dano);
+                    if(parseResult)break;
+                }
+                Debug.Log($"resultado do parse {parseResult} e dano é {dano}");
+                if(parseResult){
+                    GameEventsManager.instance.runeEvents.RuneDamageBuff(isActivate,dano);
+                }
+            break;
+            case Enums.RuneActivationCode.StatsBuff:
+            break;
+            case Enums.RuneActivationCode.TradeOff:
+            break;
+            case Enums.RuneActivationCode.OtherBonus:
+            break;
+        }
+    }
+}

@@ -7,16 +7,24 @@ public class WeaponManager : MonoBehaviour
     private float damage;
     [SerializeField] Enums.DamageType damageType;
     [SerializeField]private float strModifier = 0.5f;
-    [SerializeField]private float dexModifier = 0.1f;
+    [SerializeField]private float dexModifier = 0.3f;
     [SerializeField]private float baseDamage = 10f;
+    [SerializeField]bool isPlayerWeapon;
+    //public float bonusDamageFromRune;
     Collider damageCollider;
     //Weapon pinduricalhos
+    void OnEnable(){
+        GameEventsManager.instance.runeEvents.onRuneDamageBuff+=RuneDamageBuff;
+    }   
+    void OnDisable(){
+        GameEventsManager.instance.runeEvents.onRuneDamageBuff-=RuneDamageBuff;
+    }
     private void Start(){
         damageCollider=GetComponent<Collider>();
         if(damageCollider==null){
             Debug.LogWarning("A arma não achou o collider dela");
         }
-        damage=baseDamage;//Deveria ser substituido por uma chamada do controller de quem tem essa arma
+        damage=baseDamage;
     }
     List<IDamagable>damagedTargets = new List<IDamagable>();
     private void OnTriggerEnter(Collider collider){
@@ -43,6 +51,16 @@ public class WeaponManager : MonoBehaviour
     }
     public void SetDamage(int str,int dex){
         damage = baseDamage + str*strModifier + dex*dexModifier;
+    }
+    public void RuneDamageBuff(bool isApply, int value){
+        if(!isPlayerWeapon)return;
+        Debug.Log($"Estou mudando o meu dano de {damage}, o novo valor é {value} e o isApply é {isApply}");
+        if(isApply){
+            damage+=value;
+        }
+        else{
+            damage-=value;
+        }
     }
     
 }
