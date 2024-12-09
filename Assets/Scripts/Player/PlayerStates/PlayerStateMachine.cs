@@ -1,9 +1,6 @@
-using System;
 using Cinemachine;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 public class PlayerStateMachine : MonoBehaviour,IDataPersistence
 {
@@ -23,7 +20,8 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
         MaxJumpTime = .8f,
         BaseGravity = -9.8f,
         BaseTurnTime = 0.15f,
-        SlowTurnTimeModifier = 1.5f;
+        SlowTurnTimeModifier = 1.5f,
+        AttackTurnTimeModifier = 3f;
 
     public readonly int DodgeCooldownMs = 600;
 
@@ -38,7 +36,8 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
         _isJumpPressed,
         _isDodgePressed,
         _isAttackPressed,
-        _isAttacking,
+        _isInteractPressed,
+        _canInteract,
         _isDodging,
         _canDodge = true,
         _canJump = true,
@@ -74,6 +73,7 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
         set => _currentState = value;
     }
 
+    public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
     public bool IsJumpPressed => _isJumpPressed && _canJump;
     public bool IsDodgePressed => _isDodgePressed && _canDodge;
@@ -178,6 +178,8 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
         playerInput.Gameplay.Dodge.canceled += Dodge;
         playerInput.Gameplay.Attack.started += Attack;
         playerInput.Gameplay.Attack.canceled += Attack;
+        playerInput.Gameplay.Interact.started += OnInteractPressed;
+        playerInput.Gameplay.Interact.canceled += OnInteractPressed;
     }
 
     private void OnMovementPressed(InputAction.CallbackContext context)
@@ -187,6 +189,13 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
         _currentMovement.z = _currentMovementInput.y;
         _isMovementPressed = _currentMovementInput is not { x: 0f, y: 0f };
         Animator.SetBool(IsWalkingHash, IsMovementPressed);
+    }
+    
+    
+    private void OnInteractPressed(InputAction.CallbackContext context)
+    {
+        _isInteractPressed = context.ReadValueAsButton();
+        _canInteract = true;
     }
 
     private void Attack(InputAction.CallbackContext context)
@@ -291,8 +300,6 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
     {
         if (!_canAttack) return;
 
-        _isAttacking = true;
-
         _currentMovement = Vector3.zero;
 
         _canAttack = false;
@@ -305,7 +312,6 @@ public class PlayerStateMachine : MonoBehaviour,IDataPersistence
 
     public void ResetAttacks()
     {
-        _isAttacking = false;
         _attackCount = 0;
         _currentAttack = 0;
         ApplyAttackCount();
