@@ -33,7 +33,10 @@ public class KitsuneBoss : ActualEnemyController,IDamagable
         if(isAttacking)return;
         if(isResting)return;
         if(target==null){
-            ;
+            if(hasDisplayedLife==true){
+                UIManager.instance.HideBossLife();
+                hasDisplayedLife=false;
+            }
         }
         else{
             if(hasDisplayedLife==false){
