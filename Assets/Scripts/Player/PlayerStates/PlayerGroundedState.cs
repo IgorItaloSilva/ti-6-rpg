@@ -52,12 +52,12 @@ public class PlayerGroundedState : PlayerBaseState
             SwitchState(_factory.InAir());
         }
 
-        if (_ctx.IsSprintPressed)
+        if (_ctx.IsSprintPressed && _ctx.IsMovementPressed)
         {
             SwitchState(_factory.Sprint());
         }
 
-        if (_ctx.IsDodgePressed)
+        if (_ctx.IsDodgePressed && _ctx.IsMovementPressed)
         {
             SwitchState(_factory.Dodge());
         }
