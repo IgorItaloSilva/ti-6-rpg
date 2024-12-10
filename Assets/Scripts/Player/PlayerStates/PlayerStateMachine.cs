@@ -37,7 +37,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isDodgePressed,
         _isAttackPressed,
         _isInteractPressed,
-        _canInteract,
+        _canInteract = true,
         _isDodging,
         _canDodge = true,
         _canJump = true,
@@ -103,6 +103,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         get => _canAttack;
         set => _canAttack = value;
+    }
+    
+    public bool CanInteract
+    {
+        get => _canInteract;
+        set => _canInteract = value;
     }
 
     public Vector3 CurrentMovement

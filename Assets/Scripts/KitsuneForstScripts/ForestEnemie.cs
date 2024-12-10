@@ -14,13 +14,9 @@ public class ForestEnemie : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider other)
+    private void OnDestroy()
     {
-        if (other.CompareTag("Player"))
-        {
-            Destroy(gameObject);
-            pilar.SetActive(true);
-            KitsuneForestObserver.instance.EnemyDefeated();
-        }
+        pilar?.SetActive(true);
+        KitsuneForestObserver.instance.EnemyDefeated();
     }
 }

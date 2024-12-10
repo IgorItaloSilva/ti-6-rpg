@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
 
 public class UIEvents
@@ -140,6 +137,18 @@ public class UIEvents
     public void NotificationPlayed(string text){
         if(OnNotificationPlayed!=null){
             OnNotificationPlayed(text);
+        }
+    }
+    public event Action<float,float,string> OnBossInfoDisplayed;
+    public void BossInfoDisplay(float currentHp,float maxhp,string name){
+        if(OnBossInfoDisplayed!=null){
+            OnBossInfoDisplayed(currentHp,maxhp,name);
+        }
+    }
+    public event Action<float>OnUpdateBossLife;
+    public void UpdateBossLife(float currentLife){
+        if(OnUpdateBossLife!=null){
+            OnUpdateBossLife(currentLife);
         }
     }
 }

@@ -6,6 +6,7 @@ public class KitsuneForestObserver : MonoBehaviour
     public static KitsuneForestObserver instance;
     [SerializeField] int numEnemies;
     [SerializeField] private GameObject boss;
+    [SerializeField] private GameObject statue;
 
 
     // Start is called before the first frame update
@@ -20,7 +21,8 @@ public class KitsuneForestObserver : MonoBehaviour
         numEnemies--;
         if(numEnemies == 0)
         {
-            boss.SetActive(true);
+            statue?.SetActive(false);
+            boss?.SetActive(true);
         }
     }
 
