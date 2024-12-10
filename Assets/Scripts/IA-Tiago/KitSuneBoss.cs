@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KitsuneBoss : ActualEnemyController
+public class KitsuneBoss : ActualEnemyController,IDamagable
 {
     EnemyActions basicAttack;
     EnemyActions rangedAttack;
@@ -13,8 +13,11 @@ public class KitsuneBoss : ActualEnemyController
     [SerializeField]float restTime;
     [SerializeField]GameObject prefabRangedAttack;
     [SerializeField]public Transform[] rangedAttackPos;
+    string nome = "Kitsune, a guardiã";
+
     bool isAttacking;
     bool isResting;
+    bool hasDisplayedLife;
     protected override void CreateActions()
     {
         basicAttack = new KitsuneBasicAttack(attackTime,basicAttackDist,this);
@@ -33,6 +36,10 @@ public class KitsuneBoss : ActualEnemyController
             ;
         }
         else{
+            if(hasDisplayedLife==false){
+                GameEventsManager.instance.uiEvents.BossInfoDisplay(currentHp,maxHp,nome);
+                hasDisplayedLife=true;
+            }
             steeringManager?.AvoidObstacle();
             if(actionsPerformed>=numberOfActionsBeforeRest){
                 Debug.Log("Trocando ação para rest");
@@ -63,6 +70,9 @@ public class KitsuneBoss : ActualEnemyController
                 }
             }
         }
+    }
+    void Update(){
+        GameEventsManager.instance.uiEvents.UpdateBossLife(currentHp);
     }
     new void FixedUpdate(){
         SetSteeringTargetAndCurrentAction();
