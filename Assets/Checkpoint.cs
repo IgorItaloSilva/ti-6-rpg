@@ -29,6 +29,7 @@ public class Checkpoint : MonoBehaviour
     {
         if(PlayerStateMachine.Instance.IsInteractPressed)
         {
+            PlayerStateMachine.Instance.CanInteract = false;
             DataPersistenceManager.instance.SaveGame();
         }
     }
