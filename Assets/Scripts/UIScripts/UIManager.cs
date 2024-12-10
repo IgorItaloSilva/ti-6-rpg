@@ -276,6 +276,9 @@ public class UIManager : MonoBehaviour
     void UpdateBossLife(float currentHp){
         bossLife.value=currentHp;
     }
+    public void HideBossLife(){
+        bossBarraDeVida.SetActive(false);
+    }
     public void SwitchToScreen(int destinationUiScreen){
         Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");
         //desativa a tela atual
