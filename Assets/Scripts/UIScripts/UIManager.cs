@@ -4,9 +4,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
-using UnityEditor.PackageManager;
-using UnityEngine.Playables;
-using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -34,6 +31,10 @@ public class UIManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI notificationText;
     [SerializeField]private int iterationSteps;
     [SerializeField]private float totalTime;
+    [Header("Coisas da barra de vida do boss")]
+    [SerializeField]Slider bossLife;
+    [SerializeField]TextMeshProUGUI bossName;
+    [SerializeField]GameObject bossBarraDeVida;
     private Text youDiedVFXText;
     private Image youDiedVFXImage;
     private const float transparencyRatioYouDiedVfx = 0.05f;
@@ -61,6 +62,8 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened+=OpenDialogPanel;
         GameEventsManager.instance.uiEvents.OnNotificationPlayed+=PlayNotification;
+        GameEventsManager.instance.uiEvents.OnBossInfoDisplayed+=BossSettup;
+        GameEventsManager.instance.uiEvents.OnUpdateBossLife+=UpdateBossLife;
     }
 
     void OnDisable()
@@ -71,6 +74,8 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened -= OpenDialogPanel;
        GameEventsManager.instance.uiEvents.OnNotificationPlayed-=PlayNotification;
+       GameEventsManager.instance.uiEvents.OnBossInfoDisplayed-=BossSettup;
+       GameEventsManager.instance.uiEvents.OnUpdateBossLife-=UpdateBossLife;
     }
 
     void Start()
@@ -203,6 +208,7 @@ public class UIManager : MonoBehaviour
         painelDialog.SetActive(false);
         painelTutorial.SetActive(false);
         painelWeapon.SetActive(false);
+        bossBarraDeVida.SetActive(false);
     }
     void PlayerDied(){
         StartCoroutine("PlayYouDiedAnimation");
@@ -260,6 +266,15 @@ public class UIManager : MonoBehaviour
             notificationBox.transform.localPosition=new Vector3(x,yCoor,0);
             yield return new WaitForSecondsRealtime(totalTime/iterationSteps);
         }
+    }
+    void BossSettup(float currentLife,float maxLife,string name){
+        bossBarraDeVida.SetActive(true);
+        bossLife.maxValue=maxLife;
+        bossLife.value=currentLife;
+        bossName.text=name;
+    }
+    void UpdateBossLife(float currentHp){
+        bossLife.value=currentHp;
     }
     public void SwitchToScreen(int destinationUiScreen){
         Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");
