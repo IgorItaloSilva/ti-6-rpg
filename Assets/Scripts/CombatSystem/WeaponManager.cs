@@ -30,6 +30,7 @@ public class WeaponManager : MonoBehaviour
     private void OnTriggerEnter(Collider collider){
         //Debug.Log("A arma colidiu com algo");
         IDamagable alvoAtacado = collider.gameObject.GetComponentInParent<IDamagable>();
+        Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
         if(alvoAtacado!=null){
             DealDamage(alvoAtacado,damage);
         }

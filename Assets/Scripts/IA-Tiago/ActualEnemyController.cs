@@ -15,6 +15,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     [SerializeField]protected float minDistToAttack;
     [SerializeField]protected int numberOfActionsBeforeRest;
     [SerializeField]protected int exp;
+    [SerializeField]protected bool IsABoss;
     protected Slider healthSlider;
     public ISteeringAgent target;
     public Rigidbody rb;
@@ -101,7 +102,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
 
     public LayerMask GetObstaclesLayerMask(){return obstaclesLayerMask;}
     //Metodos das interfaces
-    public void TakeDamage(float damage, Enums.DamageType damageType)
+    public virtual void TakeDamage(float damage, Enums.DamageType damageType)
     {
         animator.ResetTrigger("tookDamage");
         animator.SetTrigger("tookDamage");
@@ -116,14 +117,20 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
                 //
             break;
         }
-        healthSlider.value=currentHp;
+        if(IsABoss)UIManager.instance?.UpdateBossLife(currentHp);
+        if(healthSlider!=null)healthSlider.value=currentHp;
         if(currentHp<=0){
+            if(IsABoss)BossDeath();
             Die();
         }
     }
     public void Die(){
         GameEventsManager.instance.playerEvents.PlayerGainExp(exp);
         Destroy(gameObject);
+    }
+    protected virtual void BossDeath(){
+        Debug.Log("Chamei a boss death base");
+        UIManager.instance?.HideBossLife();
     }
     
 }

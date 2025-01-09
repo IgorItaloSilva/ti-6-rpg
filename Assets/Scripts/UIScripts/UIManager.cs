@@ -62,8 +62,6 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened+=OpenDialogPanel;
         GameEventsManager.instance.uiEvents.OnNotificationPlayed+=PlayNotification;
-        GameEventsManager.instance.uiEvents.OnBossInfoDisplayed+=BossSettup;
-        GameEventsManager.instance.uiEvents.OnUpdateBossLife+=UpdateBossLife;
     }
 
     void OnDisable()
@@ -74,8 +72,6 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened -= OpenDialogPanel;
        GameEventsManager.instance.uiEvents.OnNotificationPlayed-=PlayNotification;
-       GameEventsManager.instance.uiEvents.OnBossInfoDisplayed-=BossSettup;
-       GameEventsManager.instance.uiEvents.OnUpdateBossLife-=UpdateBossLife;
     }
 
     void Start()
@@ -267,13 +263,13 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(totalTime/iterationSteps);
         }
     }
-    void BossSettup(float currentLife,float maxLife,string name){
+    public void BossLifeSettup(float currentLife,float maxLife,string name){
         bossBarraDeVida.SetActive(true);
         bossLife.maxValue=maxLife;
         bossLife.value=currentLife;
         bossName.text=name;
     }
-    void UpdateBossLife(float currentHp){
+    public void UpdateBossLife(float currentHp){
         bossLife.value=currentHp;
     }
     public void HideBossLife(){

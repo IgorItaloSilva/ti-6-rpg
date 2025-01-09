@@ -16,10 +16,11 @@ public class SkillTreeEvents {
             onActivatePowerUp(id);
         }
     }
-    public event Action<int> onPlayerGetsPowerUpMoney;
+    //MUDADO PARA SINGLETON
+    /* public event Action<int> onPlayerGetsPowerUpMoney;
     public void PlayerGetsPowerUpMoney(int powerUpType){
         if(onPlayerGetsPowerUpMoney!=null){
             onPlayerGetsPowerUpMoney(powerUpType);
         }
-    }
+    } */
 }

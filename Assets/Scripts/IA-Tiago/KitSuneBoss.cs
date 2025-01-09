@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KitsuneBoss : ActualEnemyController,IDamagable
+public class KitsuneBoss : ActualEnemyController
 {
     EnemyActions basicAttack;
     EnemyActions rangedAttack;
@@ -13,6 +13,7 @@ public class KitsuneBoss : ActualEnemyController,IDamagable
     [SerializeField]float restTime;
     [SerializeField]GameObject prefabRangedAttack;
     [SerializeField]public Transform[] rangedAttackPos;
+    [SerializeField]Enums.PowerUpType rewardPowerUpType;
     string nome = "Kitsune, a guardiã";
 
     bool isAttacking;
@@ -34,13 +35,13 @@ public class KitsuneBoss : ActualEnemyController,IDamagable
         if(isResting)return;
         if(target==null){
             if(hasDisplayedLife==true){
-                UIManager.instance.HideBossLife();
+                UIManager.instance?.HideBossLife();
                 hasDisplayedLife=false;
             }
         }
         else{
             if(hasDisplayedLife==false){
-                GameEventsManager.instance.uiEvents.BossInfoDisplay(currentHp,maxHp,nome);
+                UIManager.instance?.BossLifeSettup(currentHp,maxHp,nome);
                 hasDisplayedLife=true;
             }
             steeringManager?.AvoidObstacle();
@@ -74,8 +75,15 @@ public class KitsuneBoss : ActualEnemyController,IDamagable
             }
         }
     }
-    void Update(){
-        GameEventsManager.instance.uiEvents.UpdateBossLife(currentHp);
+    override public void TakeDamage(float damage, Enums.DamageType damageType){
+        base.TakeDamage(damage,damageType);
+        //Caso queiramos fazer ela ser imune a um tipo de dano, ou ter um cap de dano pra n ser obliterada 
+    }
+    protected override void BossDeath()
+    {
+        Debug.Log("Chamado a boss death da classe filha");
+        base.BossDeath();
+        SkillTree.instance?.GainMoney((int)rewardPowerUpType);
     }
     new void FixedUpdate(){
         SetSteeringTargetAndCurrentAction();
