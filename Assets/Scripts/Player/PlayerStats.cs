@@ -185,17 +185,17 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         else return 100*(int)Mathf.Pow(2,level-1);
     }
     void SendBaseStatsInfo(){
-        GameEventsManager.instance.uiEvents.ReciveBaseStatsInfo(Con,Str,Dex,Int);
+        StatsUIManager.instance?.ReciveBaseStatsInfo(Con,Str,Dex,Int);
     }
     void SendExpStatsInfo(){
-        GameEventsManager.instance.uiEvents.ReciveExpStatsInfo(Level,Exp);
+        StatsUIManager.instance?.ReciveExpStatsInfo(Level,Exp);
     }
     void SendAdvancedStatsInfo(){
-        GameEventsManager.instance.uiEvents.ReciveAdvancedStatsInfo(CurrentLife,maxLife,CurrentMana,maxMana,magicDamage
+        StatsUIManager.instance?.ReciveAdvancedStatsInfo(CurrentLife,maxLife,CurrentMana,maxMana,magicDamage
         ,lightAttackDamage,heavyAttackDamage);
     }
     void SendLevelUpInfo(){
-        GameEventsManager.instance.uiEvents.ReciveLevelUpInfo(LevelUpPoints,IsNearCampfire);
+        StatsUIManager.instance?.ReciveLevelUpInfo(LevelUpPoints,IsNearCampfire);
     }
     //Coisas de UI do level up
     public void SimulateStatusBuyOrSell(int statusId,bool isBuying){
@@ -233,7 +233,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
                 displayValue = Int+simulatedStatChange[id];
             break;
         }
-        GameEventsManager.instance.uiEvents.SimulateChangeBaseValue(id,displayValue,isDifferent);
+        StatsUIManager.instance?.SimulateChangeBaseValue(id,displayValue,isDifferent);
         CalculateAdvancedInfoAndSend(id);
     }
     void CalculateAdvancedInfoAndSend(int id){
@@ -241,22 +241,22 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         switch(id){
             case 0:
                 float simuMaxLife = BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10);
-                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(0,CurrentLife,simuMaxLife,isDifferent);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(0,CurrentLife,simuMaxLife,isDifferent);
             break;
             case 1:
                 float simuLightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex+simulatedStatChange[1]-10);
-                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(2,0,simuLightAttackDamage,isDifferent);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(2,0,simuLightAttackDamage,isDifferent);
             break;
             case 2:
                 float simuHeavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str+simulatedStatChange[2]-10);
-                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(3,0,simuHeavyAttackDamage,isDifferent);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(3,0,simuHeavyAttackDamage,isDifferent);
             break;
             case 3:
             int newIntValue = Int+simulatedStatChange[3];
                 float simuMaxMana = BaseMana + manaIntMod * newIntValue-10;
                 float simuMagicDamage = BaseMagicDamage + magicDamageMod * newIntValue-10;
-                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(1,CurrentMana,simuMaxMana,isDifferent);
-                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(4,0,simuMagicDamage,isDifferent);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(1,CurrentMana,simuMaxMana,isDifferent);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(4,0,simuMagicDamage,isDifferent);
             break;
         }
     }
@@ -273,7 +273,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         SendLevelUpInfo();
     }
     void DiscardChanges(){
-        LevelUpPoints= LevelUpPoints+spentPointsIfCancel;
+        LevelUpPoints = LevelUpPoints+spentPointsIfCancel;
+        for(int i=0;i<simulatedStatChange.Length;i++)simulatedStatChange[i]=0;
         spentPointsIfCancel=0;
     }
 }

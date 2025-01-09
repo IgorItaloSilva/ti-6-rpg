@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 
 public class StatsUIManager : MonoBehaviour
 {
+    public static StatsUIManager instance;
     [Header("Stats Base")]
     [SerializeField]TextMeshProUGUI con;
     [SerializeField]TextMeshProUGUI dex;
@@ -28,47 +29,55 @@ public class StatsUIManager : MonoBehaviour
     [SerializeField]GameObject levelUpStuff;
     [SerializeField]TextMeshProUGUI pointsToSpend;
     [Header("Cor dos Textos")]
-    [SerializeField]Color textColor = Color.white;
+    [SerializeField]Color textColor = Color.white; //ESTÁ AQUI CASO A GENTE QUEIRA MUDAR ELAS DEPOIS
     public bool isSimulating{get;private set;}
 
-    
+    void Awake(){
+        if(instance==null){
+            instance=this;
+        }
+        else{
+            Debug.Log("Já tinhamos um statsUIManager, então me destrui");
+            Destroy(gameObject);
+        }
+    }
+    void OnEnable(){//REMOVIDO PARA USAR SINGLETON
+        //GameEventsManager.instance.uiEvents.onReviceBaseStatsInfo+=ReciveBaseStatsInfo;
+        //GameEventsManager.instance.uiEvents.onReviceExpStatsInfo+=ReciveExpStatsInfo;
+        //GameEventsManager.instance.uiEvents.onReviceAdvancedStatsInfo+=ReciveAdvancedStatsInfo;
+        //GameEventsManager.instance.uiEvents.onSimulateChangeBaseValue+=SimulateChangeBaseStat;
+        //GameEventsManager.instance.uiEvents.onSimulateChangeAdvancedValue+=SimulateChangeAdvancedValue;
+        //GameEventsManager.instance.uiEvents.onReciveLevelUpInfo+=ReciveLevelUpInfo;
+    }
+    void OnDisable(){//REMOVIDO PARA USAR SINGLETON
+        //GameEventsManager.instance.uiEvents.onReviceBaseStatsInfo-=ReciveBaseStatsInfo;
+        //GameEventsManager.instance.uiEvents.onReviceExpStatsInfo-=ReciveExpStatsInfo;
+        //GameEventsManager.instance.uiEvents.onReviceAdvancedStatsInfo-=ReciveAdvancedStatsInfo;
+        //GameEventsManager.instance.uiEvents.onSimulateChangeBaseValue-=SimulateChangeBaseStat;
+        //GameEventsManager.instance.uiEvents.onSimulateChangeAdvancedValue-=SimulateChangeAdvancedValue;
+        //GameEventsManager.instance.uiEvents.onReciveLevelUpInfo-=ReciveLevelUpInfo;
+    }
     void Start()
     {
         UpdateValues();
         //Setup Sliders
     }
-    void OnEnable(){
-        GameEventsManager.instance.uiEvents.onReviceBaseStatsInfo+=ReciveBaseStatsInfo;
-        GameEventsManager.instance.uiEvents.onReviceExpStatsInfo+=ReciveExpStatsInfo;
-        GameEventsManager.instance.uiEvents.onReviceAdvancedStatsInfo+=ReciveAdvancedStatsInfo;
-        GameEventsManager.instance.uiEvents.onSimulateChangeBaseValue+=SimulateChangeBaseStat;
-        GameEventsManager.instance.uiEvents.onSimulateChangeAdvancedValue+=SimulateChangeAdvancedValue;
-        GameEventsManager.instance.uiEvents.onReciveLevelUpInfo+=ReciveLevelUpInfo;
-    }
-    void OnDisable(){
-        GameEventsManager.instance.uiEvents.onReviceBaseStatsInfo-=ReciveBaseStatsInfo;
-        GameEventsManager.instance.uiEvents.onReviceExpStatsInfo-=ReciveExpStatsInfo;
-        GameEventsManager.instance.uiEvents.onReviceAdvancedStatsInfo-=ReciveAdvancedStatsInfo;
-        GameEventsManager.instance.uiEvents.onSimulateChangeBaseValue-=SimulateChangeBaseStat;
-        GameEventsManager.instance.uiEvents.onSimulateChangeAdvancedValue-=SimulateChangeAdvancedValue;
-        GameEventsManager.instance.uiEvents.onReciveLevelUpInfo-=ReciveLevelUpInfo;
-    }
     public void UpdateValues(){
         RequestAllStatsInfo();
     }
 
-    void ReciveBaseStatsInfo(int con,int str,int dex,int inte){
+    public void ReciveBaseStatsInfo(int con,int str,int dex,int inte){
         this.con.text=con.ToString();
         this.str.text=str.ToString();
         this.dex.text=dex.ToString();
         this.inte.text=inte.ToString();
-        //Set cores
+        //Set cores caso elas tenham mudado ao simular elas
         this.con.color = textColor;
         this.str.color = textColor;
         this.dex.color = textColor;
         this.inte.color = textColor;
     }
-    void ReciveExpStatsInfo(int level,float currentExp){
+    public void ReciveExpStatsInfo(int level,float currentExp){
         this.level.text=level.ToString();
         expSlider.minValue = ExpToNextLevel(level-1);
         lastLevelExp.text=expSlider.minValue.ToString("F0");
@@ -76,7 +85,7 @@ public class StatsUIManager : MonoBehaviour
         nextLevelExp.text=expSlider.maxValue.ToString("F0");
         expSlider.value = currentExp;
     }
-    void ReciveAdvancedStatsInfo(float currentLife,float maxLife,float currentMana, float maxMana,
+    public void ReciveAdvancedStatsInfo(float currentLife,float maxLife,float currentMana, float maxMana,
                                 float magicDamage, float ligthAttackDamage,float heavyAtackDamage){
         lifeInfo.text = currentLife.ToString("F0") + "/" + maxLife.ToString("F0");
         manaInfo.text = currentMana.ToString("F0") + "/" + maxMana.ToString("F0");
@@ -90,7 +99,7 @@ public class StatsUIManager : MonoBehaviour
         this.ligthAttackDamage.color = textColor;
         this.heavyAtackDamage.color = textColor;
     }
-    void ReciveLevelUpInfo(int pointsToSpend,bool isNearCampfire){
+    public void ReciveLevelUpInfo(int pointsToSpend,bool isNearCampfire){
         if(isNearCampfire){
             levelUpStuff.SetActive(true);
             this.pointsToSpend.text = pointsToSpend.ToString();
@@ -112,7 +121,7 @@ public class StatsUIManager : MonoBehaviour
         return 100*(int)MathF.Pow(2,(level-1));
     }
     //COISAS DO LEVEL UP
-    public void SimulateChangeBaseStat(int id,int newValue,bool isDifferent){
+    public void SimulateChangeBaseValue(int id,int newValue,bool isDifferent){//Chamado pelo PlayerStats
         Color aux = isDifferent ? Color.green : textColor;
         switch(id){
             case 0:
@@ -133,7 +142,7 @@ public class StatsUIManager : MonoBehaviour
             break;
         }
     }
-    public void SimulateChangeAdvancedValue(int hardcodedId,float currentLifeOrMana,float value,bool isDifferent){
+    public void SimulateChangeAdvancedValue(int hardcodedId,float currentLifeOrMana,float value,bool isDifferent){//Chamado pelo PlayerStats
         Color aux = isDifferent ? Color.green : textColor;
         switch(hardcodedId){
             case 0:
@@ -158,19 +167,19 @@ public class StatsUIManager : MonoBehaviour
             break;
         }
     }
-    public void IncreaseStatusButtonPressed(int statusId){
+    public void IncreaseStatusButtonPressed(int statusId){//Chamado pelo Botão da UI
         isSimulating=true;
         GameEventsManager.instance.uiEvents.ChangeStatusButtonPressed(statusId,true);
     }
-    public void DecreaseStatusButtonPressed(int statusId){
+    public void DecreaseStatusButtonPressed(int statusId){//Chamado pelo Botão da UI
         isSimulating=true;
         GameEventsManager.instance.uiEvents.ChangeStatusButtonPressed(statusId,false);
     }
-    public void ConfirmLevelUp(){
+    public void ConfirmLevelUp(){//Chamado pelo Botão da UI
         isSimulating=false;
         GameEventsManager.instance.uiEvents.ConfirmLevelUp();
     }
-    public void CancelSimulation(){
+    public void CancelSimulation(){//Chamado ao sair da tela de Stats da Ui, se ainda estivermos simulando
         isSimulating=false;
         GameEventsManager.instance.uiEvents.DiscardLevelUp();
     }

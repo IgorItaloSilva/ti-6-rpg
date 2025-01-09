@@ -91,12 +91,12 @@ public class UIEvents
             onSimulateChangeAdvancedValue(hardcodedId,currentLifeOrMana,newValue,isDifferent);
         }
     }
-    public event Action<int,bool> onReciveLevelUpInfo;
+    /* public event Action<int,bool> onReciveLevelUpInfo;
     public void ReciveLevelUpInfo(int poitsToSpend, bool isNearCampfire){
         if(onReciveLevelUpInfo!=null){
             onReciveLevelUpInfo(poitsToSpend,isNearCampfire);
         }
-    }
+    } */
     public event Action<int,bool> onChangeStatusButtonPressed;
     public void ChangeStatusButtonPressed(int statusId,bool isBuying){
         if(onChangeStatusButtonPressed!=null){
