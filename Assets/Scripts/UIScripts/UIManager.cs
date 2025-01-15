@@ -174,7 +174,8 @@ public class UIManager : MonoBehaviour
     public void QuitGame(){
         Application.Quit();
     }
-    public void VoltarMainMenu(){
+    public void ReturnMainMenu(){
+        DataPersistenceManager.instance?.SaveGame();
         Time.timeScale=1f;
         SceneManager.LoadScene(0);
         Destroy(gameObject);

@@ -6,11 +6,19 @@ using UnityEngine;
 public class RunePickupable : Interactable
 {
     [SerializeField]RuneSO rune;
-    
-    void OnTriggerEnter(Collider outro){
+
+    override protected void OnTriggerEnter(Collider outro){
         if(outro.CompareTag("Player")){
             RuneManager.instance?.GainRune(rune);
-            Destroy(gameObject);
+            AlreadyInterated=true;
+            Active=false;
+            Save();
+            gameObject.SetActive(false);
         }
+    }
+    public override void Load(InteractableData interactableData)
+    {
+        base.Load(interactableData);
+        if(Active==false)gameObject.SetActive(false);
     }
 }

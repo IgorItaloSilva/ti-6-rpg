@@ -5,37 +5,55 @@ using UnityEngine.UI;
 
 public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDamagable
 {
+    [Header("Coisas de Save e Load")]
+    [SerializeField]bool ignoreSaveLoad;
+    [field:SerializeField]public string Id{get;private set;}//USED TO LOAD DATA
+    [Header ("Coisas que precisam ser colocadas")]
     [SerializeField]protected LayerMask obstaclesLayerMask;
     [SerializeField]protected float maxVelocity;
     [SerializeField]protected float maxForce;
     [SerializeField]protected float charWidth;
     [SerializeField]protected float charHeight;
     [SerializeField]protected float maxHp;
-    [SerializeField]protected float currentHp;
     [SerializeField]protected float minDistToAttack;
     [SerializeField]protected int numberOfActionsBeforeRest;
     [SerializeField]protected int exp;
     [SerializeField]protected bool IsABoss;
+    [field:Header ("Coisas só pra ver mais facil")]
+    [field:SerializeField]public float CurrentHp{get; protected set;}
+    [field:SerializeField]public bool IsDead {get; protected set;}
     protected Slider healthSlider;
     public ISteeringAgent target;
-    public Rigidbody rb;
-    public Animator animator;
+    [HideInInspector]public Rigidbody rb;
+    [HideInInspector]public Animator animator;
     protected EnemyActions currentAction;
     protected EnemyActions restAction;
     protected SteeringManager steeringManager;
     protected int actionsPerformed;
+    protected Vector3 startingPos;
+    bool initiationThroughLoad;
     
+    public virtual void Awake(){
+        if(!ignoreSaveLoad){
+            if(LevelLoadingManager.instance==null){
+                Debug.LogWarning($"O inimigo {Id} está tentando se adicionar na lista de inimigos, mas não temos um LevelLoadingManger na cena");
+            }
+            LevelLoadingManager.instance.enemies.Add(this);
+            if(Id=="")Debug.LogWarning($"O GameObject "+gameObject.name+" está sem id e marcado para salvar");
+            startingPos=transform.position;
+        }
+    }
     public void Start() { 
         animator = GetComponentInChildren<Animator>();
         if(animator==null)Debug.LogWarning("Enemy controller não conseguiu achar um animator");
         rb = GetComponent<Rigidbody>();
         healthSlider = GetComponentInChildren<Slider>();
         steeringManager=new SteeringManager(this,rb);
-        currentHp=maxHp;//mudar para save depois;
+        if(!initiationThroughLoad)CurrentHp=maxHp;
         if(healthSlider!=null){
             healthSlider.minValue=0;
             healthSlider.maxValue=maxHp;
-            healthSlider.value = currentHp;
+            healthSlider.value = CurrentHp;
         }
         restAction=new nullAction();
         AdditionalStart();
@@ -109,28 +127,63 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         animator.SetBool("damageMirror", !animator.GetBool("damageMirror"));
         switch(damageType){
             case Enums.DamageType.Regular:
-                currentHp-=damage;
+                CurrentHp-=damage;
                 //
             break;
             case Enums.DamageType.Magic:
-                currentHp-=damage;
+                CurrentHp-=damage;
                 //
             break;
         }
-        if(IsABoss)UIManager.instance?.UpdateBossLife(currentHp);
-        if(healthSlider!=null)healthSlider.value=currentHp;
-        if(currentHp<=0){
+        if(IsABoss)UIManager.instance?.UpdateBossLife(CurrentHp);
+        if(healthSlider!=null)healthSlider.value=CurrentHp;
+        if(CurrentHp<=0){
             if(IsABoss)BossDeath();
             Die();
         }
     }
     public void Die(){
         GameEventsManager.instance.playerEvents.PlayerGainExp(exp);
-        Destroy(gameObject);
+        IsDead=true;
+        Save();
+        gameObject.SetActive(false);
     }
     protected virtual void BossDeath(){
-        Debug.Log("Chamei a boss death base");
+        //Debug.Log("Chamei a boss death base");
         UIManager.instance?.HideBossLife();
+    }
+    public virtual void Load(EnemyData data){
+        if(ignoreSaveLoad)return;
+        IsDead=data.isDead;
+        CurrentHp=data.currentLife;
+        transform.position=data.lastPosition;
+        Physics.SyncTransforms();
+        initiationThroughLoad=true;
+        if(IsDead)gameObject.SetActive(false);
+    }
+    public virtual void Respawn(){
+        CurrentHp = maxHp;
+        if(healthSlider!=null)healthSlider.value=CurrentHp;
+        transform.position=startingPos;
+    }
+    public virtual void Save(){
+
+        if(ignoreSaveLoad)return;
+        if(LevelLoadingManager.instance==null){
+            Debug.Log($"O inimigo {Id} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
+        }
+        //see if we have this data in dictionary
+        if(LevelLoadingManager.instance.CurrentLevelData.enemiesData.ContainsKey(Id)){
+            //if so change it
+            EnemyData newData = new EnemyData(this);
+            LevelLoadingManager.instance.CurrentLevelData.enemiesData[Id]=newData;
+        }
+        else{
+            //if not add it
+            EnemyData newData = new EnemyData(this);
+            LevelLoadingManager.instance.CurrentLevelData.enemiesData.Add(Id,newData);
+        }
+        
     }
     
 }

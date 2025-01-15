@@ -14,6 +14,7 @@ public class SaveSlotMenu : Menu
     [SerializeField]private ConfirmationMenu confirmationPopupMenu;
     private SaveSlot[] saveSlots;
     private bool isLoadingGame = false;
+    private string levelToBeLoaded = "";
 
     private void Awake(){
         saveSlots = this.GetComponentsInChildren<SaveSlot>();
@@ -56,6 +57,7 @@ public class SaveSlotMenu : Menu
         DisableMenuButtons();
         if(isLoadingGame){
             DataPersistenceManager.instance.ChangeSelectedProfileId(saveSlot.GetProfileId());
+            levelToBeLoaded = saveSlot.GetLevelName();
             SaveGameAndLoadScene();
         }
         else if(saveSlot.hasData){
@@ -80,7 +82,14 @@ public class SaveSlotMenu : Menu
     }
     private void SaveGameAndLoadScene(){
         DataPersistenceManager.instance.SaveGame();
-        SceneManager.LoadSceneAsync(1);
+        if(levelToBeLoaded==""){
+            Debug.Log("Como não tinha um level indo pro indice 1");
+            SceneManager.LoadSceneAsync(1);
+        }
+        else{
+            Debug.Log("Indo pro level " + levelToBeLoaded);
+            SceneManager.LoadSceneAsync(levelToBeLoaded);
+        }
         SceneManager.LoadSceneAsync("Hud",LoadSceneMode.Additive);
     }
     public void OnDeleteClick(SaveSlot saveSlot){

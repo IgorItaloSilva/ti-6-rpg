@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+using System;
 
 public class DataPersistenceManager : MonoBehaviour
 {
@@ -80,6 +82,9 @@ public class DataPersistenceManager : MonoBehaviour
         }
         //timestamp the data so we know when is was last saved
         gameData.lastUpdated = System.DateTime.Now.ToBinary();
+        //save current scene name
+        Scene scene = SceneManager.GetActiveScene();
+        if(scene.name !="MainMenu")gameData.currentLevel=scene.name;
 
         //save data into a file using the data handler
         dataHandler.Save(gameData,selectedProfileId);
@@ -125,5 +130,10 @@ public class DataPersistenceManager : MonoBehaviour
             this.selectedProfileId=testSelectedProfileId;
             Debug.LogWarning("Demos override no profile que será loadado pelo profile: "+ testSelectedProfileId);
         }
+    }
+    public void SaveLevelName(){
+        //save current scene name
+        Scene scene = SceneManager.GetActiveScene();
+        if(scene.name !="MainMenu")gameData.currentLevel=scene.name;
     }
 }

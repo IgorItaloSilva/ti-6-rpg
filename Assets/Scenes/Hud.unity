@@ -5816,7 +5816,7 @@ GameObject:
   - component: {fileID: 830588913}
   - component: {fileID: 830588914}
   m_Layer: 5
-  m_Name: MenuButtons
+  m_Name: OtherMenusButtons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7111,8 +7111,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1767994925}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: VoltarMainMenu
+        m_TargetAssemblyTypeName: UIManager, Scripts
+        m_MethodName: ReturnMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13450,7 +13450,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48.15
+  m_fontSize: 48.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

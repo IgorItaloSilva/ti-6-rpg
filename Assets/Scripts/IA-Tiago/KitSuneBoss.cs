@@ -41,7 +41,7 @@ public class KitsuneBoss : ActualEnemyController
         }
         else{
             if(hasDisplayedLife==false){
-                UIManager.instance?.BossLifeSettup(currentHp,maxHp,nome);
+                UIManager.instance?.BossLifeSettup(CurrentHp,maxHp,nome);
                 hasDisplayedLife=true;
             }
             steeringManager?.AvoidObstacle();
