@@ -5,7 +5,7 @@ using UnityEngine.Events;
 public class Interactable : MonoBehaviour
 {
     [field:SerializeField]public string Id{get; protected set;}
-    [SerializeField]bool ignoreSaveLoad;
+    [SerializeField]protected bool ignoreSaveLoad;
     public bool AlreadyInterated{get; protected set;}
     public bool Active{get;protected set;}
     public bool CanInteract {get;protected set;}

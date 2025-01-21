@@ -11,6 +11,7 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
     public List<ActualEnemyController>enemies;
     public List<Interactable>interactables;
     public LevelData CurrentLevelData;
+    public Vector3 respawnPoint;
     public string LevelName {get;private set;}
     bool loadSucceded;
     void Awake(){//singleton, só que queremos só o mais recente
@@ -70,6 +71,7 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
                 enemy.gameObject.SetActive(true);
             }
             enemy.Respawn();
+            enemy.Save();
         }
     }
 }

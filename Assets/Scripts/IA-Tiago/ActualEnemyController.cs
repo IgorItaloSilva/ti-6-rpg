@@ -163,6 +163,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     }
     public virtual void Respawn(){
         CurrentHp = maxHp;
+        IsDead=false;
         if(healthSlider!=null)healthSlider.value=CurrentHp;
         transform.position=startingPos;
     }
