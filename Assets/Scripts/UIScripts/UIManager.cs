@@ -8,6 +8,8 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
+    [Header("Tempo das animações")]
+    [SerializeField]float saveIconTotalTime;
     [Header("Outros scripts de UI")]
     public SkillTreeUIManager skillTreeUIManager;
     public StatsUIManager statsUIManager;
@@ -211,7 +213,7 @@ public class UIManager : MonoBehaviour
         SwitchToScreen((int)UIScreens.Dialog);
     }
     IEnumerator SpinSaveIcon(){//OK
-        float timerTotal=5f;
+        float timerTotal=saveIconTotalTime;
         while(timerTotal>0){
             timerTotal-=Time.unscaledDeltaTime;
             saveIcon.rectTransform.Rotate(Vector3.forward,-5);

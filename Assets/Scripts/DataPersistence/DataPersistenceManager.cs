@@ -76,6 +76,7 @@ public class DataPersistenceManager : MonoBehaviour
             return;
         }
         Debug.LogWarning("We are saving the game!");
+        GameEventsManager.instance?.uiEvents.SavedGame();
         //pass data to other scripts so they can update it
         foreach (IDataPersistence dataPersistenceObj in  dataPersistenceObjects){
             dataPersistenceObj.SaveData(gameData);

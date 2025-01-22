@@ -28,7 +28,7 @@ public class PlayerWeapon : WeaponManager
         }
         alvo.TakeDamage(damage,damageType);
         //Criar um texto de dano na tela
-        //Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
+        Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
     }
     public void SetDamageAndValues(float strongAttackBonus, float fastAttackBonus){
         strBonusDamage = strongAttackBonus;

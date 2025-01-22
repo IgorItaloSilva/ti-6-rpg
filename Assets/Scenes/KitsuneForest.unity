@@ -15021,6 +15021,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1499606762}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1503166633 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2808261607170030826, guid: 930f215d62b425c498ea41baa58db735,
+    type: 3}
+  m_PrefabInstance: {fileID: 2074542693}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76aa075c4053d204c9989fdeb37be692, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1504109496 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5186267625059429768, guid: bd23250f9d39fd643b9bafe72192fd45,
@@ -22739,6 +22751,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCombate
       objectReference: {fileID: 0}
+    - target: {fileID: 973072017076873094, guid: 930f215d62b425c498ea41baa58db735,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2998542213145736662, guid: 930f215d62b425c498ea41baa58db735,
+        type: 3}
+      propertyPath: swordWeaponManager
+      value: 
+      objectReference: {fileID: 1503166633}
     - target: {fileID: 4133643009367029584, guid: 930f215d62b425c498ea41baa58db735,
         type: 3}
       propertyPath: m_LocalPosition.x

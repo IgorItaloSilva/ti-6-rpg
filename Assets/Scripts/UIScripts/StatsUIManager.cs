@@ -22,8 +22,8 @@ public class StatsUIManager : MonoBehaviour
     [Header("Advanced stats")]
     [SerializeField]TextMeshProUGUI lifeInfo;
     [SerializeField]TextMeshProUGUI manaInfo;
-    [SerializeField]TextMeshProUGUI ligthAttackDamage;
-    [SerializeField]TextMeshProUGUI heavyAtackDamage;
+    [SerializeField]TextMeshProUGUI lightAttackDamage;
+    [SerializeField]TextMeshProUGUI heavyAttackDamage;
     [SerializeField]TextMeshProUGUI magicAttackDamage;
     [Header("Coisas Level Up")]
     [SerializeField]GameObject levelUpStuff;
@@ -66,16 +66,11 @@ public class StatsUIManager : MonoBehaviour
         RequestAllStatsInfo();
     }
 
-    public void ReciveBaseStatsInfo(int con,int str,int dex,int inte){
+    public void ReciveBaseStatsInfo(int con,int dex,int str,int inte){
         this.con.text=con.ToString();
         this.str.text=str.ToString();
         this.dex.text=dex.ToString();
         this.inte.text=inte.ToString();
-        //Set cores caso elas tenham mudado ao simular elas
-        this.con.color = textColor;
-        this.str.color = textColor;
-        this.dex.color = textColor;
-        this.inte.color = textColor;
     }
     public void ReciveExpStatsInfo(int level,float currentExp){
         this.level.text=level.ToString();
@@ -86,18 +81,13 @@ public class StatsUIManager : MonoBehaviour
         expSlider.value = currentExp;
     }
     public void ReciveAdvancedStatsInfo(float currentLife,float maxLife,float currentMana, float maxMana,
-                                float magicDamage, float ligthAttackDamage,float heavyAtackDamage){
+                                        float magicDamage, float lightAttackDamage,float heavyAtackDamage){
         lifeInfo.text = currentLife.ToString("F0") + "/" + maxLife.ToString("F0");
         manaInfo.text = currentMana.ToString("F0") + "/" + maxMana.ToString("F0");
         magicAttackDamage.text = magicDamage.ToString("F0");
-        this.ligthAttackDamage.text = ligthAttackDamage.ToString("F0");
-        this.heavyAtackDamage.text = heavyAtackDamage.ToString("F0");
-        //Set cores
-        lifeInfo.color = textColor;
-        manaInfo.color = textColor;
-        magicAttackDamage.color = textColor;
-        this.ligthAttackDamage.color = textColor;
-        this.heavyAtackDamage.color = textColor;
+        this.lightAttackDamage.text = lightAttackDamage.ToString("F0");
+        this.heavyAttackDamage.text = heavyAtackDamage.ToString("F0");
+        
     }
     public void ReciveLevelUpInfo(int pointsToSpend,bool isNearCampfire){
         if(isNearCampfire){
@@ -154,12 +144,12 @@ public class StatsUIManager : MonoBehaviour
                 manaInfo.color = aux;
             break;
             case 2:
-                this.ligthAttackDamage.text = value.ToString("F0");
-                this.ligthAttackDamage.color = aux;
+                this.lightAttackDamage.text = value.ToString("F0");
+                this.lightAttackDamage.color = aux;
             break;
             case 3:
-                this.heavyAtackDamage.text = value.ToString("F0");
-                this.heavyAtackDamage.color = aux;
+                this.heavyAttackDamage.text = value.ToString("F0");
+                this.heavyAttackDamage.color = aux;
             break;
             case 4:
                 magicAttackDamage.text = value.ToString("F0");
@@ -177,10 +167,52 @@ public class StatsUIManager : MonoBehaviour
     }
     public void ConfirmLevelUp(){//Chamado pelo Botão da UI
         isSimulating=false;
+        ResetColors();
         GameEventsManager.instance.uiEvents.ConfirmLevelUp();
     }
     public void CancelSimulation(){//Chamado ao sair da tela de Stats da Ui, se ainda estivermos simulando
         isSimulating=false;
+        ResetColors();
         GameEventsManager.instance.uiEvents.DiscardLevelUp();
+    }
+    public void ColorAtributes(int[] runeBuffAmount){
+        for(int i = 0;i<runeBuffAmount.Length;i++){
+            PaintAtributeText(i,runeBuffAmount[i]);
+        }
+    }
+    public void PaintAtributeText(int Id,int buffAmount){
+        Color cor = Color.white;
+        if(buffAmount<0)cor=Color.red;
+        if(buffAmount>0)cor=Color.green;
+        switch(Id){
+            case 0:
+                con.color = cor;
+                lifeInfo.color = cor;
+            break;
+            case 1:
+                dex.color = cor;
+                lightAttackDamage.color=cor;
+            break;
+            case 2:
+                str.color=cor;
+                heavyAttackDamage.color=cor;
+            break;
+            case 3:
+                inte.color=cor;
+                manaInfo.color=cor;
+                magicAttackDamage.color=cor;
+            break;
+        }
+    }
+    void ResetColors(){
+        lifeInfo.color = textColor;
+        manaInfo.color = textColor;
+        magicAttackDamage.color = textColor;
+        lightAttackDamage.color = textColor;
+        heavyAttackDamage.color = textColor;
+        con.color = textColor;
+        dex.color = textColor;
+        str.color = textColor;
+        inte.color = textColor;
     }
 }

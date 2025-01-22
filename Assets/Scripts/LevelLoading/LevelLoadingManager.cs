@@ -14,15 +14,17 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
     public Vector3 respawnPoint;
     public string LevelName {get;private set;}
     bool loadSucceded;
-    void Awake(){//singleton, só que queremos só o mais recente
+    void Awake(){
         if(instance!=null){
-            Destroy(instance.gameObject);
+            Destroy(gameObject);
         }
+        Debug.Log("Estou no awake do level loading manager");
         instance=this;
         CurrentLevelData = new LevelData();
         enemies=new List<ActualEnemyController>();
         interactables=new List<Interactable>();
         LevelName = SceneManager.GetActiveScene().name;
+        Debug.Log(CurrentLevelData);
     }
     void Start()
     {
@@ -48,7 +50,9 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
     }
     public void LoadData(GameData gameData)
     {
-        loadSucceded= gameData.levelsData.TryGetValue(LevelName,out CurrentLevelData);
+        LevelData auxLevelData;
+        loadSucceded= gameData.levelsData.TryGetValue(LevelName,out auxLevelData);
+        if(loadSucceded)CurrentLevelData=auxLevelData;
     }
 
     public void SaveData(GameData gameData)

@@ -51,7 +51,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     private bool playerIsDead; //Adicionar no save e load depois
     private Vector3? respawnPos;
     //Coisas buff de stats das runas
-    bool[] statHasRuneBuff = new bool[4];
+    int[] statHasRuneBuff = new int[4];// value of -1, 0 or 1 indicating if there is a change, and whether positive or negative
     int[] runeBuffAmount = new int[4];
     bool hasRuneBuff;
 
@@ -174,52 +174,87 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             }
         }
     }
+    void CalculateStats(){
+        if(!hasRuneBuff){
+            maxLife = BaseLife + vidaConsMod * (Con-10);
+            maxMana = BaseMana + manaIntMod * (Int-10);
+            magicDamage = BaseMagicDamage + magicDamageMod * (Int-10);
+            lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10);
+            heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10);
+            CalculateWeaponDamage();
+        }
+        else{
+            maxLife = BaseLife + vidaConsMod * (Con-10+runeBuffAmount[0]);
+            maxMana = BaseMana + manaIntMod * (Int-10+runeBuffAmount[3]);
+            magicDamage = BaseMagicDamage + magicDamageMod * (Int-10+runeBuffAmount[3]);
+            lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10+runeBuffAmount[1]);
+            heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10+runeBuffAmount[2]);
+            CalculateWeaponDamage();
+        }
+    }
     void CalculateWeaponDamage(){
         PlayerWeapon katana = GetComponentInChildren<PlayerWeapon>();
         if(katana!=null){
             Debug.Log("O player achou uma arma para setar o dano dela");
-            if(!hasRuneBuff)
-                katana.SetDamageAndValues(Str,Dex);
-            else
-                katana.SetDamageAndValues(Str+runeBuffAmount[2],Dex+runeBuffAmount[1]);
+            katana.SetDamageAndValues(heavyAttackDamage,lightAttackDamage);
+
         }
-    }
-    void CalculateStats(){
-        maxLife = BaseLife + vidaConsMod * (Con-10);
-        maxMana = BaseMana + manaIntMod * (Int-10);
-        magicDamage = BaseMagicDamage + magicDamageMod * (Int-10);
-        lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10);
-        heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10);
-        CalculateWeaponDamage();
     }
     void RuneStatBuff(bool isActivate,string stat,int amount){
         hasRuneBuff=true;
+        int posNegDiscriminant = amount > 0 ? 1 : -1;
         if(isActivate){
             switch (stat){
                 case "vitalidade":
-                    statHasRuneBuff[0]=true;
+                    statHasRuneBuff[0]=posNegDiscriminant;
                     runeBuffAmount[0]=amount;
-                    Con+=amount; 
                 break;
                 case "destreza":
-                    statHasRuneBuff[1]=true;
+                    statHasRuneBuff[1]=posNegDiscriminant;
                     runeBuffAmount[1]=amount;
-                    Dex+=amount;
                 break;
                 case "força":
-                    statHasRuneBuff[2]=true;
+                    statHasRuneBuff[2]=posNegDiscriminant;
                     runeBuffAmount[2]=amount;
                     
                 break;
                 case "inteligência":
-                    statHasRuneBuff[3]=true;
+                    statHasRuneBuff[3]=posNegDiscriminant;
                     runeBuffAmount[3]=amount;
                 break;
             }
         }
         else{
-
+            switch(stat){
+                case "vitalidade":
+                    statHasRuneBuff[0]=0;
+                    runeBuffAmount[0]=0;
+                break;
+                case "destreza":
+                    statHasRuneBuff[1]=0;
+                    runeBuffAmount[1]=0;
+                break;
+                case "força":
+                    statHasRuneBuff[2]=0;
+                    runeBuffAmount[2]=0;
+                    
+                break;
+                case "inteligência":
+                    statHasRuneBuff[3]=0;
+                    runeBuffAmount[3]=0;
+                break;
+            }
+            bool allEqZero = false;
+            for(int i =0;i<statHasRuneBuff.Length;i++){
+                if(statHasRuneBuff[i]==0)allEqZero=true;
+                else{
+                    allEqZero = false;
+                    break;
+                }
+            }
+            hasRuneBuff = !allEqZero;
         }
+        CalculateStats();
     }
     void GainExp(int exp){
         int expToNextLevel = ExpToNextLevel(Level);
@@ -242,7 +277,14 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     #region Stats UI
     //Coisas de UI do level up
     void SendBaseStatsInfo(){
-        StatsUIManager.instance?.ReciveBaseStatsInfo(Con,Str,Dex,Int);
+        if(!hasRuneBuff){
+            StatsUIManager.instance?.ReciveBaseStatsInfo(Con,Dex,Str,Int);
+        }
+        else{
+            StatsUIManager.instance?.ReciveBaseStatsInfo(Con+runeBuffAmount[0],Dex+runeBuffAmount[1],Str+runeBuffAmount[2],Int+runeBuffAmount[3]);
+            StatsUIManager.instance?.ColorAtributes(runeBuffAmount);
+        }
+
     }
     void SendExpStatsInfo(){
         StatsUIManager.instance?.ReciveExpStatsInfo(Level,Exp);
@@ -277,16 +319,16 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         bool isDifferent = (simulatedStatChange[id]!=0) ? true:false;
         switch(id){
             case 0:
-                displayValue = Con+simulatedStatChange[id];
+                displayValue = hasRuneBuff ? Con+simulatedStatChange[id]+runeBuffAmount[0]: Con+simulatedStatChange[id];
             break;
             case 1:
-                displayValue = Dex+simulatedStatChange[id];
+                displayValue = hasRuneBuff ? Dex+simulatedStatChange[id]+runeBuffAmount[1]: Dex+simulatedStatChange[id];
             break;
             case 2:
-                displayValue = Str+simulatedStatChange[id];
+                displayValue = hasRuneBuff ? Str+simulatedStatChange[id]+runeBuffAmount[2]: Str+simulatedStatChange[id];
             break;
             case 3:
-                displayValue = Int+simulatedStatChange[id];
+                displayValue = hasRuneBuff ? Int+simulatedStatChange[id]+runeBuffAmount[3]: Int+simulatedStatChange[id];
             break;
         }
         StatsUIManager.instance?.SimulateChangeBaseValue(id,displayValue,isDifferent);
@@ -296,19 +338,22 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         bool isDifferent = (simulatedStatChange[id]!=0) ? true:false;
         switch(id){
             case 0:
-                float simuMaxLife = BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10);
+                float simuMaxLife =  hasRuneBuff ? BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10+runeBuffAmount[0])
+                                                 : BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10);
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(0,CurrentLife,simuMaxLife,isDifferent);
             break;
             case 1:
-                float simuLightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex+simulatedStatChange[1]-10);
+                float simuLightAttackDamage = hasRuneBuff ? BaseLightAttackDamage + lightAttackDamageMod * (Dex+simulatedStatChange[1]-10+runeBuffAmount[1])
+                                                          : BaseLightAttackDamage + lightAttackDamageMod * (Dex+simulatedStatChange[1]-10);
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(2,0,simuLightAttackDamage,isDifferent);
             break;
             case 2:
-                float simuHeavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str+simulatedStatChange[2]-10);
+                float simuHeavyAttackDamage = hasRuneBuff ? BaseHeavyAttackDamage + heavyAttackDamageMod * (Str+simulatedStatChange[2]-10+runeBuffAmount[2])
+                                                          : BaseHeavyAttackDamage + heavyAttackDamageMod * (Str+simulatedStatChange[2]-10) ;
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(3,0,simuHeavyAttackDamage,isDifferent);
             break;
             case 3:
-            int newIntValue = Int+simulatedStatChange[3];
+            int newIntValue = hasRuneBuff ? Int+simulatedStatChange[3]+runeBuffAmount[3] : Int +simulatedStatChange[3];
                 float simuMaxMana = BaseMana + manaIntMod * newIntValue-10;
                 float simuMagicDamage = BaseMagicDamage + magicDamageMod * newIntValue-10;
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(1,CurrentMana,simuMaxMana,isDifferent);

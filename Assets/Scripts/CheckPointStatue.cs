@@ -46,7 +46,7 @@ public class CheckPointStatue : Interactable
             inRange = false;
             playerStats=collider.GetComponent<PlayerStats>();
             if(playerStats!=null){
-                playerStats.isNearCampfire=true;
+                playerStats.isNearCampfire=false;
             }
             keyIndicationText.gameObject.SetActive(false);
         }

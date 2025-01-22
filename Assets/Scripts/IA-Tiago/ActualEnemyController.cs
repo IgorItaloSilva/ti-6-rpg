@@ -173,7 +173,8 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         if(LevelLoadingManager.instance==null){
             Debug.Log($"O inimigo {Id} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
         }
-        //see if we have this data in dictionary
+        Debug.Log(LevelLoadingManager.instance.CurrentLevelData);
+        //see if we have this data in dictionary        
         if(LevelLoadingManager.instance.CurrentLevelData.enemiesData.ContainsKey(Id)){
             //if so change it
             EnemyData newData = new EnemyData(this);
