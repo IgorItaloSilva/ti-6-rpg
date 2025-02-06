@@ -13,7 +13,9 @@ public class SaveSlot : MonoBehaviour
     [SerializeField]private GameObject noDataContent;
     [SerializeField]private GameObject hasDataContent;
     [SerializeField]private TextMeshProUGUI saveSlotName;
+    [SerializeField]private TextMeshProUGUI currentLevelName;
     [SerializeField]private TextMeshProUGUI timeText;
+    private string levelName;
     private Button saveSlotButton;
     [Header("Delete Save Button")]
     [SerializeField]private Button deleteButton;
@@ -39,10 +41,15 @@ public class SaveSlot : MonoBehaviour
             saveSlotName.text = "Save "+ profileId;
             DateTime time = DateTime.FromBinary(data.lastUpdated); 
             timeText.text = time.ToString();
+            currentLevelName.text=data.currentLevel;
+            levelName=data.currentLevel;
         }
     }
     public string GetProfileId(){
         return this.profileId;
+    }
+    public string GetLevelName(){
+        return this.levelName;
     }
     public void SetInteractable(bool interactable){
         saveSlotButton.interactable = interactable;

@@ -6,6 +6,7 @@ using UnityEngine;
 public class KitsuneController : ActualEnemyController
 {
     EnemyActions basicAttack;
+    [Header("Coisas especificas da Kitsune")]
     [SerializeField]float basicAttackDist;
     [SerializeField]float attackTime;
     [SerializeField]float restTime;

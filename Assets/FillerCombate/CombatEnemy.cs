@@ -5,7 +5,7 @@ public class CombatEnemy : MonoBehaviour
     WeaponManager[] weapons;
     void Start(){
         weapons = GetComponentsInChildren<WeaponManager>(true);
-        if(weapons[0]==null)
+        if(weapons==null)
             Debug.Log("O inimigo n achou as armas dele");
     }
     public void DesligarHitBox(){

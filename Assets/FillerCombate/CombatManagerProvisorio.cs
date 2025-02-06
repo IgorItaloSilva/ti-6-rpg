@@ -20,7 +20,7 @@ public class CombatManagerProvisorio : MonoBehaviour
         inputSystem.Gameplay.Attack.started += Atacar;
         if(weapon!=null){
             if(playerStats!=null){
-                weapon.SetDamage(playerStats.Str,playerStats.Dex);
+                //weapon.SetDamage(playerStats.Str,playerStats.Dex);
             }
         }
     }

@@ -31,9 +31,6 @@ public class SkillTree : MonoBehaviour,IDataPersistence
         GainMoney(1);
         GainMoney(0);
     }
-    void OnEnable(){
-        GameEventsManager.instance.skillTreeEvents.onPlayerGetsPowerUpMoney+=GainMoney;
-    }
     void Update(){
         if(Keyboard.current.mKey.wasPressedThisFrame){
             GainMoney(0);
@@ -41,9 +38,6 @@ public class SkillTree : MonoBehaviour,IDataPersistence
         if(Keyboard.current.nKey.wasPressedThisFrame){
             GainMoney(1);
         }
-    }
-    void OnDisable(){
-        GameEventsManager.instance.skillTreeEvents.onPlayerGetsPowerUpMoney-=GainMoney;
     }
     private void ActivatePowerUps(){
         for(int i=0; i < powerUps.Count; i++){
@@ -84,7 +78,7 @@ public class SkillTree : MonoBehaviour,IDataPersistence
             }
         }
     }
-    private void GainMoney(int powerUpType){//Adicionar isso como resposta a um evento GanharPontos que já teria que
+    public void GainMoney(int powerUpType){//Adicionar isso como resposta a um evento GanharPontos que já teria que
         if(powerUpType>=0&&powerUpType<Enum.GetNames(typeof(Enums.PowerUpType)).Length){
             //Debug.Log($"Ganhei dinheiro do tipo {powerUpType}");
             currentMoney[powerUpType]++;          //Fazer a conversao do Enum pra int, chamado ao derotar um boss

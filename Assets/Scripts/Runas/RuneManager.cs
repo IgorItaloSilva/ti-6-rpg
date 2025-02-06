@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 public class RuneManager : MonoBehaviour
 {
@@ -67,21 +68,42 @@ public class RuneManager : MonoBehaviour
         bool parseResult;
         switch(rune.runeActivationCode){
             case Enums.RuneActivationCode.DamageBuff:
+            {
                 int dano = 0;
                 parseResult = false;
                 string[] strings = rune.DescriptionText.Split(" ");
                 Debug.Log(strings.Length);
                 foreach(string s in strings){
                     parseResult = int.TryParse(s,out dano);
-                    //parseResult= float.TryParse(s,System.Globalization.NumberStyles.AllowLeadingSign,System.Globalization.CultureInfo.CurrentCulture,out dano);
                     if(parseResult)break;
                 }
                 Debug.Log($"resultado do parse {parseResult} e dano é {dano}");
                 if(parseResult){
                     GameEventsManager.instance.runeEvents.RuneDamageBuff(isActivate,dano);
                 }
+            }
             break;
             case Enums.RuneActivationCode.StatsBuff:
+            {
+                string stat = "";
+                int amount = 0;
+                parseResult = false;
+                string[] strings = rune.DescriptionText.Split(" ");
+                Debug.Log(strings.Length);
+                foreach(string s in strings){
+                    Debug.Log(s);
+                    if(!parseResult)parseResult = int.TryParse(s,out amount);
+                    if(s.Equals("vitalidade",StringComparison.OrdinalIgnoreCase)){stat ="vitalidade"; }
+                    if(s.Equals("destreza",StringComparison.OrdinalIgnoreCase)){stat ="destreza"; }
+                    if(s.Equals("força",StringComparison.OrdinalIgnoreCase)){stat ="força"; }
+                    if(s.Equals("inteligência",StringComparison.OrdinalIgnoreCase)){stat ="inteligência"; }
+                }
+                if(!parseResult)Debug.Log($"O parse da runa não funcionou, não sabemos quanto do stat: {stat} devemos aumentar");
+                Debug.Log($"resultado do parse {parseResult} e dano é {amount}");
+                if(parseResult){
+                    GameEventsManager.instance.runeEvents.RuneStatBuff(isActivate,stat,amount);
+                }
+            }
             break;
             case Enums.RuneActivationCode.TradeOff:
             break;

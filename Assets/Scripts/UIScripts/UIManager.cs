@@ -8,6 +8,8 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
+    [Header("Tempo das animações")]
+    [SerializeField]float saveIconTotalTime;
     [Header("Outros scripts de UI")]
     public SkillTreeUIManager skillTreeUIManager;
     public StatsUIManager statsUIManager;
@@ -62,8 +64,6 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened+=OpenDialogPanel;
         GameEventsManager.instance.uiEvents.OnNotificationPlayed+=PlayNotification;
-        GameEventsManager.instance.uiEvents.OnBossInfoDisplayed+=BossSettup;
-        GameEventsManager.instance.uiEvents.OnUpdateBossLife+=UpdateBossLife;
     }
 
     void OnDisable()
@@ -74,8 +74,6 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened -= OpenDialogPanel;
        GameEventsManager.instance.uiEvents.OnNotificationPlayed-=PlayNotification;
-       GameEventsManager.instance.uiEvents.OnBossInfoDisplayed-=BossSettup;
-       GameEventsManager.instance.uiEvents.OnUpdateBossLife-=UpdateBossLife;
     }
 
     void Start()
@@ -176,13 +174,11 @@ public class UIManager : MonoBehaviour
         StartCoroutine("PlayNotificationVFX");
     }
     public void QuitGame(){
-        //MUDAR PARA O GAME MANAGER DEPOIS. FECHAR O JOGO NÃO É RESPONSABILIDADE DO UI MANAGER
         Application.Quit();
     }
-    public void VoltarMainMenu(){
-        //MUDAR PARA O GAME MANAGER DEPOIS. time scale e laod de cena não são responsabilidade da UI
+    public void ReturnMainMenu(){
+        DataPersistenceManager.instance?.SaveGame();
         Time.timeScale=1f;
-        //DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadScene(0);
         Destroy(gameObject);
     }
@@ -217,7 +213,7 @@ public class UIManager : MonoBehaviour
         SwitchToScreen((int)UIScreens.Dialog);
     }
     IEnumerator SpinSaveIcon(){//OK
-        float timerTotal=5f;
+        float timerTotal=saveIconTotalTime;
         while(timerTotal>0){
             timerTotal-=Time.unscaledDeltaTime;
             saveIcon.rectTransform.Rotate(Vector3.forward,-5);
@@ -267,13 +263,13 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(totalTime/iterationSteps);
         }
     }
-    void BossSettup(float currentLife,float maxLife,string name){
+    public void BossLifeSettup(float currentLife,float maxLife,string name){
         bossBarraDeVida.SetActive(true);
         bossLife.maxValue=maxLife;
         bossLife.value=currentLife;
         bossName.text=name;
     }
-    void UpdateBossLife(float currentHp){
+    public void UpdateBossLife(float currentHp){
         bossLife.value=currentHp;
     }
     public void HideBossLife(){

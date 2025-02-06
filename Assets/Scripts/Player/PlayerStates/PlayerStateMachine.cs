@@ -12,7 +12,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private Camera mainCam;
     private Animator animator;
     private CharacterController cc;
-    [SerializeField] private WeaponManager swordWeaponManager;
+    [SerializeField] private PlayerWeapon swordWeaponManager;
     private PlayerInput playerInput;
     private float _gravity, _initialJumpVelocity, camYSpeed, camXSpeed;
 
@@ -306,6 +306,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public void HandleAttack()
     {
         if (!_canAttack) return;
+        swordWeaponManager.SetDamageType(2);
 
         _currentMovement = Vector3.zero;
 
@@ -342,6 +343,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private void DisableSwordCollider()
     {
         swordWeaponManager.DisableCollider();
+    }
+    public void SetWeaponDamageType(int value){
+        swordWeaponManager.SetDamageType(value);
     }
 
     public void LoadData(GameData gameData)

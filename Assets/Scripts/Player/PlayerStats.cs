@@ -36,10 +36,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     public float BaseHeavyAttackDamage{get;private set;}
     private float maxLife;//testar com valores 1000 + 25*Con
     private float maxMana;
-    float magicDamage;
+     float magicDamage;
     float lightAttackDamage;
-    float heavyAttackDamage;
-    //private PlayerStatsData statsLoadados; 
+    float heavyAttackDamage; 
     //CONTROLES DOS POWER UPS
     private bool PUArmorActive;
     private bool PULifeRegenActive;
@@ -47,8 +46,15 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     public int LevelUpPoints{get;private set;}//adicionar no save/load depois
     private int spentPointsIfCancel;
     public int[] simulatedStatChange;
-    public bool IsNearCampfire ;//{get;private set;}//adicionar no save/load depois
-    private bool playerIsDead; //Talvez Adicionar no save e load depois
+    public bool isNearCampfire ;//{get;private set;}//adicionar no save/load depois
+    //Coisas de controle geral
+    private bool playerIsDead; //Adicionar no save e load depois
+    private Vector3? respawnPos;
+    //Coisas buff de stats das runas
+    int[] statHasRuneBuff = new int[4];// value of -1, 0 or 1 indicating if there is a change, and whether positive or negative
+    int[] runeBuffAmount = new int[4];
+    bool hasRuneBuff;
+
     void OnEnable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo+=SendBaseStatsInfo;
         GameEventsManager.instance.uiEvents.onRequestExpStatsInfo+=SendExpStatsInfo;
@@ -60,6 +66,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.playerEvents.onPlayerRespawned+=PlayerRespawn;
         GameEventsManager.instance.playerEvents.onPlayerGainExp+=GainExp;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUp;
+        GameEventsManager.instance.runeEvents.onRuneStatBuff+=RuneStatBuff;
     }
     void OnDisable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo-=SendBaseStatsInfo;
@@ -72,10 +79,10 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.playerEvents.onPlayerRespawned-=PlayerRespawn;
         GameEventsManager.instance.playerEvents.onPlayerGainExp-=GainExp;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUp;
+        GameEventsManager.instance.runeEvents.onRuneStatBuff-=RuneStatBuff;
     }
     void Start()
     {
-        IsNearCampfire=true;
         simulatedStatChange = new int[4];
         CalculateStats();
         GameEventsManager.instance.uiEvents.UpdateSliders(0,0,maxLife);//Essas duas funções deveriam ser chamadas
@@ -92,7 +99,6 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             if(CurrentLife>maxLife)CurrentLife=maxLife;
             GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
         }
-        
     }
     public void Die(){
         GameEventsManager.instance.playerEvents.PlayerDied();
@@ -100,10 +106,27 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         playerIsDead = true;
         //DesativarInputs
     }
-    private void PlayerRespawn()
+    private void PlayerRespawn()//chamado pelo game manager depois de dar load
     {
         CurrentLife = maxLife;
         playerIsDead=false;
+        if(respawnPos.HasValue){
+            transform.position=respawnPos.Value;
+        }
+        else{
+            if(LevelLoadingManager.instance==null){
+                Debug.LogWarning("Não temos um levelLoadingManager, portanto não sabemos onde colocar o jogador ao renascer. Colocando ele no (0,0,0)");
+                transform.position=Vector3.zero;
+            }
+            else{
+                respawnPos=LevelLoadingManager.instance.respawnPoint;
+            }
+        }
+        Physics.SyncTransforms();
+    }
+    public void CheckPointStatue(){//Interagir com uma estátua de save
+        CurrentLife = maxLife;
+        respawnPos = transform.position;
     }
     public void SaveData(GameData data){
         PlayerStatsData playerStatsData = new PlayerStatsData(this);
@@ -151,20 +174,87 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             }
         }
     }
-    void CalculateWeaponDamage(){
-        WeaponManager katana = GetComponentInChildren<WeaponManager>();
-        if(katana!=null){
-            Debug.Log("O player achou uma arma para setar o dano dela");
-            katana.SetDamage(Str,Dex);
+    void CalculateStats(){
+        if(!hasRuneBuff){
+            maxLife = BaseLife + vidaConsMod * (Con-10);
+            maxMana = BaseMana + manaIntMod * (Int-10);
+            magicDamage = BaseMagicDamage + magicDamageMod * (Int-10);
+            lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10);
+            heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10);
+            CalculateWeaponDamage();
+        }
+        else{
+            maxLife = BaseLife + vidaConsMod * (Con-10+runeBuffAmount[0]);
+            maxMana = BaseMana + manaIntMod * (Int-10+runeBuffAmount[3]);
+            magicDamage = BaseMagicDamage + magicDamageMod * (Int-10+runeBuffAmount[3]);
+            lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10+runeBuffAmount[1]);
+            heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10+runeBuffAmount[2]);
+            CalculateWeaponDamage();
         }
     }
-    void CalculateStats(){
-        maxLife = BaseLife + vidaConsMod * (Con-10);
-        maxMana = BaseMana + manaIntMod * (Int-10);
-        magicDamage = BaseMagicDamage + magicDamageMod * (Int-10);
-        lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10);
-        heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10);
-        CalculateWeaponDamage();
+    void CalculateWeaponDamage(){
+        PlayerWeapon katana = GetComponentInChildren<PlayerWeapon>();
+        if(katana!=null){
+            Debug.Log("O player achou uma arma para setar o dano dela");
+            katana.SetDamageAndValues(heavyAttackDamage,lightAttackDamage);
+
+        }
+    }
+    void RuneStatBuff(bool isActivate,string stat,int amount){
+        hasRuneBuff=true;
+        int posNegDiscriminant = amount > 0 ? 1 : -1;
+        if(isActivate){
+            switch (stat){
+                case "vitalidade":
+                    statHasRuneBuff[0]=posNegDiscriminant;
+                    runeBuffAmount[0]=amount;
+                break;
+                case "destreza":
+                    statHasRuneBuff[1]=posNegDiscriminant;
+                    runeBuffAmount[1]=amount;
+                break;
+                case "força":
+                    statHasRuneBuff[2]=posNegDiscriminant;
+                    runeBuffAmount[2]=amount;
+                    
+                break;
+                case "inteligência":
+                    statHasRuneBuff[3]=posNegDiscriminant;
+                    runeBuffAmount[3]=amount;
+                break;
+            }
+        }
+        else{
+            switch(stat){
+                case "vitalidade":
+                    statHasRuneBuff[0]=0;
+                    runeBuffAmount[0]=0;
+                break;
+                case "destreza":
+                    statHasRuneBuff[1]=0;
+                    runeBuffAmount[1]=0;
+                break;
+                case "força":
+                    statHasRuneBuff[2]=0;
+                    runeBuffAmount[2]=0;
+                    
+                break;
+                case "inteligência":
+                    statHasRuneBuff[3]=0;
+                    runeBuffAmount[3]=0;
+                break;
+            }
+            bool allEqZero = false;
+            for(int i =0;i<statHasRuneBuff.Length;i++){
+                if(statHasRuneBuff[i]==0)allEqZero=true;
+                else{
+                    allEqZero = false;
+                    break;
+                }
+            }
+            hasRuneBuff = !allEqZero;
+        }
+        CalculateStats();
     }
     void GainExp(int exp){
         int expToNextLevel = ExpToNextLevel(Level);
@@ -184,20 +274,28 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         }
         else return 100*(int)Mathf.Pow(2,level-1);
     }
+    #region Stats UI
+    //Coisas de UI do level up
     void SendBaseStatsInfo(){
-        GameEventsManager.instance.uiEvents.ReciveBaseStatsInfo(Con,Str,Dex,Int);
+        if(!hasRuneBuff){
+            StatsUIManager.instance?.ReciveBaseStatsInfo(Con,Dex,Str,Int);
+        }
+        else{
+            StatsUIManager.instance?.ReciveBaseStatsInfo(Con+runeBuffAmount[0],Dex+runeBuffAmount[1],Str+runeBuffAmount[2],Int+runeBuffAmount[3]);
+            StatsUIManager.instance?.ColorAtributes(runeBuffAmount);
+        }
+
     }
     void SendExpStatsInfo(){
-        GameEventsManager.instance.uiEvents.ReciveExpStatsInfo(Level,Exp);
+        StatsUIManager.instance?.ReciveExpStatsInfo(Level,Exp);
     }
     void SendAdvancedStatsInfo(){
-        GameEventsManager.instance.uiEvents.ReciveAdvancedStatsInfo(CurrentLife,maxLife,CurrentMana,maxMana,magicDamage
+        StatsUIManager.instance?.ReciveAdvancedStatsInfo(CurrentLife,maxLife,CurrentMana,maxMana,magicDamage
         ,lightAttackDamage,heavyAttackDamage);
     }
     void SendLevelUpInfo(){
-        GameEventsManager.instance.uiEvents.ReciveLevelUpInfo(LevelUpPoints,IsNearCampfire);
+        StatsUIManager.instance?.ReciveLevelUpInfo(LevelUpPoints,isNearCampfire);
     }
-    //Coisas de UI do level up
     public void SimulateStatusBuyOrSell(int statusId,bool isBuying){
         
         if(isBuying){
@@ -221,42 +319,45 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         bool isDifferent = (simulatedStatChange[id]!=0) ? true:false;
         switch(id){
             case 0:
-                displayValue = Con+simulatedStatChange[id];
+                displayValue = hasRuneBuff ? Con+simulatedStatChange[id]+runeBuffAmount[0]: Con+simulatedStatChange[id];
             break;
             case 1:
-                displayValue = Dex+simulatedStatChange[id];
+                displayValue = hasRuneBuff ? Dex+simulatedStatChange[id]+runeBuffAmount[1]: Dex+simulatedStatChange[id];
             break;
             case 2:
-                displayValue = Str+simulatedStatChange[id];
+                displayValue = hasRuneBuff ? Str+simulatedStatChange[id]+runeBuffAmount[2]: Str+simulatedStatChange[id];
             break;
             case 3:
-                displayValue = Int+simulatedStatChange[id];
+                displayValue = hasRuneBuff ? Int+simulatedStatChange[id]+runeBuffAmount[3]: Int+simulatedStatChange[id];
             break;
         }
-        GameEventsManager.instance.uiEvents.SimulateChangeBaseValue(id,displayValue,isDifferent);
+        StatsUIManager.instance?.SimulateChangeBaseValue(id,displayValue,isDifferent);
         CalculateAdvancedInfoAndSend(id);
     }
     void CalculateAdvancedInfoAndSend(int id){
         bool isDifferent = (simulatedStatChange[id]!=0) ? true:false;
         switch(id){
             case 0:
-                float simuMaxLife = BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10);
-                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(0,CurrentLife,simuMaxLife,isDifferent);
+                float simuMaxLife =  hasRuneBuff ? BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10+runeBuffAmount[0])
+                                                 : BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(0,CurrentLife,simuMaxLife,isDifferent);
             break;
             case 1:
-                float simuLightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex+simulatedStatChange[1]-10);
-                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(2,0,simuLightAttackDamage,isDifferent);
+                float simuLightAttackDamage = hasRuneBuff ? BaseLightAttackDamage + lightAttackDamageMod * (Dex+simulatedStatChange[1]-10+runeBuffAmount[1])
+                                                          : BaseLightAttackDamage + lightAttackDamageMod * (Dex+simulatedStatChange[1]-10);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(2,0,simuLightAttackDamage,isDifferent);
             break;
             case 2:
-                float simuHeavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str+simulatedStatChange[2]-10);
-                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(3,0,simuHeavyAttackDamage,isDifferent);
+                float simuHeavyAttackDamage = hasRuneBuff ? BaseHeavyAttackDamage + heavyAttackDamageMod * (Str+simulatedStatChange[2]-10+runeBuffAmount[2])
+                                                          : BaseHeavyAttackDamage + heavyAttackDamageMod * (Str+simulatedStatChange[2]-10) ;
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(3,0,simuHeavyAttackDamage,isDifferent);
             break;
             case 3:
-            int newIntValue = Int+simulatedStatChange[3];
+            int newIntValue = hasRuneBuff ? Int+simulatedStatChange[3]+runeBuffAmount[3] : Int +simulatedStatChange[3];
                 float simuMaxMana = BaseMana + manaIntMod * newIntValue-10;
                 float simuMagicDamage = BaseMagicDamage + magicDamageMod * newIntValue-10;
-                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(1,CurrentMana,simuMaxMana,isDifferent);
-                GameEventsManager.instance.uiEvents.SimulateChangeAdvancedValue(4,0,simuMagicDamage,isDifferent);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(1,CurrentMana,simuMaxMana,isDifferent);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(4,0,simuMagicDamage,isDifferent);
             break;
         }
     }
@@ -273,7 +374,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         SendLevelUpInfo();
     }
     void DiscardChanges(){
-        LevelUpPoints= LevelUpPoints+spentPointsIfCancel;
+        LevelUpPoints = LevelUpPoints+spentPointsIfCancel;
+        for(int i=0;i<simulatedStatChange.Length;i++)simulatedStatChange[i]=0;
         spentPointsIfCancel=0;
     }
+    #endregion
 }
