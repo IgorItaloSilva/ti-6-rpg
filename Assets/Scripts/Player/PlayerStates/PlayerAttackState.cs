@@ -41,6 +41,7 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void ExitState()
     {
+        _ctx.ResetAttacks();
     }
 
     public override void CheckSwitchStates()

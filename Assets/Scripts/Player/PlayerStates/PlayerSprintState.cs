@@ -52,6 +52,10 @@ public class PlayerSprintState : PlayerBaseState
         {
             SwitchState(_factory.Grounded());
         }
+        if(_ctx.IsAttackPressed)
+        {
+            SwitchState(_factory.Attack());
+        }
     }
 
     private void HandleJump()
