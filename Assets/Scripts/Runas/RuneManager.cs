@@ -32,15 +32,15 @@ public class RuneManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.NotificationPlayed("Você coletou a rune: "+newRune.Nome);
         runeInventory.Add(newRune);
     }
-    public void EquipRune(int id){//NOssa Ui passa o Id do array de runas dela, que é igual ao nosso, por isso usado o ID diretamente
-        Debug.Log($"Vou equipar a runa de {id}, que é a {runeInventory[id]}");
-        RuneSO rune = runeInventory[id];
+    public void EquipRune(int index){//NOssa Ui passa o index do array de runas dela, que é igual ao nosso, por isso usado o ID diretamente
+        Debug.Log($"Vou equipar a runa de {index}, que é a {runeInventory[index]}");
+        RuneSO rune = runeInventory[index];
         if(equipedRunes[(int)rune.Part]==null){
-            equipedRunes[(int)rune.Part]=runeInventory[id];
+            equipedRunes[(int)rune.Part]=runeInventory[index];
         }
         else{
             unequipedRunes[(int)rune.Part]=equipedRunes[(int)rune.Part];
-            equipedRunes[(int)rune.Part]=runeInventory[id];
+            equipedRunes[(int)rune.Part]=runeInventory[index];
         }
         hasChanged[(int)rune.Part]=true;
     }
@@ -108,6 +108,7 @@ public class RuneManager : MonoBehaviour
             case Enums.RuneActivationCode.TradeOff:
             break;
             case Enums.RuneActivationCode.OtherBonus:
+                
             break;
         }
     }

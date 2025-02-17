@@ -67,6 +67,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.playerEvents.onPlayerGainExp+=GainExp;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUp;
         GameEventsManager.instance.runeEvents.onRuneStatBuff+=RuneStatBuff;
+        GameEventsManager.instance.skillTreeEvents.onLifeStealHit+=HealLife;
     }
     void OnDisable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo-=SendBaseStatsInfo;
@@ -80,6 +81,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.playerEvents.onPlayerGainExp-=GainExp;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUp;
         GameEventsManager.instance.runeEvents.onRuneStatBuff-=RuneStatBuff;
+        GameEventsManager.instance.skillTreeEvents.onLifeStealHit+=HealLife;
     }
     void Start()
     {
