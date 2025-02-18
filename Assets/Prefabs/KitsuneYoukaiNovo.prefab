@@ -1148,13 +1148,13 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: ca83f547ed5f10b429d1428c0f83cb78, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.87
@@ -1464,6 +1464,7 @@ GameObject:
   - component: {fileID: 3443531284092203688}
   - component: {fileID: 1984632311597147172}
   - component: {fileID: 7394980716942136902}
+  - component: {fileID: 2038145075410064476}
   m_Layer: 3
   m_Name: KitsuneYoukaiNovo
   m_TagString: Untagged
@@ -1529,6 +1530,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94d3ba7551b0bc346adbb8e5e7fc26fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreSaveLoad: 0
+  <Id>k__BackingField: kitsune1
   obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -1537,15 +1540,30 @@ MonoBehaviour:
   charWidth: 1.5
   charHeight: 3.5
   maxHp: 100
-  currentHp: 0
   minDistToAttack: 2
   numberOfActionsBeforeRest: 1000
   exp: 100
+  IsABoss: 0
+  <CurrentHp>k__BackingField: 0
+  <IsDead>k__BackingField: 0
   rb: {fileID: 0}
   animator: {fileID: 0}
   basicAttackDist: 2
   attackTime: 1
   restTime: 0
+--- !u!114 &2038145075410064476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7130622063641161249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71a2919a02767eb48a3d8322ca06a1f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pilar: {fileID: 0}
 --- !u!1 &7208865767583666691
 GameObject:
   m_ObjectHideFlags: 0
@@ -2209,7 +2227,6 @@ GameObject:
   - component: {fileID: 4637259785480604637}
   - component: {fileID: 4110207132227582451}
   - component: {fileID: 3721738051918932160}
-  - component: {fileID: 5283348717071924562}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2257,8 +2274,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: -1747643543
-  m_SortingOrder: -1
+  m_SortingLayerID: 0
+  m_SortingOrder: -46
   m_TargetDisplay: 0
 --- !u!114 &4637259785480604637
 MonoBehaviour:
@@ -2301,18 +2318,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
 --- !u!114 &3721738051918932160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9088355901681001728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ffe3002d21854c64c9f5494207296f77, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5283348717071924562
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2434,8 +2439,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageType: 0
-  strModifier: 1
-  dexModifier: 1
   baseDamage: 250
 --- !u!1 &9193591762702913953
 GameObject:
