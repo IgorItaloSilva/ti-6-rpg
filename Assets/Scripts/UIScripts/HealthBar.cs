@@ -11,6 +11,8 @@ public class HealthBar : MonoBehaviour
     [SerializeField]protected Slider sliderVerde;
     [SerializeField]protected Image coloredSliderImage;
     [SerializeField]protected float timeToAjust = .5f;
+    bool coroutineIsRunning;
+    Coroutine coroutine;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,10 @@ public class HealthBar : MonoBehaviour
     public void SetValue(float currentValue,bool wasCrit){
         if(currentValue<sliderVerde.value){
             sliderVerde.value=currentValue;
-            StartCoroutine(AjustColoredValue(wasCrit));
+            if(coroutineIsRunning){
+                if(coroutine!=null)StopCoroutine(coroutine);
+            }
+            coroutine=StartCoroutine(AjustColoredValue(wasCrit));
         }
         else{
             sliderVerde.value=currentValue;
@@ -37,6 +42,7 @@ public class HealthBar : MonoBehaviour
     }
 
     IEnumerator AjustColoredValue(bool wasCrit){
+        coroutineIsRunning=true;
         float time = 0f;
         Debug.Log($"time é: {time}");
         float startValue = sliderColorido.value;
@@ -50,5 +56,6 @@ public class HealthBar : MonoBehaviour
             sliderColorido.value=Mathf.Lerp(startValue,sliderVerde.value,time/timeToAjust);
             yield return null;
         }
+        coroutineIsRunning=false;
     }
 }
