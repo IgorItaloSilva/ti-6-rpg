@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerWeapon : WeaponManager
 {
-    float critRate = 5;
+    [SerializeField]float critRate = 5;
     float heavyAttackDamage = 0;
     float lightAttackDamage = 0;
     float strBonusDamage;//recived from playerStats
@@ -27,6 +27,7 @@ public class PlayerWeapon : WeaponManager
     protected override void DealDamage(IDamagable alvo, float dano)
     {
         float damageDealt;
+        bool crited = false;
         if(damagedTargets.Contains(alvo)){
             return;
         }
@@ -34,6 +35,7 @@ public class PlayerWeapon : WeaponManager
         //CritLogic
         if(Random.Range(0f,100f)<=critRate){
             damageDealt=damage*2*doubleDamageMultiplier;
+            crited=true;
         }
         else{
             damageDealt=damage*doubleDamageMultiplier;
@@ -42,7 +44,7 @@ public class PlayerWeapon : WeaponManager
             GameEventsManager.instance.skillTreeEvents.LifeStealHit(damageDealt/2);
             Debug.Log($"Curando o jogador com lifeSteal de {damageDealt/2}");
         }
-        alvo.TakeDamage(damageDealt,damageType);
+        alvo.TakeDamage(damageDealt,damageType,crited);
         Debug.Log($"Enviei {damageDealt} de dano para ser tomado para {alvo}");
         //Criar um texto de dano na tela
     }

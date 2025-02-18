@@ -3,17 +3,17 @@ using System;
 public class UIEvents
 {
     
-    public event Action<float> onLifeChange;
-    public void LifeChange(float vidaAtual){
+    public event Action<float,bool> onLifeChange;
+    public void LifeChange(float vidaAtual,bool wasCrit){
         if(onLifeChange!=null){
-            onLifeChange(vidaAtual);
+            onLifeChange(vidaAtual,wasCrit);
         }
     }
     
-    public event Action<int,float,float> onUpdateSliders;
-    public void UpdateSliders(int id,float minValue,float maxValue){
+    public event Action<int,float> onUpdateSliders;
+    public void UpdateSliders(int id,float maxValue){
         if(onUpdateSliders!=null){
-            onUpdateSliders(id,minValue,maxValue);
+            onUpdateSliders(id,maxValue);
         }
     }
     public event Action onSavedGame;
@@ -149,6 +149,12 @@ public class UIEvents
     public void UpdateBossLife(float currentLife){
         if(OnUpdateBossLife!=null){
             OnUpdateBossLife(currentLife);
+        }
+    }
+    public event Action onRequestPlayerHealthInfo;
+    public void RequestPlayerHealthInfo(){
+        if(onRequestPlayerHealthInfo!=null){
+            onRequestPlayerHealthInfo();
         }
     }
 }

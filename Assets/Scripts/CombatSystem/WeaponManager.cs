@@ -30,7 +30,7 @@ public class WeaponManager : MonoBehaviour
             return;
         }
         damagedTargets.Add(alvo);
-        alvo.TakeDamage(damage,damageType);
+        alvo.TakeDamage(damage,damageType,false);
         //Criar um texto de dano na tela
         //Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
     }
