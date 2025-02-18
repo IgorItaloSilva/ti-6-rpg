@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerAttackState : PlayerBaseState
 {
-    private Transform targetTransform;
 
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
@@ -20,12 +19,7 @@ public class PlayerAttackState : PlayerBaseState
         Debug.Log("Attacking!");
         _ctx.HandleAttack();
     }
-
-    public sealed override void HandleAnimatorParameters()
-    {
-    }
-
-
+    
     public override void UpdateState()
     {
         HandleRotation();
@@ -34,8 +28,7 @@ public class PlayerAttackState : PlayerBaseState
             _ctx.HandleAttack();
             return;
         }
-
-        if (targetTransform) HandleRotation();
+        
         CheckSwitchStates();
     }
 
@@ -45,7 +38,7 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (_ctx.AttackCount == 0)
+        if (_ctx.AttackCount is 0)
         {
             if (_ctx.IsSprintPressed)
                 SwitchState(_factory.Sprint());

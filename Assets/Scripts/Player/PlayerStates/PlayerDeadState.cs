@@ -8,11 +8,6 @@ namespace Player.PlayerStates
         {
         }
 
-        public override void HandleAnimatorParameters()
-        {
-            
-        }
-
         public override void EnterState()
         {
             _ctx.Animator.ResetTrigger(_ctx.HasDiedHash);

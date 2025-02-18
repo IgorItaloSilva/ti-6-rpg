@@ -4,7 +4,8 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerGroundedState : PlayerBaseState
 {
-    private float smoothTime;
+    private float acceleration;
+    private const byte accelerationSpeed = 3;
     protected const float MoveSpeed = 6f;
 
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
@@ -29,6 +30,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void UpdateState()
     {
+        HandleAcceleration();
         HandleRotation();
         HandleMove();
         CheckSwitchStates();
@@ -85,7 +87,15 @@ public class PlayerGroundedState : PlayerBaseState
     private void HandleMove()
     {
         _ctx.AppliedMovement = new Vector3(_ctx.CurrentMovement.x, _ctx.BaseGravity, _ctx.CurrentMovement.z);
-        _ctx.CC.Move(_ctx.AppliedMovement * (MoveSpeed * Time.deltaTime));
+        _ctx.CC.Move(_ctx.AppliedMovement * (MoveSpeed * Time.deltaTime * acceleration));
+    }
+
+    private void HandleAcceleration()
+    {
+        if (_ctx.IsMovementPressed && acceleration < 1f)
+            acceleration += (Time.deltaTime * accelerationSpeed);
+        else if(acceleration > 0f)
+            acceleration -= (Time.deltaTime * accelerationSpeed);
     }
 
 }

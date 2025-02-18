@@ -42,10 +42,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canDodge = true,
         _canJump = true,
         _canAttack = true,
+        _isBetweenAttacks,
         _isClimbing,
         _canMount = true;
 
-    private byte _attackCount, _currentAttack;
+    private byte _attackCount;
 
     // variáveis dos estados:
     private PlayerBaseState _currentState;
@@ -54,6 +55,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int IsRunningHash = Animator.StringToHash("isRunning");
     public readonly int IsGroundedHash = Animator.StringToHash("isGrounded");
     public readonly int AttackCountHash = Animator.StringToHash("AttackCount");
+    public readonly int Attack1Hash = Animator.StringToHash("Attack1");
+    public readonly int Attack2Hash = Animator.StringToHash("Attack2");
+    public readonly int Attack3Hash = Animator.StringToHash("Attack3");
     public readonly int IsClimbingHash = Animator.StringToHash("isClimbing");
     public readonly int HasJumpedHash = Animator.StringToHash("hasJumped");
     public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
@@ -138,8 +142,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     public int AttackCount => _attackCount;
-
-    public int CurrentAttack => _currentAttack;
 
     public float InitialJumpVelocity => _initialJumpVelocity;
 
@@ -305,34 +307,32 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     public void HandleAttack()
     {
-        if (!_canAttack) return;
-        swordWeaponManager.SetDamageType(2);
-
-        _currentMovement = Vector3.zero;
-
         _canAttack = false;
 
-        if (_attackCount == 3 && _currentAttack == 3) return;
+        switch (_attackCount)
+        {
+            case 0:
+                _attackCount = 1;
+                animator.SetBool(Attack1Hash, true);
+                break;
+            case 1:
+                _attackCount = 2;
+                animator.SetBool(Attack2Hash, true);
+                break;
+            case 2:
+                _attackCount = 3;
+                animator.SetBool(Attack3Hash, true);
+                break;
+        }
 
-        _attackCount++;
-        ApplyAttackCount();
     }
-
     public void ResetAttacks()
     {
+        animator.SetBool(Attack1Hash, false);
+        animator.SetBool(Attack2Hash, false);
+        animator.SetBool(Attack3Hash, false);
         _attackCount = 0;
-        _currentAttack = 0;
-        ApplyAttackCount();
-    }
-
-    private void ApplyAttackCount()
-    {
-        animator.SetInteger(AttackCountHash, _attackCount);
-    }
-
-    public void AttackStarted()
-    {
-        _currentAttack++;
+        Debug.LogWarning("RESET ATTACKS");
     }
 
     private void EnableSwordCollider()

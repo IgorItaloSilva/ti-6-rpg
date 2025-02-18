@@ -16867,6 +16867,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2038145075410064476, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
+      propertyPath: pilar
+      value: 
+      objectReference: {fileID: 1470242539}
     - target: {fileID: 3443531284092203688, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16922,11 +16927,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: KitsuneYoukaiNovo (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
-        type: 3}
-      propertyPath: <Id>k__BackingField
-      value: kitsune1
-      objectReference: {fileID: 0}
     - target: {fileID: 7506018086142468930, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -16937,45 +16937,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7619683701267421350, guid: 9180bb2c67467ed4685f4fa9d0cded37,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: -46
-      objectReference: {fileID: 0}
-    - target: {fileID: 7619683701267421350, guid: 9180bb2c67467ed4685f4fa9d0cded37,
-        type: 3}
-      propertyPath: m_SortingLayerID
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 5283348717071924562, guid: 9180bb2c67467ed4685f4fa9d0cded37, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7130622063641161249, guid: 9180bb2c67467ed4685f4fa9d0cded37,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1734751678}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9180bb2c67467ed4685f4fa9d0cded37, type: 3}
---- !u!1 &1734751677 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7130622063641161249, guid: 9180bb2c67467ed4685f4fa9d0cded37,
-    type: 3}
-  m_PrefabInstance: {fileID: 1734751676}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1734751678
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1734751677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71a2919a02767eb48a3d8322ca06a1f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pilar: {fileID: 1470242539}
 --- !u!1001 &1744381310
 PrefabInstance:
   m_ObjectHideFlags: 0
