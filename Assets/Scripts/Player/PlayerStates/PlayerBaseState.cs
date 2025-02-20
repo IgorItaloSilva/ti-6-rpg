@@ -13,7 +13,7 @@ public abstract class PlayerBaseState
         _factory = playerStateFactory;
     }
 
-    public abstract void HandleAnimatorParameters();
+    public virtual void HandleAnimatorParameters(){}
     public abstract void EnterState();
     public abstract void UpdateState();
     public abstract void ExitState();
