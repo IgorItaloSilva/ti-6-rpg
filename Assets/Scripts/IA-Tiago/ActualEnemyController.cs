@@ -22,7 +22,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     [field:Header ("Coisas só pra ver mais facil")]
     [field:SerializeField]public float CurrentHp{get; protected set;}
     [field:SerializeField]public bool IsDead {get; protected set;}
-    protected Slider healthSlider;
+    protected HealthBar healthBar;
     public ISteeringAgent target;
     [HideInInspector]public Rigidbody rb;
     [HideInInspector]public Animator animator;
@@ -47,13 +47,12 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         animator = GetComponentInChildren<Animator>();
         if(animator==null)Debug.LogWarning("Enemy controller não conseguiu achar um animator");
         rb = GetComponent<Rigidbody>();
-        healthSlider = GetComponentInChildren<Slider>();
+        healthBar = GetComponentInChildren<HealthBar>();
         steeringManager=new SteeringManager(this,rb);
         if(!initiationThroughLoad)CurrentHp=maxHp;
-        if(healthSlider!=null){
-            healthSlider.minValue=0;
-            healthSlider.maxValue=maxHp;
-            healthSlider.value = CurrentHp;
+        if(healthBar!=null){
+            healthBar.SettupBarMax(maxHp);
+            healthBar.SetValue(CurrentHp,false);
         }
         restAction=new nullAction();
         AdditionalStart();
@@ -120,7 +119,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
 
     public LayerMask GetObstaclesLayerMask(){return obstaclesLayerMask;}
     //Metodos das interfaces
-    public virtual void TakeDamage(float damage, Enums.DamageType damageType)
+    public virtual void TakeDamage(float damage, Enums.DamageType damageType,bool wasCrit)
     {
         animator.ResetTrigger("tookDamage");
         animator.SetTrigger("tookDamage");
@@ -135,14 +134,14 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
                 //
             break;
         }
-        if(IsABoss)UIManager.instance?.UpdateBossLife(CurrentHp);
-        if(healthSlider!=null)healthSlider.value=CurrentHp;
+        if(IsABoss)UIManager.instance?.UpdateBossLife(CurrentHp,wasCrit);
+        if(healthBar!=null)healthBar.SetValue(CurrentHp,wasCrit);
         if(CurrentHp<=0){
             if(IsABoss)BossDeath();
             Die();
         }
     }
-    public void Die(){
+    public virtual void Die(){
         GameEventsManager.instance.playerEvents.PlayerGainExp(exp);
         IsDead=true;
         Save();
@@ -164,7 +163,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     public virtual void Respawn(){
         CurrentHp = maxHp;
         IsDead=false;
-        if(healthSlider!=null)healthSlider.value=CurrentHp;
+        if(healthBar!=null)healthBar.SetValue(CurrentHp,false);
         transform.position=startingPos;
     }
     public virtual void Save(){
@@ -173,7 +172,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         if(LevelLoadingManager.instance==null){
             Debug.Log($"O inimigo {Id} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
         }
-        Debug.Log(LevelLoadingManager.instance.CurrentLevelData);
+        //Debug.Log(LevelLoadingManager.instance.CurrentLevelData);
         //see if we have this data in dictionary        
         if(LevelLoadingManager.instance.CurrentLevelData.enemiesData.ContainsKey(Id)){
             //if so change it

@@ -29,7 +29,7 @@ public class AttackRangedKitsuneBoss : MonoBehaviour
         Debug.Log("Collidi com algo");
         if(collision.collider.CompareTag("Player")){
             PlayerStats playerStats = collision.collider.GetComponent<PlayerStats>();
-            playerStats.TakeDamage(damage,Enums.DamageType.Magic);
+            playerStats.TakeDamage(damage,Enums.DamageType.Magic,false);
         }
         Debug.Log("Colidi com um "+collision.collider.name);
         Destroy(gameObject);

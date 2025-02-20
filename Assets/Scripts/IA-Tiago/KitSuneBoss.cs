@@ -75,8 +75,8 @@ public class KitsuneBoss : ActualEnemyController
             }
         }
     }
-    override public void TakeDamage(float damage, Enums.DamageType damageType){
-        base.TakeDamage(damage,damageType);
+    override public void TakeDamage(float damage, Enums.DamageType damageType,bool wasCrit){
+        base.TakeDamage(damage,damageType,wasCrit);
         //Caso queiramos fazer ela ser imune a um tipo de dano, ou ter um cap de dano pra n ser obliterada 
     }
     protected override void BossDeath()

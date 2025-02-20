@@ -6,7 +6,7 @@ public class KIllPlayerWhenFallOutMap : MonoBehaviour
         if(other.CompareTag("Player")){
             PlayerStats playerStats = other.GetComponent<PlayerStats>();
             if(playerStats!=null){
-                playerStats.TakeDamage(99999,Enums.DamageType.Regular);
+                playerStats.TakeDamage(99999,Enums.DamageType.Regular,false);
             }
             
         }

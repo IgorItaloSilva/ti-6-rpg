@@ -18,6 +18,7 @@ public class GameEventsManager : MonoBehaviour
     public UIEvents uiEvents;
     public SkillTreeEvents skillTreeEvents;
     public RuneEvents runeEvents;
+    public LevelEvents levelEvents;
     //EXEMPLO DE NOVA CLASSE
     //public NovaClasseEvents novaClasseEvents;
     private void Awake(){
@@ -32,6 +33,7 @@ public class GameEventsManager : MonoBehaviour
         uiEvents = new UIEvents();
         skillTreeEvents = new SkillTreeEvents();
         runeEvents = new RuneEvents();
+        levelEvents = new LevelEvents();
         //novaClasseEvents = new NovaClasseEvents();
     }
 

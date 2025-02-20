@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
+using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class UIManager : MonoBehaviour
     public StatsUIManager statsUIManager;
     public RunesUiManager runesUiManager;
     [Header("Referencias Internas")]
-    [SerializeField]private Slider lifeSlider;
+    [SerializeField]private PlayerHealthBar playerhealthBar;
     [SerializeField]private Image saveIcon;
     [SerializeField]private GameObject painelPause;
     [SerializeField]private GameObject hideblePausePartUI;
@@ -34,9 +35,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]private int iterationSteps;
     [SerializeField]private float totalTime;
     [Header("Coisas da barra de vida do boss")]
-    [SerializeField]Slider bossLife;
+    [SerializeField]HealthBar bossHealthBar;
     [SerializeField]TextMeshProUGUI bossName;
-    [SerializeField]GameObject bossBarraDeVida;
+    [SerializeField]GameObject bossHPBarAndName;
     private Text youDiedVFXText;
     private Image youDiedVFXImage;
     private const float transparencyRatioYouDiedVfx = 0.05f;
@@ -105,6 +106,7 @@ public class UIManager : MonoBehaviour
             SwitchToScreen((int)UIScreens.Tutorial);
             GameManager.instance.PauseGameAndUnlockCursor();
         }
+        RequestHealthBarInfo();
         //youDiedVFXText.color = new Color32(255,0,0,0);
     }
 
@@ -144,18 +146,20 @@ public class UIManager : MonoBehaviour
             Debug.Log($"pos do mouse = {Mouse.current.position.ReadValue()}");
         } */
     }
-    private void UpdateHealth(float vidaAtual){//MUDAR PARA UM MANAGER DE STATS DEPOIS
-        if(lifeSlider!=null){
-            lifeSlider.value=vidaAtual;
+    private void RequestHealthBarInfo(){
+        GameEventsManager.instance.uiEvents.RequestPlayerHealthInfo();
+    }
+    public void UpdateHealth(float vidaAtual,bool wasCrit){
+        if(playerhealthBar!=null){
+            playerhealthBar.SetValue(vidaAtual,wasCrit);
         }
     }
-    private void UpdateSliders(int id,float minValue,float maxValue){////MUDAR PARA UM MANAGER DE STATS DEPOIS
+    private void UpdateSliders(int id,float maxValue){
         switch(id){
             case 0:
-                if (lifeSlider != null)
+                if (playerhealthBar != null)
                 {
-                    lifeSlider.minValue = minValue;
-                    lifeSlider.maxValue = maxValue;
+                    playerhealthBar.SettupBarMax(maxValue);
                 }
 
                 break;
@@ -204,7 +208,7 @@ public class UIManager : MonoBehaviour
         painelDialog.SetActive(false);
         painelTutorial.SetActive(false);
         painelWeapon.SetActive(false);
-        bossBarraDeVida.SetActive(false);
+        bossHPBarAndName.SetActive(false);
     }
     void PlayerDied(){
         StartCoroutine("PlayYouDiedAnimation");
@@ -264,16 +268,16 @@ public class UIManager : MonoBehaviour
         }
     }
     public void BossLifeSettup(float currentLife,float maxLife,string name){
-        bossBarraDeVida.SetActive(true);
-        bossLife.maxValue=maxLife;
-        bossLife.value=currentLife;
+        bossHPBarAndName.SetActive(true);
+        bossHealthBar.SettupBarMax(maxLife);
+        bossHealthBar.SetValue(currentLife,false);
         bossName.text=name;
     }
-    public void UpdateBossLife(float currentHp){
-        bossLife.value=currentHp;
+    public void UpdateBossLife(float currentHp,bool wasCrit){
+        bossHealthBar.SetValue(currentHp,wasCrit);
     }
     public void HideBossLife(){
-        bossBarraDeVida.SetActive(false);
+        bossHPBarAndName.SetActive(false);
     }
     public void SwitchToScreen(int destinationUiScreen){
         Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");

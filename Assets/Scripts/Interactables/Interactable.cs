@@ -4,7 +4,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(SphereCollider))]
 public class Interactable : MonoBehaviour
 {
-    [field:SerializeField]public string Id{get; protected set;}
+    [field:SerializeField]public string saveId{get; protected set;}
     [SerializeField]protected bool ignoreSaveLoad;
     public bool AlreadyInterated{get; protected set;}
     public bool Active{get;protected set;}
@@ -14,10 +14,10 @@ public class Interactable : MonoBehaviour
     protected virtual void Awake(){
         if(!ignoreSaveLoad){
             if(LevelLoadingManager.instance==null){
-                Debug.LogWarning($"O interactable {Id} está tentando se adicionar na lista de interactables, mas não temos um LevelLoadingManger na cena");
+                Debug.LogWarning($"O interactable {saveId} está tentando se adicionar na lista de interactables, mas não temos um LevelLoadingManger na cena");
             }
             LevelLoadingManager.instance.interactables.Add(this);
-            if(Id=="")Debug.LogWarning($"O GameObject "+gameObject.name+" está sem id e marcado para salvar");
+            if(saveId=="")Debug.LogWarning($"O GameObject "+gameObject.name+" está sem id e marcado para salvar");
         }
     }
     protected virtual void Start(){
@@ -36,18 +36,18 @@ public class Interactable : MonoBehaviour
     public virtual void Save(){
         if(ignoreSaveLoad)return;
         if(LevelLoadingManager.instance==null){
-            Debug.Log($"O interactable {Id} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
+            Debug.Log($"O interactable {saveId} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
         }
         //see if we have this data in dictionary
-        if(LevelLoadingManager.instance.CurrentLevelData.interactablesData.ContainsKey(Id)){
+        if(LevelLoadingManager.instance.CurrentLevelData.interactablesData.ContainsKey(saveId)){
             //if so change it
             InteractableData newData = new InteractableData(this);
-            LevelLoadingManager.instance.CurrentLevelData.interactablesData[Id]=newData;
+            LevelLoadingManager.instance.CurrentLevelData.interactablesData[saveId]=newData;
         }
         else{
             //if not add it
             InteractableData newData = new InteractableData(this);
-            LevelLoadingManager.instance.CurrentLevelData.interactablesData.Add(Id,newData);
+            LevelLoadingManager.instance.CurrentLevelData.interactablesData.Add(saveId,newData);
         }
         
     }

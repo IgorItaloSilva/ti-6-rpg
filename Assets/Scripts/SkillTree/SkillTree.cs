@@ -28,8 +28,6 @@ public class SkillTree : MonoBehaviour,IDataPersistence
         currentMoney = new int[tamanhoTiposPU];
         totalMoneyGotten = new int[tamanhoTiposPU];
         LoadData();
-        GainMoney(1);
-        GainMoney(0);
     }
     void Update(){
         if(Keyboard.current.mKey.wasPressedThisFrame){

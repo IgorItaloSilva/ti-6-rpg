@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+//NO LONGER IN USE
 public class Checkpoint : MonoBehaviour
 {
     private Canvas _prompt;

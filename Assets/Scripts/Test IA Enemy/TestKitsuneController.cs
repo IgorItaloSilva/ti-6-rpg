@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TestKitsuneController : TestEnemyController,IDamagable
+public class TestKitsuneController : TestEnemyController//,IDamagable
 {
     float currentHp = 100;
     [SerializeField]Slider sliderVida;

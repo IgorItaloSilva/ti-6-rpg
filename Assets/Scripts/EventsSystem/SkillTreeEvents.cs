@@ -16,6 +16,12 @@ public class SkillTreeEvents {
             onActivatePowerUp(id);
         }
     }
+    public event Action<float>onLifeStealHit;
+    public void LifeStealHit(float heal){
+        if(onLifeStealHit!=null){
+            onLifeStealHit(heal);
+        }
+    }
     //MUDADO PARA SINGLETON
     /* public event Action<int> onPlayerGetsPowerUpMoney;
     public void PlayerGetsPowerUpMoney(int powerUpType){

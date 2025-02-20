@@ -67,6 +67,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.playerEvents.onPlayerGainExp+=GainExp;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUp;
         GameEventsManager.instance.runeEvents.onRuneStatBuff+=RuneStatBuff;
+        GameEventsManager.instance.skillTreeEvents.onLifeStealHit+=HealLife;
+        GameEventsManager.instance.uiEvents.onRequestPlayerHealthInfo+=SendHealthInfo;
     }
     void OnDisable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo-=SendBaseStatsInfo;
@@ -80,25 +82,31 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.playerEvents.onPlayerGainExp-=GainExp;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUp;
         GameEventsManager.instance.runeEvents.onRuneStatBuff-=RuneStatBuff;
+        GameEventsManager.instance.skillTreeEvents.onLifeStealHit+=HealLife;
+        GameEventsManager.instance.uiEvents.onRequestPlayerHealthInfo-=SendHealthInfo;
     }
     void Start()
     {
         simulatedStatChange = new int[4];
         CalculateStats();
-        GameEventsManager.instance.uiEvents.UpdateSliders(0,0,maxLife);//Essas duas funções deveriam ser chamadas
-        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);//             pra stamina e mana tambem
+        //GameEventsManager.instance.uiEvents.UpdateSliders(0,maxLife);//Essas duas funções deveriam ser chamadas
+        //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,false);//             pra stamina e mana tambem
+        UIManager.instance?.UpdateHealth(CurrentLife,false);
     }
-    void Update()
-    {
-        GameEventsManager.instance.uiEvents.UpdateSliders(0,0,maxLife);//Essas duas funções deveriam ser chamadas
-        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
+    void Update(){
+        
     }
     public void HealLife(float life){
-        if(CurrentLife<maxLife){
+        if(CurrentLife<=maxLife){
             CurrentLife += life;
             if(CurrentLife>maxLife)CurrentLife=maxLife;
-            GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
+            UIManager.instance?.UpdateHealth(CurrentLife,false);
         }
+    }
+    private void SendHealthInfo(){
+        GameEventsManager.instance.uiEvents.UpdateSliders(0,maxLife);//Essas duas funções deveriam ser chamadas
+        //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,false); //             pra stamina e mana tambem
+        UIManager.instance?.UpdateHealth(CurrentLife,false);
     }
     public void Die(){
         GameEventsManager.instance.playerEvents.PlayerDied();
@@ -108,7 +116,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     }
     private void PlayerRespawn()//chamado pelo game manager depois de dar load
     {
-        CurrentLife = maxLife;
+        HealLife(maxLife);
         playerIsDead=false;
         if(respawnPos.HasValue){
             transform.position=respawnPos.Value;
@@ -125,7 +133,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         Physics.SyncTransforms();
     }
     public void CheckPointStatue(){//Interagir com uma estátua de save
-        CurrentLife = maxLife;
+
+        HealLife(maxLife);
         respawnPos = transform.position;
     }
     public void SaveData(GameData data){
@@ -148,11 +157,12 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         this.BaseHeavyAttackDamage = data.playerStatsData.baseHeavyAttackDamage;
         CalculateStats();
     }
-    public void TakeDamage(float damage,Enums.DamageType damageType)
+    public void TakeDamage(float damage,Enums.DamageType damageType,bool wasCrit)
     {
         if(PUArmorActive) damage/=2;
         CurrentLife -= damage;
-        GameEventsManager.instance.uiEvents.LifeChange(CurrentLife);
+        //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,wasCrit);
+        UIManager.instance?.UpdateHealth(CurrentLife,wasCrit);
         if(CurrentLife<=0&&!playerIsDead){
             Die();
         }

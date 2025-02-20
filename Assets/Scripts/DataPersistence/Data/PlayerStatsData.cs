@@ -27,9 +27,9 @@ public class PlayerStatsData
         this.inte = playerStatsDefault.baseInt;
         this.exp = playerStatsDefault.baseExp;
         this.level = playerStatsDefault.baseLevel;
-        this.currentLife = playerStatsDefault.baseLife + playerStatsDefault.baseCon * 25;
+        this.currentLife = playerStatsDefault.baseLife;
         this.baseLife = playerStatsDefault.baseLife;
-        this.currentLife = playerStatsDefault.baseMana + playerStatsDefault.baseMana * 10;
+        this.currentMana = playerStatsDefault.baseMana;
         this.baseMana = playerStatsDefault.baseMana;
         this.baseMagicDamage = playerStatsDefault.baseMagicDamage;
         this.baseLightAttackcDamage = playerStatsDefault.baseLightAttackDamage;

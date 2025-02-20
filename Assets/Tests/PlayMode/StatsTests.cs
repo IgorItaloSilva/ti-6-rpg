@@ -37,7 +37,7 @@ public class StatsTests
         GameObject gameObject = new();
         PlayerStats stats = gameObject.AddComponent<PlayerStats>();
         float vida = stats.CurrentLife;
-        stats.TakeDamage(50,Enums.DamageType.Magic);
+        stats.TakeDamage(50,Enums.DamageType.Magic,false);
         Assert.AreEqual(vida-50f,stats.CurrentLife);
 
         yield return null;
@@ -48,7 +48,7 @@ public class StatsTests
         GameObject gameObject = new();
         PlayerStats stats = gameObject.AddComponent<PlayerStats>();
         float vida = stats.CurrentLife;
-        stats.TakeDamage(50,Enums.DamageType.Regular);
+        stats.TakeDamage(50,Enums.DamageType.Regular,false);
         Assert.AreEqual(vida-50f,stats.CurrentLife);
 
         yield return null;
@@ -63,7 +63,7 @@ public class StatsTests
         //a função de receber AtviarPowerUp é privada, e está inscrita no 
         //observer que é chamado por esse evento "ActivatePowerUp"
         //O valor 3 é o ID hardcored definido no scriptable object do power up de armadura
-        stats.TakeDamage(50,Enums.DamageType.Regular);
+        stats.TakeDamage(50,Enums.DamageType.Regular,false);
         Assert.AreEqual(vida-50f/2,stats.CurrentLife);
         //o power up deveria reduzir o dano tomado ao meio
 

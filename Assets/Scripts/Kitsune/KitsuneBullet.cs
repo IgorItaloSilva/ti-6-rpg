@@ -41,7 +41,7 @@ public class KitsuneBullet : MonoBehaviour
                 Debug.Log("a bullet n conseguiu dar dano no player");
             }
             else{
-                damagable.TakeDamage(damage,Enums.DamageType.Magic);
+                damagable.TakeDamage(damage,Enums.DamageType.Magic,false);
                 Destroy(gameObject);
             }
         }

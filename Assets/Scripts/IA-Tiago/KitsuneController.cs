@@ -10,6 +10,7 @@ public class KitsuneController : ActualEnemyController
     [SerializeField]float basicAttackDist;
     [SerializeField]float attackTime;
     [SerializeField]float restTime;
+    [SerializeField]int pillarID;
     bool isAttacking;
     bool isResting;
     protected override void CreateActions()
@@ -59,6 +60,11 @@ public class KitsuneController : ActualEnemyController
         //steeringManager?.AvoidObstacle();
         steeringManager?.Update();
         currentAction?.UpdateAction(); 
+    }
+    public override void Die()
+    {
+        base.Die();
+        GameEventsManager.instance.levelEvents.KitsuneDeath(pillarID);
     }
     protected override void ResetControlBooleans()//chamado no changeAction
     {
