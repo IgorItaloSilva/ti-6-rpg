@@ -40,7 +40,7 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
             }
             foreach(Interactable interactable in interactables){
                 InteractableData interactableData;
-                if(CurrentLevelData.interactablesData.TryGetValue(interactable.Id,out interactableData)){
+                if(CurrentLevelData.interactablesData.TryGetValue(interactable.saveId,out interactableData)){
                     interactable.Load(interactableData);
                 }
             }

@@ -141,7 +141,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
             Die();
         }
     }
-    public void Die(){
+    public virtual void Die(){
         GameEventsManager.instance.playerEvents.PlayerGainExp(exp);
         IsDead=true;
         Save();
