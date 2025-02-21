@@ -7,6 +7,7 @@ public class PlayerGroundedState : PlayerBaseState
     private float acceleration;
     private const byte accelerationSpeed = 3;
     protected const float MoveSpeed = 6f;
+    private Vector3 _appliedMovement;
 
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
@@ -86,16 +87,21 @@ public class PlayerGroundedState : PlayerBaseState
 
     private void HandleMove()
     {
-        _ctx.AppliedMovement = new Vector3(_ctx.CurrentMovement.x, _ctx.BaseGravity, _ctx.CurrentMovement.z);
-        _ctx.CC.Move(_ctx.AppliedMovement * (MoveSpeed * Time.deltaTime * acceleration));
+        _appliedMovement.x = _ctx.CurrentMovement.x * acceleration;
+        _appliedMovement.y = _ctx.BaseGravity;
+        _appliedMovement.z = _ctx.CurrentMovement.z * acceleration;
+
+        _ctx.AppliedMovement = _appliedMovement;
+        _ctx.CC.Move(_ctx.AppliedMovement * (MoveSpeed * Time.deltaTime ));
     }
 
     private void HandleAcceleration()
     {
-        if (_ctx.IsMovementPressed && acceleration < 1f)
+        if (_ctx.IsMovementPressed)
             acceleration += (Time.deltaTime * accelerationSpeed);
-        else if(acceleration > 0f)
+        else
             acceleration -= (Time.deltaTime * accelerationSpeed);
+        acceleration = Mathf.Clamp01(acceleration);
     }
 
 }
