@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerSprintState : PlayerBaseState
 {
-    protected const float SprintSpeed = 12f;
 
     public PlayerSprintState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
@@ -12,7 +11,7 @@ public class PlayerSprintState : PlayerBaseState
     public override void EnterState()
     {
         HandleAnimatorParameters();
-        Debug.Log("Sprinting");
+        if(_ctx.ShowDebugLogs) Debug.Log("Sprinting");
         _turnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
     }
 
@@ -48,7 +47,7 @@ public class PlayerSprintState : PlayerBaseState
             SwitchState(_factory.InAir());
         }
 
-        if (!_ctx.IsSprintPressed)
+        if (!_ctx.IsSprintPressed || !_ctx.IsMovementPressed)
         {
             SwitchState(_factory.Grounded());
         }
@@ -56,20 +55,24 @@ public class PlayerSprintState : PlayerBaseState
         {
             SwitchState(_factory.Attack());
         }
+        
+        if (_ctx.IsClimbing && _ctx.CanMount)
+        {
+            SwitchState(_factory.Climb());
+        }
     }
 
-    private void HandleJump()
+    protected override void HandleAcceleration()
     {
-        _ctx.Animator.SetBool(_ctx.HasJumpedHash, true);
-        _ctx.CanJump = false;
-        _ctx.CurrentMovementY = _ctx.InitialJumpVelocity;
-        _ctx.AppliedMovementY = _ctx.InitialJumpVelocity;
+        _ctx.Acceleration += (Time.fixedDeltaTime * AccelerationSpeed);
+        _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 2);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityHash, _ctx.Acceleration);
     }
 
     private void HandleSprintMove()
     {
-        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * SprintSpeed, _ctx.BaseGravity,
-            _ctx.transform.forward.z * SprintSpeed);
+        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration, _ctx.BaseGravity,
+            _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration);
 
         _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }

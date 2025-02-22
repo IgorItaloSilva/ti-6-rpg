@@ -1,29 +1,44 @@
+#region Imports
+
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
+
+#endregion
 
 public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 {
+    #region Singleton
+    
     // Singleton publico do PlayerMovement
     public static PlayerStateMachine Instance;
+    private void CreateSingleton()
+    {
+        if (Instance)
+            Destroy(this); // Deletar novo objeto caso playerMovement já tenha sido instanciado
+        else
+            Instance = this; // Instanciar PlayerMovement caso não exista
+    }
 
+    #endregion
+
+    #region References
+    [Header("Referencias")]
     [HideInInspector] public CinemachineFreeLook cinemachine;
-
     private Camera mainCam;
     private Animator animator;
     private CharacterController cc;
     [SerializeField] private PlayerWeapon swordWeaponManager;
     private PlayerInput playerInput;
-    private float _gravity, _initialJumpVelocity, camYSpeed, camXSpeed;
+    private PlayerBaseState _currentState;
+    private PlayerStateFactory _states;
 
-    public readonly float MaxJumpHeight = .25f,
-        MaxJumpTime = .8f,
-        BaseGravity = -9.8f,
-        BaseTurnTime = 0.15f,
-        SlowTurnTimeModifier = 1.5f,
-        AttackTurnTimeModifier = 3f;
+    #endregion
 
-    public readonly int DodgeCooldownMs = 600;
+    #region Private Variables
+
+    private float _gravity, _initialJumpVelocity, _camYSpeed, _camXSpeed, _acceleration;
 
     private Vector3 _currentMovement, _appliedMovement;
     private Vector2 _currentMovementInput, _currentLookInput;
@@ -48,13 +63,24 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     private byte _attackCount;
 
-    // variáveis dos estados:
-    private PlayerBaseState _currentState;
-    private PlayerStateFactory _states;
+    #endregion
+
+    #region Public Variables
+
+    public readonly int DodgeCooldownMs = 1500;
+    public readonly byte BaseMoveSpeed = 5;
+    public readonly float MaxJumpHeight = .75f,
+        MaxJumpTime = .6f,
+        BaseGravity = -9.8f,
+        BaseTurnTime = 0.15f,
+        SlowTurnTimeModifier = 1.5f;
+    
+    [FormerlySerializedAs("ShowStateLogs")] public bool ShowDebugLogs;
+
+    #region AnimatorHashes
     public readonly int IsWalkingHash = Animator.StringToHash("isWalking");
     public readonly int IsRunningHash = Animator.StringToHash("isRunning");
     public readonly int IsGroundedHash = Animator.StringToHash("isGrounded");
-    public readonly int AttackCountHash = Animator.StringToHash("AttackCount");
     public readonly int Attack1Hash = Animator.StringToHash("Attack1");
     public readonly int Attack2Hash = Animator.StringToHash("Attack2");
     public readonly int Attack3Hash = Animator.StringToHash("Attack3");
@@ -63,20 +89,17 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
     public readonly int HasDiedHash = Animator.StringToHash("hasDied");
     public readonly int HasRespawnedHash = Animator.StringToHash("hasRespawned");
-    public readonly int PlayerVelocity = Animator.StringToHash("playerVelocity");
+    public readonly int PlayerVelocityHash = Animator.StringToHash("playerVelocity");
+    #endregion
 
-    // GETTERS E SETTERS:
+    #endregion
+
+    #region Public Getters
+
     public CharacterController CC => cc;
-
     public Animator Animator => animator;
     public Camera MainCam => mainCam;
-
-    public PlayerBaseState CurrentState
-    {
-        get => _currentState;
-        set => _currentState = value;
-    }
-
+    public Vector3 CurrentMovementInput => _currentMovementInput;
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
     public bool IsJumpPressed => _isJumpPressed && _canJump;
@@ -84,6 +107,30 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsAttackPressed => _isAttackPressed && _canAttack;
     public bool IsSprintPressed => _isSprintPressed;
     public bool IsClimbing => _isClimbing;
+    public int AttackCount => _attackCount;
+    public float InitialJumpVelocity => _initialJumpVelocity;
+    
+
+    #endregion
+
+    #region Public Setters
+
+    public float Gravity
+    {
+        get => _gravity;
+        set => _gravity = value;
+    }
+
+    public bool IsDodging
+    {
+        set => _isDodging = value;
+    }
+
+    public PlayerBaseState CurrentState
+    {
+        get => _currentState;
+        set => _currentState = value;
+    }
 
     public bool CanMount
     {
@@ -108,7 +155,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         get => _canAttack;
         set => _canAttack = value;
     }
-    
+
     public bool CanInteract
     {
         get => _canInteract;
@@ -121,39 +168,46 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         set => _currentMovement = value;
     }
 
-    public Vector3 CurrentMovementInput => _currentMovementInput;
-
-    public Vector3 AppliedMovement
-    {
-        get => _appliedMovement;
-        set => _appliedMovement = value;
-    }
-
     public float CurrentMovementY
     {
         get => _currentMovement.y;
         set => _currentMovement.y = value;
     }
 
+    public Vector3 AppliedMovement
+    {
+        get => _appliedMovement;
+        set => _appliedMovement = value;
+    }
+    
+    public float AppliedMovementX
+    {
+        get => _appliedMovement.x;
+        set => _appliedMovement.x = value;
+    }
+    
     public float AppliedMovementY
     {
         get => _appliedMovement.y;
         set => _appliedMovement.y = value;
     }
-
-    public int AttackCount => _attackCount;
-
-    public float InitialJumpVelocity => _initialJumpVelocity;
-
-    public float Gravity => _gravity;
-
-    private void CreateSingleton()
+    public float AppliedMovementZ
     {
-        if (Instance)
-            Destroy(this); // Deletar novo objeto caso playerMovement já tenha sido instanciado
-        else
-            Instance = this; // Instanciar PlayerMovement caso não exista
+        get => _appliedMovement.z;
+        set => _appliedMovement.z = value;
     }
+
+    public float Acceleration
+    {
+        get => _acceleration;
+        set => _acceleration = value;
+    }
+
+    #endregion
+
+    #region Initializers
+
+    #region Input Initializers
 
     private void OnEnable()
     {
@@ -234,23 +288,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         var timeToApex = MaxJumpTime / 2;
         _gravity = (-2 * MaxJumpHeight) / Mathf.Pow(timeToApex, 2);
         _initialJumpVelocity = (2 * MaxJumpHeight) / timeToApex;
-        Debug.Log(_initialJumpVelocity);
     }
 
-    private void Awake()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-        CreateSingleton();
-        SetupReferences();
-        SetupPlayerStates();
-        SetupInputCallbackContext();
-        SetupJumpVariables();
-        camXSpeed = cinemachine.m_XAxis.m_MaxSpeed;
-        camYSpeed = cinemachine.m_YAxis.m_MaxSpeed;
-    }
-
-    private void SetupReferences()
+    #endregion
+    
+    private void InitializeReferences()
     {
         playerInput = new PlayerInput();
         mainCam = Camera.main;
@@ -259,8 +301,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         animator = GetComponent<Animator>();
     }
 
-
-    private void SetupPlayerStates()
+    private void InitializePlayerStates()
     {
         _states = new PlayerStateFactory(this);
         InitializeGroundedState();
@@ -268,13 +309,29 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     private void InitializeGroundedState()
     {
+        // Set player state to Grounded by default
         _currentState = _states.Grounded();
         _currentState.EnterState();
     }
 
-    // PRECISA SAIR DAQUI E IR PARA O MOVESTATE!!!!
+    #endregion
+    
+    private void Awake()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CreateSingleton();
+        InitializeReferences();
+        InitializePlayerStates();
+        SetupInputCallbackContext();
+        SetupJumpVariables();
+        _camXSpeed = cinemachine.m_XAxis.m_MaxSpeed;
+        _camYSpeed = cinemachine.m_YAxis.m_MaxSpeed;
+    }
+
     private void FixedUpdate()
     {
+        _currentState.FixedUpdateState();
         cinemachine.m_RecenterToTargetHeading.m_enabled = _currentMovementInput is { x: not 0, y: > 0f };
     }
 
@@ -283,15 +340,16 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _currentState.UpdateState();
     }
 
+    #region Collisions / Triggers
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Climbable") && _canMount)
         {
-            if (!Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z),
-                    transform.forward, 1f)) return;
-            var colliderTransform = other.gameObject.transform;
-            transform.rotation = colliderTransform.rotation;
-            transform.position = new Vector3(colliderTransform.position.x, transform.position.y, transform.position.z);
+            if (!Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), transform.forward, 1.5f)) return;
+            
+            transform.rotation = other.gameObject.transform.rotation;
+            CC.Move(-transform.forward * 0.1f);
             _isClimbing = true;
         }
     }
@@ -304,6 +362,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
             _isClimbing = false;
         }
     }
+    
+    #endregion
+
+    #region Attacks / Weapons
 
     public void HandleAttack()
     {
@@ -324,15 +386,16 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
                 animator.SetBool(Attack3Hash, true);
                 break;
         }
-
     }
+
     public void ResetAttacks()
     {
         animator.SetBool(Attack1Hash, false);
         animator.SetBool(Attack2Hash, false);
         animator.SetBool(Attack3Hash, false);
         _attackCount = 0;
-        Debug.LogWarning("RESET ATTACKS");
+        
+        if(ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
     }
 
     private void EnableSwordCollider()
@@ -344,10 +407,16 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         swordWeaponManager.DisableCollider();
     }
-    public void SetWeaponDamageType(int value){
+
+    public void SetWeaponDamageType(int value)
+    {
         swordWeaponManager.SetDamageType(value);
     }
 
+    #endregion
+
+    #region Savegame
+    
     public void LoadData(GameData gameData)
     {
         transform.position = gameData.pos;
@@ -359,6 +428,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         gameData.pos = transform.position;
     }
+    
+    #endregion
+
+    #region Player Death / Respawn
 
     private void PlayerDied()
     {
@@ -375,6 +448,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         InitializeGroundedState();
     }
 
+    #endregion
+
+    #region Camera
+    
     private void LockCam()
     {
         cinemachine.m_YAxis.m_MaxSpeed = 0f;
@@ -383,7 +460,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     private void UnlockCam()
     {
-        cinemachine.m_YAxis.m_MaxSpeed = camYSpeed;
-        cinemachine.m_XAxis.m_MaxSpeed = camXSpeed;
+        cinemachine.m_YAxis.m_MaxSpeed = _camYSpeed;
+        cinemachine.m_XAxis.m_MaxSpeed = _camXSpeed;
     }
+    
+    #endregion
+    
 }

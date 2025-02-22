@@ -53,7 +53,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cinemachine: {fileID: 0}
-  swordWeaponManager: {fileID: 0}
+  swordWeaponManager: {fileID: 2808261607170030826}
+  ShowDebugLogs: 0
 --- !u!114 &7001136559969210805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1472,7 +1473,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.0006196696, y: 0.00915733, z: 0.00094688527}
   m_Center: {x: 0.00000083161615, y: -0.0047680805, z: -0.000027490505}
@@ -1490,6 +1491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageType: 0
   baseDamage: 10
+  critRate: 50
 --- !u!1 &6704202763515187719
 GameObject:
   m_ObjectHideFlags: 0

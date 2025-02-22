@@ -12,7 +12,6 @@ public class PlayerWeapon : WeaponManager
     //Weapon pinduricalhos
     float runeBonusDamage = 0;
     //Skill tree powerUps
-    bool doubleDamagePUActive;
     int doubleDamageMultiplier =1;
     bool executeEnemiesPUActive;
     bool lifeStealPUActive;
@@ -78,7 +77,6 @@ public class PlayerWeapon : WeaponManager
         switch(id){
             //DoubleDamage
             case 10:
-                doubleDamagePUActive=true;
                 doubleDamageMultiplier=2;
             break;
             //Execute

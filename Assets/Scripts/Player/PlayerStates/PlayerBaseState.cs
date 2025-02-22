@@ -3,11 +3,13 @@ using UnityEngine.InputSystem;
 
 public abstract class PlayerBaseState
 {
-    protected PlayerStateMachine _ctx;
-    protected PlayerStateFactory _factory;
-    protected float _turnTime, _turnSmoothSpeed;
+    protected readonly PlayerStateMachine _ctx;
+    protected readonly PlayerStateFactory _factory;
+    protected float _turnTime, _turnSmoothSpeed, _lowestAccelerationSpeed = float.MaxValue;
+    protected readonly byte AccelerationSpeed = 3, DecelerationSpeed = 10;
+    private Vector3 _appliedMovement;
 
-    public PlayerBaseState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
+    protected PlayerBaseState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
     {
         _ctx = currentContext;
         _factory = playerStateFactory;
@@ -19,6 +21,10 @@ public abstract class PlayerBaseState
     public abstract void ExitState();
     public abstract void CheckSwitchStates();
 
+    public virtual void FixedUpdateState()
+    {
+        HandleAcceleration();
+    }
     protected void HandleRotation()
     {
         // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
@@ -36,6 +42,46 @@ public abstract class PlayerBaseState
 
         // Rotacionar a direção do player
         _ctx.transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
+    }
+    protected virtual void HandleJump(float jumpForceOverride = 1f)
+    {
+        _ctx.Animator.ResetTrigger(_ctx.HasJumpedHash);
+        _ctx.Animator.SetTrigger(_ctx.HasJumpedHash);
+        _ctx.CanJump = false;
+        if (!_ctx.IsMovementPressed)
+            _ctx.AppliedMovement = Vector3.zero;
+        _ctx.CurrentMovementY = _ctx.InitialJumpVelocity * jumpForceOverride;
+        _ctx.AppliedMovementY = _ctx.InitialJumpVelocity * jumpForceOverride;
+    }
+    protected virtual void HandleAcceleration()
+    {
+        _lowestAccelerationSpeed = Mathf.Min(_ctx.Acceleration, _lowestAccelerationSpeed);
+        
+        if (_ctx.IsMovementPressed && _ctx.Acceleration <= 1)
+        {
+            _ctx.Acceleration += Time.fixedDeltaTime * AccelerationSpeed;
+        }
+        else
+        {
+            _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
+        }
+
+        if (_lowestAccelerationSpeed < 1)
+        {
+            _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 1);
+        }
+
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityHash, _ctx.Acceleration);
+    }
+    
+    protected void HandleMove()
+    {
+        _appliedMovement.x = _ctx.CurrentMovement.x * _ctx.Acceleration;
+        _appliedMovement.y = _ctx.BaseGravity;
+        _appliedMovement.z = _ctx.CurrentMovement.z * _ctx.Acceleration;
+
+        _ctx.AppliedMovement = _appliedMovement;
+        _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime ));
     }
 
     protected void SwitchState(PlayerBaseState newState)

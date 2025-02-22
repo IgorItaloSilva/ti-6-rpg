@@ -4,9 +4,6 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerGroundedState : PlayerBaseState
 {
-    private float acceleration;
-    private const byte accelerationSpeed = 3;
-    protected const float MoveSpeed = 6f;
     private Vector3 _appliedMovement;
 
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
@@ -17,7 +14,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void EnterState()
     {
-        Debug.Log("Grounded");
+        if(_ctx.ShowDebugLogs) Debug.Log("Grounded");
         _turnTime = _ctx.BaseTurnTime;
     }
 
@@ -31,7 +28,6 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void UpdateState()
     {
-        HandleAcceleration();
         HandleRotation();
         HandleMove();
         CheckSwitchStates();
@@ -39,6 +35,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void ExitState()
     {
+        
     }
 
     public override void CheckSwitchStates()
@@ -72,36 +69,6 @@ public class PlayerGroundedState : PlayerBaseState
 
         if (_ctx.IsClimbing && _ctx.CanMount)
             SwitchState(_factory.Climb());
-    }
-
-    public void HandleJump()
-    {
-        _ctx.Animator.ResetTrigger(_ctx.HasJumpedHash);
-        _ctx.Animator.SetTrigger(_ctx.HasJumpedHash);
-        _ctx.CanJump = false;
-        if (!_ctx.IsMovementPressed)
-            _ctx.AppliedMovement = Vector3.zero;
-        _ctx.CurrentMovementY = _ctx.InitialJumpVelocity;
-        _ctx.AppliedMovementY = _ctx.InitialJumpVelocity;
-    }
-
-    private void HandleMove()
-    {
-        _appliedMovement.x = _ctx.CurrentMovement.x * acceleration;
-        _appliedMovement.y = _ctx.BaseGravity;
-        _appliedMovement.z = _ctx.CurrentMovement.z * acceleration;
-
-        _ctx.AppliedMovement = _appliedMovement;
-        _ctx.CC.Move(_ctx.AppliedMovement * (MoveSpeed * Time.deltaTime ));
-    }
-
-    private void HandleAcceleration()
-    {
-        if (_ctx.IsMovementPressed)
-            acceleration += (Time.deltaTime * accelerationSpeed);
-        else
-            acceleration -= (Time.deltaTime * accelerationSpeed);
-        acceleration = Mathf.Clamp01(acceleration);
     }
 
 }

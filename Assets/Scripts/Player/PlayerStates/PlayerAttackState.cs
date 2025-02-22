@@ -5,24 +5,26 @@ using UnityEngine;
 
 public class PlayerAttackState : PlayerBaseState
 {
-
+    private const byte AttackTurnTimeModifier = 2;
+    private new const byte DecelerationSpeed = 10;
+    
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        _turnTime = 0f;
-        HandleRotation();
-        _turnTime = _ctx.BaseTurnTime * _ctx.AttackTurnTimeModifier;
+        _turnTime = _ctx.BaseTurnTime * 2;
     }
 
     public override void EnterState()
     {
-        Debug.Log("Attacking!");
+        if(_ctx.ShowDebugLogs) Debug.Log("Attacking!");
         _ctx.HandleAttack();
     }
     
     public override void UpdateState()
     {
+        
         HandleRotation();
+        HandleMove();
         if (_ctx.IsAttackPressed)
         {
             _ctx.HandleAttack();
@@ -45,5 +47,11 @@ public class PlayerAttackState : PlayerBaseState
             else
                 SwitchState(_factory.Grounded());
         }
+    }
+
+    protected override void HandleAcceleration()
+    {
+        _ctx.Acceleration -= (Time.fixedDeltaTime * DecelerationSpeed);
+        _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, float.MaxValue);
     }
 }

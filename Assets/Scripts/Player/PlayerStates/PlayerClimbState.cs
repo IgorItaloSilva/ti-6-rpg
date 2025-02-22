@@ -6,7 +6,8 @@ namespace Player.PlayerStates
     public class PlayerClimbState : PlayerBaseState
     {
         protected const float ClimbSpeed = 4f;
-
+        private Vector3 _localMovement;
+        
         public PlayerClimbState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
             currentContext, playerStateFactory)
         {
@@ -15,8 +16,9 @@ namespace Player.PlayerStates
 
         public override void EnterState()
         {
+            _ctx.Acceleration = 0;
             _ctx.CanMount = false;
-            Debug.Log("Climbing");
+            if(_ctx.ShowDebugLogs) Debug.Log("Climbing");
         }
 
         public sealed override void HandleAnimatorParameters()
@@ -33,18 +35,9 @@ namespace Player.PlayerStates
 
         private void HandleClimb()
         {
-            _ctx.Animator.SetFloat(_ctx.PlayerVelocity, _ctx.CurrentMovementInput.y);
-            _ctx.AppliedMovement = new Vector3(0f, _ctx.CurrentMovementInput.y, 0f);
-            _ctx.CC.Move(_ctx.AppliedMovement * (ClimbSpeed * Time.deltaTime));
-        }
-
-        public void HandleJump(float jumpStrength = 1f)
-        {
-            _ctx.CanJump = false;
-            if (!_ctx.IsMovementPressed)
-                _ctx.AppliedMovement = Vector3.zero;
-            _ctx.CurrentMovementY = _ctx.InitialJumpVelocity * jumpStrength;
-            _ctx.AppliedMovementY = _ctx.InitialJumpVelocity * jumpStrength;
+            _ctx.Animator.SetFloat(_ctx.PlayerVelocityHash, Mathf.Abs(_ctx.CurrentMovementInput.x) > Mathf.Abs(_ctx.CurrentMovementInput.y) ? _ctx.CurrentMovementInput.x : _ctx.CurrentMovementInput.y);
+            _localMovement = ((_ctx.transform.right * _ctx.CurrentMovementInput.x) + (Vector3.up * _ctx.CurrentMovementInput.y)) * _ctx.Acceleration;
+            _ctx.CC.Move(_localMovement * (ClimbSpeed * Time.deltaTime));
         }
 
         public override void ExitState()
@@ -64,17 +57,18 @@ namespace Player.PlayerStates
                 {
                     if (_ctx.IsJumpPressed)
                     {
-                        _ctx.transform.Rotate(0f, 180f, 0f);
                         if(_ctx.IsMovementPressed)
                         {
+                            _ctx.transform.Rotate(0f, 180f, 0f);
                             HandleJump();
-                            SwitchState(_factory.InAir(airMoveSpeedOverride: 15f));
+                            SwitchState(_factory.InAir(shouldRotate: false));
+                            return;
                         }
                         SwitchState(_factory.InAir());
                     }
                     else
                     {
-                        HandleJump(0.75f);
+                        HandleJump();
                         SwitchState(_factory.InAir());
                     }
 

@@ -2,22 +2,20 @@ using UnityEngine;
 
 public class PlayerInAirState : PlayerBaseState
 {
-    protected const float MoveSpeed = 8f, SprintSpeed = 12f;
-    private readonly float _currentMoveSpeed;
+    private readonly bool _shouldRotate;
+    private const byte AirSpeed = 8;
 
-    public PlayerInAirState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, float airMoveSpeedOverride) : base(
+    public PlayerInAirState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, bool shouldRotate) : base(
         currentContext, playerStateFactory)
-    {
+    {        
+        HandleAirGravity();
         HandleAnimatorParameters();
-        if (airMoveSpeedOverride != 0)
-            _currentMoveSpeed = airMoveSpeedOverride;
-        else
-            _currentMoveSpeed = _ctx.IsSprintPressed ? SprintSpeed : MoveSpeed;
+        _shouldRotate = shouldRotate;
     }
 
     public override void EnterState()
     {
-        Debug.Log("In Air");
+        if(_ctx.ShowDebugLogs) Debug.Log("In Air");
         _turnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
     }
 
@@ -28,7 +26,9 @@ public class PlayerInAirState : PlayerBaseState
 
     public override void UpdateState()
     {
-        HandleRotation();
+        if(_shouldRotate)
+            HandleRotation();
+        
         HandleAirMove();
         HandleAirGravity();
         CheckSwitchStates();
@@ -54,14 +54,17 @@ public class PlayerInAirState : PlayerBaseState
 
     private void HandleAirGravity()
     {
-        var previousYVelocity = _ctx.CurrentMovementY;
+        var previousYVelocity = _ctx.CurrentMovement.y;
         _ctx.CurrentMovementY += (_ctx.Gravity * Time.deltaTime);
-        _ctx.AppliedMovementY = previousYVelocity + _ctx.CurrentMovementY;
+        _ctx.AppliedMovementY = previousYVelocity + _ctx.CurrentMovement.y;
     }
 
     private void HandleAirMove()
     {
-        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _currentMoveSpeed * _ctx.CurrentMovementInput.magnitude, _ctx.AppliedMovementY * MoveSpeed, _ctx.transform.forward.z * _currentMoveSpeed * _ctx.CurrentMovementInput.magnitude);
+        _ctx.AppliedMovement = new Vector3(
+            _ctx.transform.forward.x * AirSpeed * _ctx.Acceleration,
+            _ctx.AppliedMovementY,
+            _ctx.transform.forward.z * AirSpeed * _ctx.Acceleration);
 
         _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }

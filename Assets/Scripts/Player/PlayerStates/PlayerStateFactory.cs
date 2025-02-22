@@ -1,6 +1,7 @@
 using System.Numerics;
 using Player.PlayerStates;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerStateFactory
 {
@@ -36,9 +37,9 @@ public class PlayerStateFactory
     {
         return new PlayerGroundedState(_context, this);
     }
-    public PlayerBaseState InAir(float airMoveSpeedOverride = 0f)
+    public PlayerBaseState InAir(bool shouldRotate = true)
     {
-        return new PlayerInAirState(_context, this, airMoveSpeedOverride);
+        return new PlayerInAirState(_context, this, shouldRotate);
     }
 
     public PlayerBaseState Climb()
