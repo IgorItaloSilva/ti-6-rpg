@@ -9,7 +9,7 @@
                     "name": "Attack",
                     "type": "Button",
                     "id": "e7fa1279-f17e-4bbb-94d5-568e3f3c6692",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -63,7 +63,7 @@
                     "name": "Sprint",
                     "type": "Button",
                     "id": "429ec5c2-ff2d-40ce-bdbb-8d9d706b144f",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -73,6 +73,15 @@
                     "type": "Button",
                     "id": "a4f1dcef-a322-43b8-a2e0-6fcbc64a79d6",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Target",
+                    "type": "Button",
+                    "id": "fa73f91e-0b62-4efd-aac7-6aaa579edf0d",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -329,6 +338,28 @@
                     "processors": "",
                     "groups": "Keyboard + Mouse",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a91389d7-5936-4d1a-8a58-9a4760cf4465",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard + Mouse",
+                    "action": "Target",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dbb7602c-000f-42e0-a62a-ea4b1d365090",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Target",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
