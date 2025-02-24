@@ -10,9 +10,10 @@ using UnityEngine.Serialization;
 public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 {
     #region Singleton
-    
+
     // Singleton publico do PlayerMovement
     public static PlayerStateMachine Instance;
+
     private void CreateSingleton()
     {
         if (Instance)
@@ -24,13 +25,17 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     #endregion
 
     #region References
-    [Header("Referencias")]
-    [HideInInspector] public CinemachineFreeLook cinemachine;
-    private Camera mainCam;
-    private Animator animator;
-    private CharacterController cc;
-    [SerializeField] private PlayerWeapon swordWeaponManager;
-    private PlayerInput playerInput;
+
+    public CinemachineFreeLook playerCamera;
+    public CinemachineVirtualCamera targetCamera;
+    private CinemachineTargetGroup _camTargetGroup;
+    public GameObject enemyDetectionObject;
+    private EnemyDetection enemyDetector;
+    private Camera _mainCam;
+    private Animator _animator;
+    private CharacterController _cc;
+    [SerializeField] private PlayerWeapon _swordWeaponManager;
+    private PlayerInput _playerInput;
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
 
@@ -59,7 +64,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canAttack = true,
         _isBetweenAttacks,
         _isClimbing,
-        _canMount = true;
+        _canMount = true,
+        _isTargetPressed,
+        _canTarget,
+        _isOnTarget;
 
     private byte _attackCount;
 
@@ -69,15 +77,18 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     public readonly int DodgeCooldownMs = 1500;
     public readonly byte BaseMoveSpeed = 5;
+
     public readonly float MaxJumpHeight = .75f,
         MaxJumpTime = .6f,
         BaseGravity = -9.8f,
         BaseTurnTime = 0.15f,
         SlowTurnTimeModifier = 1.5f;
-    
-    [FormerlySerializedAs("ShowStateLogs")] public bool ShowDebugLogs;
+
+    [FormerlySerializedAs("ShowStateLogs")]
+    public bool ShowDebugLogs;
 
     #region AnimatorHashes
+
     public readonly int IsWalkingHash = Animator.StringToHash("isWalking");
     public readonly int IsRunningHash = Animator.StringToHash("isRunning");
     public readonly int IsGroundedHash = Animator.StringToHash("isGrounded");
@@ -90,15 +101,17 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int HasDiedHash = Animator.StringToHash("hasDied");
     public readonly int HasRespawnedHash = Animator.StringToHash("hasRespawned");
     public readonly int PlayerVelocityHash = Animator.StringToHash("playerVelocity");
+
     #endregion
 
     #endregion
 
     #region Public Getters
 
-    public CharacterController CC => cc;
-    public Animator Animator => animator;
-    public Camera MainCam => mainCam;
+    public CharacterController CC => _cc;
+    public Animator Animator => _animator;
+    public Camera MainCam => _mainCam;
+    public EnemyDetection EnemyDetector => enemyDetector;
     public Vector3 CurrentMovementInput => _currentMovementInput;
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
@@ -106,10 +119,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsDodgePressed => _isDodgePressed && _canDodge;
     public bool IsAttackPressed => _isAttackPressed && _canAttack;
     public bool IsSprintPressed => _isSprintPressed;
+    public bool IsTargetPressed => _isTargetPressed && _canTarget;
     public bool IsClimbing => _isClimbing;
+    public bool IsOnTarget => _isOnTarget;
     public int AttackCount => _attackCount;
     public float InitialJumpVelocity => _initialJumpVelocity;
-    
 
     #endregion
 
@@ -162,6 +176,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         set => _canInteract = value;
     }
 
+    public bool CanTarget
+    {
+        get => _canTarget;
+        set => _canTarget = value;
+    }
+
     public Vector3 CurrentMovement
     {
         get => _currentMovement;
@@ -179,18 +199,19 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         get => _appliedMovement;
         set => _appliedMovement = value;
     }
-    
+
     public float AppliedMovementX
     {
         get => _appliedMovement.x;
         set => _appliedMovement.x = value;
     }
-    
+
     public float AppliedMovementY
     {
         get => _appliedMovement.y;
         set => _appliedMovement.y = value;
     }
+
     public float AppliedMovementZ
     {
         get => _appliedMovement.z;
@@ -211,37 +232,39 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     private void OnEnable()
     {
-        playerInput.Gameplay.Enable();
+        _playerInput.Gameplay.Enable();
         GameEventsManager.instance.playerEvents.onPlayerDied += PlayerDied;
         GameEventsManager.instance.playerEvents.onPlayerRespawned += PlayerRespawned;
-        GameEventsManager.instance.uiEvents.onPauseGame += LockCam;
-        GameEventsManager.instance.uiEvents.onUnpauseGame += UnlockCam;
+        GameEventsManager.instance.uiEvents.onPauseGame += StopCameraInput;
+        GameEventsManager.instance.uiEvents.onUnpauseGame += ResumeCameraInput;
     }
 
     private void OnDisable()
     {
-        playerInput.Gameplay.Disable();
+        _playerInput.Gameplay.Disable();
         GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
         GameEventsManager.instance.playerEvents.onPlayerRespawned -= PlayerRespawned;
-        GameEventsManager.instance.uiEvents.onPauseGame -= LockCam;
-        GameEventsManager.instance.uiEvents.onUnpauseGame -= UnlockCam;
+        GameEventsManager.instance.uiEvents.onPauseGame -= StopCameraInput;
+        GameEventsManager.instance.uiEvents.onUnpauseGame -= ResumeCameraInput;
     }
 
     private void SetupInputCallbackContext()
     {
-        playerInput.Gameplay.Move.started += OnMovementPressed;
-        playerInput.Gameplay.Move.canceled += OnMovementPressed;
-        playerInput.Gameplay.Move.performed += OnMovementPressed;
-        playerInput.Gameplay.Sprint.started += Sprint;
-        playerInput.Gameplay.Sprint.canceled += Sprint;
-        playerInput.Gameplay.Jump.started += Jump;
-        playerInput.Gameplay.Jump.canceled += Jump;
-        playerInput.Gameplay.Dodge.started += Dodge;
-        playerInput.Gameplay.Dodge.canceled += Dodge;
-        playerInput.Gameplay.Attack.started += Attack;
-        playerInput.Gameplay.Attack.canceled += Attack;
-        playerInput.Gameplay.Interact.started += OnInteractPressed;
-        playerInput.Gameplay.Interact.canceled += OnInteractPressed;
+        _playerInput.Gameplay.Move.started += OnMovementPressed;
+        _playerInput.Gameplay.Move.canceled += OnMovementPressed;
+        _playerInput.Gameplay.Move.performed += OnMovementPressed;
+        _playerInput.Gameplay.Sprint.started += OnSprintPressed;
+        _playerInput.Gameplay.Sprint.canceled += OnSprintPressed;
+        _playerInput.Gameplay.Jump.started += OnJumpPressed;
+        _playerInput.Gameplay.Jump.canceled += OnJumpPressed;
+        _playerInput.Gameplay.Dodge.started += OnDodgePressed;
+        _playerInput.Gameplay.Dodge.canceled += OnDodgePressed;
+        _playerInput.Gameplay.Attack.started += OnAttackPressed;
+        _playerInput.Gameplay.Attack.canceled += OnAttackPressed;
+        _playerInput.Gameplay.Interact.started += OnInteractPressed;
+        _playerInput.Gameplay.Interact.canceled += OnInteractPressed;
+        _playerInput.Gameplay.Target.started += OnTargetPressed;
+        _playerInput.Gameplay.Target.started += OnTargetPressed;
     }
 
     private void OnMovementPressed(InputAction.CallbackContext context)
@@ -253,34 +276,39 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         Animator.SetBool(IsWalkingHash, IsMovementPressed);
     }
 
-
     private void OnInteractPressed(InputAction.CallbackContext context)
     {
         _isInteractPressed = context.ReadValueAsButton();
         _canInteract = true;
     }
 
-    private void Attack(InputAction.CallbackContext context)
+    private void OnAttackPressed(InputAction.CallbackContext context)
     {
         _isAttackPressed = context.ReadValueAsButton();
         _canAttack = true;
     }
 
-    private void Sprint(InputAction.CallbackContext context)
+    private void OnSprintPressed(InputAction.CallbackContext context)
     {
         _isSprintPressed = context.ReadValueAsButton();
         Animator.SetBool(IsRunningHash, IsSprintPressed);
     }
 
-    private void Jump(InputAction.CallbackContext context)
+    private void OnJumpPressed(InputAction.CallbackContext context)
     {
         _isJumpPressed = context.ReadValueAsButton();
         _canJump = true;
     }
 
-    private void Dodge(InputAction.CallbackContext context)
+    private void OnDodgePressed(InputAction.CallbackContext context)
     {
         _isDodgePressed = context.ReadValueAsButton();
+    }
+
+    private void OnTargetPressed(InputAction.CallbackContext context)
+    {
+        _isTargetPressed = context.ReadValueAsButton();
+        _canTarget = true;
     }
 
     private void SetupJumpVariables()
@@ -291,14 +319,15 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     #endregion
-    
+
     private void InitializeReferences()
     {
-        playerInput = new PlayerInput();
-        mainCam = Camera.main;
-        cinemachine = mainCam?.transform.parent.gameObject.GetComponent<CinemachineFreeLook>();
-        cc = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
+        _playerInput = new PlayerInput();
+        _mainCam = Camera.main;
+        _camTargetGroup = targetCamera?.GetComponentInChildren<CinemachineTargetGroup>();
+        _cc = GetComponent<CharacterController>();
+        _animator = GetComponent<Animator>();
+        enemyDetector = enemyDetectionObject.GetComponent<EnemyDetection>();
     }
 
     private void InitializePlayerStates()
@@ -315,7 +344,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     #endregion
-    
+
     private void Awake()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -325,29 +354,33 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         InitializePlayerStates();
         SetupInputCallbackContext();
         SetupJumpVariables();
-        _camXSpeed = cinemachine.m_XAxis.m_MaxSpeed;
-        _camYSpeed = cinemachine.m_YAxis.m_MaxSpeed;
+        _camXSpeed = playerCamera.m_XAxis.m_MaxSpeed;
+        _camYSpeed = playerCamera.m_YAxis.m_MaxSpeed;
     }
 
     private void FixedUpdate()
     {
         _currentState.FixedUpdateState();
-        cinemachine.m_RecenterToTargetHeading.m_enabled = _currentMovementInput is { x: not 0, y: > 0f };
+        playerCamera.m_RecenterToTargetHeading.m_enabled = _currentMovementInput is { x: not 0, y: > 0f };
     }
 
     private void Update()
     {
         _currentState.UpdateState();
+
+        if (_isTargetPressed && _canTarget)
+            HandleTarget();
     }
 
     #region Collisions / Triggers
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Climbable") && _canMount)
         {
-            if (!Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), transform.forward, 1.5f)) return;
-            
+            if (!Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 1, transform.position.z),
+                    transform.forward, 1.5f)) return;
+
             transform.rotation = other.gameObject.transform.rotation;
             CC.Move(-transform.forward * 0.1f);
             _isClimbing = true;
@@ -362,7 +395,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
             _isClimbing = false;
         }
     }
-    
+
     #endregion
 
     #region Attacks / Weapons
@@ -375,48 +408,48 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         {
             case 0:
                 _attackCount = 1;
-                animator.SetBool(Attack1Hash, true);
+                _animator.SetBool(Attack1Hash, true);
                 break;
             case 1:
                 _attackCount = 2;
-                animator.SetBool(Attack2Hash, true);
+                _animator.SetBool(Attack2Hash, true);
                 break;
             case 2:
                 _attackCount = 3;
-                animator.SetBool(Attack3Hash, true);
+                _animator.SetBool(Attack3Hash, true);
                 break;
         }
     }
 
     public void ResetAttacks()
     {
-        animator.SetBool(Attack1Hash, false);
-        animator.SetBool(Attack2Hash, false);
-        animator.SetBool(Attack3Hash, false);
+        _animator.SetBool(Attack1Hash, false);
+        _animator.SetBool(Attack2Hash, false);
+        _animator.SetBool(Attack3Hash, false);
         _attackCount = 0;
-        
-        if(ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
+
+        if (ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
     }
 
     private void EnableSwordCollider()
     {
-        swordWeaponManager.EnableCollider();
+        _swordWeaponManager.EnableCollider();
     }
 
     private void DisableSwordCollider()
     {
-        swordWeaponManager.DisableCollider();
+        _swordWeaponManager.DisableCollider();
     }
 
     public void SetWeaponDamageType(int value)
     {
-        swordWeaponManager.SetDamageType(value);
+        _swordWeaponManager.SetDamageType(value);
     }
 
     #endregion
 
     #region Savegame
-    
+
     public void LoadData(GameData gameData)
     {
         transform.position = gameData.pos;
@@ -428,7 +461,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         gameData.pos = transform.position;
     }
-    
+
     #endregion
 
     #region Player Death / Respawn
@@ -443,27 +476,54 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private void PlayerRespawned()
     {
         Debug.Log("Player respawnou");
-        animator.ResetTrigger(HasRespawnedHash);
-        animator.SetTrigger(HasRespawnedHash);
+        _animator.ResetTrigger(HasRespawnedHash);
+        _animator.SetTrigger(HasRespawnedHash);
         InitializeGroundedState();
     }
 
     #endregion
 
     #region Camera
-    
-    private void LockCam()
+
+    private void HandleTarget()
     {
-        cinemachine.m_YAxis.m_MaxSpeed = 0f;
-        cinemachine.m_XAxis.m_MaxSpeed = 0f;
+        _canTarget = false;
+        if (!_isOnTarget)
+        {
+            if(enemyDetector.targetEnemy)
+                CameraTargetLock(enemyDetector.targetEnemy.transform);
+        }
+        else
+        {
+            CameraTargetUnlock();
+        }
     }
 
-    private void UnlockCam()
+    private void StopCameraInput()
     {
-        cinemachine.m_YAxis.m_MaxSpeed = _camYSpeed;
-        cinemachine.m_XAxis.m_MaxSpeed = _camXSpeed;
+        playerCamera.m_YAxis.m_MaxSpeed = 0f;
+        playerCamera.m_XAxis.m_MaxSpeed = 0f;
     }
-    
+
+    private void ResumeCameraInput()
+    {
+        playerCamera.m_YAxis.m_MaxSpeed = _camYSpeed;
+        playerCamera.m_XAxis.m_MaxSpeed = _camXSpeed;
+    }
+
+    public void CameraTargetLock(Transform newTarget)
+    {
+        _isOnTarget = true;
+        _camTargetGroup.m_Targets[0].target = newTarget;
+        playerCamera.enabled = false;
+    }
+
+    public void CameraTargetUnlock()
+    {
+        _camTargetGroup.m_Targets[0].target = null;
+        playerCamera.enabled = true;
+        _isOnTarget = false;
+    }
+
     #endregion
-    
 }
