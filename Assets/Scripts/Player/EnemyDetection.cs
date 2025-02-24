@@ -1,6 +1,3 @@
-using System;
-using System.Threading.Tasks;
-using UnityEditor.TextCore.Text;
 using UnityEngine;
 
 public class EnemyDetection : MonoBehaviour

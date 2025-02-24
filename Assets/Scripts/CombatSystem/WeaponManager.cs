@@ -17,12 +17,16 @@ public class WeaponManager : MonoBehaviour
         }
         damage=baseDamage;
     }
-    protected virtual void OnTriggerEnter(Collider collider){
+    protected virtual void OnTriggerEnter(Collider other){
         //Debug.Log("A arma colidiu com algo");
-        IDamagable alvoAtacado = collider.gameObject.GetComponentInParent<IDamagable>();
-        Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
-        if(alvoAtacado!=null){
-            DealDamage(alvoAtacado,damage);
+        if(!other.gameObject.CompareTag("EnemyDetection"))
+        {
+            IDamagable alvoAtacado = other.gameObject.GetComponentInParent<IDamagable>();
+            Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
+            if (alvoAtacado != null)
+            {
+                DealDamage(alvoAtacado, damage);
+            }
         }
     }
     protected virtual void DealDamage(IDamagable alvo, float dano){
