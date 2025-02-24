@@ -1007,7 +1007,7 @@ GameObject:
   - component: {fileID: 8667969813010441830}
   m_Layer: 3
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1355,7 +1355,7 @@ GameObject:
   - component: {fileID: 7394980716942136902}
   m_Layer: 3
   m_Name: KitsuneYoukaiNovo
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2020,16 +2020,16 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 2
   m_Radius: 1.98
-  m_Height: 0
+  m_Height: 4.24553
   m_Direction: 1
-  m_Center: {x: -1.6389403e-14, y: -1.02, z: -0.33}
+  m_Center: {x: 4.9079965e-14, y: 0.21, z: -0.32999513}
 --- !u!114 &1702939655867158173
 MonoBehaviour:
   m_ObjectHideFlags: 0
