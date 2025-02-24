@@ -124,7 +124,7 @@ MonoBehaviour:
     m_ActionId: 44a8f965-1650-493c-8b8f-c547fcf2d45b
     m_ActionName: Gameplay/Toggle Cursor[/Keyboard/c]
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: Keyboard + Mouse
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -963,7 +963,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7424531297390244172
 Transform:
   m_ObjectHideFlags: 0
@@ -998,7 +998,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 3
+  m_Radius: 15
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &5391340577207457527
 MonoBehaviour:
