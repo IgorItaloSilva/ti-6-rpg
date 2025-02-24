@@ -5,6 +5,7 @@ using UnityEngine;
 
 public abstract class EnemyActions
 {
+    protected float animationDuration;
     protected float distToAttack;
     protected ActualEnemyController actualEnemyController;
 

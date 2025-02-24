@@ -8,14 +8,14 @@ public class KitsuneRestAction : EnemyActions
     float time;
     public override void EnterAction()
     {
-        actualEnemyController.animator.CrossFade("Fox|Idle",0.1f);
+        actualEnemyController.animator.CrossFade("Fox|Idle",0.3f);
         actualEnemyController.rb.constraints=RigidbodyConstraints.FreezePosition;
         time=0;
     }
 
     public override void ExitAction()
     {
-        actualEnemyController.animator.CrossFade("Fox_Run",0.1f);
+        actualEnemyController.animator.CrossFade("Fox_Idle",0.3f);
         actualEnemyController.rb.constraints=RigidbodyConstraints.FreezeRotation;
     }
 

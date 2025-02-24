@@ -1388,7 +1388,7 @@ Rigidbody:
   m_GameObject: {fileID: 7130622063641161249}
   serializedVersion: 4
   m_Mass: 30
-  m_Drag: 1
+  m_Drag: 1.5
   m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -1419,14 +1419,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ignoreSaveLoad: 0
-  <Id>k__BackingField: 
+  <Id>k__BackingField: kitsune1
   obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 1
-  maxVelocity: 5
+  maxVelocity: 4
   maxForce: 400
   charWidth: 1.5
-  charHeight: 3.5
+  charHeight: 3
   maxHp: 100
   minDistToAttack: 2
   numberOfActionsBeforeRest: 1000
@@ -1436,9 +1436,17 @@ MonoBehaviour:
   <IsDead>k__BackingField: 0
   rb: {fileID: 0}
   animator: {fileID: 0}
+  lookAtTargetWeight: 20
+  seekWeight: 10
+  avoidObstacleWeight: 40
+  fleeWeight: 1
+  wanderWeight: 10
   basicAttackDist: 2
   attackTime: 1
   restTime: 0
+  pillarID: 2
+  wanderCenter: {fileID: 0}
+  maxWanderDist: 17
 --- !u!1 &7794834672443956847
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,6 +16,19 @@ public class SteeringManager{
     private float wanderRadius = 2f;//era 4  
     private float wanderOrientation = 0f;
     protected bool shouldWander;
+    //Weights
+    float lookAtTargetWeight=20;
+    float seekWeight =2;
+    float avoidObstacleWeight = 10;
+    float fleeWeight;
+    float wanderWeight = 10;
+    public void SetWeights(float seekWeight,float fleeWeight,float wanderWeight,float avoidObstacleWeight,float lookAtTargetWeight){
+        this.seekWeight=seekWeight;
+        this.fleeWeight=fleeWeight;
+        this.wanderWeight=wanderWeight;
+        this.avoidObstacleWeight=avoidObstacleWeight;
+        this.lookAtTargetWeight=lookAtTargetWeight;
+    }
     // The constructor
     public SteeringManager(ISteeringAgent agent,Rigidbody rb) {
     	this.steeringAgent	= agent;
@@ -52,13 +65,25 @@ public class SteeringManager{
         //Debug.DrawRay(rb.position,steering,Color.red);
         
     }
+    public void LookAtTargetToAttack(Vector3 target){
+        steering+=doLookAtTargetToAttack(target);
+    }
+    private Vector3 doLookAtTargetToAttack(Vector3 targetPos){
+        Vector3 steeringForce;
+        float maxVelocity = steeringAgent.GetMaxVelocity();
+        Vector3 desiredVelocity = targetPos - steeringAgent.GetPosition();
+        desiredVelocity.Normalize();
+        desiredVelocity = desiredVelocity * maxVelocity;
+        steeringForce = desiredVelocity - steeringAgent.GetVelocity();
+        return steeringForce*lookAtTargetWeight;
+    }
     // Reset the internal steering force.
     public void Reset(){
         steering = Vector3.zero;
     }
     // The internal API
     private Vector3 DoSeek(Vector3 target, float slowingRadius = 0) {
-        Vector3 steeringForce = Vector3.zero;
+        Vector3 steeringForce;
         float maxVelocity = steeringAgent.GetMaxVelocity();
         Vector3 desiredVelocity = target - steeringAgent.GetPosition();
         float distanceToTarget = desiredVelocity.magnitude;
@@ -70,12 +95,12 @@ public class SteeringManager{
             desiredVelocity = desiredVelocity * maxVelocity;
         }
         steeringForce = desiredVelocity - steeringAgent.GetVelocity();
-        return steeringForce*2;
+        return steeringForce*seekWeight;
     }
     private Vector3 DoFlee(Vector3 target){
-        Vector3 steeringForce = Vector3.zero;
+        Vector3 steeringForce;
         Vector3 desiredVelocity = (steeringAgent.GetPosition()-target).normalized * steeringAgent.GetMaxVelocity();
-        steeringForce = desiredVelocity - steeringAgent.GetVelocity();
+        steeringForce = (desiredVelocity - steeringAgent.GetVelocity() )* fleeWeight;
         return steeringForce;
     }
 	private Vector3 DoWander(){
@@ -85,9 +110,8 @@ public class SteeringManager{
         float targetOrientation = wanderOrientation +  characterOrientation;  
         Vector3 targetPosition = rb.transform.position + (wanderOffset * OrientationToVector(characterOrientation));  
         targetPosition += wanderRadius * OrientationToVector(targetOrientation);  
-        steering = targetPosition - rb.transform.position;  
-        steering.Normalize();  
-        steering *= steeringAgent.GetMaxVelocity()/10;  
+        steering = (targetPosition - rb.transform.position).normalized * steeringAgent.GetMaxVelocity();  
+        steering = steering*wanderWeight;
         return steering;  
     }
     private float RandomBinomial(){//random entre -1 e 1
@@ -147,7 +171,7 @@ public class SteeringManager{
             }
         }
         desiredVel=desiredVel.normalized*steeringAgent.GetMaxVelocity();
-        steeringForce = desiredVel*10 - steeringAgent.GetVelocity();
+        steeringForce = desiredVel*avoidObstacleWeight - steeringAgent.GetVelocity();
         return steeringForce;
     }
 	private Vector3 DoEvade(ISteeringAgent targetAgent){

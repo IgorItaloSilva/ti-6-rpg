@@ -28,11 +28,20 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     [HideInInspector]public Animator animator;
     protected EnemyActions currentAction;
     protected EnemyActions restAction;
-    protected SteeringManager steeringManager;
+    [HideInInspector]public SteeringManager steeringManager;
     protected int actionsPerformed;
     protected Vector3 startingPos;
     bool initiationThroughLoad;
+    [Header("Pesos dos Steering Behaviours")]
+    public float lookAtTargetWeight=20;
+    public float seekWeight =2;
+    public float avoidObstacleWeight = 10;
+    public float fleeWeight=1;
+    public float wanderWeight = 10;
     
+    void OnValidate(){
+        steeringManager?.SetWeights(seekWeight,fleeWeight,wanderWeight,avoidObstacleWeight,lookAtTargetWeight);
+    }
     public virtual void Awake(){
         if(!ignoreSaveLoad){
             if(LevelLoadingManager.instance==null){

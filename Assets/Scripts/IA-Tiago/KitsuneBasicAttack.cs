@@ -5,7 +5,6 @@ using UnityEngine;
 public class KitsuneBasicAttack : EnemyActions
 {
     float time;
-    float animationDuration;
     public override void EnterAction()
     {
         actualEnemyController.animator.CrossFade("Fox_Attack1",0.1f);
@@ -26,9 +25,10 @@ public class KitsuneBasicAttack : EnemyActions
             actualEnemyController.ChangeAction(new nullAction());
         }
         else{
-            Vector3 target = steeringAgent.GetPosition();
+            //actualEnemyController.steeringManager.LookAtTarget();
+            /*Vector3 target = steeringAgent.GetPosition();
             target.y=actualEnemyController.transform.position.y;
-            actualEnemyController.transform.LookAt(target);
+            actualEnemyController.transform.LookAt(target); */
             if(time>animationDuration){
                 actualEnemyController.ChangeAction(new nullAction());
             }
