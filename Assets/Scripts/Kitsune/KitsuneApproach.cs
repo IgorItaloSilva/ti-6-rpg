@@ -18,13 +18,13 @@ public class KitsuneApproach : AEnemyAction
 
     public override void UpdateAction()
     {
-        Vector3 dir = (target.position - enemyController.transform.position); // Direção
-        Quaternion desiredRotation = Quaternion.LookRotation(dir); // Direção de rotação
+        Vector3 dir = (target.position - enemyController.transform.position); // Direï¿½ï¿½o
+        Quaternion desiredRotation = Quaternion.LookRotation(dir); // Direï¿½ï¿½o de rotaï¿½ï¿½o
         enemyController.transform.rotation = Quaternion.Slerp(enemyController.transform.rotation, desiredRotation, 0.15f); // Rotacionar constantemente para encarar o jogador
-        if (rb.velocity.magnitude < 4) // determinar velocidade maxima do inimigo e aplicar velocidade
-            rb.velocity += dir.normalized * 55 * Time.fixedDeltaTime;
-        enemyController.SetBlendTree("Velocity", rb.velocity.magnitude); // aplicar velocidade na blend tree
-        if (Vector3.Distance(target.position, enemyController.transform.position) < minDistanceSkill - (minDistanceSkill / 2)) // checar se esta na distancia minima de ativar a próxima ação
+        if (rb.linearVelocity.magnitude < 4) // determinar velocidade maxima do inimigo e aplicar velocidade
+            rb.linearVelocity += dir.normalized * 55 * Time.fixedDeltaTime;
+        enemyController.SetBlendTree("Velocity", rb.linearVelocity.magnitude); // aplicar velocidade na blend tree
+        if (Vector3.Distance(target.position, enemyController.transform.position) < minDistanceSkill - (minDistanceSkill / 2)) // checar se esta na distancia minima de ativar a prï¿½xima aï¿½ï¿½o
             ExitAction();
     }
 

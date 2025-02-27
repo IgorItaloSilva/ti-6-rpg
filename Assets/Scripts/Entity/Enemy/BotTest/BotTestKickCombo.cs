@@ -30,7 +30,7 @@ public class BotTestKickCombo : AEnemyAction
             Vector3 dir = (target.position - enemyController.transform.position).normalized;
             rb.transform.LookAt(target);
             rb.AddForce(dir * 3.5f, ForceMode.Impulse);
-            rb.velocity = dir * 200 * Time.fixedDeltaTime;
+            rb.linearVelocity = dir * 200 * Time.fixedDeltaTime;
             countAction++;
             if (Vector3.Distance(target.position, enemyController.transform.position) > 1.5f)
                 enemyController.SetBoolAnimation("isAttacking", false);

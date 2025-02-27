@@ -114,7 +114,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         target = steeringAgent;
     }
     //Getters das interfaces
-    public Vector3 GetVelocity(){return rb.velocity;}
+    public Vector3 GetVelocity(){return rb.linearVelocity;}
 
     public float GetMaxVelocity(){return maxVelocity;}
 

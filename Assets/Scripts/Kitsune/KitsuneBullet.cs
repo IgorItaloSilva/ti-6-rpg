@@ -14,7 +14,7 @@ public class KitsuneBullet : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.velocity = transform.forward * 10f;
+        rb.linearVelocity = transform.forward * 10f;
         Destroy(gameObject,5f);
     }
 
@@ -24,7 +24,7 @@ public class KitsuneBullet : MonoBehaviour
         {
             Vector3 dir = Vector3.Slerp(transform.position, player, 0.85f);
             transform.LookAt(dir);
-            rb.velocity = transform.forward * 20f;
+            rb.linearVelocity = transform.forward * 20f;
             return;
         }
         timer -= Time.fixedDeltaTime;

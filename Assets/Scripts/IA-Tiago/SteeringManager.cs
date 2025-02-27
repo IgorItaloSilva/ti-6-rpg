@@ -10,7 +10,7 @@ public class SteeringManager{
     public Vector3 steering;
     public ISteeringAgent steeringAgent;
     public Rigidbody rb;
-    const float MaxRaycastDist = 2;
+    const float MaxRaycastDist = 2f;
     private float wanderRate = 5f;  //era.4
     private float wanderOffset = 1.5f; //quanto a dir muda de frame pra frame era 1.5
     private float wanderRadius = 2f;//era 4  

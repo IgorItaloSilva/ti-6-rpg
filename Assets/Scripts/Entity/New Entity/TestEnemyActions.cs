@@ -46,8 +46,8 @@ public abstract class TestEnemyActions : MonoBehaviour
 
     protected virtual void GoToTarget(float speed = 4f)
     {
-        if (rb.velocity.magnitude < 4)
-            rb.velocity += dir.normalized * ((speed * 1000f) * Time.deltaTime);
+        if (rb.linearVelocity.magnitude < 4)
+            rb.linearVelocity += dir.normalized * ((speed * 1000f) * Time.deltaTime);
     }
 
     public float GetMinRange() { return minRange; }

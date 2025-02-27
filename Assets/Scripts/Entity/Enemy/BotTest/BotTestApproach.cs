@@ -22,9 +22,9 @@ public class BotTestApproach : AEnemyAction
         //rb.transform.LookAt(Vector3.Slerp(enemyController.transform.position + enemyController.transform.forward, dir, 0.15f));
         Quaternion desiredRotation = Quaternion.LookRotation(dir);
         enemyController.transform.rotation = Quaternion.Slerp(enemyController.transform.rotation, desiredRotation, 0.15f);
-        if (rb.velocity.magnitude < 4)
-            rb.velocity += dir.normalized * 55 * Time.fixedDeltaTime;
-        enemyController.SetBlendTree("Velocity", rb.velocity.magnitude);
+        if (rb.linearVelocity.magnitude < 4)
+            rb.linearVelocity += dir.normalized * 55 * Time.fixedDeltaTime;
+        enemyController.SetBlendTree("Velocity", rb.linearVelocity.magnitude);
         if (Vector3.Distance(target.position, enemyController.transform.position) < minDistanceSkill - (minDistanceSkill / 2))
             ExitAction();
     }

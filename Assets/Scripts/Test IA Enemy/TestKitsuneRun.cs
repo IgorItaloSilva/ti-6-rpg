@@ -21,7 +21,7 @@ public class TestKitsuneRun : TestEnemyActions
     }
     public override void ExitAction(TestEnemyActions enemyAction)
     {
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         animator.SetBool("isRunning", false);
         enemyController.SetAttack();
     }
