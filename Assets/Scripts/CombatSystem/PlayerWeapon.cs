@@ -1,6 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEditor.VersionControl;
 using UnityEngine;
+using Task = System.Threading.Tasks.Task;
 
 public class PlayerWeapon : WeaponManager
 {
@@ -15,6 +16,8 @@ public class PlayerWeapon : WeaponManager
     int doubleDamageMultiplier =1;
     bool executeEnemiesPUActive;
     bool lifeStealPUActive;
+    [SerializeField] Animator _animator;
+    
     void OnEnable(){
         GameEventsManager.instance.runeEvents.onRuneDamageBuff+=RuneDamageBuff;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUps;
@@ -45,7 +48,18 @@ public class PlayerWeapon : WeaponManager
         }
         alvo.TakeDamage(damageDealt,damageType,crited);
         Debug.Log($"Enviei {damageDealt} de dano para ser tomado para {alvo}");
-        //Criar um texto de dano na tela
+
+        if(_animator){
+            HitAnimatorPause();
+        }
+    }
+
+    private async void HitAnimatorPause()
+    {
+        await Task.Delay(25);
+        _animator.speed = 0f;
+        await Task.Delay(125);
+        _animator.speed = 1f;
     }
     public void SetDamageAndValues(float strongAttackBonus, float fastAttackBonus){
         strBonusDamage = strongAttackBonus;
