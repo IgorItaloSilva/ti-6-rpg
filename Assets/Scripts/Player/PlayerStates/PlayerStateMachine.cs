@@ -38,7 +38,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private PlayerInput _playerInput;
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
-
+    [SerializeField] private ParticleSystem _swordTrail;
+    [SerializeField] private TrailRenderer _swordMainTrail;
+    
     #endregion
 
     #region Private Variables
@@ -433,11 +435,15 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     private void EnableSwordCollider()
     {
+        _swordMainTrail.emitting = true;
+        _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
     }
 
     private void DisableSwordCollider()
     {
+        _swordMainTrail.emitting = false;
+        _swordTrail.Stop();
         _swordWeaponManager.DisableCollider();
     }
 
