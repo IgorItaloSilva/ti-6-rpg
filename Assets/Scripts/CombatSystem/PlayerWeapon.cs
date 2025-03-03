@@ -16,7 +16,6 @@ public class PlayerWeapon : WeaponManager
     int doubleDamageMultiplier =1;
     bool executeEnemiesPUActive;
     bool lifeStealPUActive;
-    [SerializeField] Animator _animator;
     
     void OnEnable(){
         GameEventsManager.instance.runeEvents.onRuneDamageBuff+=RuneDamageBuff;
@@ -49,17 +48,16 @@ public class PlayerWeapon : WeaponManager
         alvo.TakeDamage(damageDealt,damageType,crited);
         Debug.Log($"Enviei {damageDealt} de dano para ser tomado para {alvo}");
 
-        if(_animator){
-            HitAnimatorPause();
-        }
+        HitAnimatorPause();
     }
 
     private async void HitAnimatorPause()
     {
+        Debug.Log("Paused animation");
         await Task.Delay(25);
-        _animator.speed = 0f;
-        await Task.Delay(125);
-        _animator.speed = 1f;
+        PlayerStateMachine.Instance.Animator.speed = 0f;
+        await Task.Delay(75);
+        PlayerStateMachine.Instance.Animator.speed = 1f;
     }
     public void SetDamageAndValues(float strongAttackBonus, float fastAttackBonus){
         strBonusDamage = strongAttackBonus;
