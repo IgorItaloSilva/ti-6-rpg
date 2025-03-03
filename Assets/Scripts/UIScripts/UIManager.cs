@@ -46,7 +46,7 @@ public class UIManager : MonoBehaviour
     int carriedExp;
     int gainedExp;
     private Coroutine gainExpCouroutine;
-    bool isGainExpCouroutineRunning;
+    bool isGainExoCouroutineRunning;
     bool isGainedExpTextActive;
     private TextMeshProUGUI gainedExpText;
     //Coisas da Ui de morte
@@ -244,21 +244,15 @@ public class UIManager : MonoBehaviour
         carriedExpText.text = expAmmount.ToString();
         carriedExp=expAmmount;
     }
-    int targetAmmount;
     void PlayExpGain(int quantidade){
         Debug.Log("Chamando a função playExpGain da UI");
-        if(isGainExpCouroutineRunning){
+        if(isGainExoCouroutineRunning){
             StopCoroutine(gainExpCouroutine);
             if(isGainedExpTextActive){
                 gainedExp += quantidade;
             }
-            else{
-                gainedExp=quantidade;
-            }
-            targetAmmount+=quantidade;
         }
         else{
-            targetAmmount=carriedExp+quantidade;
             gainedExp=quantidade;
         }
         gainedExpText.text=gainedExp.ToString();
@@ -267,19 +261,21 @@ public class UIManager : MonoBehaviour
         gainExpCouroutine=StartCoroutine(PlayExpGainAnimation());        
     }
     IEnumerator PlayExpGainAnimation(){
-        Debug.Log($"Quantidade foi definido como = {targetAmmount}");
-        isGainExpCouroutineRunning=true;
+        isGainExoCouroutineRunning=true;
         yield return new WaitForSeconds(1f);
         gainedExpTextGO.SetActive(false);
         isGainedExpTextActive=false;
-        for(;carriedExp<targetAmmount;){//por algum motivo desconhecido o while n tava funcionando, ent é um for só com a condição kkk
+        int quantidade = gainedExp;
+        Debug.Log($"Quantidade foi definido como = {quantidade}");
+        for(;quantidade>0;quantidade-=1){
+            Debug.Log("chamamos dentro do for");
+            Debug.Log($"Quantidade detro do for = {quantidade}");
             carriedExp+=1;
             carriedExpText.text=carriedExp.ToString();
             yield return null;
         }
         gainedExp=0;
-        targetAmmount=0;
-        isGainExpCouroutineRunning=false;
+        isGainExoCouroutineRunning=false;
     }
     #endregion
     IEnumerator SpinSaveIcon(){//OK
