@@ -76,11 +76,11 @@ public class StatsTests
     public IEnumerator GainingExp(){
         GameObject gameObject = new();
         PlayerStats stats = gameObject.AddComponent<PlayerStats>();
-        int currentExp=stats.Exp;
+        int currentExp=stats.CarriedExp;
         GameEventsManager.instance.playerEvents.PlayerGainExp(50);
         //a função de receber exp é privada, e está inscrita no 
         //observer que é chamado por esse evento "PlayerGainExp"
-        Assert.AreEqual(currentExp+50,stats.Exp);
+        Assert.AreEqual(currentExp+50,stats.CarriedExp);
         yield return null;
     }
     [UnityTest]

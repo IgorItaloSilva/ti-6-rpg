@@ -38,7 +38,7 @@ public class MainMenu : Menu
         ActivateButtonsDependingOnData();
     }
     public void ActivateButtonsDependingOnData(){
-            Debug.Log($"temos data? {DataPersistenceManager.instance.HasData()}");
+        Debug.Log($"temos data? {DataPersistenceManager.instance.HasData()}");
         if(!DataPersistenceManager.instance.HasData()){
             continueGameButton.interactable = false;
             loadGameButton.interactable = false;

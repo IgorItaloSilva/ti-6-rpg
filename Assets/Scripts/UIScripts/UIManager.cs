@@ -4,20 +4,24 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
-using System;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-    [Header("Tempo das animações")]
-    [SerializeField]float saveIconTotalTime;
     [Header("Outros scripts de UI")]
     public SkillTreeUIManager skillTreeUIManager;
     public StatsUIManager statsUIManager;
     public RunesUiManager runesUiManager;
-    [Header("Referencias Internas")]
-    [SerializeField]private PlayerHealthBar playerhealthBar;
+    [Header("Coisas do Save VFX ")]
+    [SerializeField]float saveIconTotalTime;
     [SerializeField]private Image saveIcon;
+    [Header("Coisas das barras de Stats ")]
+    [SerializeField]private PlayerHealthBar playerhealthBar;
+    [Header("Coisas de Exp ")]
+    [SerializeField] private TextMeshProUGUI carriedExpText;
+    [SerializeField] private GameObject gainedExpTextGO;
+    
+    [Header("Referencias Internas")]
     [SerializeField]private GameObject painelPause;
     [SerializeField]private GameObject hideblePausePartUI;
     [SerializeField]private GameObject painelStats;
@@ -38,12 +42,22 @@ public class UIManager : MonoBehaviour
     [SerializeField]HealthBar bossHealthBar;
     [SerializeField]TextMeshProUGUI bossName;
     [SerializeField]GameObject bossHPBarAndName;
+    //coisas do vfx ganahr exp
+    int carriedExp;
+    int gainedExp;
+    private Coroutine gainExpCouroutine;
+    bool isGainExoCouroutineRunning;
+    bool isGainedExpTextActive;
+    private TextMeshProUGUI gainedExpText;
+    //Coisas da Ui de morte
     private Text youDiedVFXText;
     private Image youDiedVFXImage;
     private const float transparencyRatioYouDiedVfx = 0.05f;
     private const float transparencyRatioYouDiedBackgroundVfx = 0.1f;
     private const float secondsBeforeYouDiedVfxAppears = 2f;
     private const float tranparacyTimeRatioDivideByTen = 0.05f;
+
+    bool playerIsDead;//VARIAVEL DE CONTROLE PRO JOGADOR N CONSEGUIR ABRIR O MENU MORTO
     private UIScreens currentUIScreen;
     public enum UIScreens{
         Closed = -1,
@@ -65,6 +79,7 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened+=OpenDialogPanel;
         GameEventsManager.instance.uiEvents.OnNotificationPlayed+=PlayNotification;
+        GameEventsManager.instance.playerEvents.onPlayerGainExp+=PlayExpGain;
     }
 
     void OnDisable()
@@ -74,7 +89,8 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onSavedGame -= FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened -= OpenDialogPanel;
-       GameEventsManager.instance.uiEvents.OnNotificationPlayed-=PlayNotification;
+        GameEventsManager.instance.uiEvents.OnNotificationPlayed-=PlayNotification;
+        GameEventsManager.instance.playerEvents.onPlayerGainExp-=PlayExpGain;
     }
 
     void Start()
@@ -100,19 +116,24 @@ public class UIManager : MonoBehaviour
         runesUiManager=RunesUiManager.instance;
         runesUiManager.Setup();
         AjustUiOnStart();
+        gainedExpText = gainedExpTextGO.GetComponent<TextMeshProUGUI>();
         youDiedVFXText = youDiedVFXTextGO.GetComponent<Text>();
         youDiedVFXImage = youDiedVFXBackgroundGO.GetComponentInChildren<Image>();
         if(GameManager.instance.shouldLoadTutorial){
             SwitchToScreen((int)UIScreens.Tutorial);
             GameManager.instance.PauseGameAndUnlockCursor();
         }
-        RequestHealthBarInfo();
+        RequestStartingInfo();
         //youDiedVFXText.color = new Color32(255,0,0,0);
     }
-
+    void RequestStartingInfo(){
+        RequestHealthBarInfo();
+        RequestExpInfo();
+    }
     // Update is called once per frame
     void Update()
     {
+        if(playerIsDead)return;
         if(Keyboard.current.escapeKey.wasPressedThisFrame){
             if(currentUIScreen==UIScreens.Closed){
                 SwitchToScreen((int)UIScreens.MainPause);
@@ -123,9 +144,6 @@ public class UIManager : MonoBehaviour
             else{
                 SwitchToScreen((int)UIScreens.MainPause);
             }
-        }
-        if(Keyboard.current.enterKey.wasPressedThisFrame){
-            PlayerDied();
         }
         if(Keyboard.current.eKey.wasPressedThisFrame){
             if(currentUIScreen==UIScreens.Dialog){
@@ -146,9 +164,13 @@ public class UIManager : MonoBehaviour
             Debug.Log($"pos do mouse = {Mouse.current.position.ReadValue()}");
         } */
     }
-    private void RequestHealthBarInfo(){
+    private void RequestHealthBarInfo(){//deppois mudar pra mandar a mana tambem
         GameEventsManager.instance.uiEvents.RequestPlayerHealthInfo();
     }
+    private void RequestExpInfo(){
+        GameEventsManager.instance.uiEvents.RequestExpInfo();
+    }
+    
     public void UpdateHealth(float vidaAtual,bool wasCrit){
         if(playerhealthBar!=null){
             playerhealthBar.SetValue(vidaAtual,wasCrit);
@@ -210,12 +232,52 @@ public class UIManager : MonoBehaviour
         painelWeapon.SetActive(false);
         bossHPBarAndName.SetActive(false);
     }
-    void PlayerDied(){
+    public void PlayerDied(){
+        playerIsDead=true;
         StartCoroutine("PlayYouDiedAnimation");
     }
+    #region Exp
     void OpenDialogPanel(){
         SwitchToScreen((int)UIScreens.Dialog);
     }
+    public void DisplayExpAmmount(int expAmmount){
+        carriedExpText.text = expAmmount.ToString();
+        carriedExp=expAmmount;
+    }
+    void PlayExpGain(int quantidade){
+        Debug.Log("Chamando a função playExpGain da UI");
+        if(isGainExoCouroutineRunning){
+            StopCoroutine(gainExpCouroutine);
+            if(isGainedExpTextActive){
+                gainedExp += quantidade;
+            }
+        }
+        else{
+            gainedExp=quantidade;
+        }
+        gainedExpText.text=gainedExp.ToString();
+        gainedExpTextGO.SetActive(true);
+        isGainedExpTextActive=true;
+        gainExpCouroutine=StartCoroutine(PlayExpGainAnimation());        
+    }
+    IEnumerator PlayExpGainAnimation(){
+        isGainExoCouroutineRunning=true;
+        yield return new WaitForSeconds(1f);
+        gainedExpTextGO.SetActive(false);
+        isGainedExpTextActive=false;
+        int quantidade = gainedExp;
+        Debug.Log($"Quantidade foi definido como = {quantidade}");
+        for(;quantidade>0;quantidade-=1){
+            Debug.Log("chamamos dentro do for");
+            Debug.Log($"Quantidade detro do for = {quantidade}");
+            carriedExp+=1;
+            carriedExpText.text=carriedExp.ToString();
+            yield return null;
+        }
+        gainedExp=0;
+        isGainExoCouroutineRunning=false;
+    }
+    #endregion
     IEnumerator SpinSaveIcon(){//OK
         float timerTotal=saveIconTotalTime;
         while(timerTotal>0){
@@ -223,11 +285,9 @@ public class UIManager : MonoBehaviour
             saveIcon.rectTransform.Rotate(Vector3.forward,-5);
             yield return null;
         }
-
         saveIcon.gameObject.SetActive(false);
     }
     IEnumerator PlayYouDiedAnimation(){
-        
         yield return new WaitForSecondsRealtime(secondsBeforeYouDiedVfxAppears);
         youDiedVFXParent.SetActive(true);
         byte youDiedTextColor = 0;
@@ -302,6 +362,7 @@ public class UIManager : MonoBehaviour
             case UIScreens.Death:
                 GameManager.instance.ReturnFromDeath();
                 painelDeath.SetActive(false);
+                playerIsDead=false;
             break;
             case UIScreens.Dialog:
                 painelDialog.SetActive(false);

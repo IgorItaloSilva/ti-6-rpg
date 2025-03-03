@@ -17,7 +17,10 @@ public class Interactable : MonoBehaviour
                 Debug.LogWarning($"O interactable {saveId} está tentando se adicionar na lista de interactables, mas não temos um LevelLoadingManger na cena");
             }
             LevelLoadingManager.instance.interactables.Add(this);
-            if(saveId=="")Debug.LogWarning($"O GameObject "+gameObject.name+" está sem id e marcado para salvar");
+            if(saveId==""){
+                //Debug.LogWarning($"O GameObject "+gameObject.name+" está sem id e marcado para salvar, dando o nome do Objeto para ele");
+                saveId=gameObject.name;
+            }
         }
     }
     protected virtual void Start(){
@@ -49,7 +52,6 @@ public class Interactable : MonoBehaviour
             InteractableData newData = new InteractableData(this);
             LevelLoadingManager.instance.CurrentLevelData.interactablesData.Add(saveId,newData);
         }
-        
     }
     
 }

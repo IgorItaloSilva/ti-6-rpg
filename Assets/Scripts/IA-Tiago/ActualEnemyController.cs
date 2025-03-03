@@ -7,7 +7,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
 {
     [Header("Coisas de Save e Load")]
     [SerializeField]bool ignoreSaveLoad;
-    [field:SerializeField]public string Id{get;private set;}//USED TO LOAD DATA
+    [field:SerializeField]public string SaveId{get;private set;}//USED TO LOAD DATA
     [Header ("Coisas que precisam ser colocadas")]
     [SerializeField]protected LayerMask obstaclesLayerMask;
     [SerializeField]protected float maxVelocity;
@@ -43,20 +43,25 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         steeringManager?.SetWeights(seekWeight,fleeWeight,wanderWeight,avoidObstacleWeight,lookAtTargetWeight);
     }
     public virtual void Awake(){
+        //Pegar os game components precisa ficar antes do start, caso eles começem mortos e n rodem o start
+        animator = GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody>();
+        healthBar = GetComponentInChildren<HealthBar>();
         if(!ignoreSaveLoad){
             if(LevelLoadingManager.instance==null){
-                Debug.LogWarning($"O inimigo {Id} está tentando se adicionar na lista de inimigos, mas não temos um LevelLoadingManger na cena");
+                Debug.LogWarning($"O inimigo {gameObject.name} está tentando se adicionar na lista de inimigos, mas não temos um LevelLoadingManger na cena");
             }
             LevelLoadingManager.instance.enemies.Add(this);
-            if(Id=="")Debug.LogWarning($"O GameObject "+gameObject.name+" está sem id e marcado para salvar");
+            if(SaveId==""){
+                //Debug.LogWarning($"O GameObject "+gameObject.name+" está sem id e marcado para salvar, colocando o nome dele como saveId");
+                SaveId=gameObject.name;
+            }
             startingPos=transform.position;
         }
     }
     public void Start() { 
-        animator = GetComponentInChildren<Animator>();
+        
         if(animator==null)Debug.LogWarning("Enemy controller não conseguiu achar um animator");
-        rb = GetComponent<Rigidbody>();
-        healthBar = GetComponentInChildren<HealthBar>();
         steeringManager=new SteeringManager(this,rb);
         if(!initiationThroughLoad)CurrentHp=maxHp;
         if(healthBar!=null){
@@ -179,19 +184,19 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
 
         if(ignoreSaveLoad)return;
         if(LevelLoadingManager.instance==null){
-            Debug.Log($"O inimigo {Id} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
+            Debug.Log($"O inimigo {SaveId} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
         }
         //Debug.Log(LevelLoadingManager.instance.CurrentLevelData);
         //see if we have this data in dictionary        
-        if(LevelLoadingManager.instance.CurrentLevelData.enemiesData.ContainsKey(Id)){
+        if(LevelLoadingManager.instance.CurrentLevelData.enemiesData.ContainsKey(SaveId)){
             //if so change it
             EnemyData newData = new EnemyData(this);
-            LevelLoadingManager.instance.CurrentLevelData.enemiesData[Id]=newData;
+            LevelLoadingManager.instance.CurrentLevelData.enemiesData[SaveId]=newData;
         }
         else{
             //if not add it
             EnemyData newData = new EnemyData(this);
-            LevelLoadingManager.instance.CurrentLevelData.enemiesData.Add(Id,newData);
+            LevelLoadingManager.instance.CurrentLevelData.enemiesData.Add(SaveId,newData);
         }
         
     }

@@ -25,7 +25,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     public int Str {get; private set;}
     public int Dex {get; private set;}
     public int Int {get; private set;}
-    public int Exp {get; private set;}
+    public int CarriedExp {get;private set;}//e depois adicionar a parte visual dessa merda
     public int Level {get; private set;}
     public float CurrentLife{get; private set;}
     public float CurrentMana{get; private set;}
@@ -43,12 +43,12 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     private bool PUArmorActive;
     private bool PULifeRegenActive;
     //Coisas de level up
-    public int LevelUpPoints{get;private set;}//adicionar no save/load depois
+    public int LevelUpPoints{get;private set;}
     private int spentPointsIfCancel;
     public int[] simulatedStatChange;
-    public bool isNearCampfire ;//{get;private set;}//adicionar no save/load depois
+    public bool isNearCampfire;
     //Coisas de controle geral
-    private bool playerIsDead; //Adicionar no save e load depois
+    public bool PlayerIsDead{get; private set;}
     private Vector3? respawnPos;
     //Coisas buff de stats das runas
     int[] statHasRuneBuff = new int[4];// value of -1, 0 or 1 indicating if there is a change, and whether positive or negative
@@ -69,6 +69,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.runeEvents.onRuneStatBuff+=RuneStatBuff;
         GameEventsManager.instance.skillTreeEvents.onLifeStealHit+=HealLife;
         GameEventsManager.instance.uiEvents.onRequestPlayerHealthInfo+=SendHealthInfo;
+        GameEventsManager.instance.uiEvents.onRequestExpInfo+=SendExpInfo;
+        GameEventsManager.instance.uiEvents.onBuyLevelClicked+=BuyLevel;
     }
     void OnDisable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo-=SendBaseStatsInfo;
@@ -84,6 +86,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.runeEvents.onRuneStatBuff-=RuneStatBuff;
         GameEventsManager.instance.skillTreeEvents.onLifeStealHit+=HealLife;
         GameEventsManager.instance.uiEvents.onRequestPlayerHealthInfo-=SendHealthInfo;
+        GameEventsManager.instance.uiEvents.onRequestExpInfo-=SendExpInfo;
+        GameEventsManager.instance.uiEvents.onBuyLevelClicked-=BuyLevel;
     }
     void Start()
     {
@@ -91,7 +95,12 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         CalculateStats();
         //GameEventsManager.instance.uiEvents.UpdateSliders(0,maxLife);//Essas duas funções deveriam ser chamadas
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,false);//             pra stamina e mana tambem
-        UIManager.instance?.UpdateHealth(CurrentLife,false);
+        /* UIManager.instance?.UpdateHealth(CurrentLife,false);
+        UIManager.instance.DisplayExpAmmount(CarriedExp); 
+        não adianta colocar essas coisas aqui pois o UIManager ainda n existe*/
+        if(PlayerIsDead){
+            Invoke("Die",1f);
+        }
     }
     void Update(){
         
@@ -108,17 +117,24 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,false); //             pra stamina e mana tambem
         UIManager.instance?.UpdateHealth(CurrentLife,false);
     }
-    public void Die(){
+    void SendExpInfo(){
+        UIManager.instance?.DisplayExpAmmount(CarriedExp);
+    }
+    public void Die(){//não faz sentido mudar variaveis aqui, pois vamos chamar um load logo após
+        DroppedExp.instance.SetVariablesAndPos(CarriedExp,transform.position);
         GameEventsManager.instance.playerEvents.PlayerDied();
         Debug.Log("Player morreu!");
-        playerIsDead = true;
+        PlayerIsDead = true;
         //DesativarInputs
     }
     private void PlayerRespawn()//chamado pelo game manager depois de dar load
     {
         HealLife(maxLife);
-        playerIsDead=false;
+        PlayerIsDead=false;
+        CarriedExp=0;
+        UIManager.instance?.DisplayExpAmmount(CarriedExp);
         if(respawnPos.HasValue){
+            Debug.Log("respawnPos tem valor, ent vou colocar minha posição nela");
             transform.position=respawnPos.Value;
         }
         else{
@@ -127,7 +143,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
                 transform.position=Vector3.zero;
             }
             else{
+                Debug.Log("Como não temos uma respawnPos, vamos voltar por onde o levelLoadingManager mandou");
                 respawnPos=LevelLoadingManager.instance.respawnPoint;
+                transform.position=respawnPos.Value;
             }
         }
         Physics.SyncTransforms();
@@ -146,8 +164,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         this.Str = data.playerStatsData.str;
         this.Dex = data.playerStatsData.dex;
         this.Int = data.playerStatsData.inte;
-        this.Exp = data.playerStatsData.exp;
+        this.CarriedExp = data.playerStatsData.carriedExp;
         this.Level = data.playerStatsData.level;
+        this.LevelUpPoints = data.playerStatsData.levelUpPoints;
         this.CurrentLife = data.playerStatsData.currentLife;
         this.BaseLife = data.playerStatsData.baseLife;
         this.BaseMana = data.playerStatsData.baseMana;
@@ -155,6 +174,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         this.BaseMagicDamage = data.playerStatsData.baseMagicDamage;
         this.BaseLightAttackDamage = data.playerStatsData.baseLightAttackcDamage;
         this.BaseHeavyAttackDamage = data.playerStatsData.baseHeavyAttackDamage;
+        this.PlayerIsDead = data.playerStatsData.playerIsDead;
+        this.isNearCampfire = data.playerStatsData.isNearCampfire;
         CalculateStats();
     }
     public void TakeDamage(float damage,Enums.DamageType damageType,bool wasCrit)
@@ -163,7 +184,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         CurrentLife -= damage;
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,wasCrit);
         UIManager.instance?.UpdateHealth(CurrentLife,wasCrit);
-        if(CurrentLife<=0&&!playerIsDead){
+        if(CurrentLife<=0&&!PlayerIsDead){
             Die();
         }
     }
@@ -267,19 +288,25 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         CalculateStats();
     }
     void GainExp(int exp){
+        CarriedExp+=exp;
+    }
+    void BuyLevel(){
         int expToNextLevel = ExpToNextLevel(Level);
-        Exp+=exp;
-        if(Exp>expToNextLevel){
+        if(CarriedExp>=expToNextLevel){
+            CarriedExp-=expToNextLevel;
             LevelUp();
-        } 
+        }
     }
     void LevelUp(){
         Level+=1;
         LevelUpPoints+=3;
+        SendExpStatsInfo();
+        SendLevelUpInfo();
         GameEventsManager.instance.uiEvents.NotificationPlayed("Você upou de nível!");
+        DataPersistenceManager.instance.SaveGame();
     }
-    int ExpToNextLevel(int level){
-        if(level==0){
+    int ExpToNextLevel(int level){//OBS: ESSA FUNÇÃO DEVERIA SER IDENTICA A FUNÇÃO DE MESMO NOME NO STATSUIMANAGER 
+        if(level<=0){             //CASO ELA MUDE AQUI ELA DEVERIA SER MUDADA LA TAMBEM
             return 0;
         }
         else return 100*(int)Mathf.Pow(2,level-1);
@@ -297,7 +324,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
 
     }
     void SendExpStatsInfo(){
-        StatsUIManager.instance?.ReciveExpStatsInfo(Level,Exp);
+        StatsUIManager.instance?.ReciveExpStatsInfo(Level,CarriedExp,ExpToNextLevel(Level));
     }
     void SendAdvancedStatsInfo(){
         StatsUIManager.instance?.ReciveAdvancedStatsInfo(CurrentLife,maxLife,CurrentMana,maxMana,magicDamage

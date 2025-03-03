@@ -157,4 +157,16 @@ public class UIEvents
             onRequestPlayerHealthInfo();
         }
     }
+    public event Action onRequestExpInfo;
+    public void RequestExpInfo(){
+        if(onRequestExpInfo!=null){
+            onRequestExpInfo();
+        }
+    }
+    public event Action onBuyLevelClicked;
+    public void BuyLevelClicked(){
+        if(onBuyLevelClicked!=null){
+            onBuyLevelClicked();
+        }
+    }
 }

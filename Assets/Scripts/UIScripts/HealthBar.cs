@@ -44,7 +44,6 @@ public class HealthBar : MonoBehaviour
     IEnumerator AjustColoredValue(bool wasCrit){
         coroutineIsRunning=true;
         float time = 0f;
-        Debug.Log($"time é: {time}");
         float startValue = sliderColorido.value;
         coloredSliderImage.color = Color.red;
         if(wasCrit){
