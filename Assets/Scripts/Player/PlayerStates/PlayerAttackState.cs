@@ -4,7 +4,7 @@ public class PlayerAttackState : PlayerBaseState
 {
     private const byte AttackTurnTimeModifier = 2;
     private new const byte DecelerationSpeed = 10;
-    public Vector3 _targetPosition, _attackDirection;
+    public Vector3 _attackDirection;
     private const byte RotationSpeed = 3;
     private bool _hasTarget;
     
