@@ -4,7 +4,7 @@ using System;
 public class AudioPlayer : MonoBehaviour
 {
     public Sound[] musicSounds, sfxSounds;
-    public AudioSource musicSource, sfxSource;
+    public AudioSource musicSource;
     public static AudioPlayer instance;
     private void Awake()
     {
@@ -20,7 +20,7 @@ public class AudioPlayer : MonoBehaviour
     }
     private void Start()
     {
-        PlayMusic("MainMusic");
+        PlayMusic("MainTheme");
     }
 
     public void PlayMusic(string name)
@@ -37,7 +37,7 @@ public class AudioPlayer : MonoBehaviour
             musicSource.Play();
         }
     }
-    public void PlaySFX(string name)
+    public void PlaySFX(string name, AudioSource source = null)
     {
         Sound s = Array.Find(sfxSounds, x => x.name == name);
 
@@ -45,9 +45,13 @@ public class AudioPlayer : MonoBehaviour
         {
             Debug.Log("SFX Not Found");
         }
+        else if(s.source == null)
+        {
+            source.PlayOneShot(s.clip);
+        }
         else
         {
-            sfxSource.PlayOneShot(s.clip);
+            s.source.PlayOneShot(s.clip);
         }
     }
 }
