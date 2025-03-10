@@ -438,6 +438,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordMainTrail.emitting = true;
         _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
+        AudioPlayer.instance.PlaySFX("Cut");
     }
 
     private void DisableSwordCollider()
