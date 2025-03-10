@@ -65,6 +65,7 @@ public class PlayerGroundedState : PlayerBaseState
         if (_ctx.IsAttackPressed)
         {
             SwitchState(_factory.Attack());
+            AudioPlayer.instance.PlaySFX("Cut");
         }
 
         if (_ctx.IsClimbing && _ctx.CanMount)
