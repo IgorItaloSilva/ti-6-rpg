@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Terrain
+  m_Name: MAT_SakuraOld
   m_Shader: {fileID: -6465566751694194690, guid: f92934d2ca0c96e439416c06883679a9,
     type: 3}
   m_Parent: {fileID: 0}
@@ -76,6 +76,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PathImage:
+        m_Texture: {fileID: 2800000, guid: b1f194417828cd347a61b889b1245466, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_41a5f27c3f924f7fa5383f5a28280aab_Texture_1_Texture2D:
