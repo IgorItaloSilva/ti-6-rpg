@@ -267,7 +267,7 @@ public class UIManager : MonoBehaviour
         gainExpCouroutine=StartCoroutine(PlayExpGainAnimation());        
     }
     IEnumerator PlayExpGainAnimation(){
-        Debug.Log($"Quantidade foi definido como = {targetAmmount}");
+        //Debug.Log($"Quantidade foi definido como = {targetAmmount}");
         isGainExpCouroutineRunning=true;
         yield return new WaitForSeconds(1f);
         gainedExpTextGO.SetActive(false);

@@ -19,10 +19,10 @@ public class WeaponManager : MonoBehaviour
     }
     protected virtual void OnTriggerEnter(Collider other){
         //Debug.Log("A arma colidiu com algo");
-        if(!other.gameObject.CompareTag("EnemyDetection"))
+        if(!other.gameObject.CompareTag("EnemyDetection")&&!other.CompareTag("Enemy"))
         {
             IDamagable alvoAtacado = other.gameObject.GetComponentInParent<IDamagable>();
-            Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
+            //Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
             if (alvoAtacado != null)
             {
                 DealDamage(alvoAtacado, damage);

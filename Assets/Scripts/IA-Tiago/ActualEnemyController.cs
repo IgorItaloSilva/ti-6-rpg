@@ -18,11 +18,13 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     [SerializeField]protected float minDistToAttack;
     [SerializeField]protected int numberOfActionsBeforeRest;
     [SerializeField]protected int exp;
+    [SerializeField]protected int nAttacksToPoiseBreak = 4;
     [SerializeField]protected bool IsABoss;
     [field:Header ("Coisas só pra ver mais facil")]
     [field:SerializeField]public float CurrentHp{get; protected set;}
     [field:SerializeField]public bool IsDead {get; protected set;}
     protected HealthBar healthBar;
+    protected Slider poiseSlider;
     public ISteeringAgent target;
     [HideInInspector]public Rigidbody rb;
     [HideInInspector]public Animator animator;
@@ -32,6 +34,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     protected int actionsPerformed;
     protected Vector3 startingPos;
     bool initiationThroughLoad;
+    protected int hitsTaken;
     [Header("Pesos dos Steering Behaviours")]
     public float lookAtTargetWeight=20;
     public float seekWeight =2;
@@ -47,6 +50,11 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         healthBar = GetComponentInChildren<HealthBar>();
+        poiseSlider = GetComponentInChildren<Slider>();
+        if(poiseSlider!=null){
+            poiseSlider.maxValue=nAttacksToPoiseBreak;
+            poiseSlider.value = 0;
+        }
         if(!ignoreSaveLoad){
             if(LevelLoadingManager.instance==null){
                 Debug.LogWarning($"O inimigo {gameObject.name} está tentando se adicionar na lista de inimigos, mas não temos um LevelLoadingManger na cena");
@@ -69,8 +77,8 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
             healthBar.SetValue(CurrentHp,false);
         }
         restAction=new nullAction();
-        AdditionalStart();
         CreateActions();
+        AdditionalStart();
     }
     protected abstract void CreateActions();//Enemy must have at least one action
     protected abstract void AdditionalStart();
@@ -135,9 +143,16 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     //Metodos das interfaces
     public virtual void TakeDamage(float damage, Enums.DamageType damageType,bool wasCrit)
     {
-        animator.ResetTrigger("tookDamage");
-        animator.SetTrigger("tookDamage");
-        animator.SetBool("damageMirror", !animator.GetBool("damageMirror"));
+        hitsTaken++;
+        if(hitsTaken>=nAttacksToPoiseBreak){
+            animator.ResetTrigger("tookDamage");
+            animator.SetTrigger("tookDamage");
+            animator.SetBool("damageMirror", !animator.GetBool("damageMirror"));
+            hitsTaken=0;
+        }
+        if(poiseSlider!=null){
+            poiseSlider.value=hitsTaken;
+        }
         switch(damageType){
             case Enums.DamageType.Regular:
                 CurrentHp-=damage;
@@ -175,6 +190,8 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         if(IsDead)gameObject.SetActive(false);
     }
     public virtual void Respawn(){
+        hitsTaken=0;
+        if(poiseSlider!=null)poiseSlider.value=hitsTaken;
         CurrentHp = maxHp;
         IsDead=false;
         if(healthBar!=null)healthBar.SetValue(CurrentHp,false);

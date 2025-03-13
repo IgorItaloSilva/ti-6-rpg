@@ -2,22 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KitsuneBoss : ActualEnemyController
+public class KitsuneBoss : KitsuneController
 {
-    EnemyActions basicAttack;
     EnemyActions rangedAttack;
-    [SerializeField]float basicAttackDist;
+    [Header("Coisas especificas da kitsuneBoss")]
     [SerializeField]float minDistToRangedAttack;
-    [SerializeField]float attackTime;
     [SerializeField]float rangedattackTime;
-    [SerializeField]float restTime;
     [SerializeField]GameObject prefabRangedAttack;
     [SerializeField]public Transform[] rangedAttackPos;
     [SerializeField]Enums.PowerUpType rewardPowerUpType;
     string nome = "Kitsune, a guardiã";
-
-    bool isAttacking;
-    bool isResting;
     bool hasDisplayedLife;
     protected override void CreateActions()
     {

@@ -121,7 +121,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         UIManager.instance?.DisplayExpAmmount(CarriedExp);
     }
     public void Die(){//não faz sentido mudar variaveis aqui, pois vamos chamar um load logo após
-        DroppedExp.instance.SetVariablesAndPos(CarriedExp,transform.position);
+        DroppedExp.instance?.SetVariablesAndPos(CarriedExp,transform.position);
         GameEventsManager.instance.playerEvents.PlayerDied();
         Debug.Log("Player morreu!");
         PlayerIsDead = true;

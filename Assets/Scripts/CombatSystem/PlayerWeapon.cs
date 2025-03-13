@@ -23,6 +23,18 @@ public class PlayerWeapon : WeaponManager
         GameEventsManager.instance.runeEvents.onRuneDamageBuff-=RuneDamageBuff;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp-=ActivatePowerUps;
     }
+    override protected void OnTriggerEnter(Collider other){
+        //Debug.Log("A arma colidiu com algo");
+        if(!other.gameObject.CompareTag("EnemyDetection"))
+        {
+            IDamagable alvoAtacado = other.gameObject.GetComponentInParent<IDamagable>();
+            //Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
+            if (alvoAtacado != null)
+            {
+                DealDamage(alvoAtacado, damage);
+            }
+        }
+    }
     protected override void DealDamage(IDamagable alvo, float dano)
     {
         float damageDealt;
