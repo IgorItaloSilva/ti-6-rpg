@@ -54,6 +54,12 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     int[] statHasRuneBuff = new int[4];// value of -1, 0 or 1 indicating if there is a change, and whether positive or negative
     int[] runeBuffAmount = new int[4];
     bool hasRuneBuff;
+    //Coisas da poção
+    public int PotionsAmmount{get;private set;}//add to save and laod
+    public int PotionLevel;//add to save and load
+    int maxPotions;
+    [SerializeField]int maxStartingPotions = 6;
+    [SerializeField]int potionLevelMultiplier = 50;//change to const later
 
     void OnEnable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo+=SendBaseStatsInfo;
@@ -71,6 +77,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.uiEvents.onRequestPlayerHealthInfo+=SendHealthInfo;
         GameEventsManager.instance.uiEvents.onRequestExpInfo+=SendExpInfo;
         GameEventsManager.instance.uiEvents.onBuyLevelClicked+=BuyLevel;
+        GameEventsManager.instance.uiEvents.onRequestPotionAmmountInfo+=SendPotionAmmountInfo;
     }
     void OnDisable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo-=SendBaseStatsInfo;
@@ -88,11 +95,13 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.uiEvents.onRequestPlayerHealthInfo-=SendHealthInfo;
         GameEventsManager.instance.uiEvents.onRequestExpInfo-=SendExpInfo;
         GameEventsManager.instance.uiEvents.onBuyLevelClicked-=BuyLevel;
+        GameEventsManager.instance.uiEvents.onRequestPotionAmmountInfo-=SendPotionAmmountInfo;
     }
     void Start()
     {
         simulatedStatChange = new int[4];
         CalculateStats();
+        maxPotions = maxStartingPotions + PotionLevel/5;
         //GameEventsManager.instance.uiEvents.UpdateSliders(0,maxLife);//Essas duas funções deveriam ser chamadas
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,false);//             pra stamina e mana tambem
         /* UIManager.instance?.UpdateHealth(CurrentLife,false);
@@ -103,7 +112,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         }
     }
     void Update(){
-        
+        if(Keyboard.current.qKey.wasPressedThisFrame){
+            UsePotion();
+        }
     }
     public void HealLife(float life){
         if(CurrentLife<=maxLife){
@@ -112,13 +123,24 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             UIManager.instance?.UpdateHealth(CurrentLife,false);
         }
     }
+    private void UsePotion(){
+        if(PotionsAmmount>0){
+            float lifeToheal = maxLife/4 + potionLevelMultiplier*PotionLevel;
+            HealLife(lifeToheal);
+            PotionsAmmount--;
+            UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
+        }
+    }
     private void SendHealthInfo(){
         GameEventsManager.instance.uiEvents.UpdateSliders(0,maxLife);//Essas duas funções deveriam ser chamadas
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,false); //             pra stamina e mana tambem
         UIManager.instance?.UpdateHealth(CurrentLife,false);
     }
-    void SendExpInfo(){
+    void SendExpInfo(){//esse chorume existe pq isso aqui n é um singleton, ele responde a um chamado no Start da UI
         UIManager.instance?.DisplayExpAmmount(CarriedExp);
+    }
+    void SendPotionAmmountInfo(){//esse chorume existe pq isso aqui n é um singleton, ele responde a um chamado no Start da UI
+        UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
     }
     public void Die(){//não faz sentido mudar variaveis aqui, pois vamos chamar um load logo após
         DroppedExp.instance?.SetVariablesAndPos(CarriedExp,transform.position);
@@ -132,6 +154,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         HealLife(maxLife);
         PlayerIsDead=false;
         CarriedExp=0;
+        PotionsAmmount=maxPotions;
+        UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
         UIManager.instance?.DisplayExpAmmount(CarriedExp);
         if(respawnPos.HasValue){
             Debug.Log("respawnPos tem valor, ent vou colocar minha posição nela");
@@ -154,6 +178,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
 
         HealLife(maxLife);
         respawnPos = transform.position;
+        PotionsAmmount=maxPotions;
+        UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
     }
     public void SaveData(GameData data){
         PlayerStatsData playerStatsData = new PlayerStatsData(this);
@@ -176,6 +202,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         this.BaseHeavyAttackDamage = data.playerStatsData.baseHeavyAttackDamage;
         this.PlayerIsDead = data.playerStatsData.playerIsDead;
         this.isNearCampfire = data.playerStatsData.isNearCampfire;
+        this.PotionsAmmount = data.playerStatsData.potionsAmmount;
+        this.PotionLevel = data.playerStatsData.potionLevel;
         CalculateStats();
     }
     public void TakeDamage(float damage,Enums.DamageType damageType,bool wasCrit)

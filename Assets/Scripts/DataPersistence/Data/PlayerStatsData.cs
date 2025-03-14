@@ -20,6 +20,8 @@ public class PlayerStatsData
     public bool isNearCampfire;
     public bool playerIsDead;
     public int levelUpPoints;
+    public int potionsAmmount;
+    public int potionLevel;
 
     //ESSE É O CONSTRUTOR DEFALT QUE É CRIADO COM O INICIO DO JOGO
     public PlayerStatsData(PlayerStatsDefaultSO playerStatsDefault){
@@ -40,20 +42,8 @@ public class PlayerStatsData
         this.playerIsDead = false;
         this.isNearCampfire=false;
         this.levelUpPoints=0;
-    }
-    public PlayerStatsData(){
-        //Debug.Log("O player não tem um ScriptableObject com os stats dele, usando valores hardcoded");
-        con = 1;
-        str = 1;
-        dex = 1;
-        inte = 1;
-        carriedExp = 1;
-        level = 1;
-        currentLife = 1000;
-        baseLife = 975;
-        this.playerIsDead = false;
-        this.isNearCampfire=false;
-        this.levelUpPoints=0;
+        this.potionLevel=1;
+        this.potionsAmmount=playerStatsDefault.potionsAmmount;
     }
     public PlayerStatsData(PlayerStats playerStats){//Manter como Adapter
         this.con = playerStats.Con;
@@ -71,6 +61,22 @@ public class PlayerStatsData
         this.playerIsDead = playerStats.PlayerIsDead;
         this.isNearCampfire= playerStats.isNearCampfire;
         this.levelUpPoints= playerStats.LevelUpPoints;
+        this.potionsAmmount=playerStats.PotionsAmmount;
+        this.potionLevel=playerStats.PotionLevel;
+    }
+    public PlayerStatsData(){
+        //Debug.Log("O player não tem um ScriptableObject com os stats dele, usando valores hardcoded");
+        con = 1;
+        str = 1;
+        dex = 1;
+        inte = 1;
+        carriedExp = 1;
+        level = 1;
+        currentLife = 1000;
+        baseLife = 975;
+        this.playerIsDead = false;
+        this.isNearCampfire=false;
+        this.levelUpPoints=0;
     }
 
 }

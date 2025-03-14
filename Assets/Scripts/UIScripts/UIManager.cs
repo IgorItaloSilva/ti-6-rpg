@@ -42,6 +42,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]HealthBar bossHealthBar;
     [SerializeField]TextMeshProUGUI bossName;
     [SerializeField]GameObject bossHPBarAndName;
+    [Header("Coisas poção")]
+    [SerializeField]TextMeshProUGUI potionsAmmountText;
     //coisas do vfx ganahr exp
     int carriedExp;
     int gainedExp;
@@ -129,6 +131,7 @@ public class UIManager : MonoBehaviour
     void RequestStartingInfo(){
         RequestHealthBarInfo();
         RequestExpInfo();
+        RequestPotionInfo();
     }
     // Update is called once per frame
     void Update()
@@ -170,6 +173,10 @@ public class UIManager : MonoBehaviour
     private void RequestExpInfo(){
         GameEventsManager.instance.uiEvents.RequestExpInfo();
     }
+    private void RequestPotionInfo(){
+        GameEventsManager.instance.uiEvents.RequestPotionAmmountInfo();
+    }
+
     
     public void UpdateHealth(float vidaAtual,bool wasCrit){
         if(playerhealthBar!=null){
@@ -187,6 +194,9 @@ public class UIManager : MonoBehaviour
                 break;
             default: return;
         }
+    }
+    public void DisplayPotionAmmount(int nPotions){
+        potionsAmmountText.text=nPotions.ToString();
     }
     private void FeedBackSave(){//OK
         if(saveIcon!=null){

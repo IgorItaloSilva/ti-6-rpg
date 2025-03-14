@@ -163,6 +163,12 @@ public class UIEvents
             onRequestExpInfo();
         }
     }
+    public event Action onRequestPotionAmmountInfo;
+    public void RequestPotionAmmountInfo(){
+        if(onRequestPotionAmmountInfo!=null){
+            onRequestPotionAmmountInfo();
+        }
+    }
     public event Action onBuyLevelClicked;
     public void BuyLevelClicked(){
         if(onBuyLevelClicked!=null){
