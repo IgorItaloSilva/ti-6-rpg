@@ -14,6 +14,7 @@ public class StatsUIManager : MonoBehaviour
     [SerializeField]TextMeshProUGUI dex;
     [SerializeField]TextMeshProUGUI str;
     [SerializeField]TextMeshProUGUI inte;
+    [SerializeField]TextMeshProUGUI potionLevel;
     [Header("Exp e Level")]
     [SerializeField]TextMeshProUGUI level;
     [SerializeField]TextMeshProUGUI nextLevelExp;
@@ -24,6 +25,7 @@ public class StatsUIManager : MonoBehaviour
     [SerializeField]TextMeshProUGUI lightAttackDamage;
     [SerializeField]TextMeshProUGUI heavyAttackDamage;
     [SerializeField]TextMeshProUGUI magicAttackDamage;
+    [SerializeField]TextMeshProUGUI potionHeal;
     [Header("Coisas Level Up")]
     [SerializeField]GameObject levelUpStuff;
     [SerializeField]TextMeshProUGUI pointsToSpend;
@@ -65,11 +67,12 @@ public class StatsUIManager : MonoBehaviour
         RequestAllStatsInfo();
     }
 
-    public void ReciveBaseStatsInfo(int con,int dex,int str,int inte){
+    public void ReciveBaseStatsInfo(int con,int dex,int str,int inte,int potionLevel){
         this.con.text=con.ToString();
         this.str.text=str.ToString();
         this.dex.text=dex.ToString();
         this.inte.text=inte.ToString();
+        this.potionLevel.text=potionLevel.ToString();
     }
     public void ReciveExpStatsInfo(int level,int carriedExp,int expToNextLevel){
         this.level.text=level.ToString();
@@ -77,12 +80,13 @@ public class StatsUIManager : MonoBehaviour
         this.nextLevelExp.text=expToNextLevel.ToString();
     }
     public void ReciveAdvancedStatsInfo(float currentLife,float maxLife,float currentMana, float maxMana,
-                                        float magicDamage, float lightAttackDamage,float heavyAtackDamage){
+                                        float magicDamage, float lightAttackDamage,float heavyAtackDamage,float lifeToheal){
         lifeInfo.text = currentLife.ToString("F0") + "/" + maxLife.ToString("F0");
         manaInfo.text = currentMana.ToString("F0") + "/" + maxMana.ToString("F0");
         magicAttackDamage.text = magicDamage.ToString("F0");
         this.lightAttackDamage.text = lightAttackDamage.ToString("F0");
         this.heavyAttackDamage.text = heavyAtackDamage.ToString("F0");
+        potionHeal.text=lifeToheal.ToString("F0");
         
     }
     public void ReciveLevelUpInfo(int pointsToSpend,bool isNearCampfire){
@@ -120,6 +124,10 @@ public class StatsUIManager : MonoBehaviour
                 this.inte.text=newValue.ToString();
                 this.inte.color = aux;
             break;
+            case 4:
+                potionLevel.text=newValue.ToString();
+                potionLevel.color=aux;
+            break;
         }
     }
     public void SimulateChangeAdvancedValue(int hardcodedId,float currentLifeOrMana,float value,bool isDifferent){//Chamado pelo PlayerStats
@@ -144,6 +152,10 @@ public class StatsUIManager : MonoBehaviour
             case 4:
                 magicAttackDamage.text = value.ToString("F0");
                 magicAttackDamage.color = aux;
+            break;
+            case 5:
+                potionHeal.text = value.ToString("F0");
+                potionHeal.color=aux;
             break;
         }
     }
@@ -192,6 +204,10 @@ public class StatsUIManager : MonoBehaviour
                 manaInfo.color=cor;
                 magicAttackDamage.color=cor;
             break;
+            case 4:
+                potionLevel.color=cor;
+                potionHeal.color=cor;
+            break;
         }
     }
     void ResetColors(){
@@ -204,6 +220,8 @@ public class StatsUIManager : MonoBehaviour
         dex.color = textColor;
         str.color = textColor;
         inte.color = textColor;
+        potionLevel.color=textColor;
+        potionHeal.color=textColor;
     }
     public void BuyLevel(){
         GameEventsManager.instance.uiEvents.BuyLevelClicked();

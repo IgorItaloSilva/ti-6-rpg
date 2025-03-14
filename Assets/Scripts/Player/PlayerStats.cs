@@ -51,13 +51,14 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     public bool PlayerIsDead{get; private set;}
     private Vector3? respawnPos;
     //Coisas buff de stats das runas
-    int[] statHasRuneBuff = new int[4];// value of -1, 0 or 1 indicating if there is a change, and whether positive or negative
-    int[] runeBuffAmount = new int[4];
+    int[] statHasRuneBuff = new int[5];// value of -1, 0 or 1 indicating if there is a change, and whether positive or negative
+    int[] runeBuffAmount = new int[5];
     bool hasRuneBuff;
     //Coisas da poção
     public int PotionsAmmount{get;private set;}//add to save and laod
     public int PotionLevel;//add to save and load
     int maxPotions;
+    float lifeToheal;
     [SerializeField]int maxStartingPotions = 6;
     [SerializeField]int potionLevelMultiplier = 50;//change to const later
 
@@ -99,7 +100,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     }
     void Start()
     {
-        simulatedStatChange = new int[4];
+        simulatedStatChange = new int[5];
         CalculateStats();
         maxPotions = maxStartingPotions + PotionLevel/5;
         //GameEventsManager.instance.uiEvents.UpdateSliders(0,maxLife);//Essas duas funções deveriam ser chamadas
@@ -125,7 +126,6 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     }
     private void UsePotion(){
         if(PotionsAmmount>0){
-            float lifeToheal = maxLife/4 + potionLevelMultiplier*PotionLevel;
             HealLife(lifeToheal);
             PotionsAmmount--;
             UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
@@ -240,6 +240,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             magicDamage = BaseMagicDamage + magicDamageMod * (Int-10);
             lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10);
             heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10);
+            lifeToheal = maxLife/4 + potionLevelMultiplier*(PotionLevel-1);
             CalculateWeaponDamage();
         }
         else{
@@ -248,6 +249,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             magicDamage = BaseMagicDamage + magicDamageMod * (Int-10+runeBuffAmount[3]);
             lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10+runeBuffAmount[1]);
             heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10+runeBuffAmount[2]);
+            lifeToheal = maxLife/4 + potionLevelMultiplier*(PotionLevel-1+runeBuffAmount[4]);
             CalculateWeaponDamage();
         }
     }
@@ -330,6 +332,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         LevelUpPoints+=3;
         SendExpStatsInfo();
         SendLevelUpInfo();
+        UIManager.instance?.DisplayExpAmmount(CarriedExp);
         GameEventsManager.instance.uiEvents.NotificationPlayed("Você upou de nível!");
         DataPersistenceManager.instance.SaveGame();
     }
@@ -343,10 +346,11 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     //Coisas de UI do level up
     void SendBaseStatsInfo(){
         if(!hasRuneBuff){
-            StatsUIManager.instance?.ReciveBaseStatsInfo(Con,Dex,Str,Int);
+            StatsUIManager.instance?.ReciveBaseStatsInfo(Con,Dex,Str,Int,PotionLevel);
         }
         else{
-            StatsUIManager.instance?.ReciveBaseStatsInfo(Con+runeBuffAmount[0],Dex+runeBuffAmount[1],Str+runeBuffAmount[2],Int+runeBuffAmount[3]);
+            StatsUIManager.instance?.ReciveBaseStatsInfo(Con+runeBuffAmount[0],Dex+runeBuffAmount[1],Str+runeBuffAmount[2],
+                                                            Int+runeBuffAmount[3],PotionLevel+runeBuffAmount[4]);
             StatsUIManager.instance?.ColorAtributes(runeBuffAmount);
         }
 
@@ -356,7 +360,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     }
     void SendAdvancedStatsInfo(){
         StatsUIManager.instance?.ReciveAdvancedStatsInfo(CurrentLife,maxLife,CurrentMana,maxMana,magicDamage
-        ,lightAttackDamage,heavyAttackDamage);
+        ,lightAttackDamage,heavyAttackDamage,lifeToheal);
     }
     void SendLevelUpInfo(){
         StatsUIManager.instance?.ReciveLevelUpInfo(LevelUpPoints,isNearCampfire);
@@ -395,6 +399,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             case 3:
                 displayValue = hasRuneBuff ? Int+simulatedStatChange[id]+runeBuffAmount[3]: Int+simulatedStatChange[id];
             break;
+            case 4:
+                displayValue = hasRuneBuff ? PotionLevel+simulatedStatChange[id]+runeBuffAmount[4]: PotionLevel+simulatedStatChange[id];
+            break;
         }
         StatsUIManager.instance?.SimulateChangeBaseValue(id,displayValue,isDifferent);
         CalculateAdvancedInfoAndSend(id);
@@ -406,6 +413,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
                 float simuMaxLife =  hasRuneBuff ? BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10+runeBuffAmount[0])
                                                  : BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10);
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(0,CurrentLife,simuMaxLife,isDifferent);
+                float simuPotionHeal = hasRuneBuff ? simuMaxLife/4 + potionLevelMultiplier * (PotionLevel+simulatedStatChange[4]-1+runeBuffAmount[4])
+                                                   : simuMaxLife/4 + potionLevelMultiplier*(PotionLevel+simulatedStatChange[4]-1);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(5,0,simuPotionHeal,isDifferent);
             break;
             case 1:
                 float simuLightAttackDamage = hasRuneBuff ? BaseLightAttackDamage + lightAttackDamageMod * (Dex+simulatedStatChange[1]-10+runeBuffAmount[1])
@@ -424,6 +434,20 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(1,CurrentMana,simuMaxMana,isDifferent);
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(4,0,simuMagicDamage,isDifferent);
             break;
+            case 4:
+                if(simulatedStatChange[0]!=0){
+                    simuMaxLife =  hasRuneBuff ? BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10+runeBuffAmount[0])
+                                                 : BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10);
+                    simuPotionHeal = hasRuneBuff ? simuMaxLife/4 + potionLevelMultiplier * (PotionLevel+simulatedStatChange[4]-1+runeBuffAmount[4])
+                                                   : simuMaxLife/4 + potionLevelMultiplier*(PotionLevel+simulatedStatChange[4]-1);
+                    StatsUIManager.instance?.SimulateChangeAdvancedValue(5,0,simuPotionHeal,isDifferent);
+                }
+                else{
+                    simuPotionHeal = hasRuneBuff ? maxLife/4 + potionLevelMultiplier * (PotionLevel+simulatedStatChange[4]-1+runeBuffAmount[4])
+                                                    : maxLife/4 + potionLevelMultiplier*(PotionLevel+simulatedStatChange[4]-1);
+                    StatsUIManager.instance?.SimulateChangeAdvancedValue(5,0,simuPotionHeal,isDifferent);
+                }
+            break;
         }
     }
     void ConfirmChanges(){
@@ -431,6 +455,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         Dex+=simulatedStatChange[1];
         Str+=simulatedStatChange[2];
         Int+=simulatedStatChange[3];
+        PotionLevel+=simulatedStatChange[4];
         CalculateStats();
         SendBaseStatsInfo();
         SendAdvancedStatsInfo();
