@@ -27,14 +27,4 @@ public class EnemyDetection : MonoBehaviour
             PlayerStateMachine.Instance.CameraTargetUnlock();
         }
     }
-
-    private void FixedUpdate()
-    {
-        // ESSE CÓDIGO ESTÁ UMA MERDA, LEVAR ISSO PARA O SCRIPT DO INIMIGO
-        if (targetEnemy && !targetEnemy.transform.parent.gameObject.activeSelf)
-        {
-            targetEnemy = null;
-            PlayerStateMachine.Instance.CameraTargetUnlock();
-        }
-    }
 }

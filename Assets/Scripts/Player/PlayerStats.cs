@@ -112,6 +112,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.playerEvents.PlayerDied();
         Debug.Log("Player morreu!");
         playerIsDead = true;
+        AudioPlayer.instance.PlaySFX("PlayerDeath");
+        AudioPlayer.instance.PlayMusic("DeathMusic");
         //DesativarInputs
     }
     private void PlayerRespawn()//chamado pelo game manager depois de dar load
@@ -130,6 +132,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
                 respawnPos=LevelLoadingManager.instance.respawnPoint;
             }
         }
+        AudioPlayer.instance.PlayMusic("MainTheme");
         Physics.SyncTransforms();
     }
     public void CheckPointStatue(){//Interagir com uma estátua de save

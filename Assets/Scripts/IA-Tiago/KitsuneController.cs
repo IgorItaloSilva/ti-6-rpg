@@ -14,6 +14,8 @@ public class KitsuneController : ActualEnemyController
     [SerializeField]int pillarID;
     [SerializeField]Transform wanderCenter;
     [SerializeField]float maxWanderDist;
+    [SerializeField] private CapsuleCollider collider;
+    [SerializeField] private Canvas healthBar;
     //Variaveis de controle das actions
     bool isAttacking,isResting,isDead;
     //Variaveis de controle de ifs
@@ -97,6 +99,8 @@ public class KitsuneController : ActualEnemyController
     {
         if(isDead)return;
         base.TakeDamage(damage, damageType, wasCrit);
+        AudioPlayer.instance.PlaySFX("SwordHit");
+        AudioPlayer.instance.PlaySFX("Stab");
     }
     new void FixedUpdate(){
         SetSteeringTargetAndCurrentAction();
@@ -106,15 +110,32 @@ public class KitsuneController : ActualEnemyController
     }
     public override void Die()
     {
+        PlayerStateMachine.Instance.CameraTargetUnlock();
+        if (collider && healthBar)
+        {
+            collider.enabled = false;
+            healthBar.enabled = false;
+        }
         isDead=true;
         ChangeAction(deathAction);
     }
     public void ActualDeath(){
+        PlayerStateMachine.Instance.CameraTargetUnlock();
+        if (collider && healthBar)
+        {
+            collider.enabled = false;
+            healthBar.enabled = false;
+        }
         base.Die();
         GameEventsManager.instance.levelEvents.KitsuneDeath(pillarID);
     }
     public override void Respawn()
     {
+        if (collider && healthBar)
+        {
+            collider.enabled = true;
+            healthBar.enabled = true;
+        }
         base.Respawn();
         isDead=false;
         animator.SetBool("isDeadBool",false);

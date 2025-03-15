@@ -55,8 +55,8 @@ public class PlayerWeapon : WeaponManager
     {
         Debug.Log("Paused animation");
         await Task.Delay(25);
-        PlayerStateMachine.Instance.Animator.speed = 0f;
-        await Task.Delay(75);
+        PlayerStateMachine.Instance.Animator.speed = 0.1f;
+        await Task.Delay(150);
         PlayerStateMachine.Instance.Animator.speed = 1f;
     }
     public void SetDamageAndValues(float strongAttackBonus, float fastAttackBonus){
