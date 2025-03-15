@@ -15,7 +15,6 @@ public class EnemyDetection : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             targetEnemy = other.gameObject;
-            
         }
     }
 

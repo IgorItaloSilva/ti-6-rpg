@@ -527,6 +527,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     public void CameraTargetUnlock()
     {
+        enemyDetector.targetEnemy = null;
         _camTargetGroup.m_Targets[0].target = null;
         playerCamera.enabled = true;
         _isOnTarget = false;
