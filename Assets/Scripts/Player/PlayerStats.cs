@@ -146,7 +146,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         DroppedExp.instance?.SetVariablesAndPos(CarriedExp,transform.position);
         GameEventsManager.instance.playerEvents.PlayerDied();
         Debug.Log("Player morreu!");
-        playerIsDead = true;
+        PlayerIsDead = true;
         AudioPlayer.instance.PlaySFX("PlayerDeath");
         AudioPlayer.instance.PlayMusic("DeathMusic");
         PlayerIsDead = true;
