@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class KitsuneTakeDamageAction : EnemyActions
 {
+    //NÃO ESTÁ SENDO USADA
     float time;
     public KitsuneTakeDamageAction(float animationDuration,ActualEnemyController actualEnemyController){
         this.animationDuration=animationDuration;

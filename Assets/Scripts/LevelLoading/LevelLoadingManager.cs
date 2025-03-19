@@ -34,7 +34,7 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
         else{
             foreach(ActualEnemyController enemy in enemies){
                 EnemyData enemieData;
-                if(CurrentLevelData.enemiesData.TryGetValue(enemy.Id,out enemieData)){
+                if(CurrentLevelData.enemiesData.TryGetValue(enemy.SaveId,out enemieData)){
                     enemy.Load(enemieData);
                 }
             }

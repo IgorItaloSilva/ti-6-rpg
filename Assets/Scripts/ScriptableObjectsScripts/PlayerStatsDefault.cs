@@ -15,4 +15,5 @@ public class PlayerStatsDefaultSO : ScriptableObject
     public float baseMagicDamage;
     public float baseLightAttackDamage;
     public float baseHeavyAttackDamage;
+    public int potionsAmmount;
 }

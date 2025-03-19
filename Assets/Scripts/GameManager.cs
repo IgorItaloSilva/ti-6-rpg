@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance {get;private set;}
-    bool hudIsOpen;
+    [SerializeField]bool shouldOpenHud;
     public bool shouldLoadTutorial;
     [HideInInspector] public AudioManager audioManager;//negocio do igor
 
@@ -15,25 +15,31 @@ public class GameManager : MonoBehaviour
     void OnDisable(){
         GameEventsManager.instance.playerEvents.onPlayerDied-=PlayerDied;
     }
-    void Start(){
+    void Awake(){
         if(!instance){
             instance=this;
             DontDestroyOnLoad(gameObject);
         }
         else{
             Debug.Log("Temos 2 gameManagers, estou me destruindo");
-            Destroy(gameObject);
-            
+            Destroy(gameObject);  
         }
     }
-    void Update(){
+    void Start(){
+        #if UNITY_EDITOR
+            if(shouldOpenHud){
+                SceneManager.LoadScene("Hud",LoadSceneMode.Additive);
+            }
+        #endif
+    }
+    /* void Update(){
         if(Keyboard.current.hKey.wasPressedThisFrame){
             if(hudIsOpen==false){
                 SceneManager.LoadScene("Hud",LoadSceneMode.Additive);
                 hudIsOpen=true;
             }
         }
-    }
+    } */
     public void PauseGameAndUnlockCursor(){
         Time.timeScale=0f;
         Cursor.lockState=CursorLockMode.Confined;

@@ -5,19 +5,21 @@ using UnityEngine;
 
 public class KitsuneController : ActualEnemyController
 {
-    EnemyActions basicAttack;
-    EnemyActions deathAction;
+    protected EnemyActions basicAttack;
+    protected EnemyActions deathAction;
     [Header("Coisas especificas da Kitsune")]
-    [SerializeField]float basicAttackDist;
-    [SerializeField]float attackTime;
-    [SerializeField]float restTime;
+    [SerializeField]protected float basicAttackDist;
+    [SerializeField]protected float attackTime;
+    [SerializeField]protected float restTime;
     [SerializeField]int pillarID;
     [SerializeField]Transform wanderCenter;
     [SerializeField]float maxWanderDist;
     [SerializeField] private CapsuleCollider collider;
     [SerializeField] private Canvas healthBar;
+    [SerializeField]float maxWanderTime;
+    float timeWandering;
     //Variaveis de controle das actions
-    bool isAttacking,isResting,isDead;
+    [HideInInspector]public bool isAttacking,isResting,isDead;
     //Variaveis de controle de ifs
     bool halvedVelocity,doubledVelocity,halvedAvoidWeight,doubledAvoidWeight=true;
     protected override void CreateActions()
@@ -29,17 +31,19 @@ public class KitsuneController : ActualEnemyController
     protected override void AdditionalStart()
     {
         isAttacking=false;
-        isResting=false;
         isDead = false;
+        ChangeAction(restAction);
     }
     protected override void SetSteeringTargetAndCurrentAction(){
         if(isDead)return;
+        if(isResting)return;
         if(target==null){//colocado aqui devido a bug quando o jogador morre
             if(wanderCenter!=null){
                 //Debug.Log((wanderCenter.position-transform.position).sqrMagnitude);
                 if((wanderCenter.position-transform.position).sqrMagnitude<maxWanderDist*maxWanderDist){
                     if(!halvedVelocity){
                         maxVelocity/=2;
+                        animator.SetBool("isRunning",false);
                         halvedVelocity=true;
                         doubledVelocity=false;
                     }
@@ -49,12 +53,17 @@ public class KitsuneController : ActualEnemyController
                         doubledAvoidWeight=true;
                     }
                     steeringManager?.Wander();
-                    
                 }
                 else{
                     steeringManager.Seek(wanderCenter.position);
                 }
                 steeringManager?.AvoidObstacle();
+                timeWandering+=Time.deltaTime;
+                if(timeWandering>=maxWanderTime){
+                    ChangeAction(restAction);
+                    isResting=true;
+                    timeWandering=0;
+                }
             }
         }
         else{
@@ -62,7 +71,7 @@ public class KitsuneController : ActualEnemyController
                 steeringManager.LookAtTargetToAttack(target.GetPosition());
                 return;
             }
-            if(isResting)return;
+            
             if(actionsPerformed>=numberOfActionsBeforeRest){
                 Debug.Log("Trocando ação para rest");
                 ChangeAction(restAction);
@@ -75,6 +84,7 @@ public class KitsuneController : ActualEnemyController
                     steeringManager?.AvoidObstacle();
                     if(!doubledVelocity){
                         maxVelocity*=2;
+                        animator.SetBool("isRunning",true);
                         halvedVelocity=false;
                         doubledVelocity=true;
                     }
@@ -89,7 +99,6 @@ public class KitsuneController : ActualEnemyController
                         Debug.Log("troquei a ação pra ataque");
                         ChangeAction(basicAttack);
                         actionsPerformed++;
-                        isAttacking=true;
                     }
                 }
             }
@@ -140,6 +149,7 @@ public class KitsuneController : ActualEnemyController
         isDead=false;
         animator.SetBool("isDeadBool",false);
         animator.ResetTrigger("isDead");
+        target=null;
     }
     protected override void ResetControlBooleans()//chamado no changeAction
     {

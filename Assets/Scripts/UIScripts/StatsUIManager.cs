@@ -14,17 +14,18 @@ public class StatsUIManager : MonoBehaviour
     [SerializeField]TextMeshProUGUI dex;
     [SerializeField]TextMeshProUGUI str;
     [SerializeField]TextMeshProUGUI inte;
+    [SerializeField]TextMeshProUGUI potionLevel;
     [Header("Exp e Level")]
-    [SerializeField]Slider expSlider;
     [SerializeField]TextMeshProUGUI level;
-    [SerializeField]TextMeshProUGUI lastLevelExp;
     [SerializeField]TextMeshProUGUI nextLevelExp;
+    [SerializeField]TextMeshProUGUI carriedExp;
     [Header("Advanced stats")]
     [SerializeField]TextMeshProUGUI lifeInfo;
     [SerializeField]TextMeshProUGUI manaInfo;
     [SerializeField]TextMeshProUGUI lightAttackDamage;
     [SerializeField]TextMeshProUGUI heavyAttackDamage;
     [SerializeField]TextMeshProUGUI magicAttackDamage;
+    [SerializeField]TextMeshProUGUI potionHeal;
     [Header("Coisas Level Up")]
     [SerializeField]GameObject levelUpStuff;
     [SerializeField]TextMeshProUGUI pointsToSpend;
@@ -66,27 +67,26 @@ public class StatsUIManager : MonoBehaviour
         RequestAllStatsInfo();
     }
 
-    public void ReciveBaseStatsInfo(int con,int dex,int str,int inte){
+    public void ReciveBaseStatsInfo(int con,int dex,int str,int inte,int potionLevel){
         this.con.text=con.ToString();
         this.str.text=str.ToString();
         this.dex.text=dex.ToString();
         this.inte.text=inte.ToString();
+        this.potionLevel.text=potionLevel.ToString();
     }
-    public void ReciveExpStatsInfo(int level,float currentExp){
+    public void ReciveExpStatsInfo(int level,int carriedExp,int expToNextLevel){
         this.level.text=level.ToString();
-        expSlider.minValue = ExpToNextLevel(level-1);
-        lastLevelExp.text=expSlider.minValue.ToString("F0");
-        expSlider.maxValue = ExpToNextLevel(level);
-        nextLevelExp.text=expSlider.maxValue.ToString("F0");
-        expSlider.value = currentExp;
+        this.carriedExp.text=carriedExp.ToString();
+        this.nextLevelExp.text=expToNextLevel.ToString();
     }
     public void ReciveAdvancedStatsInfo(float currentLife,float maxLife,float currentMana, float maxMana,
-                                        float magicDamage, float lightAttackDamage,float heavyAtackDamage){
+                                        float magicDamage, float lightAttackDamage,float heavyAtackDamage,float lifeToheal){
         lifeInfo.text = currentLife.ToString("F0") + "/" + maxLife.ToString("F0");
         manaInfo.text = currentMana.ToString("F0") + "/" + maxMana.ToString("F0");
         magicAttackDamage.text = magicDamage.ToString("F0");
         this.lightAttackDamage.text = lightAttackDamage.ToString("F0");
         this.heavyAttackDamage.text = heavyAtackDamage.ToString("F0");
+        potionHeal.text=lifeToheal.ToString("F0");
         
     }
     public void ReciveLevelUpInfo(int pointsToSpend,bool isNearCampfire){
@@ -103,12 +103,6 @@ public class StatsUIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.RequestExpStatsInfo();
         GameEventsManager.instance.uiEvents.RequestAdvancedStatsInfo();
         GameEventsManager.instance.uiEvents.RequestLevelUpInfo();
-    }
-    int ExpToNextLevel(int level){
-        if(level==0){
-            return 0;
-        }
-        return 100*(int)MathF.Pow(2,(level-1));
     }
     //COISAS DO LEVEL UP
     public void SimulateChangeBaseValue(int id,int newValue,bool isDifferent){//Chamado pelo PlayerStats
@@ -129,6 +123,10 @@ public class StatsUIManager : MonoBehaviour
             case 3:
                 this.inte.text=newValue.ToString();
                 this.inte.color = aux;
+            break;
+            case 4:
+                potionLevel.text=newValue.ToString();
+                potionLevel.color=aux;
             break;
         }
     }
@@ -154,6 +152,10 @@ public class StatsUIManager : MonoBehaviour
             case 4:
                 magicAttackDamage.text = value.ToString("F0");
                 magicAttackDamage.color = aux;
+            break;
+            case 5:
+                potionHeal.text = value.ToString("F0");
+                potionHeal.color=aux;
             break;
         }
     }
@@ -202,6 +204,10 @@ public class StatsUIManager : MonoBehaviour
                 manaInfo.color=cor;
                 magicAttackDamage.color=cor;
             break;
+            case 4:
+                potionLevel.color=cor;
+                potionHeal.color=cor;
+            break;
         }
     }
     void ResetColors(){
@@ -214,5 +220,10 @@ public class StatsUIManager : MonoBehaviour
         dex.color = textColor;
         str.color = textColor;
         inte.color = textColor;
+        potionLevel.color=textColor;
+        potionHeal.color=textColor;
     }
+    public void BuyLevel(){
+        GameEventsManager.instance.uiEvents.BuyLevelClicked();
+    } 
 }

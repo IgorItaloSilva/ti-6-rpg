@@ -25,7 +25,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     public int Str {get; private set;}
     public int Dex {get; private set;}
     public int Int {get; private set;}
-    public int Exp {get; private set;}
+    public int CarriedExp {get;private set;}//e depois adicionar a parte visual dessa merda
     public int Level {get; private set;}
     public float CurrentLife{get; private set;}
     public float CurrentMana{get; private set;}
@@ -43,17 +43,24 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     private bool PUArmorActive;
     private bool PULifeRegenActive;
     //Coisas de level up
-    public int LevelUpPoints{get;private set;}//adicionar no save/load depois
+    public int LevelUpPoints{get;private set;}
     private int spentPointsIfCancel;
     public int[] simulatedStatChange;
-    public bool isNearCampfire ;//{get;private set;}//adicionar no save/load depois
+    public bool isNearCampfire;
     //Coisas de controle geral
-    private bool playerIsDead; //Adicionar no save e load depois
+    public bool PlayerIsDead{get; private set;}
     private Vector3? respawnPos;
     //Coisas buff de stats das runas
-    int[] statHasRuneBuff = new int[4];// value of -1, 0 or 1 indicating if there is a change, and whether positive or negative
-    int[] runeBuffAmount = new int[4];
+    int[] statHasRuneBuff = new int[5];// value of -1, 0 or 1 indicating if there is a change, and whether positive or negative
+    int[] runeBuffAmount = new int[5];
     bool hasRuneBuff;
+    //Coisas da poção
+    public int PotionsAmmount{get;private set;}//add to save and laod
+    public int PotionLevel;//add to save and load
+    int maxPotions;
+    float lifeToheal;
+    [SerializeField]int maxStartingPotions = 6;
+    [SerializeField]int potionLevelMultiplier = 50;//change to const later
 
     void OnEnable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo+=SendBaseStatsInfo;
@@ -69,6 +76,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.runeEvents.onRuneStatBuff+=RuneStatBuff;
         GameEventsManager.instance.skillTreeEvents.onLifeStealHit+=HealLife;
         GameEventsManager.instance.uiEvents.onRequestPlayerHealthInfo+=SendHealthInfo;
+        GameEventsManager.instance.uiEvents.onRequestExpInfo+=SendExpInfo;
+        GameEventsManager.instance.uiEvents.onBuyLevelClicked+=BuyLevel;
+        GameEventsManager.instance.uiEvents.onRequestPotionAmmountInfo+=SendPotionAmmountInfo;
     }
     void OnDisable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo-=SendBaseStatsInfo;
@@ -84,17 +94,28 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.runeEvents.onRuneStatBuff-=RuneStatBuff;
         GameEventsManager.instance.skillTreeEvents.onLifeStealHit+=HealLife;
         GameEventsManager.instance.uiEvents.onRequestPlayerHealthInfo-=SendHealthInfo;
+        GameEventsManager.instance.uiEvents.onRequestExpInfo-=SendExpInfo;
+        GameEventsManager.instance.uiEvents.onBuyLevelClicked-=BuyLevel;
+        GameEventsManager.instance.uiEvents.onRequestPotionAmmountInfo-=SendPotionAmmountInfo;
     }
     void Start()
     {
-        simulatedStatChange = new int[4];
+        simulatedStatChange = new int[5];
         CalculateStats();
+        maxPotions = maxStartingPotions + PotionLevel/5;
         //GameEventsManager.instance.uiEvents.UpdateSliders(0,maxLife);//Essas duas funções deveriam ser chamadas
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,false);//             pra stamina e mana tambem
-        UIManager.instance?.UpdateHealth(CurrentLife,false);
+        /* UIManager.instance?.UpdateHealth(CurrentLife,false);
+        UIManager.instance.DisplayExpAmmount(CarriedExp); 
+        não adianta colocar essas coisas aqui pois o UIManager ainda n existe*/
+        if(PlayerIsDead){
+            Invoke("Die",1f);
+        }
     }
     void Update(){
-        
+        if(Keyboard.current.qKey.wasPressedThisFrame){
+            UsePotion();
+        }
     }
     public void HealLife(float life){
         if(CurrentLife<=maxLife){
@@ -103,24 +124,43 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             UIManager.instance?.UpdateHealth(CurrentLife,false);
         }
     }
+    private void UsePotion(){
+        if(PotionsAmmount>0){
+            HealLife(lifeToheal);
+            PotionsAmmount--;
+            UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
+        }
+    }
     private void SendHealthInfo(){
         GameEventsManager.instance.uiEvents.UpdateSliders(0,maxLife);//Essas duas funções deveriam ser chamadas
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,false); //             pra stamina e mana tambem
         UIManager.instance?.UpdateHealth(CurrentLife,false);
     }
-    public void Die(){
+    void SendExpInfo(){//esse chorume existe pq isso aqui n é um singleton, ele responde a um chamado no Start da UI
+        UIManager.instance?.DisplayExpAmmount(CarriedExp);
+    }
+    void SendPotionAmmountInfo(){//esse chorume existe pq isso aqui n é um singleton, ele responde a um chamado no Start da UI
+        UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
+    }
+    public void Die(){//não faz sentido mudar variaveis aqui, pois vamos chamar um load logo após
+        DroppedExp.instance?.SetVariablesAndPos(CarriedExp,transform.position);
         GameEventsManager.instance.playerEvents.PlayerDied();
         Debug.Log("Player morreu!");
         playerIsDead = true;
         AudioPlayer.instance.PlaySFX("PlayerDeath");
         AudioPlayer.instance.PlayMusic("DeathMusic");
-        //DesativarInputs
+        PlayerIsDead = true;
     }
     private void PlayerRespawn()//chamado pelo game manager depois de dar load
     {
         HealLife(maxLife);
-        playerIsDead=false;
+        PlayerIsDead=false;
+        CarriedExp=0;
+        PotionsAmmount=maxPotions;
+        UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
+        UIManager.instance?.DisplayExpAmmount(CarriedExp);
         if(respawnPos.HasValue){
+            Debug.Log("respawnPos tem valor, ent vou colocar minha posição nela");
             transform.position=respawnPos.Value;
         }
         else{
@@ -129,7 +169,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
                 transform.position=Vector3.zero;
             }
             else{
+                Debug.Log("Como não temos uma respawnPos, vamos voltar por onde o levelLoadingManager mandou");
                 respawnPos=LevelLoadingManager.instance.respawnPoint;
+                transform.position=respawnPos.Value;
             }
         }
         AudioPlayer.instance.PlayMusic("MainTheme");
@@ -139,6 +181,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
 
         HealLife(maxLife);
         respawnPos = transform.position;
+        PotionsAmmount=maxPotions;
+        UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
     }
     public void SaveData(GameData data){
         PlayerStatsData playerStatsData = new PlayerStatsData(this);
@@ -149,8 +193,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         this.Str = data.playerStatsData.str;
         this.Dex = data.playerStatsData.dex;
         this.Int = data.playerStatsData.inte;
-        this.Exp = data.playerStatsData.exp;
+        this.CarriedExp = data.playerStatsData.carriedExp;
         this.Level = data.playerStatsData.level;
+        this.LevelUpPoints = data.playerStatsData.levelUpPoints;
         this.CurrentLife = data.playerStatsData.currentLife;
         this.BaseLife = data.playerStatsData.baseLife;
         this.BaseMana = data.playerStatsData.baseMana;
@@ -158,6 +203,10 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         this.BaseMagicDamage = data.playerStatsData.baseMagicDamage;
         this.BaseLightAttackDamage = data.playerStatsData.baseLightAttackcDamage;
         this.BaseHeavyAttackDamage = data.playerStatsData.baseHeavyAttackDamage;
+        this.PlayerIsDead = data.playerStatsData.playerIsDead;
+        this.isNearCampfire = data.playerStatsData.isNearCampfire;
+        this.PotionsAmmount = data.playerStatsData.potionsAmmount;
+        this.PotionLevel = data.playerStatsData.potionLevel;
         CalculateStats();
     }
     public void TakeDamage(float damage,Enums.DamageType damageType,bool wasCrit)
@@ -166,7 +215,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         CurrentLife -= damage;
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,wasCrit);
         UIManager.instance?.UpdateHealth(CurrentLife,wasCrit);
-        if(CurrentLife<=0&&!playerIsDead){
+        if(CurrentLife<=0&&!PlayerIsDead){
             Die();
         }
     }
@@ -194,6 +243,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             magicDamage = BaseMagicDamage + magicDamageMod * (Int-10);
             lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10);
             heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10);
+            lifeToheal = maxLife/4 + potionLevelMultiplier*(PotionLevel-1);
             CalculateWeaponDamage();
         }
         else{
@@ -202,6 +252,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             magicDamage = BaseMagicDamage + magicDamageMod * (Int-10+runeBuffAmount[3]);
             lightAttackDamage = BaseLightAttackDamage + lightAttackDamageMod * (Dex-10+runeBuffAmount[1]);
             heavyAttackDamage = BaseHeavyAttackDamage + heavyAttackDamageMod * (Str-10+runeBuffAmount[2]);
+            lifeToheal = maxLife/4 + potionLevelMultiplier*(PotionLevel-1+runeBuffAmount[4]);
             CalculateWeaponDamage();
         }
     }
@@ -270,19 +321,26 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         CalculateStats();
     }
     void GainExp(int exp){
+        CarriedExp+=exp;
+    }
+    void BuyLevel(){
         int expToNextLevel = ExpToNextLevel(Level);
-        Exp+=exp;
-        if(Exp>expToNextLevel){
+        if(CarriedExp>=expToNextLevel){
+            CarriedExp-=expToNextLevel;
             LevelUp();
-        } 
+        }
     }
     void LevelUp(){
         Level+=1;
         LevelUpPoints+=3;
+        SendExpStatsInfo();
+        SendLevelUpInfo();
+        UIManager.instance?.DisplayExpAmmount(CarriedExp);
         GameEventsManager.instance.uiEvents.NotificationPlayed("Você upou de nível!");
+        DataPersistenceManager.instance.SaveGame();
     }
-    int ExpToNextLevel(int level){
-        if(level==0){
+    int ExpToNextLevel(int level){//OBS: ESSA FUNÇÃO DEVERIA SER IDENTICA A FUNÇÃO DE MESMO NOME NO STATSUIMANAGER 
+        if(level<=0){             //CASO ELA MUDE AQUI ELA DEVERIA SER MUDADA LA TAMBEM
             return 0;
         }
         else return 100*(int)Mathf.Pow(2,level-1);
@@ -291,20 +349,21 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     //Coisas de UI do level up
     void SendBaseStatsInfo(){
         if(!hasRuneBuff){
-            StatsUIManager.instance?.ReciveBaseStatsInfo(Con,Dex,Str,Int);
+            StatsUIManager.instance?.ReciveBaseStatsInfo(Con,Dex,Str,Int,PotionLevel);
         }
         else{
-            StatsUIManager.instance?.ReciveBaseStatsInfo(Con+runeBuffAmount[0],Dex+runeBuffAmount[1],Str+runeBuffAmount[2],Int+runeBuffAmount[3]);
+            StatsUIManager.instance?.ReciveBaseStatsInfo(Con+runeBuffAmount[0],Dex+runeBuffAmount[1],Str+runeBuffAmount[2],
+                                                            Int+runeBuffAmount[3],PotionLevel+runeBuffAmount[4]);
             StatsUIManager.instance?.ColorAtributes(runeBuffAmount);
         }
 
     }
     void SendExpStatsInfo(){
-        StatsUIManager.instance?.ReciveExpStatsInfo(Level,Exp);
+        StatsUIManager.instance?.ReciveExpStatsInfo(Level,CarriedExp,ExpToNextLevel(Level));
     }
     void SendAdvancedStatsInfo(){
         StatsUIManager.instance?.ReciveAdvancedStatsInfo(CurrentLife,maxLife,CurrentMana,maxMana,magicDamage
-        ,lightAttackDamage,heavyAttackDamage);
+        ,lightAttackDamage,heavyAttackDamage,lifeToheal);
     }
     void SendLevelUpInfo(){
         StatsUIManager.instance?.ReciveLevelUpInfo(LevelUpPoints,isNearCampfire);
@@ -343,6 +402,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             case 3:
                 displayValue = hasRuneBuff ? Int+simulatedStatChange[id]+runeBuffAmount[3]: Int+simulatedStatChange[id];
             break;
+            case 4:
+                displayValue = hasRuneBuff ? PotionLevel+simulatedStatChange[id]+runeBuffAmount[4]: PotionLevel+simulatedStatChange[id];
+            break;
         }
         StatsUIManager.instance?.SimulateChangeBaseValue(id,displayValue,isDifferent);
         CalculateAdvancedInfoAndSend(id);
@@ -354,6 +416,9 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
                 float simuMaxLife =  hasRuneBuff ? BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10+runeBuffAmount[0])
                                                  : BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10);
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(0,CurrentLife,simuMaxLife,isDifferent);
+                float simuPotionHeal = hasRuneBuff ? simuMaxLife/4 + potionLevelMultiplier * (PotionLevel+simulatedStatChange[4]-1+runeBuffAmount[4])
+                                                   : simuMaxLife/4 + potionLevelMultiplier*(PotionLevel+simulatedStatChange[4]-1);
+                StatsUIManager.instance?.SimulateChangeAdvancedValue(5,0,simuPotionHeal,isDifferent);
             break;
             case 1:
                 float simuLightAttackDamage = hasRuneBuff ? BaseLightAttackDamage + lightAttackDamageMod * (Dex+simulatedStatChange[1]-10+runeBuffAmount[1])
@@ -372,6 +437,20 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(1,CurrentMana,simuMaxMana,isDifferent);
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(4,0,simuMagicDamage,isDifferent);
             break;
+            case 4:
+                if(simulatedStatChange[0]!=0){
+                    simuMaxLife =  hasRuneBuff ? BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10+runeBuffAmount[0])
+                                                 : BaseLife + vidaConsMod * (Con+simulatedStatChange[0]-10);
+                    simuPotionHeal = hasRuneBuff ? simuMaxLife/4 + potionLevelMultiplier * (PotionLevel+simulatedStatChange[4]-1+runeBuffAmount[4])
+                                                   : simuMaxLife/4 + potionLevelMultiplier*(PotionLevel+simulatedStatChange[4]-1);
+                    StatsUIManager.instance?.SimulateChangeAdvancedValue(5,0,simuPotionHeal,isDifferent);
+                }
+                else{
+                    simuPotionHeal = hasRuneBuff ? maxLife/4 + potionLevelMultiplier * (PotionLevel+simulatedStatChange[4]-1+runeBuffAmount[4])
+                                                    : maxLife/4 + potionLevelMultiplier*(PotionLevel+simulatedStatChange[4]-1);
+                    StatsUIManager.instance?.SimulateChangeAdvancedValue(5,0,simuPotionHeal,isDifferent);
+                }
+            break;
         }
     }
     void ConfirmChanges(){
@@ -379,6 +458,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         Dex+=simulatedStatChange[1];
         Str+=simulatedStatChange[2];
         Int+=simulatedStatChange[3];
+        PotionLevel+=simulatedStatChange[4];
         CalculateStats();
         SendBaseStatsInfo();
         SendAdvancedStatsInfo();
