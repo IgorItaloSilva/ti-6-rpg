@@ -15,7 +15,7 @@ public class KitsuneBoss : KitsuneController
     bool hasDisplayedLife;
     protected override void CreateActions()
     {
-        basicAttack = new KitsuneBasicAttack(attackTime,basicAttackDist,this);
+        basicAttack = new KitsuneBasicAttack(attackTime,this);
         restAction = new KitsuneRestAction(restTime,this);
         rangedAttack = new KitSuneRangedAttack(rangedattackTime,prefabRangedAttack,this);
     }

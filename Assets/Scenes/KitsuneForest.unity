@@ -18021,13 +18021,33 @@ PrefabInstance:
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: maxVelocity
-      value: 20
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
+      propertyPath: nDashCharges
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: wanderCenter
       value: 
       objectReference: {fileID: 1826530586}
+    - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
+      propertyPath: dashAttackDist
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
+      propertyPath: dashAttackTime
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
+      propertyPath: numberOfActionsBeforeRest
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 8667969813010441830, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: m_Radius

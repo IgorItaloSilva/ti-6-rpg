@@ -11,7 +11,7 @@ public class KitsuneRestAction : EnemyActions
     {
         kitsuneController.animator.SetBool("isResting",true);
         kitsuneController.isResting=true;
-        kitsuneController.rb.constraints=RigidbodyConstraints.FreezePosition;
+        kitsuneController.rb.constraints=RigidbodyConstraints.FreezeAll;
         time=0;
     }
 
@@ -19,6 +19,7 @@ public class KitsuneRestAction : EnemyActions
     {
         kitsuneController.animator.SetBool("isResting",false);
         kitsuneController.rb.constraints=RigidbodyConstraints.FreezeRotation;
+        kitsuneController.ResetSpecialAttacksCharges();
     }
 
     public override void UpdateAction()

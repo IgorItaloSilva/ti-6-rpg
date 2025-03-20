@@ -1618,7 +1618,7 @@ MonoBehaviour:
   charHeight: 3
   maxHp: 100
   minDistToAttack: 2
-  numberOfActionsBeforeRest: 1000
+  numberOfActionsBeforeRest: 3
   exp: 100
   nAttacksToPoiseBreak: 4
   IsABoss: 0
@@ -1633,14 +1633,19 @@ MonoBehaviour:
   wanderWeight: 10
   basicAttackDist: 2
   attackTime: 1
+  dashAttackDist: 6
+  dashAttackTime: 1.5
+  nDashCharges: 2
   restTime: 3
   pillarID: 0
   wanderCenter: {fileID: 0}
   maxWanderDist: 17
+  collider: {fileID: 8667969813010441830}
   maxWanderTime: 5
   isAttacking: 0
   isResting: 0
   isDead: 0
+  isDashing: 0
 --- !u!1 &7349978195883291756
 GameObject:
   m_ObjectHideFlags: 0

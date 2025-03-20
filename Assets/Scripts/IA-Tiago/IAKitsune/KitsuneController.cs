@@ -7,35 +7,43 @@ public class KitsuneController : ActualEnemyController
 {
     protected EnemyActions basicAttack;
     protected EnemyActions deathAction;
+    protected EnemyActions dashAttack;
     [Header("Coisas especificas da Kitsune")]
     [SerializeField]protected float basicAttackDist;
     [SerializeField]protected float attackTime;
+    [SerializeField]protected float dashAttackDist;
+    [SerializeField]protected float dashAttackTime;
+    [SerializeField]int nDashCharges;
     [SerializeField]protected float restTime;
     [SerializeField]int pillarID;
     [SerializeField]Transform wanderCenter;
     [SerializeField]float maxWanderDist;
     [SerializeField] private CapsuleCollider collider;
-    [SerializeField] private Canvas healthBar;
+    //[SerializeField] private Canvas healthBar;
     [SerializeField]float maxWanderTime;
     float timeWandering;
+    int dashCharges;
     //Variaveis de controle das actions
-    [HideInInspector]public bool isAttacking,isResting,isDead;
+    [HideInInspector]public bool isAttacking,isResting,isDead,isDashing;
     //Variaveis de controle de ifs
     bool halvedVelocity,doubledVelocity,halvedAvoidWeight,doubledAvoidWeight=true;
     protected override void CreateActions()
     {
-        basicAttack = new KitsuneBasicAttack(attackTime,basicAttackDist,this);
+        basicAttack = new KitsuneBasicAttack(attackTime,this);
         restAction = new KitsuneRestAction(restTime,this);
         deathAction = new KitsuneDeathAction(3f,this);
+        dashAttack = new KitsuneDashAttack(dashAttackTime,.3f,this);
     }
     protected override void AdditionalStart()
     {
+        ResetSpecialAttacksCharges();
         isAttacking=false;
         isDead = false;
         ChangeAction(restAction);
     }
     protected override void SetSteeringTargetAndCurrentAction(){
         if(isDead)return;
+        if(isDashing)return;
         if(isResting)return;
         if(target==null){//colocado aqui devido a bug quando o jogador morre
             if(wanderCenter!=null){
@@ -71,7 +79,6 @@ public class KitsuneController : ActualEnemyController
                 steeringManager.LookAtTargetToAttack(target.GetPosition());
                 return;
             }
-            
             if(actionsPerformed>=numberOfActionsBeforeRest){
                 Debug.Log("Trocando ação para rest");
                 ChangeAction(restAction);
@@ -79,9 +86,15 @@ public class KitsuneController : ActualEnemyController
                 actionsPerformed=0;
             }
             else{
-                if(Vector3.SqrMagnitude(target.GetPosition()-transform.position)>minDistToAttack*minDistToAttack){
+                float distToPlayerSqr = Vector3.SqrMagnitude(target.GetPosition()-transform.position);
+                if(distToPlayerSqr>minDistToAttack*minDistToAttack){
                     steeringManager?.Seek(target.GetPosition());
                     steeringManager?.AvoidObstacle();
+                    if((distToPlayerSqr<dashAttackDist*dashAttackDist) && dashCharges>0){
+                        ChangeAction(dashAttack);
+                        actionsPerformed++;
+                        dashCharges--;
+                    }
                     if(!doubledVelocity){
                         maxVelocity*=2;
                         animator.SetBool("isRunning",true);
@@ -113,7 +126,6 @@ public class KitsuneController : ActualEnemyController
     }
     new void FixedUpdate(){
         SetSteeringTargetAndCurrentAction();
-        //steeringManager?.AvoidObstacle();
         steeringManager?.Update();
         currentAction?.UpdateAction(); 
     }
@@ -130,25 +142,26 @@ public class KitsuneController : ActualEnemyController
     }
     public void ActualDeath(){
         PlayerStateMachine.Instance.CameraTargetUnlock();
-        if (collider && healthBar)
+        if (collider)// && healthBar)
         {
             collider.enabled = false;
-            healthBar.enabled = false;
+            //healthBar.enabled = false;
         }
         base.Die();
         GameEventsManager.instance.levelEvents.KitsuneDeath(pillarID);
     }
     public override void Respawn()
     {
-        if (collider && healthBar)
+        if (collider) //&& healthBar)
         {
             collider.enabled = true;
-            healthBar.enabled = true;
+            //healthBar.enabled = true;
         }
         base.Respawn();
         isDead=false;
         animator.SetBool("isDeadBool",false);
         animator.ResetTrigger("isDead");
+        ResetSpecialAttacksCharges();
         target=null;
     }
     protected override void ResetControlBooleans()//chamado no changeAction
@@ -156,5 +169,9 @@ public class KitsuneController : ActualEnemyController
         base.ResetControlBooleans();
         isAttacking=false;
         isResting=false;
+        isDashing=false;
+    }
+    public void ResetSpecialAttacksCharges(){
+        dashCharges = nDashCharges;
     }
 }

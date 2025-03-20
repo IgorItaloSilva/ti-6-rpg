@@ -27,18 +27,13 @@ public class KitsuneBasicAttack : EnemyActions
             kitsuneController.ChangeAction(new nullAction());
         }
         else{
-            //kitsuneController.steeringManager.LookAtTarget();
-            /*Vector3 target = steeringAgent.GetPosition();
-            target.y=kitsuneController.transform.position.y;
-            kitsuneController.transform.LookAt(target); */
             if(time>animationDuration){
                 kitsuneController.ChangeAction(new nullAction());
             }
         }
     }
-    public KitsuneBasicAttack(float attackTime,float minDistToAttack,KitsuneController kitsuneController){
+    public KitsuneBasicAttack(float attackTime,KitsuneController kitsuneController){
         animationDuration=attackTime;
-        distToAttack=minDistToAttack;
         this.kitsuneController=kitsuneController;
     }
 }
