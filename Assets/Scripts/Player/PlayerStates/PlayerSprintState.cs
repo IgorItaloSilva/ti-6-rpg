@@ -66,7 +66,7 @@ public class PlayerSprintState : PlayerBaseState
     {
         _ctx.Acceleration += (Time.fixedDeltaTime * AccelerationSpeed);
         _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 2);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityHash, _ctx.Acceleration);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
     }
 
     private void HandleSprintMove()

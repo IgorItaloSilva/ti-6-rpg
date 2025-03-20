@@ -107,7 +107,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int HasDiedHash = Animator.StringToHash("hasDied");
     public readonly int HasSavedHash = Animator.StringToHash("hasSaved");
     public readonly int HasRespawnedHash = Animator.StringToHash("hasRespawned");
-    public readonly int PlayerVelocityHash = Animator.StringToHash("playerVelocity");
+    public readonly int PlayerVelocityXHash = Animator.StringToHash("playerVelocityX");
+    public readonly int PlayerVelocityYHash = Animator.StringToHash("playerVelocityY");
 
     #endregion
 
