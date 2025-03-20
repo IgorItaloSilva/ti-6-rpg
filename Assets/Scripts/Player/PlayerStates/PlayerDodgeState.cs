@@ -79,7 +79,7 @@ public class PlayerDodgeState : PlayerBaseState
     protected override void HandleAcceleration()
     {
         _ctx.Acceleration += (Time.fixedDeltaTime * DodgeAccelerationSpeed);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityHash, _ctx.Acceleration);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
     }
 
     private void HandleDodgeMove()

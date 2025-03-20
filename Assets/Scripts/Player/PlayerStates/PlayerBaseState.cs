@@ -71,7 +71,8 @@ public abstract class PlayerBaseState
             _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 1);
         }
 
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityHash, _ctx.Acceleration);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
+        //_ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration);
     }
     
     protected void HandleMove()

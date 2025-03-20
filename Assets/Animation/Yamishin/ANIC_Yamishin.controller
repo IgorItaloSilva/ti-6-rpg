@@ -159,8 +159,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7893087049417417613, guid: 511ba1f1b54826c43a082d70654a7bd9,
-      type: 3}
+    m_Motion: {fileID: 7400000, guid: 64581796a7b6e65409f61770962cd471, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -168,30 +167,44 @@ BlendTree:
     m_DirectBlendParameter: playerVelocity
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 949470540795305201, guid: 2b8f71f202855e642a98dc2ef624aa25,
-      type: 3}
+    m_Motion: {fileID: 7400000, guid: be782f4a3dfaee64ebfc54b55fc015d6, type: 2}
     m_Threshold: 1
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1.5
+    m_Position: {x: 0, y: 1}
+    m_TimeScale: 2.5
     m_CycleOffset: 0
     m_DirectBlendParameter: playerVelocity
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 94039622535000679, guid: 2b8f71f202855e642a98dc2ef624aa25,
-      type: 3}
+    m_Motion: {fileID: 7400000, guid: a5486f237da052841bd41b2f8d14df1f, type: 2}
     m_Threshold: 2
-    m_Position: {x: 0, y: 0}
-    m_TimeScale: 1.2
+    m_Position: {x: 0, y: 2}
+    m_TimeScale: 2.5
     m_CycleOffset: 0
     m_DirectBlendParameter: playerVelocity
     m_Mirror: 0
-  m_BlendParameter: playerVelocity
-  m_BlendParameterY: playerVelocity
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: a63d0420d4367f44593cb41a72750dd3, type: 2}
+    m_Threshold: 3
+    m_Position: {x: 2, y: 0}
+    m_TimeScale: 1.5
+    m_CycleOffset: 0
+    m_DirectBlendParameter: playerVelocityY
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: a63d0420d4367f44593cb41a72750dd3, type: 2}
+    m_Threshold: 4
+    m_Position: {x: -2, y: 0}
+    m_TimeScale: 1.5
+    m_CycleOffset: 0.5
+    m_DirectBlendParameter: playerVelocityY
+    m_Mirror: 1
+  m_BlendParameter: playerVelocityX
+  m_BlendParameterY: playerVelocityY
   m_MinThreshold: 0
-  m_MaxThreshold: 2
+  m_MaxThreshold: 4
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
-  m_BlendType: 0
+  m_BlendType: 2
 --- !u!1101 &-5524348026323604201
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -604,6 +617,25 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1107 &-60824176130606554
+AnimatorStateMachine:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Upper Body
+  m_ChildStates: []
+  m_ChildStateMachines: []
+  m_AnyStateTransitions: []
+  m_EntryTransitions: []
+  m_StateMachineTransitions: {}
+  m_StateMachineBehaviours: []
+  m_AnyStatePosition: {x: 50, y: 20, z: 0}
+  m_EntryPosition: {x: 50, y: 120, z: 0}
+  m_ExitPosition: {x: 800, y: 120, z: 0}
+  m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
+  m_DefaultState: {fileID: 0}
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -631,7 +663,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: playerVelocity
+  - m_Name: playerVelocityY
+    m_Type: 1
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: playerVelocityX
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -694,6 +732,22 @@ AnimatorController:
     m_Behaviours: []
     m_BlendingMode: 0
     m_SyncedLayerIndex: -1
+    m_DefaultWeight: 0
+    m_IKPass: 0
+    m_SyncedLayerAffectsTiming: 0
+    m_Controller: {fileID: 9100000}
+  - serializedVersion: 5
+    m_Name: Upper Body
+    m_StateMachine: {fileID: -60824176130606554}
+    m_Mask: {fileID: 31900000, guid: 0d3e2a2b5f31e8c4cbf6db38be937159, type: 2}
+    m_Motions:
+    - serializedVersion: 2
+      m_State: {fileID: 1665370465227841005}
+      m_Motion: {fileID: 949470540795305201, guid: 5af09029bfb6c2a46b18de2ccb13322d,
+        type: 3}
+    m_Behaviours: []
+    m_BlendingMode: 0
+    m_SyncedLayerIndex: 0
     m_DefaultWeight: 0
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
@@ -910,7 +964,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Idle/Walk/Run
+  m_Name: Combat Idle/Walk/Run
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -979,7 +1033,7 @@ AnimatorStateMachine:
     m_Position: {x: -890, y: 370, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1665370465227841005}
-    m_Position: {x: -430, y: 170, z: 0}
+    m_Position: {x: -430, y: 180, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5139317848305273456}
     m_Position: {x: -890, y: 170, z: 0}
@@ -998,11 +1052,11 @@ AnimatorStateMachine:
   - {fileID: 1227622178868082634}
   m_EntryTransitions: []
   m_StateMachineTransitions:
+  - first: {fileID: 4236903021100400136}
+    second: []
   - first: {fileID: -3101684108348920906}
     second:
     - {fileID: 787931075308084589}
-  - first: {fileID: 4236903021100400136}
-    second: []
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -870, y: 280, z: 0}
   m_EntryPosition: {x: -90, y: 180, z: 0}
@@ -1401,10 +1455,10 @@ AnimatorState:
   m_Motion: {fileID: -5967731538796040843, guid: 02660f7c4b973d043b6806e0483901b8,
     type: 3}
   m_Tag: 
-  m_SpeedParameter: playerVelocity
+  m_SpeedParameter: playerVelocityY
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: playerVelocity
+  m_TimeParameter: playerVelocityY
 --- !u!1101 &7127699472117257643
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
