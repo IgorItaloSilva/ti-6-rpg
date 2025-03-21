@@ -3,38 +3,45 @@ using UnityEngine;
 public class AttackRangedKitsuneBoss : MonoBehaviour
 {
     public ISteeringAgent target;
-    Vector3 destination;
     bool canMove;
     [SerializeField]float speed;
     [SerializeField]float damage;
+    [SerializeField]float timeToBreak=4f;
+    bool stopUpdatingPos = false;
+    Vector3 dir;
     void Start()
     {
-        Invoke("SetDestinationAndGo",.5f);
-        Invoke("Die",2f);
+        Invoke("Die",timeToBreak);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         if(canMove){
-            Vector3 dir = destination-transform.position;
-            transform.position+=dir*(speed*Time.fixedDeltaTime);
+            if(!stopUpdatingPos){
+                dir = target.GetPosition()-transform.position;
+            }
+            if(dir.magnitude<5&&!stopUpdatingPos){
+                stopUpdatingPos=true;
+            }
+            transform.position+=dir.normalized*(speed*Time.fixedDeltaTime);
         }
     }
-    void SetDestinationAndGo(){
-        destination=target.GetPosition()+new Vector3(0,1,0);
+    public void SetTargetAndGo(ISteeringAgent target){
+        this.target=target;
         canMove=true;
     }
-    public void OnCollisionEnter(Collision collision){
-        Debug.Log("Collidi com algo");
-        if(collision.collider.CompareTag("Player")){
-            PlayerStats playerStats = collision.collider.GetComponent<PlayerStats>();
+    public void OnTriggerEnter(Collider collider){
+        if(collider.CompareTag("EnemyDetection"))return;
+        Debug.Log("Colidi com um "+collider.name);
+        if(collider.CompareTag("Player")){
+            PlayerStats playerStats = collider.GetComponent<PlayerStats>();
             playerStats.TakeDamage(damage,Enums.DamageType.Magic,false);
         }
-        Debug.Log("Colidi com um "+collision.collider.name);
         Destroy(gameObject);
     }
     void Die(){
+        Debug.Log("Acabou meu tempo");
         Destroy(gameObject);
     }
 }

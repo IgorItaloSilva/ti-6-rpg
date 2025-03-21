@@ -175,10 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageType: 0
-  strModifier: 1
-  dexModifier: 1
   baseDamage: 250
-  isPlayerWeapon: 0
 --- !u!1 &814172841410110555
 GameObject:
   m_ObjectHideFlags: 0
@@ -5190,6 +5187,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5358,6 +5358,9 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 3
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5807,7 +5810,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1175166700181648433
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5821,6 +5824,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -5979,6 +5983,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 051ae59a165c87140b41be4008e32b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ignoreSaveLoad: 0
+  <SaveId>k__BackingField: 
   obstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -5987,18 +5993,38 @@ MonoBehaviour:
   charWidth: 1.5
   charHeight: 3.5
   maxHp: 500
-  currentHp: 0
   minDistToAttack: 2
   numberOfActionsBeforeRest: 4
   exp: 1000
+  nAttacksToPoiseBreak: 4
   IsABoss: 1
+  <CurrentHp>k__BackingField: 0
+  <IsDead>k__BackingField: 0
   rb: {fileID: 0}
   animator: {fileID: 0}
+  lookAtTargetWeight: 20
+  seekWeight: 2
+  avoidObstacleWeight: 10
+  fleeWeight: 1
+  wanderWeight: 10
   basicAttackDist: 2
-  minDistToRangedAttack: 150
   attackTime: 1
-  rangedattackTime: 3.5
+  dashAttackDist: 0
+  dashAttackTime: 0
+  nDashCharges: 0
   restTime: 3
+  pillarID: 0
+  wanderCenter: {fileID: 0}
+  maxWanderDist: 0
+  collider: {fileID: 0}
+  maxWanderTime: 0
+  isAttacking: 0
+  isResting: 0
+  isDead: 0
+  isDashing: 0
+  isCasting: 0
+  minDistToRangedAttack: 150
+  rangedattackTime: 3.5
   prefabRangedAttack: {fileID: 7839349217143219840, guid: f18667aad33dd4f47b0633a21f933882,
     type: 3}
   rangedAttackPos:
@@ -6165,7 +6191,7 @@ Transform:
   m_GameObject: {fileID: 3244490672897707836}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.74, z: 0}
+  m_LocalPosition: {x: 0, y: 7.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12680,6 +12706,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

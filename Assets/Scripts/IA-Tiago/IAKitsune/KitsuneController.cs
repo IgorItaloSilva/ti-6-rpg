@@ -8,23 +8,29 @@ public class KitsuneController : ActualEnemyController
     protected EnemyActions basicAttack;
     protected EnemyActions deathAction;
     protected EnemyActions dashAttack;
+    protected EnemyActions magicAttack;
     [Header("Coisas especificas da Kitsune")]
     [SerializeField]protected float basicAttackDist;
     [SerializeField]protected float attackTime;
     [SerializeField]protected float dashAttackDist;
     [SerializeField]protected float dashAttackTime;
-    [SerializeField]int nDashCharges;
+    [SerializeField]protected float rangedAttackTime;
+    [SerializeField]protected int nDashCharges;
+    [SerializeField]protected int nMagicCharges;
     [SerializeField]protected float restTime;
     [SerializeField]int pillarID;
     [SerializeField]Transform wanderCenter;
     [SerializeField]float maxWanderDist;
-    [SerializeField] private CapsuleCollider collider;
+    [SerializeField]private CapsuleCollider collider;
     //[SerializeField] private Canvas healthBar;
     [SerializeField]float maxWanderTime;
+    [SerializeField]protected GameObject prefabRangedAttack;
+    public Transform[] rangedAttackPos;
     float timeWandering;
-    int dashCharges;
+    protected int dashCharges;
+    protected int magicCharges;
     //Variaveis de controle das actions
-    [HideInInspector]public bool isAttacking,isResting,isDead,isDashing;
+    [HideInInspector]public bool isAttacking,isResting,isDead,isDashing,isCasting;
     //Variaveis de controle de ifs
     bool halvedVelocity,doubledVelocity,halvedAvoidWeight,doubledAvoidWeight=true;
     protected override void CreateActions()
@@ -33,18 +39,21 @@ public class KitsuneController : ActualEnemyController
         restAction = new KitsuneRestAction(restTime,this);
         deathAction = new KitsuneDeathAction(3f,this);
         dashAttack = new KitsuneDashAttack(dashAttackTime,.3f,this);
+        magicAttack = new KitSuneRangedAttack(rangedAttackTime,prefabRangedAttack,this);
     }
     protected override void AdditionalStart()
     {
         ResetSpecialAttacksCharges();
         isAttacking=false;
         isDead = false;
+        isCasting=false;
         ChangeAction(restAction);
     }
     protected override void SetSteeringTargetAndCurrentAction(){
         if(isDead)return;
         if(isDashing)return;
         if(isResting)return;
+        if(isCasting)return;
         if(target==null){//colocado aqui devido a bug quando o jogador morre
             if(wanderCenter!=null){
                 //Debug.Log((wanderCenter.position-transform.position).sqrMagnitude);
@@ -90,6 +99,11 @@ public class KitsuneController : ActualEnemyController
                 if(distToPlayerSqr>minDistToAttack*minDistToAttack){
                     steeringManager?.Seek(target.GetPosition());
                     steeringManager?.AvoidObstacle();
+                    if(magicCharges>0){
+                        ChangeAction(magicAttack);
+                        actionsPerformed++;
+                        magicCharges--;
+                    }
                     if((distToPlayerSqr<dashAttackDist*dashAttackDist) && dashCharges>0){
                         ChangeAction(dashAttack);
                         actionsPerformed++;
@@ -170,8 +184,10 @@ public class KitsuneController : ActualEnemyController
         isAttacking=false;
         isResting=false;
         isDashing=false;
+        isCasting=false;
     }
     public void ResetSpecialAttacksCharges(){
         dashCharges = nDashCharges;
+        magicCharges = nMagicCharges;
     }
 }

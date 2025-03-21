@@ -4,54 +4,64 @@ using UnityEngine;
 
 public class KitSuneRangedAttack : EnemyActions
 {
-    float rangedAttackTime;
+    float spawnDelay = .3f;
     float time;
-    float auxSpawn;
+    float spawnTime;
+    float releaseTime=2f;
     GameObject rangedAttackPrefab;
-    KitsuneBoss kitsuneBossController;
+    KitsuneController kitsuneController;
+    int nBallsToSpawn;
+    int vectorIndex;
+    GameObject[]bolas;
+    bool hasReleased;
+    
     public override void EnterAction()
     {
-        //actualEnemyController.animator.CrossFade("Fox_Attack1",0.1f);
+        Debug.Log("Entrei numa ação de magia");
+        kitsuneController.animator.SetTrigger("isCasting");
+        kitsuneController.rb.constraints=RigidbodyConstraints.FreezeAll;
+        kitsuneController.isCasting = true;
+        hasReleased=false;
         time=0;
-        //actualEnemyController.animator.applyRootMotion=true;
-        actualEnemyController.rb.constraints=RigidbodyConstraints.FreezeAll;
-        auxSpawn=1;
-        for(int i = 0;  i < kitsuneBossController.rangedAttackPos.Length; i++)
-        {
-            GameObject clone = GameObject.Instantiate(rangedAttackPrefab,  kitsuneBossController.rangedAttackPos[i].position, kitsuneBossController.rangedAttackPos[i].rotation);
-            clone.GetComponent<KitsuneBullet>().SetPlayer(kitsuneBossController.target.GetPosition()+Vector3.up);
-        }
+        spawnTime=spawnDelay;
+        vectorIndex=0;
+        nBallsToSpawn=kitsuneController.rangedAttackPos.Length;
     }
 
     public override void ExitAction()
     {
-        actualEnemyController.rb.constraints=RigidbodyConstraints.FreezeRotation;
+        Debug.Log("Sai duma ação de magia");
+        kitsuneController.rb.constraints=RigidbodyConstraints.FreezeRotation;
     }
 
     public override void UpdateAction()
     {
-        
         time+=Time.fixedDeltaTime;
-        
-        //if(time>auxSpawn){
-           // Vector3 spawnPoint = actualEnemyController.transform.position + new Vector3(0,4,0);
-           // GameObject newAttack = GameObject.Instantiate(rangedAttackPrefab,spawnPoint,Quaternion.identity);
-           // AttackRangedKitsuneBoss attackRangedKitsuneBoss = newAttack.GetComponent<AttackRangedKitsuneBoss>();
-           //attackRangedKitsuneBoss.target=actualEnemyController.target;
-           // auxSpawn+=1f;
-        //}
-        //Vector3 target = actualEnemyController.target.GetPosition();
-        //target.y=actualEnemyController.transform.position.y;
-        //actualEnemyController.transform.LookAt(target);
-        if(time>rangedAttackTime){
-            actualEnemyController.ChangeAction(new nullAction());
+        if(nBallsToSpawn>0){
+            if(time>spawnTime){
+                GameObject clone = GameObject.Instantiate(rangedAttackPrefab,  kitsuneController.rangedAttackPos[vectorIndex].position,
+                                                             kitsuneController.rangedAttackPos[vectorIndex].rotation);
+                bolas[vectorIndex]=clone;
+                vectorIndex++;
+                spawnTime=spawnTime+spawnDelay;
+                nBallsToSpawn--;
+            }
+        }
+        if(time>releaseTime&&!hasReleased){
+            for(int i=0;i<kitsuneController.rangedAttackPos.Length;i++){
+                bolas[i].GetComponent<AttackRangedKitsuneBoss>().SetTargetAndGo(kitsuneController.target);
+            }
+            hasReleased=true;
+        }
+        if(time>animationDuration){
+            kitsuneController.ChangeAction(new nullAction());
         } 
     }
-    public KitSuneRangedAttack(float rangedAttackTime,GameObject prefabRangedAttack,KitsuneBoss kitsuneBossController){
-        this.kitsuneBossController=kitsuneBossController;
-        this.actualEnemyController=kitsuneBossController;
-        this.rangedAttackTime=rangedAttackTime;
+    public KitSuneRangedAttack(float rangedAttackTime,GameObject prefabRangedAttack,KitsuneController kitsuneController){
+        this.kitsuneController=kitsuneController;
+        this.animationDuration=rangedAttackTime;
         this.rangedAttackPrefab=prefabRangedAttack;
+        bolas = new GameObject[kitsuneController.rangedAttackPos.Length];
     }
 
 }
