@@ -24,8 +24,9 @@ public abstract class PlayerBaseState
     public virtual void FixedUpdateState()
     {
         HandleAcceleration();
+        HandleAnimatorVelocity();
     }
-    protected void HandleRotation()
+    protected virtual void HandleRotation()
     {
         // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
         var turnOrientation = Mathf.Atan2(_ctx.CurrentMovementInput.x, _ctx.CurrentMovementInput.y) * Mathf.Rad2Deg +
@@ -70,12 +71,14 @@ public abstract class PlayerBaseState
         {
             _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 1);
         }
-
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
-        //_ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration);
     }
     
-    protected void HandleMove()
+    protected virtual void HandleAnimatorVelocity()
+    {
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, Mathf.Lerp(_ctx.Animator.GetFloat(_ctx.PlayerVelocityYHash), _ctx.Acceleration * Mathf.Max(Mathf.Abs(_ctx.CurrentMovementInput.x), Mathf.Abs(_ctx.CurrentMovementInput.y)), Time.fixedDeltaTime * 10f));
+    }
+    
+    protected virtual void HandleMove()
     {
         _appliedMovement.x = _ctx.CurrentMovement.x * _ctx.Acceleration;
         _appliedMovement.y = _ctx.BaseGravity;
@@ -83,6 +86,7 @@ public abstract class PlayerBaseState
 
         _ctx.AppliedMovement = _appliedMovement;
         _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime ));
+        
     }
 
     protected void SwitchState(PlayerBaseState newState)

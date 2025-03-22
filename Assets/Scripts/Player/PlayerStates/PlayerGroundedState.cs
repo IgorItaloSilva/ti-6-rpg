@@ -18,8 +18,10 @@ public class PlayerGroundedState : PlayerBaseState
         _turnTime = _ctx.BaseTurnTime;
     }
 
-    public sealed override void HandleAnimatorParameters()
+    public override void HandleAnimatorParameters()
     {
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0);
+        _ctx.Animator.SetLayerWeight(1, 1);
         _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
         _ctx.Animator.SetBool(_ctx.IsRunningHash, false);
         _ctx.Animator.SetBool(_ctx.IsWalkingHash, _ctx.IsMovementPressed);
@@ -40,6 +42,10 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
+        if (_ctx.EnemyDetector.targetEnemy)
+        {
+            SwitchState(_factory.Combat());
+        }
         if (!_ctx.CC.isGrounded)
         {
             SwitchState(_factory.InAir());

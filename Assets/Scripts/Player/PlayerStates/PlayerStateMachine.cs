@@ -525,11 +525,16 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _camTargetGroup.m_Targets[0].target = newTarget;
         playerCamera.enabled = false;
     }
+    
+    
 
-    public void CameraTargetUnlock()
+    public void CameraTargetUnlock(bool shouldDeleteTarget = false)
     {
-        enemyDetector.targetEnemy = null;
-        _camTargetGroup.m_Targets[0].target = null;
+        if(shouldDeleteTarget)
+        {        
+            _camTargetGroup.m_Targets[0].target = null;
+            enemyDetector.targetEnemy = null;
+        }
         playerCamera.enabled = true;
         _isOnTarget = false;
     }

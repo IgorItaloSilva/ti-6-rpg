@@ -3,15 +3,14 @@ using UnityEngine;
 public class PlayerAttackState : PlayerBaseState
 {
     private const byte AttackTurnTimeModifier = 2;
-    private new const byte DecelerationSpeed = 10;
-    public Vector3 _attackDirection;
+    private Vector3 _appliedMovement, _cameraForward, _cameraRight, _attackDirection;
     private const byte RotationSpeed = 3;
     private bool _hasTarget;
     
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        _turnTime = _ctx.BaseTurnTime * 2;
+        _turnTime = _ctx.BaseTurnTime * AttackTurnTimeModifier;
     }
 
     public override void EnterState()
@@ -23,7 +22,9 @@ public class PlayerAttackState : PlayerBaseState
     
     public override void UpdateState()
     {
-        if(!_hasTarget)
+        if(_hasTarget)
+            HandleAttackRotation();
+        else
             HandleRotation();
         
         HandleMove();
@@ -41,9 +42,6 @@ public class PlayerAttackState : PlayerBaseState
         CheckTarget();
         
         HandleAcceleration();
-        
-        if(_hasTarget) 
-            HandleAttackRotation();
     }
 
     public override void ExitState()
@@ -72,14 +70,18 @@ public class PlayerAttackState : PlayerBaseState
         {
             if (_ctx.IsSprintPressed)
                 SwitchState(_factory.Sprint());
+            else if(_hasTarget)
+                SwitchState(_factory.Combat());
             else
                 SwitchState(_factory.Grounded());
         }
     }
-
-    protected override void HandleAcceleration()
+    
+    protected override void HandleMove()
     {
-        _ctx.Acceleration -= (Time.fixedDeltaTime * DecelerationSpeed);
-        _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, float.MaxValue);
+        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration, _ctx.BaseGravity,
+            _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration);
+
+        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
 }

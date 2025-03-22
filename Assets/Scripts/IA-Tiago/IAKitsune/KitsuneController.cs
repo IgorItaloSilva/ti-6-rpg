@@ -119,7 +119,7 @@ public class KitsuneController : ActualEnemyController
     }
     public override void Die()
     {
-        PlayerStateMachine.Instance.CameraTargetUnlock();
+        PlayerStateMachine.Instance.CameraTargetUnlock(true);
         if (collider && healthBar)
         {
             collider.enabled = false;
@@ -129,7 +129,7 @@ public class KitsuneController : ActualEnemyController
         ChangeAction(deathAction);
     }
     public void ActualDeath(){
-        PlayerStateMachine.Instance.CameraTargetUnlock();
+        PlayerStateMachine.Instance.CameraTargetUnlock(true);
         if (collider && healthBar)
         {
             collider.enabled = false;

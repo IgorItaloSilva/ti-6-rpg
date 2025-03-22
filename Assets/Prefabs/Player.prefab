@@ -41,7 +41,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5660211945057266783}
-  m_Layer: 0
+  - component: {fileID: 3226698401320831613}
+  - component: {fileID: 2991858853400201595}
+  m_Layer: 8
   m_Name: KatanaDEF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -63,6 +65,42 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5744335565417119567}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3226698401320831613
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486141853874030644}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0008737855, y: 0.0076969215, z: 0.0018574483}
+  m_Center: {x: 0.00006321558, y: 0.0065077203, z: -0.00042867713}
+--- !u!114 &2991858853400201595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486141853874030644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76aa075c4053d204c9989fdeb37be692, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageType: 0
+  baseDamage: 10
+  critRate: 5
 --- !u!1 &578014627446561422
 GameObject:
   m_ObjectHideFlags: 0
@@ -1910,7 +1948,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7989624521174892601}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 1, z: -0, w: -0.00000035762784}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: -0.45363235, y: -1.28, z: -0.9923477}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1936,7 +1974,7 @@ MonoBehaviour:
   playerCamera: {fileID: 0}
   targetCamera: {fileID: 0}
   enemyDetectionObject: {fileID: 6791872645147152259}
-  _swordWeaponManager: {fileID: 0}
+  _swordWeaponManager: {fileID: 2991858853400201595}
   _swordTrail: {fileID: 0}
   _swordMainTrail: {fileID: 0}
   ShowDebugLogs: 0

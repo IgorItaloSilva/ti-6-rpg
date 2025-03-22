@@ -37,6 +37,10 @@ public class PlayerStateFactory
     {
         return new PlayerGroundedState(_context, this);
     }
+    public PlayerBaseState Combat()
+    {
+        return new PlayerCombatState(_context, this);
+    }
     public PlayerBaseState InAir(bool shouldRotate = true)
     {
         return new PlayerInAirState(_context, this, shouldRotate);
