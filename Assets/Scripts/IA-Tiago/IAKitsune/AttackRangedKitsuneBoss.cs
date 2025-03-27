@@ -27,7 +27,8 @@ public class AttackRangedKitsuneBoss : MonoBehaviour
             transform.position+=dir.normalized*(speed*Time.fixedDeltaTime);
         }
     }
-    public void SetTargetAndGo(ISteeringAgent target){
+    public void SetTargetDamageAndGo(ISteeringAgent target,float damage){
+        this.damage=damage;
         this.target=target;
         canMove=true;
     }

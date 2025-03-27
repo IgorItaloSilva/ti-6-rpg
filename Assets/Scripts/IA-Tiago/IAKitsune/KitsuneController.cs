@@ -15,6 +15,7 @@ public class KitsuneController : ActualEnemyController
     [SerializeField]protected float dashAttackDist;
     [SerializeField]protected float dashAttackTime;
     [SerializeField]protected float rangedAttackTime;
+    [SerializeField]protected float rangedAttackDamage;
     [SerializeField]protected int nDashCharges;
     [SerializeField]protected int nMagicCharges;
     [SerializeField]protected float restTime;
@@ -39,7 +40,7 @@ public class KitsuneController : ActualEnemyController
         restAction = new KitsuneRestAction(restTime,this);
         deathAction = new KitsuneDeathAction(3f,this);
         dashAttack = new KitsuneDashAttack(dashAttackTime,.3f,this);
-        magicAttack = new KitSuneRangedAttack(rangedAttackTime,prefabRangedAttack,this);
+        magicAttack = new KitSuneRangedAttack(rangedAttackTime,rangedAttackDamage,prefabRangedAttack,this);
     }
     protected override void AdditionalStart()
     {
