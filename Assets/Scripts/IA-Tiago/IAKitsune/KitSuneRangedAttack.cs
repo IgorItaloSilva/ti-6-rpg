@@ -14,6 +14,7 @@ public class KitSuneRangedAttack : EnemyActions
     int vectorIndex;
     GameObject[]bolas;
     bool hasReleased;
+    float damage;
     
     public override void EnterAction()
     {
@@ -49,7 +50,7 @@ public class KitSuneRangedAttack : EnemyActions
         }
         if(time>releaseTime&&!hasReleased){
             for(int i=0;i<kitsuneController.rangedAttackPos.Length;i++){
-                bolas[i].GetComponent<AttackRangedKitsuneBoss>().SetTargetAndGo(kitsuneController.target);
+                bolas[i].GetComponent<AttackRangedKitsuneBoss>().SetTargetDamageAndGo(kitsuneController.target,damage);
             }
             hasReleased=true;
         }
@@ -57,7 +58,8 @@ public class KitSuneRangedAttack : EnemyActions
             kitsuneController.ChangeAction(new nullAction());
         } 
     }
-    public KitSuneRangedAttack(float rangedAttackTime,GameObject prefabRangedAttack,KitsuneController kitsuneController){
+    public KitSuneRangedAttack(float rangedAttackTime,float rangedAttackDamage,GameObject prefabRangedAttack,KitsuneController kitsuneController){
+        damage=rangedAttackDamage;
         this.kitsuneController=kitsuneController;
         this.animationDuration=rangedAttackTime;
         this.rangedAttackPrefab=prefabRangedAttack;
