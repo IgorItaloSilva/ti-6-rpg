@@ -47,11 +47,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSounds:
   - name: MainTheme
-    clip: {fileID: 8300000, guid: 41be72af2982f67449e42ace3590c9ad, type: 3}
+    clip: {fileID: 8300000, guid: 28d409b88a06a2044964b2f454c5feb0, type: 3}
+    source: {fileID: 0}
+  - name: DeathMusic
+    clip: {fileID: 8300000, guid: 01c6fbb7983da994eb810d09a2398377, type: 3}
     source: {fileID: 0}
   sfxSounds:
-  - name: Cut
+  - name: AirSlash
     clip: {fileID: 8300000, guid: 0a5e111505f918242bb5863e3b605e92, type: 3}
+    source: {fileID: 0}
+  - name: SwordSlash
+    clip: {fileID: 8300000, guid: c427e0c2309940046b32c9c55468a218, type: 3}
+    source: {fileID: 0}
+  - name: Stab
+    clip: {fileID: 8300000, guid: 65b667adae508ab47b5d13a4b16dbd17, type: 3}
+    source: {fileID: 0}
+  - name: PlayerDeath
+    clip: {fileID: 8300000, guid: e52524f87679cd4438a47eda486e48cf, type: 3}
+    source: {fileID: 0}
+  - name: PlayerDamage1
+    clip: {fileID: 8300000, guid: 94ab392386d7d96409e5931a4df1cec2, type: 3}
+    source: {fileID: 0}
+  - name: PlayerDamage2
+    clip: {fileID: 8300000, guid: 73abc5bc7e44bf2448c3078a3d064177, type: 3}
     source: {fileID: 0}
   musicSource: {fileID: 3702471209712790024}
 --- !u!82 &3702471209712790024
@@ -67,7 +85,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -77,7 +95,7 @@ AudioSource:
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
-  Pan2D: -0.86
+  Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
