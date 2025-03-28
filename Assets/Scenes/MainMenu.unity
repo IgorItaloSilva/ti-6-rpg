@@ -1078,7 +1078,17 @@ PrefabInstance:
     - target: {fileID: 1392424927752586740, guid: 5cd8efb0b98f9f04a9cba3c8b20ab4ae,
         type: 3}
       propertyPath: m_Name
-      value: VersionText
+      value: VersionTMP
+      objectReference: {fileID: 0}
+    - target: {fileID: 2553262369772731115, guid: 5cd8efb0b98f9f04a9cba3c8b20ab4ae,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 508682676}
+    - target: {fileID: 2553262369772731115, guid: 5cd8efb0b98f9f04a9cba3c8b20ab4ae,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenCloseLogs
       objectReference: {fileID: 0}
     - target: {fileID: 5486325655091691545, guid: 5cd8efb0b98f9f04a9cba3c8b20ab4ae,
         type: 3}
@@ -1709,6 +1719,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &508682676 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4710760969743983100, guid: 0613ba1db34055c48994b42b3a2d2d43,
+    type: 3}
+  m_PrefabInstance: {fileID: 3873081137543928050}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9fa3f68d12e5b3469a48e00d1e0d7f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &520267796
 GameObject:
   m_ObjectHideFlags: 0
@@ -1845,6 +1867,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 520267796}
   m_CullTransparentMesh: 1
+--- !u!114 &526017603 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6092921214439210896, guid: 5cd8efb0b98f9f04a9cba3c8b20ab4ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 294980713}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &529653739
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7556,7 +7590,7 @@ PrefabInstance:
     - target: {fileID: 4421357738001137708, guid: 2bdc61f2a5af96e46b6ab4bb58f608fa,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 260.13644
+      value: -0.000061035156
       objectReference: {fileID: 0}
     - target: {fileID: 5297231967393705590, guid: 2bdc61f2a5af96e46b6ab4bb58f608fa,
         type: 3}
@@ -8088,7 +8122,7 @@ PrefabInstance:
         type: 3}
       propertyPath: versionTMP
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 526017603}
     - target: {fileID: 4710760969743983100, guid: 0613ba1db34055c48994b42b3a2d2d43,
         type: 3}
       propertyPath: painelUpdates
