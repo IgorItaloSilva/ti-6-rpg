@@ -4,6 +4,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using UnityEngine.VFX;
 
 #endregion
 
@@ -40,6 +41,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private PlayerStateFactory _states;
     [SerializeField] private ParticleSystem _swordTrail;
     [SerializeField] private TrailRenderer _swordMainTrail;
+    [SerializeField] private VisualEffect _swordSlash;
     
     #endregion
 
@@ -358,6 +360,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         SetupJumpVariables();
         _camXSpeed = playerCamera.m_XAxis.m_MaxSpeed;
         _camYSpeed = playerCamera.m_YAxis.m_MaxSpeed;
+        _swordSlash.playRate = 0.6f;
+        _swordSlash.Stop();
     }
 
     private void FixedUpdate()
@@ -439,6 +443,17 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
+    }
+    
+    private void EnableSwordColliderAttack3()
+    {
+        _swordSlash.Play();
+        _swordWeaponManager.EnableCollider();
+        AudioPlayer.instance.PlaySFX("SwordSlash");
+    }
+
+    private void PlaySwordSlash()
+    {
     }
 
     private void DisableSwordCollider()

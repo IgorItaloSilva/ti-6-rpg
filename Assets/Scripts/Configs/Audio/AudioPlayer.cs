@@ -47,7 +47,7 @@ public class AudioPlayer : MonoBehaviour
         }
         else if(s.source == null)
         {
-            source.PlayOneShot(s.clip);
+            musicSource.PlayOneShot(s.clip);
         }
         else
         {
