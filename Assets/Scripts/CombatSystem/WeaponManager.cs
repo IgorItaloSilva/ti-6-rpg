@@ -36,7 +36,7 @@ public class WeaponManager : MonoBehaviour
         damagedTargets.Add(alvo);
         alvo.TakeDamage(damage,damageType,false);
         //Criar um texto de dano na tela
-        //Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
+        Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
     }
     public void EnableCollider(){
         damageCollider.enabled=true;
