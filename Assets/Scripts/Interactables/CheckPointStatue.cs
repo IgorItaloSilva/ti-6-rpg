@@ -60,6 +60,9 @@ public class CheckPointStatue : Interactable
     }
     void Interact(InputAction.CallbackContext context){
         if(inRange){
+            PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasSavedHash);
+            PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasSavedHash);
+            PlayerStateMachine.Instance.LockPlayer();
             LevelLoadingManager.instance?.RespawnEnemies();
             playerStats?.CheckPointStatue();
             DataPersistenceManager.instance.SaveGame();

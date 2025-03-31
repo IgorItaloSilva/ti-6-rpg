@@ -18,7 +18,7 @@ public class AttackRangedKitsuneBoss : MonoBehaviour
     void FixedUpdate()
     {
         if(canMove){
-            if(!stopUpdatingPos){
+            if(!stopUpdatingPos && target != null){
                 dir = target.GetPosition()-transform.position;
             }
             if(dir.magnitude<5&&!stopUpdatingPos){
