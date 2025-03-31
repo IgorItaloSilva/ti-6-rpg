@@ -71,7 +71,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canMount = true,
         _isTargetPressed,
         _canTarget,
-        _isOnTarget;
+        _isOnTarget,
+        _shouldLock;
 
     private byte _attackCount;
 
@@ -103,6 +104,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int HasJumpedHash = Animator.StringToHash("hasJumped");
     public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
     public readonly int HasDiedHash = Animator.StringToHash("hasDied");
+    public readonly int HasSavedHash = Animator.StringToHash("hasSaved");
     public readonly int HasRespawnedHash = Animator.StringToHash("hasRespawned");
     public readonly int PlayerVelocityHash = Animator.StringToHash("playerVelocity");
 
@@ -142,6 +144,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsDodging
     {
         set => _isDodging = value;
+    }
+
+    public bool ShouldLock
+    {
+        get => _shouldLock;
+        set => _shouldLock = value;
     }
 
     public PlayerBaseState CurrentState
@@ -452,10 +460,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         AudioPlayer.instance.PlaySFX("SwordSlash");
     }
 
-    private void PlaySwordSlash()
-    {
-    }
-
     private void DisableSwordCollider()
     {
         _swordMainTrail.emitting = false;
@@ -466,6 +470,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public void SetWeaponDamageType(int value)
     {
         _swordWeaponManager.SetDamageType(value);
+    }
+
+    public void LockPlayer()
+    {
+        _shouldLock = true;
     }
 
     #endregion

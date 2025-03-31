@@ -68,6 +68,7 @@ public class DataPersistenceManager : MonoBehaviour
         }
     }
     public void SaveGame(){
+        
         if(disableDataPersistence){
             return;
         }

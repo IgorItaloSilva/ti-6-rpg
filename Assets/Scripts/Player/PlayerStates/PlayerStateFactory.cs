@@ -47,4 +47,14 @@ public class PlayerStateFactory
         return new PlayerClimbState(_context, this);
     }
 
+    public PlayerBaseState Locked(int duration)
+    {
+        return new PlayerLockedState(_context, this, duration);
+    }
+    
+    public PlayerBaseState Locked()
+    {
+        return new PlayerLockedState(_context, this);
+    }
+
 }
