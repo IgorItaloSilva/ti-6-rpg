@@ -10,14 +10,19 @@ public class DoorInteractable : Interactable
     [SerializeField]GameObject openDoor;
     [SerializeField]TextMeshPro wrongSideText;
     [SerializeField]TextMeshPro keyIndicationText;
-    bool inRange;
-    PlayerInput playerInput;
+    //PlayerInput playerInput;
+    void OnEnable(){
+        PlayerStateMachine.Instance.AddActionToInteract(Interact);
+    }
+    void OnDisable(){
+        PlayerStateMachine.Instance.RemoveActionFromInteract(Interact);
+    }
     protected override void Start()
     {
         base.Start();
-        playerInput = new PlayerInput();
+        /* playerInput = new PlayerInput();
         playerInput.Gameplay.Enable();
-        playerInput.Gameplay.Interact.performed+=Interact;
+        playerInput.Gameplay.Interact.performed+=Interact; */
     }
     protected override void OnTriggerEnter(Collider collider)
     {
