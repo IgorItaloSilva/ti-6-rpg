@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pillar : Interactable
+public class PillarInteractabe : Interactable
 {
     [SerializeField]int spawnId;
     [SerializeField]GameObject effect;

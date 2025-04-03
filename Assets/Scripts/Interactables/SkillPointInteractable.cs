@@ -30,9 +30,13 @@ public class SkillPointInteractable : Interactable, IDamagable
             }
         }
     }
-    public void Die()
+    virtual public void Die()
     {
         SkillTree.instance?.GainMoney((int)Enums.PowerUpType.Dark);
+        AlreadyInterated=true;
+        Active=false;
+        Save();
+        gameObject.SetActive(false);
         //se monstro
         //desativa o corpo com vfx de morrer
         //se arvore
@@ -68,27 +72,21 @@ public class SkillPointInteractable : Interactable, IDamagable
             Rescue();
         }
     }
-    void Rescue(){
+    protected virtual void Rescue(){
         SkillTree.instance?.GainMoney((int)Enums.PowerUpType.Light);
+        AlreadyInterated=true;
+        Active=false;
+        Save();
+        gameObject.SetActive(false);
         //se monstro
         //deixa o corpo parado ali?
         //vfx de purificar?
         //se arvore
         //destroy a arvore? toca um vfx?
     }
-    /* void RewardAndDeactivate(){
-        SkillTree.instance?.GainMoney((int)powerUpType);
-        AlreadyInterated=true;
-        Active=false;
-        Save();
-        gameObject.SetActive(false);
-    } */
     public override void Load(InteractableData interactableData)
     {
         base.Load(interactableData);
         if(AlreadyInterated||!Active)gameObject.SetActive(false);
-    }
-    public void Activate(){
-        Active=true;
     }
 }

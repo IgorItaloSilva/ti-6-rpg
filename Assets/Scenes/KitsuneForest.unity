@@ -6381,6 +6381,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 03e5975d44a05a04bb51c9f7b0af8da8, type: 3}
+--- !u!4 &524644449 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6727528030538330448, guid: 03e5975d44a05a04bb51c9f7b0af8da8,
+    type: 3}
+  m_PrefabInstance: {fileID: 524644448}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &524644450 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 241711296684430534, guid: 03e5975d44a05a04bb51c9f7b0af8da8,
+    type: 3}
+  m_PrefabInstance: {fileID: 524644448}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &524644451 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1370622380160189605, guid: 03e5975d44a05a04bb51c9f7b0af8da8,
+    type: 3}
+  m_PrefabInstance: {fileID: 524644448}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &538427576
 GameObject:
   m_ObjectHideFlags: 0
@@ -11884,7 +11902,7 @@ PrefabInstance:
     - target: {fileID: 7130622063641161249, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: m_Name
-      value: KitsuneYoukaiNovo (7)
+      value: KitsuneYoukaiNovo3
       objectReference: {fileID: 0}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
@@ -11899,7 +11917,7 @@ PrefabInstance:
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: pillarID
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
@@ -11920,7 +11938,7 @@ PrefabInstance:
         type: 3}
       propertyPath: wanderCenter
       value: 
-      objectReference: {fileID: 1826530586}
+      objectReference: {fileID: 524644450}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: maxWanderTime
@@ -16745,7 +16763,7 @@ PrefabInstance:
     - target: {fileID: 7130622063641161249, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: m_Name
-      value: KitsuneYoukaiNovo (6)
+      value: KitsuneYoukaiNovo1
       objectReference: {fileID: 0}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
@@ -16760,7 +16778,7 @@ PrefabInstance:
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: pillarID
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
@@ -18294,7 +18312,7 @@ PrefabInstance:
     - target: {fileID: 7130622063641161249, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: m_Name
-      value: KitsuneYoukaiNovo (1)
+      value: KitsuneYoukaiNovo4
       objectReference: {fileID: 0}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
@@ -18309,7 +18327,7 @@ PrefabInstance:
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: pillarID
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
@@ -18330,7 +18348,7 @@ PrefabInstance:
         type: 3}
       propertyPath: wanderCenter
       value: 
-      objectReference: {fileID: 1826530586}
+      objectReference: {fileID: 524644449}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: maxWanderTime
@@ -18399,11 +18417,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 3443531284092203688, guid: 9180bb2c67467ed4685f4fa9d0cded37,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2126997113}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9180bb2c67467ed4685f4fa9d0cded37, type: 3}
 --- !u!1001 &1744381310
@@ -18854,12 +18868,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a28323060f773f14195a401d2992b201, type: 3}
---- !u!4 &1823808957 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3443531284092203688, guid: 9180bb2c67467ed4685f4fa9d0cded37,
-    type: 3}
-  m_PrefabInstance: {fileID: 1734751676}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1825976492 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6ee1f842cb816e842af40aa48737b805,
@@ -24802,7 +24810,7 @@ PrefabInstance:
     - target: {fileID: 7130622063641161249, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: m_Name
-      value: KitsuneYoukaiNovo (5)
+      value: KitsuneYoukaiNovo 2
       objectReference: {fileID: 0}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
@@ -24817,7 +24825,7 @@ PrefabInstance:
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: pillarID
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
@@ -24838,7 +24846,7 @@ PrefabInstance:
         type: 3}
       propertyPath: wanderCenter
       value: 
-      objectReference: {fileID: 1826530586}
+      objectReference: {fileID: 524644451}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: maxWanderTime
@@ -24942,37 +24950,12 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4987588963207440520, guid: 5595e8ccd9abb7041bd5bd883eb4cd5d, type: 3}
---- !u!1 &2126997112
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2126997113}
-  m_Layer: 3
-  m_Name: Pos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2126997113
+--- !u!4 &2126997113 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 2663507803675481887, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+    type: 3}
+  m_PrefabInstance: {fileID: 1734751676}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2126997112}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.06, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1823808957}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2130011165
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25297,11 +25280,36 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 135824772337262798, guid: 33f62d9253163c34ab0b12a3b664c9cb,
+        type: 3}
+      propertyPath: spawnId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 810151694458280382, guid: 33f62d9253163c34ab0b12a3b664c9cb,
+        type: 3}
+      propertyPath: m_Name
+      value: Pilar3
+      objectReference: {fileID: 0}
+    - target: {fileID: 856834866566339436, guid: 33f62d9253163c34ab0b12a3b664c9cb,
+        type: 3}
+      propertyPath: m_Name
+      value: Pilar4
+      objectReference: {fileID: 0}
     - target: {fileID: 1859424648405332497, guid: 33f62d9253163c34ab0b12a3b664c9cb,
         type: 3}
       propertyPath: boss
       value: 
       objectReference: {fileID: 1964602097}
+    - target: {fileID: 1909859160030877218, guid: 33f62d9253163c34ab0b12a3b664c9cb,
+        type: 3}
+      propertyPath: spawnId
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2273237397714328705, guid: 33f62d9253163c34ab0b12a3b664c9cb,
+        type: 3}
+      propertyPath: spawnId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3374632661584239617, guid: 33f62d9253163c34ab0b12a3b664c9cb,
         type: 3}
       propertyPath: m_Name
@@ -25311,6 +25319,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5283491158834990886, guid: 33f62d9253163c34ab0b12a3b664c9cb,
+        type: 3}
+      propertyPath: m_Name
+      value: Pilar1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6367664809076200887, guid: 33f62d9253163c34ab0b12a3b664c9cb,
+        type: 3}
+      propertyPath: spawnId
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6495561446810922197, guid: 33f62d9253163c34ab0b12a3b664c9cb,
         type: 3}
@@ -25361,6 +25379,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7992183515749021807, guid: 33f62d9253163c34ab0b12a3b664c9cb,
+        type: 3}
+      propertyPath: m_Name
+      value: Pilar2
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 45161584165451196, guid: 33f62d9253163c34ab0b12a3b664c9cb, type: 3}
@@ -26163,22 +26186,22 @@ PrefabInstance:
     - target: {fileID: 7897325956007512491, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99938923
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7897325956007512491, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.034946207
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7897325956007512491, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0000001403275
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7897325956007512491, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.0000000025462588
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

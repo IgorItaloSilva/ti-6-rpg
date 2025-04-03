@@ -73,7 +73,6 @@ public class KitsuneBoss : KitsuneController
     {
         Debug.Log("Chamado a boss death da classe filha");
         base.BossDeath();
-        SkillTree.instance?.GainMoney((int)rewardPowerUpType);
     }
     
 }

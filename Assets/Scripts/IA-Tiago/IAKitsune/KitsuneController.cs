@@ -22,7 +22,6 @@ public class KitsuneController : ActualEnemyController
     [SerializeField]int pillarID;
     [SerializeField]Transform wanderCenter;
     [SerializeField]float maxWanderDist;
-    [SerializeField]private CapsuleCollider collider;
     //[SerializeField] private Canvas healthBar;
     [SerializeField]float maxWanderTime;
     [SerializeField]protected GameObject prefabRangedAttack;
@@ -146,32 +145,16 @@ public class KitsuneController : ActualEnemyController
     }
     public override void Die()
     {
-        PlayerStateMachine.Instance.CameraTargetUnlock();
-        if (collider && healthBar)
-        {
-            collider.enabled = false;
-            healthBar.enabled = false;
-        }
         isDead=true;
+        base.Die();
         ChangeAction(deathAction);
     }
     public void ActualDeath(){
-        PlayerStateMachine.Instance.CameraTargetUnlock();
-        if (collider)// && healthBar)
-        {
-            collider.enabled = false;
-            //healthBar.enabled = false;
-        }
-        base.Die();
+        base.ActualDeath();
         GameEventsManager.instance.levelEvents.KitsuneDeath(pillarID);
     }
     public override void Respawn()
     {
-        if (collider) //&& healthBar)
-        {
-            collider.enabled = true;
-            //healthBar.enabled = true;
-        }
         base.Respawn();
         isDead=false;
         animator.SetBool("isDeadBool",false);
