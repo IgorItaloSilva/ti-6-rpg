@@ -43,7 +43,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     [SerializeField] private ParticleSystem _swordTrail;
     [SerializeField] private TrailRenderer _swordMainTrail;
     [SerializeField] private VisualEffect _swordSlash;
-    
+
     #endregion
 
     #region Private Variables
@@ -73,7 +73,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isTargetPressed,
         _canTarget,
         _isOnTarget,
-        _shouldLock;
+        _isLocked;
 
     private byte _attackCount;
 
@@ -81,7 +81,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     #region Public Variables
 
-    public readonly int DodgeCooldownMs = 1500;
+    public readonly int DodgeCooldownMs = 500;
     public readonly byte BaseMoveSpeed = 5;
 
     public readonly float MaxJumpHeight = .75f,
@@ -129,12 +129,13 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsTargetPressed => _isTargetPressed && _canTarget;
     public bool IsClimbing => _isClimbing;
     public bool IsOnTarget => _isOnTarget;
-    public int AttackCount => _attackCount;
+    public byte AttackCount => _attackCount;
     public float InitialJumpVelocity => _initialJumpVelocity;
 
     #endregion
 
     #region Public Setters
+    
 
     public float Gravity
     {
@@ -144,13 +145,14 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     public bool IsDodging
     {
+        get => _isDodging;
         set => _isDodging = value;
     }
 
-    public bool ShouldLock
+    public bool IsLocked
     {
-        get => _shouldLock;
-        set => _shouldLock = value;
+        get => _isLocked;
+        set => _isLocked = value;
     }
 
     public PlayerBaseState CurrentState
@@ -415,9 +417,17 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     #region Attacks / Weapons
 
-    public void HandleAttack()
+    public void HandleAttack(bool dodgeAttack = false)
     {
         _canAttack = false;
+        
+        if(dodgeAttack)
+        {
+            Debug.Log("DODGE ATTACK");
+            _attackCount = 3;
+            _animator.SetBool(Attack3Hash, true);
+            return;
+        }
 
         switch (_attackCount)
         {
@@ -443,17 +453,20 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _animator.SetBool(Attack3Hash, false);
         _attackCount = 0;
 
+        DisableSwordCollider();
+        
         if (ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
     }
 
     private void EnableSwordCollider()
     {
+        if (_isDodging) return;
         _swordMainTrail.emitting = true;
         _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
     }
-    
+
     private void EnableSwordColliderAttack3()
     {
         _swordSlash.Play();
@@ -473,9 +486,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordWeaponManager.SetDamageType(value);
     }
 
-    public void LockPlayer()
+    public void LockPlayer(int durationMs = 1667)
     {
-        _shouldLock = true;
+        if (_isLocked) return;
+        _isLocked = true;
+        _currentState.LockPlayer(durationMs);
     }
 
     #endregion
@@ -522,7 +537,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canTarget = false;
         if (!_isOnTarget)
         {
-            if(enemyDetector.targetEnemy)
+            if (enemyDetector.targetEnemy)
                 CameraTargetLock(enemyDetector.targetEnemy.transform);
         }
         else
@@ -550,9 +565,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         playerCamera.enabled = false;
     }
 
-    public void CameraTargetUnlock()
-    {
-        enemyDetector.targetEnemy = null;
+    public void CameraTargetUnlock(bool shouldForgetTarget = false)
+    { 
+        if(shouldForgetTarget) enemyDetector.targetEnemy = null;
         _camTargetGroup.m_Targets[0].target = null;
         playerCamera.enabled = true;
         _isOnTarget = false;

@@ -43,7 +43,7 @@ public class PlayerDodgeState : PlayerBaseState
     {
         if (_ctx.IsAttackPressed)
         {
-            SwitchState(_factory.Attack());
+            SwitchState(_factory.Attack(true));
         }
         
         if (!_ctx.CC.isGrounded)

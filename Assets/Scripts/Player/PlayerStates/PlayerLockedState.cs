@@ -3,20 +3,17 @@ using UnityEngine;
 
 public class PlayerLockedState : PlayerBaseState
 {
-    private readonly int _lockDurationMs;
     
-    public PlayerLockedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, int lockDurationMs = 1667) : base(
+    public PlayerLockedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, int lockDurationMs) : base(
         currentContext, playerStateFactory)
     {
-        this._lockDurationMs = lockDurationMs;
-        _ctx.ShouldLock = false;
+        HandleLockDurationAsync(lockDurationMs);
     }
 
     public override void EnterState()
     {
         if(_ctx.ShowDebugLogs) Debug.Log("Locked");
         _turnTime = int.MaxValue;
-        HandleLockDurationAsync();
     }
 
     public override void UpdateState()
@@ -38,9 +35,10 @@ public class PlayerLockedState : PlayerBaseState
 
     }
 
-    private async void HandleLockDurationAsync()
+    private async void HandleLockDurationAsync(int _lockDurationMs)
     {
         await Task.Delay(_lockDurationMs);
         SwitchState(_factory.Grounded());
+        _ctx.IsLocked = false;
     }
 }

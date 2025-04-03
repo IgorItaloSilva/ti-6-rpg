@@ -70,9 +70,6 @@ public class PlayerGroundedState : PlayerBaseState
 
         if (_ctx.IsClimbing && _ctx.CanMount)
             SwitchState(_factory.Climb());
-        
-        if(_ctx.ShouldLock)
-            SwitchState(_factory.Locked());
     }
 
 }

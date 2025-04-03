@@ -91,4 +91,9 @@ public abstract class PlayerBaseState
 
         _ctx.CurrentState = newState;
     }
+
+    public void LockPlayer(int durationMs)
+    {
+        SwitchState(_factory.Locked(durationMs));
+    }
 }
