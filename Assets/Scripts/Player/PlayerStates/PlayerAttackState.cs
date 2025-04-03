@@ -3,22 +3,24 @@ using UnityEngine;
 public class PlayerAttackState : PlayerBaseState
 {
     private const byte AttackTurnTimeModifier = 2;
-    private new const byte DecelerationSpeed = 10;
+    private new const byte DecelerationSpeed = 10, DodgeDecelerationSpeed = 5;
     public Vector3 _attackDirection;
     private const byte RotationSpeed = 3;
     private bool _hasTarget;
+    private readonly bool _dodgeAttack;
     
-    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
+    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, bool dodgeAttack = false) : base(
         currentContext, playerStateFactory)
     {
         _turnTime = _ctx.BaseTurnTime * 2;
+        //_dodgeAttack = dodgeAttack;
     }
 
     public override void EnterState()
     {
         if(_ctx.ShowDebugLogs) Debug.Log("Attacking!");
         CheckTarget();
-        _ctx.HandleAttack();
+        if(_dodgeAttack) _ctx.HandleAttack(_dodgeAttack);
     }
     
     public override void UpdateState()
@@ -75,11 +77,17 @@ public class PlayerAttackState : PlayerBaseState
             else
                 SwitchState(_factory.Grounded());
         }
+
+        if (_ctx.IsDodgePressed && !_dodgeAttack)
+        {
+            _ctx.ResetAttacks();
+            SwitchState(_factory.Dodge());
+        }
     }
 
     protected override void HandleAcceleration()
     {
-        _ctx.Acceleration -= (Time.fixedDeltaTime * DecelerationSpeed);
+        _ctx.Acceleration -= (Time.fixedDeltaTime * (_dodgeAttack ? DodgeDecelerationSpeed : DecelerationSpeed));
         _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, float.MaxValue);
     }
 }

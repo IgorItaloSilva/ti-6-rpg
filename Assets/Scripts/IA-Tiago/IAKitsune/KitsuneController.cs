@@ -146,17 +146,18 @@ public class KitsuneController : ActualEnemyController
     }
     public override void Die()
     {
-        PlayerStateMachine.Instance.CameraTargetUnlock();
-        if (collider && healthBar)
+        PlayerStateMachine.Instance.CameraTargetUnlock(true);
+        if (collider && healthBar && poiseSlider)
         {
             collider.enabled = false;
-            healthBar.enabled = false;
+            healthBar.gameObject.SetActive(false);
+            poiseSlider.gameObject.SetActive(false);
         }
         isDead=true;
         ChangeAction(deathAction);
     }
     public void ActualDeath(){
-        PlayerStateMachine.Instance.CameraTargetUnlock();
+        PlayerStateMachine.Instance.CameraTargetUnlock(true);
         if (collider)// && healthBar)
         {
             collider.enabled = false;
@@ -170,7 +171,8 @@ public class KitsuneController : ActualEnemyController
         if (collider) //&& healthBar)
         {
             collider.enabled = true;
-            //healthBar.enabled = true;
+            healthBar.gameObject.SetActive(true);
+            poiseSlider.gameObject.SetActive(true);
         }
         base.Respawn();
         isDead=false;

@@ -59,7 +59,7 @@ public class CheckPointStatue : Interactable
         }
     }
     void Interact(InputAction.CallbackContext context){
-        if(inRange){
+        if(inRange && !PlayerStateMachine.Instance.IsLocked){
             PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasSavedHash);
             PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasSavedHash);
             PlayerStateMachine.Instance.LockPlayer();

@@ -34,9 +34,16 @@ public class WeaponManager : MonoBehaviour
             return;
         }
         damagedTargets.Add(alvo);
-        alvo.TakeDamage(damage,damageType,false);
-        //Criar um texto de dano na tela
-        Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
+        if(!PlayerStateMachine.Instance.IsDodging)
+        {
+            alvo.TakeDamage(damage, damageType, false);
+            //Criar um texto de dano na tela
+            Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
+        }
+        else
+        {
+            Debug.Log($"Não enviei {damage} de dano para ser tomado para {alvo}. Ele está desviando!");
+        }
     }
     public void EnableCollider(){
         damageCollider.enabled=true;
