@@ -20,6 +20,8 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     [SerializeField]protected int exp;
     [SerializeField]protected int nAttacksToPoiseBreak = 4;
     [SerializeField]protected bool IsABoss;
+    [SerializeField]protected GameObject bossDeathInteractableGO;
+    [SerializeField]protected CapsuleCollider colliderPrincipal;
     [field:Header ("Coisas só pra ver mais facil")]
     [field:SerializeField]public float CurrentHp{get; protected set;}
     [field:SerializeField]public bool IsDead {get; protected set;}
@@ -30,6 +32,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     [HideInInspector]public Animator animator;
     protected EnemyActions currentAction;
     protected EnemyActions restAction;
+    protected EnemyActions deathAction;
     [HideInInspector]public SteeringManager steeringManager;
     protected int actionsPerformed;
     protected Vector3 startingPos;
@@ -167,18 +170,39 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         if(healthBar!=null)healthBar.SetValue(CurrentHp,wasCrit);
         if(CurrentHp<=0){
             if(IsABoss)BossDeath();
-            Die();
+            else Die();
         }
     }
     public virtual void Die(){
+        PlayerStateMachine.Instance.CameraTargetUnlock();
+        if (colliderPrincipal && healthBar)
+        {
+            colliderPrincipal.enabled = false;
+            healthBar.enabled = false;
+        }
+        ChangeAction(deathAction);
+    }
+    public virtual void ActualDeath(){
+        PlayerStateMachine.Instance.CameraTargetUnlock();
+        if (colliderPrincipal && healthBar)
+        {
+            colliderPrincipal.enabled = false;
+            healthBar.enabled = false;
+        }
         GameEventsManager.instance.playerEvents.PlayerGainExp(exp);
         IsDead=true;
         Save();
         gameObject.SetActive(false);
     }
     protected virtual void BossDeath(){
-        //Debug.Log("Chamei a boss death base");
+        GameEventsManager.instance.playerEvents.PlayerGainExp(exp);
+        IsDead=true;
+        Save();
         UIManager.instance?.HideBossLife();
+        if(bossDeathInteractableGO!=null){
+            bossDeathInteractableGO.SetActive(true);
+            BossDeathInteractable bossDeathInteractable = bossDeathInteractableGO.GetComponent<BossDeathInteractable>();
+        }
     }
     public virtual void Load(EnemyData data){
         if(ignoreSaveLoad)return;
@@ -190,6 +214,11 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         if(IsDead)gameObject.SetActive(false);
     }
     public virtual void Respawn(){
+        if (colliderPrincipal && healthBar)
+        {
+            colliderPrincipal.enabled = true;
+            healthBar.enabled = true;
+        }
         hitsTaken=0;
         if(poiseSlider!=null)poiseSlider.value=hitsTaken;
         CurrentHp = maxHp;
