@@ -5,6 +5,7 @@ using UnityEngine;
 public class WeaponManager : MonoBehaviour
 {
     protected float damage;
+    [SerializeField]bool showDebug = false;
     [SerializeField]protected Enums.DamageType damageType;
     [SerializeField]protected float baseDamage = 10f;
     protected Collider damageCollider;
@@ -13,13 +14,15 @@ public class WeaponManager : MonoBehaviour
     protected virtual void Start(){
         damageCollider=GetComponent<Collider>();
         if(damageCollider==null){
-            Debug.LogWarning("A arma não achou o collider dela");
+            Debug.LogWarning($"O weapon manager do {name} não achou o collider dela");
         }
         damage=baseDamage;
     }
     protected virtual void OnTriggerEnter(Collider other){
         //Debug.Log("A arma colidiu com algo");
-        if(!other.gameObject.CompareTag("EnemyDetection")&&!other.CompareTag("Enemy"))
+        //if(!other.gameObject.CompareTag("EnemyDetection")&&!other.CompareTag("Enemy")) 
+        //não tem pra que tirar todas as excessoes quando a gente pode só colocar o caso do jogador aqui
+        if(other.CompareTag("Player"))
         {
             IDamagable alvoAtacado = other.gameObject.GetComponentInParent<IDamagable>();
             //Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
@@ -35,8 +38,8 @@ public class WeaponManager : MonoBehaviour
         }
         damagedTargets.Add(alvo);
         alvo.TakeDamage(damage,damageType,false);
-        //Criar um texto de dano na tela
-        Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
+        
+        if(showDebug)Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
     }
     public void EnableCollider(){
         damageCollider.enabled=true;

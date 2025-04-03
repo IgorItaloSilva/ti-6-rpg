@@ -6,6 +6,7 @@ public class Interactable : MonoBehaviour
 {
     [field:SerializeField]public string saveId{get; protected set;}
     [SerializeField]protected bool ignoreSaveLoad;
+    protected bool inRange;
     public bool AlreadyInterated{get; protected set;}
     public bool Active{get;protected set;}
     public bool CanInteract {get;protected set;}

@@ -1,5 +1,6 @@
 #region Imports
 
+using System;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -558,4 +559,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     #endregion
+    public void AddActionToInteract(Action<InputAction.CallbackContext> action){
+        _playerInput.Gameplay.Interact.started+=action;
+    }
+    public void RemoveActionFromInteract(Action<InputAction.CallbackContext> action){
+        _playerInput.Gameplay.Interact.started-=action;
+    }
 }

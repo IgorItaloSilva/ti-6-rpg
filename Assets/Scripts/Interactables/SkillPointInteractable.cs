@@ -1,58 +1,54 @@
-using System;
-using TMPro;
 using UnityEngine;
+using TMPro;
 using UnityEngine.InputSystem;
+using System;
 
-public class CheckPointStatue : Interactable
+public class SkillPointInteractable : Interactable, IDamagable
 {
+    [SerializeField]int hitsToDestroy = 3;
     [SerializeField]TextMeshPro keyIndicationText;
-    [SerializeField]bool isDefaultSpawnPoint;
-    PlayerStats playerStats;
-    protected override void Awake()
-    {
-        ignoreSaveLoad=true;
-    }
+    int life;
     void OnEnable(){
         PlayerStateMachine.Instance.AddActionToInteract(Interact);
     }
     void OnDisable(){
         PlayerStateMachine.Instance.RemoveActionFromInteract(Interact);
     }
+
     protected override void Start()
     {
         base.Start();
-        /* playerInput = new PlayerInput(); REMOVIDO POIS EU CRIEI O PlayerStateMachine.Instance.AddFunctionToInteract
-        playerInput.Gameplay.Enable();
-        playerInput.Gameplay.Interact.performed+=Interact; */
-        if(isDefaultSpawnPoint){
-            if(LevelLoadingManager.instance==null){
-                Debug.LogWarning("Não temos um loading manager para definir a posição de spawn");
-            }
-            else{
-                LevelLoadingManager.instance.respawnPoint=transform.position;
+        life = hitsToDestroy;
+    }
+
+    public void TakeDamage(float damage, Enums.DamageType damageType, bool wasCrit)
+    {
+        if(CanInteract){
+            life--;
+            if(life<=0){
+                Die();
             }
         }
+    }
+    public void Die()
+    {
+        SkillTree.instance?.GainMoney((int)Enums.PowerUpType.Dark);
+        //se monstro
+        //desativa o corpo com vfx de morrer
+        //se arvore
+        //destroy a arvore? toca um vfx?
+        
     }
     protected override void OnTriggerEnter(Collider collider)
     {
-        //Debug.Log("Entrei na area da status de save");
         if(collider.CompareTag("Player")){
             keyIndicationText.gameObject.SetActive(true);
             inRange=true;
-            playerStats=collider.GetComponent<PlayerStats>();
-            if(playerStats!=null){
-                playerStats.isNearCampfire=true;
-            }
         }
     }
     void OnTriggerExit(Collider collider){
-        //Debug.Log("Sai da statue de save");
         if(collider.CompareTag("Player")){
             inRange = false;
-            playerStats=collider.GetComponent<PlayerStats>();
-            if(playerStats!=null){
-                playerStats.isNearCampfire=false;
-            }
             keyIndicationText.gameObject.SetActive(false);
         }
     }
@@ -64,13 +60,35 @@ public class CheckPointStatue : Interactable
         }
     }
     void Interact(InputAction.CallbackContext context){
-        if(inRange){
+        if(inRange&&CanInteract&&!AlreadyInterated){
+            PlayerStateMachine.Instance.CanInteract=false;
             PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasSavedHash);
             PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasSavedHash);
             PlayerStateMachine.Instance.LockPlayer();
-            LevelLoadingManager.instance?.RespawnEnemies();
-            playerStats?.CheckPointStatue();
-            DataPersistenceManager.instance.SaveGame();
+            Rescue();
         }
+    }
+    void Rescue(){
+        SkillTree.instance?.GainMoney((int)Enums.PowerUpType.Light);
+        //se monstro
+        //deixa o corpo parado ali?
+        //vfx de purificar?
+        //se arvore
+        //destroy a arvore? toca um vfx?
+    }
+    /* void RewardAndDeactivate(){
+        SkillTree.instance?.GainMoney((int)powerUpType);
+        AlreadyInterated=true;
+        Active=false;
+        Save();
+        gameObject.SetActive(false);
+    } */
+    public override void Load(InteractableData interactableData)
+    {
+        base.Load(interactableData);
+        if(AlreadyInterated||!Active)gameObject.SetActive(false);
+    }
+    public void Activate(){
+        Active=true;
     }
 }
