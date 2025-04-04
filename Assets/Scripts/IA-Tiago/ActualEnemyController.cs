@@ -175,19 +175,21 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     }
     public virtual void Die(){
         PlayerStateMachine.Instance.CameraTargetUnlock();
-        if (colliderPrincipal && healthBar)
+        if (colliderPrincipal && healthBar && poiseSlider)
         {
             colliderPrincipal.enabled = false;
-            healthBar.enabled = false;
+            healthBar.gameObject.SetActive(false);
+            poiseSlider.gameObject.SetActive(false);
         }
         ChangeAction(deathAction);
     }
     public virtual void ActualDeath(){
         PlayerStateMachine.Instance.CameraTargetUnlock();
-        if (colliderPrincipal && healthBar)
+        if (colliderPrincipal && healthBar && poiseSlider)
         {
             colliderPrincipal.enabled = false;
-            healthBar.enabled = false;
+            healthBar.gameObject.SetActive(false);
+            poiseSlider.gameObject.SetActive(false);
         }
         GameEventsManager.instance.playerEvents.PlayerGainExp(exp);
         IsDead=true;
@@ -218,10 +220,11 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         if(IsDead)gameObject.SetActive(false);
     }
     public virtual void Respawn(){
-        if (colliderPrincipal && healthBar)
+        if (colliderPrincipal && healthBar && poiseSlider)
         {
             colliderPrincipal.enabled = true;
-            healthBar.enabled = true;
+            healthBar.gameObject.SetActive(true);
+            poiseSlider.gameObject.SetActive(true);
         }
         hitsTaken=0;
         if(poiseSlider!=null)poiseSlider.value=hitsTaken;

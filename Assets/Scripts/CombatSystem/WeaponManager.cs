@@ -5,7 +5,7 @@ using UnityEngine;
 public class WeaponManager : MonoBehaviour
 {
     protected float damage;
-    [SerializeField]bool showDebug = false;
+    [SerializeField]protected bool showDebug = false;
     [SerializeField]protected Enums.DamageType damageType;
     [SerializeField]protected float baseDamage = 10f;
     protected Collider damageCollider;
@@ -41,11 +41,11 @@ public class WeaponManager : MonoBehaviour
         {
             alvo.TakeDamage(damage, damageType, false);
             //Criar um texto de dano na tela
-            Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
+            if(showDebug)Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
         }
         else
         {
-            Debug.Log($"Não enviei {damage} de dano para ser tomado para {alvo}. Ele está desviando!");
+            if(showDebug)Debug.Log($"Não enviei {damage} de dano para ser tomado para {alvo}. Ele está desviando!");
         }
     }
     public void EnableCollider(){

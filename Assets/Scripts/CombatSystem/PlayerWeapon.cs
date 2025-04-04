@@ -54,17 +54,17 @@ public class PlayerWeapon : WeaponManager
         }
         if(lifeStealPUActive){
             GameEventsManager.instance.skillTreeEvents.LifeStealHit(damageDealt/2);
-            Debug.Log($"Curando o jogador com lifeSteal de {damageDealt/2}");
+            if(showDebug)Debug.Log($"Curando o jogador com lifeSteal de {damageDealt/2}");
         }
         alvo.TakeDamage(damageDealt,damageType,crited);
-        Debug.Log($"Enviei {damageDealt} de dano para ser tomado para {alvo}");
+        if(showDebug)Debug.Log($"Enviei {damageDealt} de dano para ser tomado para {alvo}");
 
         HitAnimatorPause();
     }
 
     private async void HitAnimatorPause()
     {
-        Debug.Log("Paused animation");
+        if(showDebug)Debug.Log("Paused animation");
         await Task.Delay(25);
         PlayerStateMachine.Instance.Animator.speed = 0.1f;
         await Task.Delay(150);
@@ -79,13 +79,16 @@ public class PlayerWeapon : WeaponManager
         heavyAttackDamage = baseDamage+strBonusDamage+runeBonusDamage;
         lightAttackDamage = baseDamage+dexBonusDamage+runeBonusDamage;
     }
-    public void SetDamageType(int attackType){//Chamado pelo playerStateMachine
-        if(attackType==1){
-            damage = lightAttackDamage;
+    public void SetDamageType(Enums.AttackType attackType){//Chamado pelo playerStateMachine
+        switch(attackType){
+            case Enums.AttackType.LightAttack:
+                damage = lightAttackDamage;
+            break;
+            case Enums.AttackType.HeavyAttack:
+                damage = heavyAttackDamage;
+            break;
         }
-        else{
-            damage = heavyAttackDamage;
-        }
+        
     }
      public void RuneDamageBuff(bool isApply, int value){
         if(isApply){

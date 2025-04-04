@@ -29,5 +29,9 @@ public class Enums {
         TradeOff,
         OtherBonus
     }
+    public enum AttackType{
+        HeavyAttack,
+        LightAttack
+    }
     
 }
