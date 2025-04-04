@@ -460,6 +460,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     private void EnableSwordCollider()
     {
+        _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
         if (_isDodging) return;
         _swordMainTrail.emitting = true;
         _swordTrail.Play();
@@ -469,6 +470,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     private void EnableSwordColliderAttack3()
     {
+         _swordWeaponManager.SetDamageType(Enums.AttackType.HeavyAttack);
         _swordSlash.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("SwordSlash");
@@ -479,11 +481,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordMainTrail.emitting = false;
         _swordTrail.Stop();
         _swordWeaponManager.DisableCollider();
-    }
-
-    public void SetWeaponDamageType(int value)
-    {
-        _swordWeaponManager.SetDamageType(value);
     }
 
     public void LockPlayer(int durationMs = 1667)
