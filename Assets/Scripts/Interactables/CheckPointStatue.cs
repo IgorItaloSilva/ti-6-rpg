@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -6,19 +7,23 @@ public class CheckPointStatue : Interactable
 {
     [SerializeField]TextMeshPro keyIndicationText;
     [SerializeField]bool isDefaultSpawnPoint;
-    bool inRange;
-    PlayerInput playerInput;
     PlayerStats playerStats;
     protected override void Awake()
     {
         ignoreSaveLoad=true;
     }
+    void OnEnable(){
+        PlayerStateMachine.Instance?.AddActionToInteract(Interact);
+    }
+    void OnDisable(){
+        PlayerStateMachine.Instance?.RemoveActionFromInteract(Interact);
+    }
     protected override void Start()
     {
         base.Start();
-        playerInput = new PlayerInput();
+        /* playerInput = new PlayerInput(); REMOVIDO POIS EU CRIEI O PlayerStateMachine.Instance.AddFunctionToInteract
         playerInput.Gameplay.Enable();
-        playerInput.Gameplay.Interact.performed+=Interact;
+        playerInput.Gameplay.Interact.performed+=Interact; */
         if(isDefaultSpawnPoint){
             if(LevelLoadingManager.instance==null){
                 Debug.LogWarning("Não temos um loading manager para definir a posição de spawn");
