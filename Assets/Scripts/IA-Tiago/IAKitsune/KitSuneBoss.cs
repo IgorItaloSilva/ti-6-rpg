@@ -5,10 +5,17 @@ using UnityEngine;
 public class KitsuneBoss : KitsuneController
 {
     [Header("Coisas especificas da kitsuneBoss")]
-    [SerializeField]Enums.PowerUpType rewardPowerUpType;
     string nome = "Kitsune, a guardiã";
     bool hasDisplayedLife;
     bool lastActionWasMagic;
+    protected override void CreateActions()
+    {
+        basicAttack = new KitsuneBasicAttack(attackTime,this);
+        restAction = new KitsuneRestAction(restTime,this);
+        deathAction = new KitsuneDeathAction(10000f,this);
+        dashAttack = new KitsuneDashAttack(dashAttackTime,.3f,this);
+        magicAttack = new KitSuneRangedAttack(rangedAttackTime,rangedAttackDamage,prefabRangedAttack,this);
+    }
     protected override void SetSteeringTargetAndCurrentAction(){
         if(isDead)return;
         if(isDashing)return;
@@ -71,7 +78,9 @@ public class KitsuneBoss : KitsuneController
     }
     protected override void BossDeath()
     {
-        Debug.Log("Chamado a boss death da classe filha");
+        Debug.Log("Chamando o boss death da classe boss");
+        colliderPrincipal.enabled=false;
+        isDead=true;
         base.BossDeath();
     }
     

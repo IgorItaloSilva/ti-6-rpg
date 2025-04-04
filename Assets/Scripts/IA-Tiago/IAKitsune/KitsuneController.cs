@@ -6,7 +6,6 @@ using UnityEngine;
 public class KitsuneController : ActualEnemyController
 {
     protected EnemyActions basicAttack;
-    protected EnemyActions deathAction;
     protected EnemyActions dashAttack;
     protected EnemyActions magicAttack;
     [Header("Coisas especificas da Kitsune")]
@@ -22,7 +21,6 @@ public class KitsuneController : ActualEnemyController
     [SerializeField]int pillarID;
     [SerializeField]Transform wanderCenter;
     [SerializeField]float maxWanderDist;
-    [SerializeField]private CapsuleCollider collider;
     //[SerializeField] private Canvas healthBar;
     [SerializeField]float maxWanderTime;
     [SerializeField]protected GameObject prefabRangedAttack;
@@ -146,34 +144,16 @@ public class KitsuneController : ActualEnemyController
     }
     public override void Die()
     {
-        PlayerStateMachine.Instance.CameraTargetUnlock(true);
-        if (collider && healthBar && poiseSlider)
-        {
-            collider.enabled = false;
-            healthBar.gameObject.SetActive(false);
-            poiseSlider.gameObject.SetActive(false);
-        }
         isDead=true;
-        ChangeAction(deathAction);
-    }
-    public void ActualDeath(){
-        PlayerStateMachine.Instance.CameraTargetUnlock(true);
-        if (collider)// && healthBar)
-        {
-            collider.enabled = false;
-            //healthBar.enabled = false;
-        }
         base.Die();
+        //ChangeAction(deathAction);colocado na classe base
+    }
+    override public void ActualDeath(){
+        base.ActualDeath();
         GameEventsManager.instance.levelEvents.KitsuneDeath(pillarID);
     }
     public override void Respawn()
     {
-        if (collider) //&& healthBar)
-        {
-            collider.enabled = true;
-            healthBar.gameObject.SetActive(true);
-            poiseSlider.gameObject.SetActive(true);
-        }
         base.Respawn();
         isDead=false;
         animator.SetBool("isDeadBool",false);

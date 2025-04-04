@@ -195,13 +195,16 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         gameObject.SetActive(false);
     }
     protected virtual void BossDeath(){
-        GameEventsManager.instance.playerEvents.PlayerGainExp(exp);
+        Debug.Log("Chamando o boss death da classe base");
         IsDead=true;
         Save();
+        Die();
         UIManager.instance?.HideBossLife();
         if(bossDeathInteractableGO!=null){
             bossDeathInteractableGO.SetActive(true);
             BossDeathInteractable bossDeathInteractable = bossDeathInteractableGO.GetComponent<BossDeathInteractable>();
+            bossDeathInteractable.bossController=this;
+            bossDeathInteractable.Activate();
         }
     }
     public virtual void Load(EnemyData data){

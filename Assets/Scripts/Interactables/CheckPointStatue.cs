@@ -13,10 +13,10 @@ public class CheckPointStatue : Interactable
         ignoreSaveLoad=true;
     }
     void OnEnable(){
-        PlayerStateMachine.Instance.AddActionToInteract(Interact);
+        PlayerStateMachine.Instance?.AddActionToInteract(Interact);
     }
     void OnDisable(){
-        PlayerStateMachine.Instance.RemoveActionFromInteract(Interact);
+        PlayerStateMachine.Instance?.RemoveActionFromInteract(Interact);
     }
     protected override void Start()
     {
