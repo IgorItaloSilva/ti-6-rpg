@@ -34,7 +34,7 @@ public class AttackRangedKitsuneBoss : MonoBehaviour
     }
     public void OnTriggerEnter(Collider collider){
         if(collider.CompareTag("EnemyDetection"))return;
-        Debug.Log("Colidi com um "+collider.name);
+        //Debug.Log("Colidi com um "+collider.name);
         if(collider.CompareTag("Player")){
             PlayerStats playerStats = collider.GetComponent<PlayerStats>();
             playerStats.TakeDamage(damage,Enums.DamageType.Magic,false);
@@ -42,7 +42,7 @@ public class AttackRangedKitsuneBoss : MonoBehaviour
         Destroy(gameObject);
     }
     void Die(){
-        Debug.Log("Acabou meu tempo");
+        //Debug.Log("Acabou meu tempo");
         Destroy(gameObject);
     }
 }

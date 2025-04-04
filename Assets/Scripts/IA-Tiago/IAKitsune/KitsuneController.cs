@@ -6,7 +6,6 @@ using UnityEngine;
 public class KitsuneController : ActualEnemyController
 {
     protected EnemyActions basicAttack;
-    protected EnemyActions deathAction;
     protected EnemyActions dashAttack;
     protected EnemyActions magicAttack;
     [Header("Coisas especificas da Kitsune")]
@@ -147,9 +146,9 @@ public class KitsuneController : ActualEnemyController
     {
         isDead=true;
         base.Die();
-        ChangeAction(deathAction);
+        //ChangeAction(deathAction);colocado na classe base
     }
-    public void ActualDeath(){
+    override public void ActualDeath(){
         base.ActualDeath();
         GameEventsManager.instance.levelEvents.KitsuneDeath(pillarID);
     }

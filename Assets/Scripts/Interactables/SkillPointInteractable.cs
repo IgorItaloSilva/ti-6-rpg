@@ -6,7 +6,7 @@ using System;
 public class SkillPointInteractable : Interactable, IDamagable
 {
     [SerializeField]int hitsToDestroy = 3;
-    [SerializeField]TextMeshPro keyIndicationText;
+    [SerializeField]GameObject canvas;
     int life;
     void OnEnable(){
         PlayerStateMachine.Instance.AddActionToInteract(Interact);
@@ -37,30 +37,26 @@ public class SkillPointInteractable : Interactable, IDamagable
         Active=false;
         Save();
         gameObject.SetActive(false);
-        //se monstro
-        //desativa o corpo com vfx de morrer
-        //se arvore
-        //destroy a arvore? toca um vfx?
         
     }
     protected override void OnTriggerEnter(Collider collider)
     {
         if(collider.CompareTag("Player")){
-            keyIndicationText.gameObject.SetActive(true);
+            canvas.gameObject.SetActive(true);
             inRange=true;
         }
     }
     void OnTriggerExit(Collider collider){
         if(collider.CompareTag("Player")){
             inRange = false;
-            keyIndicationText.gameObject.SetActive(false);
+            canvas.gameObject.SetActive(false);
         }
     }
     void OnTriggerStay(Collider collider){
         if(collider.CompareTag("Player")){
-            Vector3 lookAt = new Vector3(collider.transform.position.x,keyIndicationText.transform.position.y,collider.transform.position.z);
-            keyIndicationText.transform.LookAt(lookAt);
-            keyIndicationText.transform.Rotate(new Vector3(0,180,0));
+            Vector3 lookAt = new Vector3(collider.transform.position.x,canvas.transform.position.y,collider.transform.position.z);
+            canvas.transform.LookAt(lookAt);
+            canvas.transform.Rotate(new Vector3(0,180,0));
         }
     }
     void Interact(InputAction.CallbackContext context){

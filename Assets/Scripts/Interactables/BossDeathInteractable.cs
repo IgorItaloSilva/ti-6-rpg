@@ -2,9 +2,10 @@ using UnityEngine;
 
 public class BossDeathInteractable : SkillPointInteractable
 {
-    ActualEnemyController bossController;
+    public ActualEnemyController bossController;
     public void Activate(){
         Active=true;
+        CanInteract=true;
         Save();
     }
     public override void Die()
@@ -14,6 +15,7 @@ public class BossDeathInteractable : SkillPointInteractable
         Active=false;
         Save();
         gameObject.SetActive(false);
+        bossController.ActualDeath();
         //Efeito de morrer no boss...
     }
 }
