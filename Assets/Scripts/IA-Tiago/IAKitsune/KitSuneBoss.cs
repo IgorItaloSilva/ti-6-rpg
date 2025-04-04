@@ -78,7 +78,7 @@ public class KitsuneBoss : KitsuneController
     }
     protected override void BossDeath()
     {
-        Debug.Log("Chamando o boss death da classe boss");
+        //Debug.Log("Chamando o boss death da classe boss");
         colliderPrincipal.enabled=false;
         isDead=true;
         base.BossDeath();

@@ -6617,6 +6617,7 @@ MonoBehaviour:
   hitsToDestroy: 3
   canvas: {fileID: 994314648}
   bossController: {fileID: 0}
+  expIfRescued: 0
 --- !u!135 &569210878
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -17265,6 +17266,11 @@ PrefabInstance:
       objectReference: {fileID: 240201345}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
+      propertyPath: charHeight
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
       propertyPath: maxVelocity
       value: 10
       objectReference: {fileID: 0}
@@ -20187,6 +20193,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5051613356014962097, guid: 64ad6a1411a9a2e4a9051ea9723d2e1c,
         type: 3}
+      propertyPath: seekWeight
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5051613356014962097, guid: 64ad6a1411a9a2e4a9051ea9723d2e1c,
+        type: 3}
       propertyPath: maxVelocity
       value: 10
       objectReference: {fileID: 0}
@@ -20232,6 +20243,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5051613356014962097, guid: 64ad6a1411a9a2e4a9051ea9723d2e1c,
         type: 3}
+      propertyPath: avoidObstacleWeight
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 5051613356014962097, guid: 64ad6a1411a9a2e4a9051ea9723d2e1c,
+        type: 3}
       propertyPath: bossDeathInteractableGO
       value: 
       objectReference: {fileID: 569210875}
@@ -20259,6 +20275,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5882466586119403394, guid: 64ad6a1411a9a2e4a9051ea9723d2e1c,
+        type: 3}
+      propertyPath: m_Drag
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5882466586119403394, guid: 64ad6a1411a9a2e4a9051ea9723d2e1c,
+        type: 3}
+      propertyPath: m_AngularDrag
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7619538365697095876, guid: 64ad6a1411a9a2e4a9051ea9723d2e1c,
         type: 3}
