@@ -195,7 +195,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         gameObject.SetActive(false);
     }
     protected virtual void BossDeath(){
-        Debug.Log("Chamando o boss death da classe base");
+        //Debug.Log("Chamando o boss death da classe base");
         IsDead=true;
         Save();
         Die();
@@ -204,6 +204,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
             bossDeathInteractableGO.SetActive(true);
             BossDeathInteractable bossDeathInteractable = bossDeathInteractableGO.GetComponent<BossDeathInteractable>();
             bossDeathInteractable.bossController=this;
+            bossDeathInteractable.expIfRescued=exp/2;
             bossDeathInteractable.Activate();
         }
     }
