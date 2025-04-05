@@ -84,10 +84,4 @@ public class PlayerAttackState : PlayerBaseState
             SwitchState(_factory.Dodge());
         }
     }
-
-    protected override void HandleAcceleration()
-    {
-        _ctx.Acceleration -= (Time.fixedDeltaTime * (_dodgeAttack ? DodgeDecelerationSpeed : DecelerationSpeed));
-        _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, float.MaxValue);
-    }
 }
