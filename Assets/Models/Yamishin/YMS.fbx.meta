@@ -128,16 +128,8 @@ ModelImporter:
       error 0.3 mm and maximum position error 3.7 mm at time 0:30 (50.0%) Frame 30\n\nRetargeting
       quality report for clip 'Yami_Rig|YMS_D_SE':\n\tRightHand average position
       error 0.4 mm and maximum position error 4.1 mm at time 0:30 (50.0%) Frame 30\n\nRetargeting
-      quality report for clip 'Yami_Rig|YMS_D_SW':\n\tLeftUpperArm average position
-      error 1.4 mm and maximum position error 85.9 mm at time 0: 1 (1.7%) Frame 1\n\tLeftLowerArm
-      average position error 1.4 mm and maximum position error 85.9 mm at time 0:
-      1 (1.7%) Frame 1\n\tLeftHand average position error 1.6 mm and maximum position
-      error 86.0 mm at time 0: 1 (1.7%) Frame 1\n\tRightUpperArm average position
-      error 1.4 mm and maximum position error 85.9 mm at time 0: 1 (1.7%) Frame 1\n\tRightLowerArm
-      average position error 1.4 mm and maximum position error 85.9 mm at time 0:
-      1 (1.7%) Frame 1\n\tRightHand average position error 1.5 mm and maximum position
-      error 85.9 mm at time 0: 1 (1.7%) Frame 1\n\tHead average position error 1.4
-      mm and maximum position error 85.9 mm at time 0: 1 (1.7%) Frame 1\n\nRetargeting
+      quality report for clip 'Yami_Rig|YMS_D_SW':\n\tRetargeting quality is good.
+      No significant differences with original animation were found.\n\nRetargeting
       quality report for clip 'Yami_Rig|YMS_E_E':\n\tRetargeting quality is good.
       No significant differences with original animation were found.\n\nRetargeting
       quality report for clip 'Yami_Rig|YMS_E_N':\n\tRetargeting quality is good.
@@ -403,10 +395,10 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -549,11 +541,11 @@ ModelImporter:
       loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -850,7 +842,7 @@ ModelImporter:
       keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
-      bodyMask: 01000000010000000100000000000000000000000100000001000000010000000100000001000000010000000100000001000000
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
       - time: 0.24202128
@@ -897,7 +889,7 @@ ModelImporter:
       - path: 
         weight: 1
       - path: Katana
-        weight: 1
+        weight: 0
       - path: Yami_Rig
         weight: 1
       - path: Yami_Rig/KatanaDEF
@@ -1037,7 +1029,7 @@ ModelImporter:
       keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
-      bodyMask: 01000000010000000100000000000000000000000100000001000000010000000100000001000000010000000100000001000000
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
       - time: 0.18828784
@@ -1224,7 +1216,7 @@ ModelImporter:
       keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
-      bodyMask: 01000000010000000100000000000000000000000100000001000000010000000100000001000000010000000100000001000000
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
       - time: 0.4
@@ -1395,7 +1387,7 @@ ModelImporter:
       keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
-      bodyMask: 01000000010000000100000000000000000000000100000001000000010000000100000001000000010000000100000001000000
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
       - time: 0.23396227
@@ -2024,6 +2016,1035 @@ ModelImporter:
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Katana
+        weight: 0
+      - path: Yami_Rig
+        weight: 1
+      - path: Yami_Rig/KatanaDEF
+        weight: 1
+      - path: Yami_Rig/ROOT
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L/Toes.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R/Toes.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L/Middle3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L/Pinky3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L/Pointer3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L/Ring3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L/Thumb3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R/Middle3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R/Pinky3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R/Pointer3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R/Ring3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R/Thumb3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck/Head
+        weight: 1
+      - path: YamiNewHigh
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Yami_Rig|YMS_DrawKatana
+      takeName: Yami_Rig|YMS_ChangeBA
+      internalID: -199420179763117477
+      firstFrame: 0
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Katana
+        weight: 0
+      - path: Yami_Rig
+        weight: 1
+      - path: Yami_Rig/KatanaDEF
+        weight: 1
+      - path: Yami_Rig/ROOT
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L/Toes.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R/Toes.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L/Middle3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L/Pinky3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L/Pointer3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L/Ring3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L/Thumb3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R/Middle3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R/Pinky3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R/Pointer3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R/Ring3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R/Thumb3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck/Head
+        weight: 1
+      - path: YamiNewHigh
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Yami_Rig|YMS_SheathKatana
+      takeName: Yami_Rig|YMS_ChangeAB
+      internalID: -6442168084049560921
+      firstFrame: 0
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Katana
+        weight: 0
+      - path: Yami_Rig
+        weight: 1
+      - path: Yami_Rig/KatanaDEF
+        weight: 1
+      - path: Yami_Rig/ROOT
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L/Toes.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R/Toes.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L/Middle3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L/Pinky3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L/Pointer3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L/Ring3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L/Thumb3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R/Middle3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R/Pinky3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R/Pointer3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R/Ring3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R/Thumb3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck/Head
+        weight: 1
+      - path: YamiNewHigh
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Yami_Rig|YMS_D_NE
+      takeName: Yami_Rig|YMS_D_NE
+      internalID: 7247168774464353026
+      firstFrame: 0
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Katana
+        weight: 0
+      - path: Yami_Rig
+        weight: 1
+      - path: Yami_Rig/KatanaDEF
+        weight: 1
+      - path: Yami_Rig/ROOT
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L/Toes.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R/Toes.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L/Middle3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L/Pinky3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L/Pointer3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L/Ring3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L/Thumb3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R/Middle3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R/Pinky3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R/Pointer3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R/Ring3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R/Thumb3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck/Head
+        weight: 1
+      - path: YamiNewHigh
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Yami_Rig|YMS_D_NW
+      takeName: Yami_Rig|YMS_D_NW
+      internalID: 1558675797826039630
+      firstFrame: 0
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Katana
+        weight: 0
+      - path: Yami_Rig
+        weight: 1
+      - path: Yami_Rig/KatanaDEF
+        weight: 1
+      - path: Yami_Rig/ROOT
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L/Toes.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R/Toes.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L/Middle3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L/Pinky3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L/Pointer3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L/Ring3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L/Thumb3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R/Middle3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R/Pinky3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R/Pointer3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R/Ring3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R/Thumb3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck/Head
+        weight: 1
+      - path: YamiNewHigh
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Yami_Rig|YMS_D_SE
+      takeName: Yami_Rig|YMS_D_SE
+      internalID: 2459500662025885420
+      firstFrame: 0
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Katana
+        weight: 0
+      - path: Yami_Rig
+        weight: 1
+      - path: Yami_Rig/KatanaDEF
+        weight: 1
+      - path: Yami_Rig/ROOT
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L/Toes.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R/Toes.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L/Middle3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L/Pinky3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L/Pointer3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L/Ring3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L/Thumb3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R/Middle3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R/Pinky3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R/Pointer3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R/Ring3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R/Thumb3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck/Head
+        weight: 1
+      - path: YamiNewHigh
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Yami_Rig|YMS_D_SW
+      takeName: Yami_Rig|YMS_D_SW
+      internalID: 3506669099847803598
+      firstFrame: 0
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Katana
+        weight: 0
+      - path: Yami_Rig
+        weight: 1
+      - path: Yami_Rig/KatanaDEF
+        weight: 1
+      - path: Yami_Rig/ROOT
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.L/Shin.L/Foot.L/Toes.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Hips/Leg.R/Shin.R/Foot.R/Toes.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Middle1.L/Middle2.L/Middle3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pinky1.L/Pinky2.L/Pinky3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Pointer1.L/Pointer2.L/Pointer3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Ring1.L/Ring2.L/Ring3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.L/Arm.L/Forearm.L/Hand.L/Thumb1.L/Thumb2.L/Thumb3.L
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Middle1.R/Middle2.R/Middle3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pinky1.R/Pinky2.R/Pinky3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Pointer1.R/Pointer2.R/Pointer3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Ring1.R/Ring2.R/Ring3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Cravicle.R/Arm.R/Forearm.R/Hand.R/Thumb1.R/Thumb2.R/Thumb3.R
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck
+        weight: 1
+      - path: Yami_Rig/ROOT/MASTER/Waist/Belly/Chest/Neck/Head
+        weight: 1
+      - path: YamiNewHigh
+        weight: 0
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Yami_Rig|YMS_Katana_Holder
+      takeName: Yami_Rig|YMS_Idle_B
+      internalID: 2302853859203028692
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 1
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 1
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
       curves: []
       events: []
       transformMask:

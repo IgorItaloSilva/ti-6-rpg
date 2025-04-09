@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EnemyDetection : MonoBehaviour
@@ -12,9 +13,20 @@ public class EnemyDetection : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy") && other.gameObject.activeInHierarchy)
         {
+            PlayerStateMachine.Instance.InCombat = true;
             targetEnemy = other.gameObject;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (targetEnemy && !targetEnemy.activeInHierarchy)
+        {
+            PlayerStateMachine.Instance.InCombat = false;
+            targetEnemy = null;
+            PlayerStateMachine.Instance.CameraTargetUnlock();
         }
     }
 
@@ -22,6 +34,7 @@ public class EnemyDetection : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
+            PlayerStateMachine.Instance.InCombat = false;
             targetEnemy = null;
             PlayerStateMachine.Instance.CameraTargetUnlock();
         }
