@@ -36,7 +36,7 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void ExitState()
     {
-        
+        _ctx.Animator.SetBool(_ctx.InCombatHash, false);
     }
 
     public override void CheckSwitchStates()

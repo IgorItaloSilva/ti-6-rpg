@@ -73,7 +73,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isTargetPressed,
         _canTarget,
         _isOnTarget,
-        _isLocked;
+        _isLocked,
+        _inCombat;
 
     private byte _attackCount;
 
@@ -109,6 +110,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int HasRespawnedHash = Animator.StringToHash("hasRespawned");
     public readonly int PlayerVelocityXHash = Animator.StringToHash("playerVelocityX");
     public readonly int PlayerVelocityYHash = Animator.StringToHash("playerVelocityY");
+    public readonly int InCombatHash = Animator.StringToHash("inCombat");
 
     #endregion
 
@@ -125,7 +127,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsMovementPressed => _isMovementPressed;
     public bool IsJumpPressed => _isJumpPressed && _canJump;
     public bool IsDodgePressed => _isDodgePressed && _canDodge;
-    public bool IsAttackPressed => _isAttackPressed && _canAttack;
+    public bool IsAttackPressed => _isAttackPressed && _canAttack && _inCombat;
     public bool IsSprintPressed => _isSprintPressed;
     public bool IsTargetPressed => _isTargetPressed && _canTarget;
     public bool IsClimbing => _isClimbing;
@@ -190,6 +192,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         get => _canInteract;
         set => _canInteract = value;
+    }
+    
+    public bool InCombat
+    {
+        get => _inCombat;
+        set => _inCombat = value;
     }
 
     public bool CanTarget
@@ -461,8 +469,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     private void EnableSwordCollider()
     {
-        _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
         if (_isDodging) return;
+        _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
+        Acceleration = 2f;
         _swordMainTrail.emitting = true;
         _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
@@ -471,7 +480,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     private void EnableSwordColliderAttack3()
     {
-         _swordWeaponManager.SetDamageType(Enums.AttackType.HeavyAttack);
+        if (_isDodging) return;
+        _swordWeaponManager.SetDamageType(Enums.AttackType.HeavyAttack);
+        Acceleration = 2f;
         _swordSlash.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("SwordSlash");
@@ -536,7 +547,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         if (!_isOnTarget)
         {
             if (enemyDetector.targetEnemy)
-                CameraTargetLock(enemyDetector.targetEnemy.transform);
+                CameraTargetLock(enemyDetector.targetEnemy.transform); 
         }
         else
         {

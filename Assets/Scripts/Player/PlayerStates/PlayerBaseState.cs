@@ -24,6 +24,14 @@ public abstract class PlayerBaseState
     public virtual void FixedUpdateState()
     {
         HandleAcceleration();
+        if (_ctx.InCombat)
+        {
+            _ctx.Animator.SetBool(_ctx.InCombatHash, true);
+        }
+        else
+        {
+            _ctx.Animator.SetBool(_ctx.InCombatHash, false);
+        }
     }
     protected void HandleRotation()
     {
@@ -72,7 +80,7 @@ public abstract class PlayerBaseState
         }
 
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
-        //_ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration);
     }
     
     protected void HandleMove()
