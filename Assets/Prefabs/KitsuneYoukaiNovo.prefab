@@ -1627,7 +1627,7 @@ MonoBehaviour:
   <SaveId>k__BackingField: 
   obstaclesLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4097
   maxVelocity: 10
   maxForce: 600
   charWidth: 1.5
@@ -1638,6 +1638,8 @@ MonoBehaviour:
   exp: 100
   nAttacksToPoiseBreak: 4
   IsABoss: 0
+  bossDeathInteractableGO: {fileID: 0}
+  colliderPrincipal: {fileID: 0}
   <CurrentHp>k__BackingField: 0
   <IsDead>k__BackingField: 0
   rb: {fileID: 0}
@@ -1659,7 +1661,6 @@ MonoBehaviour:
   pillarID: 0
   wanderCenter: {fileID: 0}
   maxWanderDist: 17
-  collider: {fileID: 8667969813010441830}
   maxWanderTime: 5
   prefabRangedAttack: {fileID: 0}
   rangedAttackPos: []
