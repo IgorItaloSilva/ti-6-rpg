@@ -82,11 +82,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     #region Public Variables
 
-    public readonly int DodgeCooldownMs = 500;
     public readonly byte BaseMoveSpeed = 5;
 
-    public readonly float MaxJumpHeight = .75f,
-        MaxJumpTime = .6f,
+    public readonly float MaxJumpHeight = 1f,
+        MaxJumpTime = .75f,
         BaseGravity = -9.8f,
         BaseTurnTime = 0.15f,
         SlowTurnTimeModifier = 1.5f;
@@ -127,7 +126,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsMovementPressed => _isMovementPressed;
     public bool IsJumpPressed => _isJumpPressed && _canJump;
     public bool IsDodgePressed => _isDodgePressed && _canDodge;
-    public bool IsAttackPressed => _isAttackPressed && _canAttack && _inCombat;
+    public bool IsAttackPressed => _isAttackPressed && _canAttack;
     public bool IsSprintPressed => _isSprintPressed;
     public bool IsTargetPressed => _isTargetPressed && _canTarget;
     public bool IsClimbing => _isClimbing;
@@ -429,14 +428,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public void HandleAttack(bool dodgeAttack = false)
     {
         _canAttack = false;
-        
-        if(dodgeAttack)
-        {
-            Debug.Log("DODGE ATTACK");
-            _attackCount = 3;
-            _animator.SetBool(Attack3Hash, true);
-            return;
-        }
 
         switch (_attackCount)
         {
@@ -471,21 +462,24 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         if (_isDodging) return;
         _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
-        Acceleration = 2f;
         _swordMainTrail.emitting = true;
         _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
+        if(enemyDetector.targetEnemy)
+            Acceleration = 2f;
+
     }
 
     private void EnableSwordColliderAttack3()
     {
         if (_isDodging) return;
         _swordWeaponManager.SetDamageType(Enums.AttackType.HeavyAttack);
-        Acceleration = 2f;
         _swordSlash.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("SwordSlash");
+        if(enemyDetector.targetEnemy)
+            Acceleration = 2f;
     }
 
     private void DisableSwordCollider()

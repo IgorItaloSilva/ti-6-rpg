@@ -4,6 +4,8 @@ public class PlayerInAirState : PlayerBaseState
 {
     private readonly bool _shouldRotate;
     private const byte AirSpeed = 8;
+    private new const byte DecelerationSpeed = 1;
+    private readonly float MaxAcceleration = 2;
 
     public PlayerInAirState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, bool shouldRotate) : base(
         currentContext, playerStateFactory)
@@ -11,6 +13,7 @@ public class PlayerInAirState : PlayerBaseState
         HandleAirGravity();
         HandleAnimatorParameters();
         _shouldRotate = shouldRotate;
+        MaxAcceleration = Mathf.Min(_ctx.Acceleration,1.75f);
     }
 
     public override void EnterState()
@@ -50,6 +53,15 @@ public class PlayerInAirState : PlayerBaseState
             SwitchState(_factory.Climb());
         }
             
+    }
+    protected override void HandleAcceleration()
+    {
+        _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
+        
+        _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, MaxAcceleration);
+        
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude * 1.5f);
+        //_ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration);
     }
 
     private void HandleAirGravity()

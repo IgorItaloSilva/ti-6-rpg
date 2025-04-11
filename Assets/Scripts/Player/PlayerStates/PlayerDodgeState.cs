@@ -3,19 +3,22 @@ using UnityEngine;
 
 public class PlayerDodgeState : PlayerBaseState
 {
-    private const byte DodgeDurationMs = 200, DodgeAccelerationSpeed = 20;
+    private const byte DodgeDurationMs = 200;
+    private new const byte DecelerationSpeed = 6;
+    private const int DodgeCooldownMs = 500;
     
     public PlayerDodgeState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
         HandleAnimatorParameters();
+        _ctx.Acceleration = 3.5f;
     }
 
     public override void EnterState()
     {
         if(_ctx.ShowDebugLogs) Debug.Log("Dodging");
         _ctx.IsDodging = true;
-        _turnTime = 0f;
+        _turnTime = 0;
         HandleRotation();
         _ctx.CanDodge = false;
         HandleDodgeDurationAsync();
@@ -30,7 +33,7 @@ public class PlayerDodgeState : PlayerBaseState
 
     public override void UpdateState()
     {
-        HandleDodgeMove();
+        HandleMove();
         CheckSwitchStates();
     }
 
@@ -43,7 +46,7 @@ public class PlayerDodgeState : PlayerBaseState
     {
         if (_ctx.IsAttackPressed)
         {
-            SwitchState(_factory.Attack(true));
+            SwitchState(_factory.Attack());
         }
         
         if (!_ctx.CC.isGrounded)
@@ -55,9 +58,7 @@ public class PlayerDodgeState : PlayerBaseState
 
     private async void HandleDodgeDurationAsync()
     {
-
         HandleDodgeCooldownAsync();
-        
         await Task.Delay(DodgeDurationMs);
         if (!_ctx.Animator.GetBool(_ctx.Attack1Hash))
         {
@@ -67,7 +68,7 @@ public class PlayerDodgeState : PlayerBaseState
     
     private async void HandleDodgeCooldownAsync()
     {
-        await Task.Delay(DodgeDurationMs + _ctx.DodgeCooldownMs);
+        await Task.Delay(DodgeDurationMs + DodgeCooldownMs);
         while (_ctx.IsDodgePressed)
         {
             await Task.Yield();
@@ -78,14 +79,7 @@ public class PlayerDodgeState : PlayerBaseState
 
     protected override void HandleAcceleration()
     {
-        _ctx.Acceleration += (Time.fixedDeltaTime * DodgeAccelerationSpeed);
+        _ctx.Acceleration -= (Time.fixedDeltaTime * DecelerationSpeed);
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
-    }
-
-    private void HandleDodgeMove()
-    {
-        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration, _ctx.BaseGravity, _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration);
-        
-        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
 }
