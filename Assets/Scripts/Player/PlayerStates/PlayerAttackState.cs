@@ -2,27 +2,23 @@ using UnityEngine;
 
 public class PlayerAttackState : PlayerBaseState
 {
-    private const byte AttackTurnTimeModifier = 2;
-    private new const byte DecelerationSpeed = 6, DodgeDecelerationSpeed = 5;
+    private new const byte DecelerationSpeed = 5;
     public Vector3 _attackDirection;
     private const byte RotationSpeed = 3;
     private bool _hasTarget;
-    private readonly bool _dodgeAttack;
 
-    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory,
-        bool dodgeAttack = false) : base(
+    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
         _turnTime = _ctx.BaseTurnTime * 2;
-        //_dodgeAttack = dodgeAttack;
     }
 
     public override void EnterState()
     {
-        _ctx.Acceleration = 3;
+        _ctx.Animator.SetBool(_ctx.InCombatHash, true);
+        _ctx.InCombat = true;
         if (_ctx.ShowDebugLogs) Debug.Log("Attacking!");
         CheckTarget();
-        if (_dodgeAttack) _ctx.HandleAttack(_dodgeAttack);
     }
 
     public override void UpdateState()
@@ -52,6 +48,8 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void ExitState()
     {
+        if (!_ctx.EnemyDetector.targetEnemy)
+            _ctx.InCombat = false;
     }
 
     private void HandleAttackRotation()
@@ -61,6 +59,14 @@ public class PlayerAttackState : PlayerBaseState
 
         _ctx.transform.rotation = Quaternion.Slerp(_ctx.transform.rotation, Quaternion.LookRotation(_attackDirection),
             Time.deltaTime * RotationSpeed);
+    }
+    
+    protected override void HandleMove()
+    {
+        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration, _ctx.BaseGravity,
+            _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration);
+
+        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
 
     private void CheckTarget()
@@ -83,13 +89,14 @@ public class PlayerAttackState : PlayerBaseState
             _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
         }
 
-        if (_lowestAccelerationSpeed < 0.5f)
+        if (_lowestAccelerationSpeed < 0.5f && !_ctx.EnemyDetector.targetEnemy)
         {
             _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 0.5f);
         }
+        _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0f, float.MaxValue);
         
         
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude * 1.5f);
         //_ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration);
     }
 
@@ -103,7 +110,7 @@ public class PlayerAttackState : PlayerBaseState
                 SwitchState(_factory.Grounded());
         }
 
-        if (_ctx.IsDodgePressed && !_dodgeAttack)
+        if (_ctx.IsDodgePressed)
         {
             _ctx.ResetAttacks();
             SwitchState(_factory.Dodge());

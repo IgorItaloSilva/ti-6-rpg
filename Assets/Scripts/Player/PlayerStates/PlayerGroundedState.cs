@@ -16,7 +16,7 @@ public class PlayerGroundedState : PlayerBaseState
     public override void EnterState()
     {
         if(_ctx.ShowDebugLogs) Debug.Log("Grounded");
-        _turnTime = _ctx.BaseTurnTime;
+        _turnTime = _ctx.BaseTurnTime * 2;
     }
 
     public sealed override void HandleAnimatorParameters()
@@ -36,19 +36,36 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void ExitState()
     {
-        _ctx.Animator.SetBool(_ctx.InCombatHash, false);
+    }
+    
+    protected override void HandleMove()
+    {
+        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration, _ctx.BaseGravity,
+            _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration);
+
+        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
 
     public override void CheckSwitchStates()
     {
+        // if(_ctx.IsOnTarget)
+        // {
+        //     SwitchState(_factory.Combat());
+        //     return;
+        // }
+        //
         if (!_ctx.CC.isGrounded)
         {
+            
+            _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             SwitchState(_factory.InAir());
             return;
         }
 
         if (_ctx.IsJumpPressed)
         {
+            
+            _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             HandleJump();
             SwitchState(_factory.InAir());
         }
@@ -69,7 +86,10 @@ public class PlayerGroundedState : PlayerBaseState
         }
 
         if (_ctx.IsClimbing && _ctx.CanMount)
+        {
+            _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             SwitchState(_factory.Climb());
+        }
     }
 
 }

@@ -26,7 +26,7 @@ public class PlayerSprintState : PlayerBaseState
     public override void UpdateState()
     {
         HandleRotation();
-        HandleSprintMove();
+        HandleMove();
         CheckSwitchStates();
     }
 
@@ -65,11 +65,11 @@ public class PlayerSprintState : PlayerBaseState
     protected override void HandleAcceleration()
     {
         _ctx.Acceleration += (Time.fixedDeltaTime * AccelerationSpeed);
-        _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 2);
+        _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 2.5f);
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
     }
 
-    private void HandleSprintMove()
+    protected override void HandleMove()
     {
         _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration, _ctx.BaseGravity,
             _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration);

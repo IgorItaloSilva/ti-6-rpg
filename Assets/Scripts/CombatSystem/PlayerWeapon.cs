@@ -30,7 +30,7 @@ public class PlayerWeapon : WeaponManager
         {
             IDamagable alvoAtacado = other.gameObject.GetComponentInParent<IDamagable>();
             //Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
-            if (alvoAtacado != null)
+            if (alvoAtacado != null && alvoAtacado.GetType() != typeof(PlayerStats))
             {
                 DealDamage(alvoAtacado, damage);
             }
@@ -58,16 +58,15 @@ public class PlayerWeapon : WeaponManager
         }
         alvo.TakeDamage(damageDealt,damageType,crited);
         if(showDebug)Debug.Log($"Enviei {damageDealt} de dano para ser tomado para {alvo}");
-
+        
         HitAnimatorPause();
     }
 
     private async void HitAnimatorPause()
     {
         if(showDebug)Debug.Log("Paused animation");
-        await Task.Delay(25);
-        PlayerStateMachine.Instance.Animator.speed = 0.1f;
-        await Task.Delay(150);
+        PlayerStateMachine.Instance.Animator.speed = 0f;
+        await Task.Delay(100);
         PlayerStateMachine.Instance.Animator.speed = 1f;
     }
     public void SetDamageAndValues(float strongAttackBonus, float fastAttackBonus){

@@ -23,9 +23,9 @@ public class PlayerStateFactory
         return new PlayerDodgeState(_context, this);
     }
     
-    public PlayerBaseState Attack(bool dodgeAttack = false)
+    public PlayerBaseState Attack()
     {
-        return new PlayerAttackState(_context, this, dodgeAttack);
+        return new PlayerAttackState(_context, this);
     }
 
     public PlayerBaseState Dead()
@@ -50,6 +50,11 @@ public class PlayerStateFactory
     public PlayerBaseState Locked(int duration)
     {
         return new PlayerLockedState(_context, this, duration);
+    }
+    
+    public PlayerBaseState Combat()
+    {
+        return new PlayerCombatState(_context, this);
     }
 
 }
