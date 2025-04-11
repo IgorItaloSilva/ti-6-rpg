@@ -8392,7 +8392,7 @@ GameObject:
   - component: {fileID: 543536125}
   - component: {fileID: 543536124}
   - component: {fileID: 543536123}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: IslandHike (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9292,7 +9292,7 @@ GameObject:
   - component: {fileID: 652439243}
   - component: {fileID: 652439242}
   - component: {fileID: 652439241}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: IslandHike (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10255,7 +10255,7 @@ GameObject:
   - component: {fileID: 739640187}
   - component: {fileID: 739640186}
   - component: {fileID: 739640185}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: IslandHike (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11528,7 +11528,7 @@ GameObject:
   - component: {fileID: 898386083}
   - component: {fileID: 898386082}
   - component: {fileID: 898386081}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: IslandHike (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14574,7 +14574,7 @@ GameObject:
   - component: {fileID: 1257268657}
   - component: {fileID: 1257268656}
   - component: {fileID: 1257268655}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: IslandHike (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20091,7 +20091,7 @@ GameObject:
   - component: {fileID: 1369344011}
   - component: {fileID: 1369344010}
   - component: {fileID: 1369344009}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: IslandHikeFinal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23472,6 +23472,79 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 3596210576530482120, guid: c78c02eb575cdcf44a24c1ae8d4917b0, type: 3}
+--- !u!1001 &1721911240
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8748049028930473884, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 157b394206afff64ea18558596a92fc0, type: 2}
+    - target: {fileID: -8679921383154817045, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 68.65101
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.3133535
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -16.21532
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 46a3c56a69843b049abe70bf740f6f6f,
+        type: 3}
+      propertyPath: m_Name
+      value: KitsuneYoukai-Model
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 46a3c56a69843b049abe70bf740f6f6f, type: 3}
 --- !u!64 &1722324655
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -44785,7 +44858,7 @@ GameObject:
   - component: {fileID: 7010718504972596243}
   - component: {fileID: 976557417905830705}
   - component: {fileID: 568429050}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: IslandHike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61492,7 +61565,7 @@ GameObject:
   - component: {fileID: 1882455155735790881}
   - component: {fileID: 3856653678515773666}
   - component: {fileID: 491655261}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: IslandBig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65949,3 +66022,4 @@ SceneRoots:
   - {fileID: 1336106100}
   - {fileID: 1954123058}
   - {fileID: 1017463990}
+  - {fileID: 1721911240}
