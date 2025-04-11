@@ -59,6 +59,7 @@ namespace Player.PlayerStates
                     {
                         if(_ctx.IsMovementPressed)
                         {
+                            _ctx.Acceleration = 2.5f;
                             _ctx.transform.Rotate(0f, 180f, 0f);
                             HandleJump();
                             SwitchState(_factory.InAir(shouldRotate: false));
