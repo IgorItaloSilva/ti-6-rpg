@@ -17970,6 +17970,26 @@ PrefabInstance:
       propertyPath: baseDamage
       value: 150
       objectReference: {fileID: 0}
+    - target: {fileID: 4995505603189159344, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 2.56
+      objectReference: {fileID: 0}
+    - target: {fileID: 4995505603189159344, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 4995505603189159344, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 3.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 4995505603189159344, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 1.87
+      objectReference: {fileID: 0}
     - target: {fileID: 5495623960884717171, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -18070,6 +18090,11 @@ PrefabInstance:
         type: 3}
       propertyPath: numberOfActionsBeforeRest
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
+        type: 3}
+      propertyPath: obstaclesLayerMask.m_Bits
+      value: 4097
       objectReference: {fileID: 0}
     - target: {fileID: 7394980716942136902, guid: 9180bb2c67467ed4685f4fa9d0cded37,
         type: 3}
@@ -27285,6 +27310,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DeathCube
       objectReference: {fileID: 0}
+    - target: {fileID: 6045037557154647923, guid: b8e704c341178564ca82006832bb1262,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32750,22 +32780,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!1 &5647203885461478374
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6217447193287233758}
-  m_Layer: 0
-  m_Name: Runas
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1001 &5790761496575071304
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32911,29 +32925,13 @@ GameObject:
   - component: {fileID: 8838904921755977406}
   - component: {fileID: 1794015330482802905}
   - component: {fileID: 4953662778305476668}
-  - component: {fileID: 6353929686986676808}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6217447193287233758
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5647203885461478374}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6231021338730554060
 GameObject:
   m_ObjectHideFlags: 0
@@ -32945,60 +32943,13 @@ GameObject:
   - component: {fileID: 8764149129254640100}
   - component: {fileID: 2012833540952706947}
   - component: {fileID: 5166869081479636838}
-  - component: {fileID: 6568266282386605330}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!136 &6353929686986676808
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6157426623992561046}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!136 &6568266282386605330
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6231021338730554060}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!33 &6753214364127009701
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -33071,7 +33022,7 @@ GameObject:
   - component: {fileID: 4925102177483088632}
   - component: {fileID: 1073744369577312726}
   - component: {fileID: 7869344279578606417}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RuneTrevas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33089,7 +33040,7 @@ PrefabInstance:
     - target: {fileID: 780983560333986371, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_CollideAgainst.m_Bits
-      value: 5047
+      value: 4224
       objectReference: {fileID: 0}
     - target: {fileID: 928519387070355884, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
@@ -33194,22 +33145,27 @@ PrefabInstance:
     - target: {fileID: 7897325956007512491, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.99938923
       objectReference: {fileID: 0}
     - target: {fileID: 7897325956007512491, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.034946207
       objectReference: {fileID: 0}
     - target: {fileID: 7897325956007512491, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.0000001403275
       objectReference: {fileID: 0}
     - target: {fileID: 7897325956007512491, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.0000000025462588
+      objectReference: {fileID: 0}
+    - target: {fileID: 8957481510371975007, guid: e3a5558b14fb02d47bf241bea8333e09,
+        type: 3}
+      propertyPath: m_IgnoreTag
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 8957481510371975007, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
@@ -33247,7 +33203,7 @@ GameObject:
   - component: {fileID: 5139698263960845730}
   - component: {fileID: 1003228289080843916}
   - component: {fileID: 7944100073162073099}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RuneColectable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33296,7 +33252,6 @@ SceneRoots:
   - {fileID: 1588548881}
   - {fileID: 1926636958}
   - {fileID: 5139698263960845730}
-  - {fileID: 6217447193287233758}
   - {fileID: 4925102177483088632}
   - {fileID: 2646148195065521216}
   - {fileID: 836562977}
