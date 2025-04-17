@@ -8,11 +8,13 @@ public class CheckPointStatue : Interactable
     [SerializeField]TextMeshPro keyIndicationText;
     [SerializeField]bool isDefaultSpawnPoint;
     PlayerStats playerStats;
+    bool didntAddInteract = false;
     protected override void Awake()
     {
         ignoreSaveLoad=true;
     }
     void OnEnable(){
+        if(!PlayerStateMachine.Instance)didntAddInteract=true;
         PlayerStateMachine.Instance?.AddActionToInteract(Interact);
     }
     void OnDisable(){
@@ -21,6 +23,9 @@ public class CheckPointStatue : Interactable
     protected override void Start()
     {
         base.Start();
+        if(didntAddInteract){
+            PlayerStateMachine.Instance?.AddActionToInteract(Interact);
+        }
         /* playerInput = new PlayerInput(); REMOVIDO POIS EU CRIEI O PlayerStateMachine.Instance.AddFunctionToInteract
         playerInput.Gameplay.Enable();
         playerInput.Gameplay.Interact.performed+=Interact; */
@@ -37,6 +42,7 @@ public class CheckPointStatue : Interactable
     {
         //Debug.Log("Entrei na area da status de save");
         if(collider.CompareTag("Player")){
+            Debug.Log("Um jogadore ntrou aqui");
             keyIndicationText.gameObject.SetActive(true);
             inRange=true;
             playerStats=collider.GetComponent<PlayerStats>();
@@ -48,6 +54,7 @@ public class CheckPointStatue : Interactable
     void OnTriggerExit(Collider collider){
         //Debug.Log("Sai da statue de save");
         if(collider.CompareTag("Player")){
+                        Debug.Log("Um jogadore saiu aqui");
             inRange = false;
             playerStats=collider.GetComponent<PlayerStats>();
             if(playerStats!=null){
