@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 352908174036988174}
   - component: {fileID: 7642240721635823305}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2216346276598398350}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ToriFencePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -148,6 +148,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ToriiFence
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3ab773fb1bbd75d44a57a846508f86cd,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
