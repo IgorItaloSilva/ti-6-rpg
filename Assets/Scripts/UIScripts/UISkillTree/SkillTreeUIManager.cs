@@ -20,6 +20,8 @@ public class SkillTreeUIManager : MonoBehaviour
     [SerializeField]GameObject powerUpUIBox;
     [SerializeField]TextMeshProUGUI powerUpDescriptionText;
     [SerializeField]TextMeshProUGUI powerUpNameText;    
+    [SerializeField]GameObject puBoxMoedaHonra;
+    [SerializeField]GameObject puBoxMoedaTrevas;
     [SerializeField]float pixelOffset = 5;
     [SerializeField]SkillNodeUI[] powerUpNodes; //O NODE PRECISA SER FEITO EM ORDER PELO ID, não precisaria ser o node, mas caso precise já esta aqui
     bool powerUpBoxIsOpen = false;
@@ -62,6 +64,14 @@ public class SkillTreeUIManager : MonoBehaviour
             powerUpNameText.text = node.powerUp.Name;
             powerUpDescriptionText.text = node.powerUp.UiDescription;
             powerUpBoxIsOpen=true;
+            if(node.powerUp.PUType==Enums.PowerUpType.Light){
+                puBoxMoedaHonra.SetActive(true);
+                puBoxMoedaTrevas.SetActive(false);
+            }
+            else{
+                puBoxMoedaHonra.SetActive(false);
+                puBoxMoedaTrevas.SetActive(true);
+            }
         }
     }
     public void DeactivatePowerUpDescriptionBox(){
@@ -99,15 +109,24 @@ public class SkillTreeUIManager : MonoBehaviour
     public void AjustButtonsSprites(){
         foreach(SkillNodeUI skillNode in powerUpNodes){
             int id = skillNode.powerUp.Id;
+            Debug.Log($"id do power up id é {id}");
+            if(buyablePowerUps==null)Debug.LogWarning("o buyablePowerUps não existe");
             if(buyablePowerUps[id]){
                 skillNode.button.interactable=true;
+                skillNode.NotBoughtOutlineImage.color=Color.gray;
             }
             else{
                 skillNode.button.interactable=false;
+                skillNode.NotBoughtOutlineImage.color=Color.black;
             }
             if(boughtPowerUps[id]){
                 powerUpNodes[id].button.interactable = true;
-                skillNode.button.image.sprite=skillNode.powerUpBoughtSprite;
+                skillNode.powerUpBoughtGO.SetActive(true);
+                skillNode.powerUpNotBoughtGO.SetActive(false);
+            }
+            else{
+                skillNode.powerUpBoughtGO.SetActive(false);
+                skillNode.powerUpNotBoughtGO.SetActive(true);
             }
         }
     }
@@ -117,7 +136,9 @@ public class SkillTreeUIManager : MonoBehaviour
         }
         boughtPowerUps[id]=true;
         powerUpNodes[id].button.interactable=true;
-        powerUpNodes[id].button.image.sprite=powerUpNodes[id].powerUpBoughtSprite;
+        powerUpNodes[id].NotBoughtOutlineImage.color=Color.gray;
+        powerUpNodes[id].powerUpBoughtGO.SetActive(true);
+        powerUpNodes[id].powerUpNotBoughtGO.SetActive(false);
     }
     public void AjustBuyable(int id){
         if(buyablePowerUps==null){
@@ -125,6 +146,7 @@ public class SkillTreeUIManager : MonoBehaviour
         }
         buyablePowerUps[id]=true;
         powerUpNodes[id].button.interactable=true;
+        powerUpNodes[id].NotBoughtOutlineImage.color=Color.gray;
     }
     
     public void AjustText(){

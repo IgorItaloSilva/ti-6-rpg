@@ -5003,10 +5003,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4341404159733780230, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6651508308763140785, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8255920817437254428, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
         type: 3}
       propertyPath: m_Name
       value: ToriGatePrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255920817437254428, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 9205037329910234002, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -27489,74 +27509,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6231021338730554060}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &2616497388397952581
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4060863738994464534, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -3.6653404
-      objectReference: {fileID: 0}
-    - target: {fileID: 4060863738994464534, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 14.5742035
-      objectReference: {fileID: 0}
-    - target: {fileID: 4060863738994464534, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -113.87164
-      objectReference: {fileID: 0}
-    - target: {fileID: 4060863738994464534, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4060863738994464534, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4060863738994464534, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4060863738994464534, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4060863738994464534, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4060863738994464534, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4060863738994464534, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8255920817437254428, guid: 60f7eed15b4a84c419b4d2c6903f0ba1,
-        type: 3}
-      propertyPath: m_Name
-      value: ToriGatePrefab
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 60f7eed15b4a84c419b4d2c6903f0ba1, type: 3}
 --- !u!1001 &2646148195065521216
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33572,4 +33524,3 @@ SceneRoots:
   - {fileID: 105908739}
   - {fileID: 33260925}
   - {fileID: 2036512214}
-  - {fileID: 2616497388397952581}
