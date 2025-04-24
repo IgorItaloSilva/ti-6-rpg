@@ -9,7 +9,9 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler,IPointerExitHandl
 {
     [field:SerializeField]public PowerUpSO powerUp {get; private set;}
     [field:SerializeField]public Button button{get; private set;}
-    [field:SerializeField]public Sprite powerUpBoughtSprite{get; private set;}
+    [field:SerializeField]public GameObject powerUpNotBoughtGO{get; private set;}
+    [field:SerializeField]public GameObject powerUpBoughtGO{get; private set;}
+    [field:SerializeField]public Image NotBoughtOutlineImage{get; private set;}
 
     public void OnPointerEnter(PointerEventData eventData)
     {

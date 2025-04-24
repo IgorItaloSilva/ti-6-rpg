@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class SkillTree : MonoBehaviour,IDataPersistence
 {
     public static SkillTree instance;
-    private const int NPOWERUPS = 15; //PRECISA SER AJUSTADO MANUALMENTE
+    private const int NPOWERUPS = 13; //PRECISA SER AJUSTADO MANUALMENTE
     [SerializeField] private List<PowerUpSO> powerUps;
     private int[] currentMoney;//o indice é o enum do tipo de powerUp
     private int[] totalMoneyGotten;//o indice é o enum do tipo de powerUp
