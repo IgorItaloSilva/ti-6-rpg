@@ -112,20 +112,16 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             Invoke("Die",1f);
         }
     }
-    void Update(){
-        if(Keyboard.current.qKey.wasPressedThisFrame){
-            UsePotion();
-        }
-    }
-    public void HealLife(float life){
+    private void HealLife(float life){
         if(CurrentLife<=maxLife){
             CurrentLife += life;
             if(CurrentLife>maxLife)CurrentLife=maxLife;
             UIManager.instance?.UpdateHealth(CurrentLife,false);
         }
     }
-    private void UsePotion(){
-        if(PotionsAmmount>0){
+    public void UsePotion(){
+        if(PotionsAmmount>0)
+        {
             HealLife(lifeToheal);
             PotionsAmmount--;
             UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);

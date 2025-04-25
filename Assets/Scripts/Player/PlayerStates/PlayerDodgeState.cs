@@ -6,22 +6,21 @@ public class PlayerDodgeState : PlayerBaseState
     private const byte DodgeDurationMs = 200;
     private new const byte DecelerationSpeed = 6;
     private const int DodgeCooldownMs = 500;
-    
+
     public PlayerDodgeState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
         HandleAnimatorParameters();
-        _ctx.Acceleration = 3.5f;
+        _ctx.Acceleration = _ctx.IsMovementPressed ? 4f : -4f;
+        if (_ctx.ShowDebugLogs) Debug.Log("Dodging");
+        _ctx.IsDodging = true;
+        _turnTime = DodgeDurationMs / 2000f;
+        _ctx.CanDodge = false;
+        HandleDodgeDurationAsync();
     }
 
     public override void EnterState()
     {
-        if(_ctx.ShowDebugLogs) Debug.Log("Dodging");
-        _ctx.IsDodging = true;
-        _turnTime = 0;
-        HandleRotation();
-        _ctx.CanDodge = false;
-        HandleDodgeDurationAsync();
     }
 
     public sealed override void HandleAnimatorParameters()
@@ -34,6 +33,7 @@ public class PlayerDodgeState : PlayerBaseState
     public override void UpdateState()
     {
         HandleMove();
+        HandleRotation();
         CheckSwitchStates();
     }
 
@@ -48,12 +48,11 @@ public class PlayerDodgeState : PlayerBaseState
         {
             SwitchState(_factory.Attack());
         }
-        
+
         if (!_ctx.CC.isGrounded)
         {
             SwitchState(_factory.InAir());
         }
-
     }
 
     private async void HandleDodgeDurationAsync()
@@ -65,7 +64,7 @@ public class PlayerDodgeState : PlayerBaseState
             SwitchState(_ctx.IsSprintPressed ? _factory.Sprint() : _factory.Grounded());
         }
     }
-    
+
     private async void HandleDodgeCooldownAsync()
     {
         await Task.Delay(DodgeDurationMs + DodgeCooldownMs);
