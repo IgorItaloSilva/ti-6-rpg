@@ -61,12 +61,14 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isJumpPressed,
         _isDodgePressed,
         _isAttackPressed,
+        _isPotionPressed,
         _isInteractPressed,
         _canInteract = true,
         _isDodging,
         _canDodge = true,
         _canJump = true,
         _canAttack = true,
+        _canHeal = true,
         _isBetweenAttacks,
         _isClimbing,
         _canMount = true,
@@ -101,9 +103,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int Attack1Hash = Animator.StringToHash("Attack1");
     public readonly int Attack2Hash = Animator.StringToHash("Attack2");
     public readonly int Attack3Hash = Animator.StringToHash("Attack3");
+    public readonly int Attack4Hash = Animator.StringToHash("Attack4");
     public readonly int IsClimbingHash = Animator.StringToHash("isClimbing");
     public readonly int HasJumpedHash = Animator.StringToHash("hasJumped");
     public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
+    public readonly int HasHealedHash = Animator.StringToHash("hasHealed");
     public readonly int HasDiedHash = Animator.StringToHash("hasDied");
     public readonly int HasSavedHash = Animator.StringToHash("hasSaved");
     public readonly int HasRespawnedHash = Animator.StringToHash("hasRespawned");
@@ -127,9 +131,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsJumpPressed => _isJumpPressed && _canJump;
     public bool IsDodgePressed => _isDodgePressed && _canDodge;
     public bool IsAttackPressed => _isAttackPressed && _canAttack;
-    public bool IsSprintPressed => _isSprintPressed;
+    public bool IsPotionPressed => _isPotionPressed && _canHeal;
+    public bool IsSprintPressed => _isSprintPressed && _isMovementPressed;
     public bool IsTargetPressed => _isTargetPressed && _canTarget;
-    public bool IsClimbing => _isClimbing;
+    public bool IsClimbing => _isClimbing && _canMount;
     public bool IsOnTarget => _isOnTarget;
     public byte AttackCount => _attackCount;
     public float InitialJumpVelocity => _initialJumpVelocity;
@@ -181,10 +186,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         set => _canDodge = value;
     }
 
-    public bool CanAttack
+    public bool CanHeal
     {
-        get => _canAttack;
-        set => _canAttack = value;
+        get => _canHeal;
+        set => _canHeal = value;
     }
 
     public bool CanInteract
@@ -288,6 +293,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _playerInput.Gameplay.Interact.canceled += OnInteractPressed;
         _playerInput.Gameplay.Target.started += OnTargetPressed;
         _playerInput.Gameplay.Target.started += OnTargetPressed;
+        _playerInput.Gameplay.Potion.started += OnPotionPressed;
+        _playerInput.Gameplay.Potion.canceled += OnPotionPressed;
     }
 
     private void OnMovementPressed(InputAction.CallbackContext context)
@@ -309,6 +316,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         _isAttackPressed = context.ReadValueAsButton();
         _canAttack = true;
+    }
+    
+    private void OnPotionPressed(InputAction.CallbackContext context)
+    {
+        _isPotionPressed = context.ReadValueAsButton();
+        _canHeal = true;
     }
 
     private void OnSprintPressed(InputAction.CallbackContext context)
@@ -395,6 +408,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
         if (_isTargetPressed && _canTarget)
             HandleTarget();
+        
     }
 
     #region Collisions / Triggers
@@ -436,12 +450,27 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
                 _animator.SetBool(Attack1Hash, true);
                 break;
             case 1:
+                if (!_animator.GetCurrentAnimatorStateInfo(1).IsName("Attack1")) return;
                 _attackCount = 2;
                 _animator.SetBool(Attack2Hash, true);
                 break;
             case 2:
+                if (!_animator.GetCurrentAnimatorStateInfo(1).IsName("Attack2")) return;
                 _attackCount = 3;
                 _animator.SetBool(Attack3Hash, true);
+                break;
+            case 3:
+                if (!_animator.GetCurrentAnimatorStateInfo(1).IsName("Attack3")) return;
+                _attackCount = 4;
+                _animator.SetBool(Attack4Hash, true);
+                break;
+            case 4:
+                if (!_animator.GetCurrentAnimatorStateInfo(1).IsName("Attack4")) return;
+                _attackCount = 1;
+                _animator.SetBool(Attack1Hash, true);
+                _animator.SetBool(Attack2Hash, false);
+                _animator.SetBool(Attack3Hash, false);
+                _animator.SetBool(Attack4Hash, false);
                 break;
         }
     }
@@ -451,6 +480,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _animator.SetBool(Attack1Hash, false);
         _animator.SetBool(Attack2Hash, false);
         _animator.SetBool(Attack3Hash, false);
+        _animator.SetBool(Attack4Hash, false);
         _attackCount = 0;
 
         DisableSwordCollider();
@@ -466,20 +496,18 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
-        if(enemyDetector.targetEnemy)
-            Acceleration = 2f;
+        Acceleration = 2.5f;
 
     }
 
-    private void EnableSwordColliderAttack3()
+    private void EnableSwordColliderAttack4()
     {
         if (_isDodging) return;
         _swordWeaponManager.SetDamageType(Enums.AttackType.HeavyAttack);
         _swordSlash.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("SwordSlash");
-        if(enemyDetector.targetEnemy)
-            Acceleration = 2f;
+        Acceleration = 3f;
     }
 
     private void DisableSwordCollider()
