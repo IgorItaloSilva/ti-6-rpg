@@ -4,7 +4,7 @@ public class PlayerAttackState : PlayerBaseState
 {
     private new const byte DecelerationSpeed = 5;
     public Vector3 _attackDirection;
-    private const byte RotationSpeed = 3;
+    private const byte RotationSpeed = 5;
     private bool _hasTarget;
 
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
@@ -77,26 +77,13 @@ public class PlayerAttackState : PlayerBaseState
     }
 
     protected override void HandleAcceleration()
-    {
-        _lowestAccelerationSpeed = Mathf.Min(_ctx.Acceleration, _lowestAccelerationSpeed);
-
-        if (_ctx.IsMovementPressed && _ctx.Acceleration <= 0.5f)
-        {
-            _ctx.Acceleration += Time.fixedDeltaTime * AccelerationSpeed;
-        }
-        else
-        {
+    { 
+        if(_ctx.Acceleration > 0)
             _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
-        }
-
-        if (_lowestAccelerationSpeed < 0.5f && !_ctx.EnemyDetector.targetEnemy)
-        {
-            _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 0.5f);
-        }
-        _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0f, float.MaxValue);
+        else
+            _ctx.Acceleration = 0;
         
-        
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude * 1.5f);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
         //_ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration);
     }
 
