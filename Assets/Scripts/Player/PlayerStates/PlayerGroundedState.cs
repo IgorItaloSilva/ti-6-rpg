@@ -31,6 +31,7 @@ public class PlayerGroundedState : PlayerBaseState
     {
         HandleRotation();
         HandleMove();
+        HandlePotion();
         CheckSwitchStates();
     }
 
@@ -70,12 +71,12 @@ public class PlayerGroundedState : PlayerBaseState
             SwitchState(_factory.InAir());
         }
 
-        if (_ctx.IsSprintPressed && _ctx.IsMovementPressed)
+        if (_ctx.IsSprintPressed)
         {
             SwitchState(_factory.Sprint());
         }
 
-        if (_ctx.IsDodgePressed && _ctx.IsMovementPressed)
+        if (_ctx.IsDodgePressed)
         {
             SwitchState(_factory.Dodge());
         }
@@ -85,11 +86,13 @@ public class PlayerGroundedState : PlayerBaseState
             SwitchState(_factory.Attack());
         }
 
-        if (_ctx.IsClimbing && _ctx.CanMount)
+        if (_ctx.IsClimbing)
         {
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             SwitchState(_factory.Climb());
         }
+        
+        
     }
 
 }

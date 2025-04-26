@@ -82,6 +82,16 @@ public abstract class PlayerBaseState
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration);
     }
     
+    protected void HandlePotion()
+    {
+        if (_ctx.IsPotionPressed)
+        {
+            _ctx.CanHeal = false;
+            _ctx.Animator.ResetTrigger(_ctx.HasHealedHash);
+            _ctx.Animator.SetTrigger(_ctx.HasHealedHash);
+        }
+    }
+    
     protected virtual void HandleMove()
     {
         _appliedMovement.x = _ctx.CurrentMovement.x * _ctx.Acceleration;

@@ -205,6 +205,7 @@ Transform:
   m_Children:
   - {fileID: 4953457174982705264}
   - {fileID: 6802169052179594061}
+  - {fileID: 7253312636133638991}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5761765984587487946
@@ -223,7 +224,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4953457174982705264
 Transform:
   m_ObjectHideFlags: 0
@@ -255,11 +256,11 @@ LODGroup:
   m_AnimateCrossFading: 1
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.8036734
+  - screenRelativeHeight: 0.89706624
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 3313182885473616741}
-  - screenRelativeHeight: 0.10228052
+  - screenRelativeHeight: 0.19856678
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 3158385531015555028}
@@ -319,3 +320,77 @@ CapsuleCollider:
   m_Height: 18.97
   m_Direction: 1
   m_Center: {x: 0, y: 5.05, z: 0}
+--- !u!1001 &7506313260814407895
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3870816855708687876}
+    m_Modifications:
+    - target: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2319892959971001322, guid: e5fca826b75d366488ed8478145a6c3b,
+        type: 3}
+      propertyPath: m_Name
+      value: SakuraGrande
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e5fca826b75d366488ed8478145a6c3b, type: 3}
+--- !u!4 &7253312636133638991 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 901627341640080280, guid: e5fca826b75d366488ed8478145a6c3b,
+    type: 3}
+  m_PrefabInstance: {fileID: 7506313260814407895}
+  m_PrefabAsset: {fileID: 0}

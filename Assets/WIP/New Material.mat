@@ -66,6 +66,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 51307ad1afa789b4b83f77d7ac2708a2, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MainTex0:
+        m_Texture: {fileID: 10305, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -80,6 +84,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _PathImage:
         m_Texture: {fileID: 2800000, guid: fd27e49d612dd214b90461d1f89e186f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PathMask:
+        m_Texture: {fileID: 2800000, guid: 95f4fda4391f53640a380ad79289d35c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -131,15 +139,17 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
+    - _Tiling: 4.28
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 0.4575472, b: 0.4575472, a: 1}
+    - _Color0: {r: 0.4528302, g: 0.1747533, b: 0.10466359, a: 1}
     - _Earth: {r: 0.3018868, g: 0.15153535, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Grass: {r: 0.8939026, g: 0.58526164, b: 0.9056604, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Tiling: {r: 50, g: 50, b: 0, a: 0}
+    - _Tiling: {r: 30, g: 30, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
