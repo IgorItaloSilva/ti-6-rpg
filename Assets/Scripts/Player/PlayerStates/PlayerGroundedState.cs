@@ -29,22 +29,22 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void UpdateState()
     {
-        HandleRotation();
-        HandleMove();
+        if(!_ctx.EnemyDetector.targetEnemy)
+        {
+            HandleRotation();
+            HandleMove();
+        }
+        else
+        {
+            HandleTargetedRotation();
+            HandleTargetedMove();
+        }
         HandlePotion();
         CheckSwitchStates();
     }
 
     public override void ExitState()
     {
-    }
-    
-    protected override void HandleMove()
-    {
-        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration, _ctx.BaseGravity,
-            _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration);
-
-        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
 
     public override void CheckSwitchStates()
@@ -62,10 +62,15 @@ public class PlayerGroundedState : PlayerBaseState
             SwitchState(_factory.InAir());
             return;
         }
-
+        if(_ctx.IsBlockPressed)
+        {
+            _ctx.Animator.SetBool(_ctx.InCombatHash, true);
+            _ctx.Animator.SetBool(_ctx.IsBlockingHash, true);
+            SwitchState(_factory.SlowGrounded());
+            return;
+        }
         if (_ctx.IsJumpPressed)
         {
-            
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             HandleJump();
             SwitchState(_factory.InAir());
@@ -91,7 +96,6 @@ public class PlayerGroundedState : PlayerBaseState
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             SwitchState(_factory.Climb());
         }
-        
         
     }
 

@@ -3,8 +3,6 @@ using UnityEngine;
 public class PlayerAttackState : PlayerBaseState
 {
     private new const byte DecelerationSpeed = 5;
-    public Vector3 _attackDirection;
-    private const byte RotationSpeed = 5;
     private bool _hasTarget;
 
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
@@ -26,7 +24,7 @@ public class PlayerAttackState : PlayerBaseState
         if (!_hasTarget)
             HandleRotation();
 
-        HandleMove();
+        HandleForwardMove();
         if (_ctx.IsAttackPressed)
         {
             _ctx.HandleAttack();
@@ -43,30 +41,13 @@ public class PlayerAttackState : PlayerBaseState
         HandleAcceleration();
 
         if (_hasTarget)
-            HandleAttackRotation();
+            HandleTargetedRotation();
     }
 
     public override void ExitState()
     {
         if (!_ctx.EnemyDetector.targetEnemy)
             _ctx.InCombat = false;
-    }
-
-    private void HandleAttackRotation()
-    {
-        _attackDirection = _ctx.EnemyDetector.targetEnemy.transform.position - _ctx.transform.position;
-        _attackDirection.y = 0; // Keep rotation only on the Y-axis if needed
-
-        _ctx.transform.rotation = Quaternion.Slerp(_ctx.transform.rotation, Quaternion.LookRotation(_attackDirection),
-            Time.deltaTime * RotationSpeed);
-    }
-    
-    protected override void HandleMove()
-    {
-        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration, _ctx.BaseGravity,
-            _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration);
-
-        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
 
     private void CheckTarget()
@@ -101,6 +82,13 @@ public class PlayerAttackState : PlayerBaseState
         {
             _ctx.ResetAttacks();
             SwitchState(_factory.Dodge());
+        }
+        
+        if(_ctx.IsBlocking)
+        {            
+            _ctx.ResetAttacks();
+            _ctx.Animator.SetBool(_ctx.IsBlockingHash, true);
+            SwitchState(_factory.SlowGrounded());
         }
     }
 }
