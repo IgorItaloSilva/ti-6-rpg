@@ -81,8 +81,6 @@ public abstract class PlayerBaseState
             _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, MaxAcceleration);
         }
 
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovement.y);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration * _ctx.CurrentMovement.x);
     }
     protected void HandleTargetedRotation()
     {
@@ -112,6 +110,8 @@ public abstract class PlayerBaseState
 
         _ctx.AppliedMovement = _appliedMovement;
         _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime ));
+        
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude);
     }
     
     protected virtual void HandleTargetedMove()
@@ -130,6 +130,11 @@ public abstract class PlayerBaseState
         
         _ctx.AppliedMovement = _appliedMovement;
         _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime));
+        
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration * _ctx.CurrentMovementInput.x);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.y);
+        
+        
     }
     
     protected virtual void HandleForwardMove()
