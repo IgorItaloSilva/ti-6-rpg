@@ -27,8 +27,16 @@ public class PlayerCombatState : PlayerGroundedState
     
     public override void UpdateState()
     {
-        HandleTargetedRotation();
-        HandleTargetedMove();
+        if(_ctx.EnemyDetector.targetEnemy)
+        {
+            HandleTargetedRotation();
+            HandleTargetedMove();
+        }
+        else
+        {
+            HandleRotation();
+            HandleForwardMove();
+        }
         HandlePotion();
         CheckSwitchStates();
     }

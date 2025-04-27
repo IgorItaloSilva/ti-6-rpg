@@ -43,6 +43,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     [SerializeField] private ParticleSystem _swordTrail;
     [SerializeField] private TrailRenderer _swordMainTrail;
     [SerializeField] private VisualEffect _swordSlash;
+    [SerializeField] private VisualEffect _parryVfx;
 
     #endregion
 
@@ -131,6 +132,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public Animator Animator => _animator;
     public Camera MainCam => _mainCam;
     public EnemyDetection EnemyDetector => enemyDetector;
+    public VisualEffect ParryVfx => _parryVfx;
     public Vector3 CurrentMovementInput => _currentMovementInput;
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
@@ -256,6 +258,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         get => _appliedMovement.y;
         set => _appliedMovement.y = value;
+    }
+    
+    public float AppliedMovementZ
+    {
+        get => _appliedMovement.z;
+        set => _appliedMovement.z = value;
     }
 
     public float Acceleration
@@ -420,6 +428,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private void FixedUpdate()
     {
         _currentState.FixedUpdateState();
+        Debug.Log("CurrentMovementInput: " + _currentMovementInput);
+        Debug.Log("Acceleration: " + _acceleration);
+        Debug.Log("CurrentMovement: " + _currentMovement);
+        Debug.Log("AppliedMovement: " + _appliedMovement);
         playerCamera.m_RecenterToTargetHeading.m_enabled = _currentMovementInput is { x: not 0, y: > 0f };
     }
 
@@ -623,6 +635,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _camTargetGroup.m_Targets[0].target = null;
         playerCamera.enabled = true;
         _isOnTarget = false;
+    }
+
+    public void PlayParryVFX()
+    {
+        _parryVfx.Play();
     }
 
     #endregion

@@ -30,7 +30,7 @@ public class PlayerGroundedState : PlayerBaseState
     public override void UpdateState()
     {
         HandleRotation();
-        HandleMove();
+        HandleForwardMove();
         HandlePotion();
         CheckSwitchStates();
     }

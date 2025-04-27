@@ -41,7 +41,10 @@ public class PlayerBlockState : PlayerCombatState
         if(!_ctx.IsBlocking)
         {
             _ctx.Animator.SetBool(_ctx.IsBlockingHash, false);
-            SwitchState(_factory.Grounded());
+            if(_ctx.InCombat)
+                SwitchState(_factory.Combat());
+            else
+                SwitchState(_factory.Grounded());
             return;
         }
     }

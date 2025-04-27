@@ -9,7 +9,7 @@ public abstract class PlayerBaseState
     protected const float MaxAcceleration = 1.5f;
     private const byte RotationSpeed = 5;
     protected readonly byte AccelerationSpeed = 3, DecelerationSpeed = 10;
-    private Vector3 _appliedMovement;
+    private Vector3 _appliedMovement, _cameraForward, _cameraRight;
     protected Vector3 _targetDirection;
 
     protected PlayerBaseState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
@@ -117,16 +117,16 @@ public abstract class PlayerBaseState
     
     protected virtual void HandleTargetedMove()
     {
-        var cameraForward = _ctx.MainCam.transform.forward;
-        var cameraRight = _ctx.MainCam.transform.right;
+        _cameraForward = _ctx.MainCam.transform.forward;
+        _cameraRight = _ctx.MainCam.transform.right;
         
         // Flatten the camera directions to ignore vertical movement
-        cameraForward.y = 0;
-        cameraRight.y = 0;
-        cameraForward.Normalize();
-        cameraRight.Normalize();
+        _cameraForward.y = 0;
+        _cameraRight.y = 0;
+        _cameraForward.Normalize();
+        _cameraRight.Normalize();
         
-        _appliedMovement = (cameraForward * _ctx.CurrentMovement.z + cameraRight * _ctx.CurrentMovement.x) * _ctx.Acceleration;
+        _appliedMovement = (_cameraForward * _ctx.CurrentMovement.z + _cameraRight * _ctx.CurrentMovement.x) * _ctx.Acceleration;
         _appliedMovement.y = _ctx.BaseGravity;
         
         _ctx.AppliedMovement = _appliedMovement;
@@ -138,10 +138,23 @@ public abstract class PlayerBaseState
     
     protected virtual void HandleForwardMove()
     {
-        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration, _ctx.BaseGravity,
-            _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration);
+        _cameraForward = _ctx.MainCam.transform.forward;
+        _cameraRight = _ctx.MainCam.transform.right;
+        
+        // Flatten the camera directions to ignore vertical movement
+        _cameraForward.y = 0;
+        _cameraRight.y = 0;
+        _cameraForward.Normalize();
+        _cameraRight.Normalize();
+        
+        _ctx.AppliedMovementX = _ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration;
+        _ctx.AppliedMovementY = _ctx.BaseGravity;
+        _ctx.AppliedMovementZ = _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration;
 
         _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
+        
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f);
     }
 
     protected void SwitchState(PlayerBaseState newState)

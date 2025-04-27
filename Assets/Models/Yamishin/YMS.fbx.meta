@@ -3448,7 +3448,7 @@ ModelImporter:
       name: Yami_Rig|YMS_Parry
       takeName: Yami_Rig|YMS_Parry
       internalID: -1569524175442041074
-      firstFrame: 46
+      firstFrame: 54
       lastFrame: 120
       wrapMode: 0
       orientationOffsetY: 0
@@ -3468,7 +3468,15 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0
+        functionName: PlayParryVFX
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -3596,7 +3604,7 @@ ModelImporter:
       takeName: Yami_Rig|YMS_Parry
       internalID: 4691679994977180445
       firstFrame: 30
-      lastFrame: 55
+      lastFrame: 58
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
