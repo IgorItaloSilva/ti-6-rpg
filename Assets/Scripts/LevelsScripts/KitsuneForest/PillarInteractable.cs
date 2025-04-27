@@ -14,8 +14,9 @@ public class PillarInteractabe : Interactable
     }
     override protected void Start()
     {
+        Debug.Log("Rodei o start do pilar");
         base.Start();
-        if(effect!=null)effect.SetActive(false);
+        if(effect!=null&&!AlreadyInterated)effect.SetActive(false);
     }
     void KitsuneDied(int kitsuneId){
         if(kitsuneId==spawnId&&!AlreadyInterated){
@@ -24,6 +25,7 @@ public class PillarInteractabe : Interactable
     }
     
     void ActivatePillar(){
+        Debug.Log("Entrei no activate pilar");
         GameEventsManager.instance.levelEvents.PillarActivated();
         AlreadyInterated = true;
         if(effect!=null)effect.SetActive(true);

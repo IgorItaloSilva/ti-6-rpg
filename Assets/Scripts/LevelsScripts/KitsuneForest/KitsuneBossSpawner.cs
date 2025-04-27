@@ -6,7 +6,7 @@ public class BossSpawner : MonoBehaviour
 {
     [SerializeField]GameObject boss;
     [SerializeField]GameObject statue;
-    [SerializeField]GameObject vfxRoxo;
+    [SerializeField]LightBeamRoxoInteractable vfxRoxo;
     [SerializeField]int numberOfPillarsRequired;
     int numActivePillars;
 
@@ -24,6 +24,6 @@ public class BossSpawner : MonoBehaviour
     void SpawnBoss(){
         statue.SetActive(false);
         boss.SetActive(true);
-        vfxRoxo.SetActive(true);
+        vfxRoxo.Activate();
     }
 }

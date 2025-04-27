@@ -97,6 +97,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.uiEvents.onRequestExpInfo-=SendExpInfo;
         GameEventsManager.instance.uiEvents.onBuyLevelClicked-=BuyLevel;
         GameEventsManager.instance.uiEvents.onRequestPotionAmmountInfo-=SendPotionAmmountInfo;
+        CancelInvoke();
     }
     void Start()
     {
