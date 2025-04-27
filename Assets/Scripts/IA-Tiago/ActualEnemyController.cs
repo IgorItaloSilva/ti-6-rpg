@@ -146,13 +146,6 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     //Metodos das interfaces
     public virtual void TakeDamage(float damage, Enums.DamageType damageType,bool wasCrit)
     {
-        hitsTaken++;
-        if(hitsTaken>=nAttacksToPoiseBreak){
-            animator.ResetTrigger("tookDamage");
-            animator.SetTrigger("tookDamage");
-            animator.SetBool("damageMirror", !animator.GetBool("damageMirror"));
-            hitsTaken=0;
-        }
         if(poiseSlider!=null){
             poiseSlider.value=hitsTaken;
         }
@@ -165,6 +158,16 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
                 CurrentHp-=damage;
                 //
             break;
+            case Enums.DamageType.Parry:
+                hitsTaken=nAttacksToPoiseBreak;
+            break;
+        }
+        hitsTaken++;
+        if(hitsTaken>=nAttacksToPoiseBreak){
+            animator.ResetTrigger("tookDamage");
+            animator.SetTrigger("tookDamage");
+            animator.SetBool("damageMirror", !animator.GetBool("damageMirror"));
+            hitsTaken=0;
         }
         if(IsABoss)UIManager.instance?.UpdateBossLife(CurrentHp,wasCrit);
         if(healthBar!=null)healthBar.SetValue(CurrentHp,wasCrit);
@@ -252,6 +255,9 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
             LevelLoadingManager.instance.CurrentLevelData.enemiesData.Add(SaveId,newData);
         }
         
+    }
+    public void WasParried(){
+        TakeDamage(0,Enums.DamageType.Parry,false);
     }
     
 }

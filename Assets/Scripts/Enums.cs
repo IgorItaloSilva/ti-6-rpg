@@ -9,7 +9,8 @@ public class Enums {
     //COISAS DE DANO
     public enum DamageType{
         Regular,
-        Magic
+        Magic,
+        Parry
     }
     //COISAS DAS RUNAS
     public enum KatanaPart{

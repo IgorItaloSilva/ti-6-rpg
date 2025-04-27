@@ -10,9 +10,12 @@ public class WeaponManager : MonoBehaviour
     [SerializeField]protected float baseDamage = 10f;
     protected Collider damageCollider;
     protected List<IDamagable>damagedTargets = new List<IDamagable>();
+    protected ActualEnemyController actualEnemyController;
     
     protected virtual void Start(){
         damageCollider=GetComponent<Collider>();
+        actualEnemyController = GetComponentInParent<ActualEnemyController>();
+        if(actualEnemyController==null)Debug.LogWarning("A arma não achou o enemyControllerDela");
         if(damageCollider==null){
             Debug.LogWarning($"O weapon manager do {name} não achou o collider dela");
         }
@@ -28,7 +31,14 @@ public class WeaponManager : MonoBehaviour
             //Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
             if (alvoAtacado != null)
             {
-                DealDamage(alvoAtacado, damage);
+                if(PlayerStateMachine.Instance.IsBlocking){
+                    if(PlayerStateMachine.Instance.ShouldParry){
+                        actualEnemyController.WasParried();
+                    }
+                }
+                else{
+                    DealDamage(alvoAtacado, damage);
+                }
             }
         }
     }

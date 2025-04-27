@@ -24,6 +24,14 @@ public class PlayerWeapon : WeaponManager
         GameEventsManager.instance.runeEvents.onRuneDamageBuff-=RuneDamageBuff;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp-=ActivatePowerUps;
     }
+    protected override void Start()
+    {
+        damageCollider=GetComponent<Collider>();
+        if(damageCollider==null){
+            Debug.LogWarning($"O weapon manager do {name} não achou o collider dela");
+        }
+        damage=baseDamage;
+    }
     override protected void OnTriggerEnter(Collider other){
         //Debug.Log("A arma colidiu com algo");
         if(!other.gameObject.CompareTag("EnemyDetection"))
