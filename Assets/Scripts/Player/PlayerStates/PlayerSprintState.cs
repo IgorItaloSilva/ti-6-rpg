@@ -27,6 +27,7 @@ public class PlayerSprintState : PlayerBaseState
     {
         HandleRotation();
         HandleMove();
+        HandlePotion();
         CheckSwitchStates();
     }
 
