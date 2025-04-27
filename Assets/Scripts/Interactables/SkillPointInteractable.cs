@@ -7,9 +7,11 @@ public class SkillPointInteractable : Interactable, IDamagable
 {
     [SerializeField]int hitsToDestroy = 3;
     [SerializeField]GameObject canvas;
+    bool didntAddInteract;
     int life;
     void OnEnable(){
-        PlayerStateMachine.Instance.AddActionToInteract(Interact);
+        if(!PlayerStateMachine.Instance)didntAddInteract=true;
+        PlayerStateMachine.Instance?.AddActionToInteract(Interact);
     }
     void OnDisable(){
         PlayerStateMachine.Instance.RemoveActionFromInteract(Interact);
@@ -17,6 +19,9 @@ public class SkillPointInteractable : Interactable, IDamagable
 
     protected override void Start()
     {
+        if(didntAddInteract){
+            PlayerStateMachine.Instance?.AddActionToInteract(Interact);
+        }
         base.Start();
         life = hitsToDestroy;
     }
