@@ -49,6 +49,7 @@ public class CheckPointStatue : Interactable
             if(playerStats!=null){
                 playerStats.isNearCampfire=true;
             }
+            UIManager.instance.NearCampfire(true);
         }
     }
     void OnTriggerExit(Collider collider){
@@ -61,6 +62,7 @@ public class CheckPointStatue : Interactable
                 playerStats.isNearCampfire=false;
             }
             keyIndicationText.gameObject.SetActive(false);
+            UIManager.instance.NearCampfire(false);
         }
     }
     void OnTriggerStay(Collider collider){
@@ -78,6 +80,8 @@ public class CheckPointStatue : Interactable
             LevelLoadingManager.instance?.RespawnEnemies();
             playerStats?.CheckPointStatue();
             DataPersistenceManager.instance.SaveGame();
+            UIManager.instance.SwitchToScreen((int)UIManager.UIScreens.MainPause);
+            UIManager.instance.SwitchToScreen((int)UIManager.UIScreens.Stats);
         }
     }
 }

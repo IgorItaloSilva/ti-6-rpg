@@ -29,6 +29,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]private GameObject painelDialog;
     [SerializeField]private GameObject painelTutorial;
     [SerializeField]private GameObject painelWeapon;
+    [SerializeField]private GameObject buttonMainMenu;
+    [SerializeField]private GameObject buttonTutorial;
     [Header("Coisas do VFX de You Died ")]
     [SerializeField]private GameObject youDiedVFXParent;
     [SerializeField]private GameObject youDiedVFXBackgroundGO;
@@ -54,6 +56,7 @@ public class UIManager : MonoBehaviour
     //Coisas da Ui de morte
     private Text youDiedVFXText;
     private Image youDiedVFXImage;
+    public bool isNearCampfire;
     private const float transparencyRatioYouDiedVfx = 0.05f;
     private const float transparencyRatioYouDiedBackgroundVfx = 0.1f;
     private const float secondsBeforeYouDiedVfxAppears = 2f;
@@ -140,12 +143,13 @@ public class UIManager : MonoBehaviour
         if(Keyboard.current.escapeKey.wasPressedThisFrame){
             if(currentUIScreen==UIScreens.Closed){
                 SwitchToScreen((int)UIScreens.MainPause);
+                if(isNearCampfire)SwitchToScreen((int)UIScreens.Stats);
             }else 
             if(currentUIScreen == UIScreens.MainPause){
                 SwitchToScreen((int)UIScreens.Closed);
             }
             else{
-                SwitchToScreen((int)UIScreens.MainPause);
+                SwitchToScreen((int)UIScreens.Closed);
             }
         }
         if(Keyboard.current.eKey.wasPressedThisFrame){
@@ -432,6 +436,18 @@ public class UIManager : MonoBehaviour
                 currentUIScreen=UIScreens.Tutorial;
             break;
             default: Debug.LogWarning("A tela destino é indefinida"); break;
+        }
+    }
+    public void NearCampfire(bool isNear){
+        if(isNear){
+            isNearCampfire=true;
+            buttonTutorial.SetActive(false);
+            buttonMainMenu.SetActive(false);
+        }
+        else{
+            isNearCampfire=false;
+            buttonTutorial.SetActive(true);
+            buttonMainMenu.SetActive(true);
         }
     }
     
