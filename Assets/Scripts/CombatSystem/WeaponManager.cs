@@ -34,6 +34,14 @@ public class WeaponManager : MonoBehaviour
                 if(PlayerStateMachine.Instance.IsBlocking){
                     if(PlayerStateMachine.Instance.ShouldParry){
                         actualEnemyController.WasParried();
+                        PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasParried);
+                        PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasParried);
+                        DisableCollider();
+                    }
+                    else{
+                        PlayerStateMachine.Instance.Animator.ResetTrigger("tookHit");
+                        PlayerStateMachine.Instance.Animator.SetTrigger("tookHit");
+                        DealDamage(alvoAtacado,damage/3);
                     }
                 }
                 else{
@@ -49,13 +57,13 @@ public class WeaponManager : MonoBehaviour
         damagedTargets.Add(alvo);
         if(!PlayerStateMachine.Instance.IsDodging)
         {
-            alvo.TakeDamage(damage, damageType, false);
+            alvo.TakeDamage(dano, damageType, false);
             //Criar um texto de dano na tela
-            if(showDebug)Debug.Log($"Enviei {damage} de dano para ser tomado para {alvo}");
+            if(showDebug)Debug.Log($"Enviei {dano} de dano para ser tomado para {alvo}");
         }
         else
         {
-            if(showDebug)Debug.Log($"Não enviei {damage} de dano para ser tomado para {alvo}. Ele está desviando!");
+            if(showDebug)Debug.Log($"Não enviei {dano} de dano para ser tomado para {alvo}. Ele está desviando!");
         }
     }
     public void EnableCollider(){

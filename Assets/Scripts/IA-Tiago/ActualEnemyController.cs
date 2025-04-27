@@ -259,5 +259,11 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
     public void WasParried(){
         TakeDamage(0,Enums.DamageType.Parry,false);
     }
+    public void HealLife(float lifeToHeal){
+        CurrentHp+=lifeToHeal;
+        if(CurrentHp>maxHp){
+            CurrentHp=maxHp;
+        }
+    }
     
 }

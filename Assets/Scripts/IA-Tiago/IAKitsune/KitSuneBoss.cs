@@ -25,6 +25,7 @@ public class KitsuneBoss : KitsuneController
             if(hasDisplayedLife){
                 UIManager.instance?.HideBossLife();
                 hasDisplayedLife=false;
+                HealLife(maxHp);
             }
         }
         else{
