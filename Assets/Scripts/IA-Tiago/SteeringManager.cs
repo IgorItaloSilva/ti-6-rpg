@@ -61,6 +61,7 @@ public class SteeringManager{
         steering = steering.normalized * steeringAgent.GetMaxForce();
         rb.gameObject.transform.LookAt(steering);
         rb.gameObject.transform.eulerAngles=new Vector3(0,rb.gameObject.transform.eulerAngles.y,0);
+        Debug.DrawRay(rb.transform.position,steering,Color.red);
         rb.AddForce(steering);
         //Debug.DrawRay(rb.position,steering,Color.red);
         

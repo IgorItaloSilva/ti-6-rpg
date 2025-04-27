@@ -177,7 +177,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         }
     }
     public virtual void Die(){
-        PlayerStateMachine.Instance.CameraTargetUnlock();
+        PlayerStateMachine.Instance.CameraTargetUnlock(true);
         if (colliderPrincipal && healthBar && poiseSlider)
         {
             colliderPrincipal.enabled = false;
@@ -187,7 +187,6 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         ChangeAction(deathAction);
     }
     public virtual void ActualDeath(){
-        PlayerStateMachine.Instance.CameraTargetUnlock();
         if (colliderPrincipal && healthBar && poiseSlider)
         {
             colliderPrincipal.enabled = false;
