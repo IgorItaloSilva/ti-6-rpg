@@ -17,6 +17,7 @@ public class PlayerDodgeState : PlayerBaseState
         _turnTime = DodgeDurationMs / 2000f;
         _ctx.CanDodge = false;
         HandleDodgeDurationAsync();
+        _ctx.ResetAttacks();
     }
 
     public override void EnterState()
@@ -28,6 +29,7 @@ public class PlayerDodgeState : PlayerBaseState
         _ctx.Animator.ResetTrigger(_ctx.HasDodgedHash);
         _ctx.Animator.SetTrigger(_ctx.HasDodgedHash);
         _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f);
     }
 
     public override void UpdateState()
@@ -67,10 +69,12 @@ public class PlayerDodgeState : PlayerBaseState
     {
         HandleDodgeCooldownAsync();
         await Task.Delay(DodgeDurationMs);
-        if (!_ctx.Animator.GetBool(_ctx.Attack1Hash))
-        {
-            SwitchState(_ctx.IsSprintPressed ? _factory.Sprint() : _factory.Grounded());
-        }
+        if(_ctx.InCombat)
+            SwitchState(_factory.Combat());
+        else if(_ctx.IsSprintPressed)
+            SwitchState(_factory.Sprint());
+        else
+            SwitchState(_factory.Grounded());
     }
 
     private async void HandleDodgeCooldownAsync()

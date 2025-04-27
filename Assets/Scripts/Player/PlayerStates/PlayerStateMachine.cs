@@ -143,7 +143,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsTargetPressed => _isTargetPressed && _canTarget;
     public bool IsClimbing => _isClimbing && _canMount;
     public bool IsOnTarget => _isOnTarget;
-    public bool ShouldParry => _shouldParry;
     public byte AttackCount => _attackCount;
     public float InitialJumpVelocity => _initialJumpVelocity;
 
@@ -168,6 +167,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         get => _isBlocking;
         set => _isBlocking = value;
+    }
+    public bool ShouldParry
+    {
+        get => _shouldParry;
+        set => _shouldParry = value;
     }
 
     public bool IsLocked

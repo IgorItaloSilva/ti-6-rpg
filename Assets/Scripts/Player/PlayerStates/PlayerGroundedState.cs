@@ -10,35 +10,27 @@ public class PlayerGroundedState : PlayerBaseState
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        HandleAnimatorParameters();
     }
 
     public override void EnterState()
     {
+        HandleAnimatorParameters();
         if(_ctx.ShowDebugLogs) Debug.Log("Grounded");
         _turnTime = _ctx.BaseTurnTime * 2;
     }
 
-    public sealed override void HandleAnimatorParameters()
+    public override void HandleAnimatorParameters()
     {
         _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
+        _ctx.Animator.SetBool(_ctx.InCombatHash, false);
         _ctx.Animator.SetBool(_ctx.IsRunningHash, false);
         _ctx.Animator.SetBool(_ctx.IsWalkingHash, _ctx.IsMovementPressed);
     }
-
-
+    
     public override void UpdateState()
     {
-        if(!_ctx.EnemyDetector.targetEnemy)
-        {
-            HandleRotation();
-            HandleMove();
-        }
-        else
-        {
-            HandleTargetedRotation();
-            HandleTargetedMove();
-        }
+        HandleRotation();
+        HandleMove();
         HandlePotion();
         CheckSwitchStates();
     }
@@ -49,12 +41,11 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        // if(_ctx.IsOnTarget)
-        // {
-        //     SwitchState(_factory.Combat());
-        //     return;
-        // }
-        //
+        if (_ctx.InCombat)
+        {
+            SwitchState(_factory.Combat());
+            return;
+        }
         if (!_ctx.CC.isGrounded)
         {
             
@@ -66,7 +57,7 @@ public class PlayerGroundedState : PlayerBaseState
         {
             _ctx.Animator.SetBool(_ctx.InCombatHash, true);
             _ctx.Animator.SetBool(_ctx.IsBlockingHash, true);
-            SwitchState(_factory.SlowGrounded());
+            SwitchState(_factory.Block());
             return;
         }
         if (_ctx.IsJumpPressed)

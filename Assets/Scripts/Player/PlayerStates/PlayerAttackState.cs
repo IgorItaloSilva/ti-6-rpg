@@ -13,10 +13,8 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void EnterState()
     {
-        _ctx.Animator.SetBool(_ctx.InCombatHash, true);
-        _ctx.InCombat = true;
         if (_ctx.ShowDebugLogs) Debug.Log("Attacking!");
-        CheckTarget();
+        CheckAttackTargetDistance();
     }
 
     public override void UpdateState()
@@ -36,7 +34,7 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void FixedUpdateState()
     {
-        CheckTarget();
+        CheckAttackTargetDistance();
 
         HandleAcceleration();
 
@@ -46,13 +44,12 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void ExitState()
     {
-        if (!_ctx.EnemyDetector.targetEnemy)
-            _ctx.InCombat = false;
+        
     }
 
-    private void CheckTarget()
+    private void CheckAttackTargetDistance()
     {
-        _hasTarget = ((_ctx.IsOnTarget || _ctx.EnemyDetector.targetEnemy) &&
+        _hasTarget = ((_ctx.InCombat) &&
                       Vector3.Distance(_ctx.transform.position, _ctx.EnemyDetector.targetEnemy.transform.position) <=
                       3f);
     }
@@ -74,6 +71,8 @@ public class PlayerAttackState : PlayerBaseState
         {
             if (_ctx.IsSprintPressed)
                 SwitchState(_factory.Sprint());
+            else if (_ctx.InCombat)
+                SwitchState(_factory.Combat());
             else
                 SwitchState(_factory.Grounded());
         }
@@ -88,7 +87,7 @@ public class PlayerAttackState : PlayerBaseState
         {            
             _ctx.ResetAttacks();
             _ctx.Animator.SetBool(_ctx.IsBlockingHash, true);
-            SwitchState(_factory.SlowGrounded());
+            SwitchState(_factory.Block());
         }
     }
 }

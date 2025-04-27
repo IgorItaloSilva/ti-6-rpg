@@ -37,9 +37,9 @@ public class PlayerStateFactory
     {
         return new PlayerGroundedState(_context, this);
     }
-    public PlayerBaseState SlowGrounded()
+    public PlayerBaseState Block()
     {
-        return new PlayerSlowGroundedState(_context, this);
+        return new PlayerBlockState(_context, this);
     }
     public PlayerBaseState InAir(bool shouldRotate = true)
     {

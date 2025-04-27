@@ -112,6 +112,7 @@ public abstract class PlayerBaseState
         _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime ));
         
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f);
     }
     
     protected virtual void HandleTargetedMove()
@@ -133,8 +134,6 @@ public abstract class PlayerBaseState
         
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration * _ctx.CurrentMovementInput.x);
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.y);
-        
-        
     }
     
     protected virtual void HandleForwardMove()

@@ -49,7 +49,10 @@ public class PlayerSprintState : PlayerBaseState
 
         if (!_ctx.IsSprintPressed || !_ctx.IsMovementPressed)
         {
-            SwitchState(_factory.Grounded());
+            if(_ctx.InCombat)
+                SwitchState(_factory.Combat());
+            else
+                SwitchState(_factory.Grounded());
         }
         if(_ctx.IsAttackPressed)
         {
