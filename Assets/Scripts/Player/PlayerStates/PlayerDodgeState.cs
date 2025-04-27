@@ -32,8 +32,16 @@ public class PlayerDodgeState : PlayerBaseState
 
     public override void UpdateState()
     {
-        HandleMove();
-        HandleRotation();
+        if (_ctx.EnemyDetector.targetEnemy)
+        {
+            HandleTargetedRotation();
+            HandleTargetedMove();
+        }
+        else
+        {
+            HandleRotation();
+            HandleMove();
+        }
         CheckSwitchStates();
     }
 

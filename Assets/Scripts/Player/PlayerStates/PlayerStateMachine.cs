@@ -58,9 +58,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isMovementPressed,
         _isSprintPressed,
         _isJumping,
+        _isBlocking,
         _isJumpPressed,
         _isDodgePressed,
         _isAttackPressed,
+        _isBlockPressed,
         _isPotionPressed,
         _isInteractPressed,
         _canInteract = true,
@@ -68,6 +70,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canDodge = true,
         _canJump = true,
         _canAttack = true,
+        _canBlock = true,
         _canHeal = true,
         _isBetweenAttacks,
         _isClimbing,
@@ -76,7 +79,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canTarget,
         _isOnTarget,
         _isLocked,
-        _inCombat;
+        _inCombat,
+        _shouldParry;
 
     private byte _attackCount;
 
@@ -99,6 +103,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     public readonly int IsWalkingHash = Animator.StringToHash("isWalking");
     public readonly int IsRunningHash = Animator.StringToHash("isRunning");
+    public readonly int IsBlockingHash = Animator.StringToHash("isBlocking");
     public readonly int IsGroundedHash = Animator.StringToHash("isGrounded");
     public readonly int Attack1Hash = Animator.StringToHash("Attack1");
     public readonly int Attack2Hash = Animator.StringToHash("Attack2");
@@ -108,6 +113,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int HasJumpedHash = Animator.StringToHash("hasJumped");
     public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
     public readonly int HasHealedHash = Animator.StringToHash("hasHealed");
+    public readonly int HasParried = Animator.StringToHash("hasParried");
     public readonly int HasDiedHash = Animator.StringToHash("hasDied");
     public readonly int HasSavedHash = Animator.StringToHash("hasSaved");
     public readonly int HasRespawnedHash = Animator.StringToHash("hasRespawned");
@@ -132,10 +138,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsDodgePressed => _isDodgePressed && _canDodge;
     public bool IsAttackPressed => _isAttackPressed && _canAttack;
     public bool IsPotionPressed => _isPotionPressed && _canHeal;
+    public bool IsBlockPressed => _isBlockPressed;
     public bool IsSprintPressed => _isSprintPressed && _isMovementPressed;
     public bool IsTargetPressed => _isTargetPressed && _canTarget;
     public bool IsClimbing => _isClimbing && _canMount;
     public bool IsOnTarget => _isOnTarget;
+    public bool ShouldParry => _shouldParry;
     public byte AttackCount => _attackCount;
     public float InitialJumpVelocity => _initialJumpVelocity;
 
@@ -154,6 +162,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         get => _isDodging;
         set => _isDodging = value;
+    }
+    
+    public bool IsBlocking
+    {
+        get => _isBlocking;
+        set => _isBlocking = value;
     }
 
     public bool IsLocked
@@ -240,12 +254,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         set => _appliedMovement.y = value;
     }
 
-    public float AppliedMovementZ
-    {
-        get => _appliedMovement.z;
-        set => _appliedMovement.z = value;
-    }
-
     public float Acceleration
     {
         get => _acceleration;
@@ -295,6 +303,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _playerInput.Gameplay.Target.started += OnTargetPressed;
         _playerInput.Gameplay.Potion.started += OnPotionPressed;
         _playerInput.Gameplay.Potion.canceled += OnPotionPressed;
+        _playerInput.Gameplay.Block.started += OnBlockPressed;
+        _playerInput.Gameplay.Block.canceled += OnBlockPressed;
     }
 
     private void OnMovementPressed(InputAction.CallbackContext context)
@@ -334,6 +344,13 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         _isJumpPressed = context.ReadValueAsButton();
         _canJump = true;
+    }
+    
+    private void OnBlockPressed(InputAction.CallbackContext context)
+    {
+        _isBlockPressed = context.ReadValueAsButton();
+        _isBlocking = _isBlockPressed && _canBlock;
+        _canBlock = true;
     }
 
     private void OnDodgePressed(InputAction.CallbackContext context)

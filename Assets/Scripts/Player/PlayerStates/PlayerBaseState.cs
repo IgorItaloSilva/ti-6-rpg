@@ -6,8 +6,11 @@ public abstract class PlayerBaseState
     protected readonly PlayerStateMachine _ctx;
     protected readonly PlayerStateFactory _factory;
     protected float _turnTime, _turnSmoothSpeed, _lowestAccelerationSpeed = float.MaxValue;
+    protected const float MaxAcceleration = 1.5f;
+    private const byte RotationSpeed = 5;
     protected readonly byte AccelerationSpeed = 3, DecelerationSpeed = 10;
     private Vector3 _appliedMovement;
+    protected Vector3 _targetDirection;
 
     protected PlayerBaseState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
     {
@@ -64,7 +67,7 @@ public abstract class PlayerBaseState
     {
         _lowestAccelerationSpeed = Mathf.Min(_ctx.Acceleration, _lowestAccelerationSpeed);
         
-        if (_ctx.IsMovementPressed && _ctx.Acceleration <= 1.5f)
+        if (_ctx.IsMovementPressed && _ctx.Acceleration <= MaxAcceleration)
         {
             _ctx.Acceleration += Time.fixedDeltaTime * AccelerationSpeed;
         }
@@ -75,11 +78,18 @@ public abstract class PlayerBaseState
 
         if (_lowestAccelerationSpeed < 1)
         {
-            _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 1.5f);
+            _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, MaxAcceleration);
         }
 
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration);
+    }
+    protected void HandleTargetedRotation()
+    {
+        if (!_ctx.EnemyDetector.targetEnemy) return;
+        _targetDirection = _ctx.EnemyDetector.targetEnemy.transform.position - _ctx.transform.position;
+        _targetDirection.y = 0; // Keep rotation only on the Y-axis if needed
+
+        _ctx.transform.rotation = Quaternion.Slerp(_ctx.transform.rotation, Quaternion.LookRotation(_targetDirection),
+            Time.deltaTime * RotationSpeed);
     }
     
     protected void HandlePotion()
@@ -100,6 +110,39 @@ public abstract class PlayerBaseState
 
         _ctx.AppliedMovement = _appliedMovement;
         _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime ));
+        
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude);
+    }
+    
+    protected virtual void HandleTargetedMove()
+    {
+        var cameraForward = _ctx.MainCam.transform.forward;
+        var cameraRight = _ctx.MainCam.transform.right;
+        
+        // Flatten the camera directions to ignore vertical movement
+        cameraForward.y = 0;
+        cameraRight.y = 0;
+        cameraForward.Normalize();
+        cameraRight.Normalize();
+        
+        _appliedMovement = (cameraForward * _ctx.CurrentMovement.z + cameraRight * _ctx.CurrentMovement.x) * _ctx.Acceleration;
+        _appliedMovement.y = _ctx.BaseGravity;
+        
+        _ctx.AppliedMovement = _appliedMovement;
+        _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime));
+        
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration * _ctx.CurrentMovementInput.x);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.y);
+        
+        
+    }
+    
+    protected virtual void HandleForwardMove()
+    {
+        _ctx.AppliedMovement = new Vector3(_ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration, _ctx.BaseGravity,
+            _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration);
+
+        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
     }
 
     protected void SwitchState(PlayerBaseState newState)
