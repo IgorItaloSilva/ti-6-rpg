@@ -26,6 +26,7 @@ public class KitsuneDashAttack : EnemyActions
     {
         time+=Time.fixedDeltaTime;
         if(!alreadyDashed){
+            Debug.Log(kitsuneController.target.GetPosition());
             kitsuneController.steeringManager.LookAtTargetToAttack(kitsuneController.target.GetPosition());
         }
         if((time>timeWaitDash)&&(!alreadyDashed)){
