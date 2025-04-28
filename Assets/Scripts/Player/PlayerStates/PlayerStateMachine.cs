@@ -1,5 +1,4 @@
 #region Imports
-
 using System;
 using Cinemachine;
 using UnityEngine;
@@ -116,7 +115,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int HasHealedHash = Animator.StringToHash("hasHealed");
     public readonly int HasParried = Animator.StringToHash("hasParried");
     public readonly int HasDiedHash = Animator.StringToHash("hasDied");
-    public readonly int HasSavedHash = Animator.StringToHash("hasSaved");
+    public readonly int HasPrayedHash = Animator.StringToHash("hasPrayed");
     public readonly int HasRespawnedHash = Animator.StringToHash("hasRespawned");
     public readonly int PlayerVelocityXHash = Animator.StringToHash("playerVelocityX");
     public readonly int PlayerVelocityYHash = Animator.StringToHash("playerVelocityY");
@@ -428,10 +427,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private void FixedUpdate()
     {
         _currentState.FixedUpdateState();
-        Debug.Log("CurrentMovementInput: " + _currentMovementInput);
-        Debug.Log("Acceleration: " + _acceleration);
-        Debug.Log("CurrentMovement: " + _currentMovement);
-        Debug.Log("AppliedMovement: " + _appliedMovement);
         playerCamera.m_RecenterToTargetHeading.m_enabled = _currentMovementInput is { x: not 0, y: > 0f };
     }
 
@@ -530,7 +525,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
         Acceleration = 2.5f;
-
     }
 
     private void EnableSwordColliderAttack4()

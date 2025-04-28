@@ -174,6 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8079176dc091b947847866f831db827, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showDebug: 0
   damageType: 0
   baseDamage: 250
 --- !u!1 &814172841410110555
@@ -5364,10 +5365,10 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 84a0d3e06b750b54da600bedcfe4abe7, type: 2}
+  - {fileID: 2100000, guid: 561f70ee8f15202478b32c83049f76bd, type: 2}
+  - {fileID: 2100000, guid: 276b11c797cfd3c48904c6978f4ccebb, type: 2}
   - {fileID: 2100000, guid: ac1f0f00c5659884097614e15e43942c, type: 2}
-  - {fileID: 2100000, guid: ac1f0f00c5659884097614e15e43942c, type: 2}
-  - {fileID: 2100000, guid: 2c7aa2de03b83794e912fb03572b9939, type: 2}
+  - {fileID: 2100000, guid: 82e6295116fcab44e8d9c69e07546699, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5577,7 +5578,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1921281815168013673}
-  - {fileID: 5263288358474271491}
   - {fileID: 760813261431342278}
   m_Father: {fileID: 7528611375691547125}
   m_LocalEulerAnglesHint: {x: -85.651115, y: -179.99992, z: -0.00004784651}
@@ -5998,6 +5998,8 @@ MonoBehaviour:
   exp: 1000
   nAttacksToPoiseBreak: 4
   IsABoss: 1
+  bossDeathInteractableGO: {fileID: 0}
+  colliderPrincipal: {fileID: 0}
   <CurrentHp>k__BackingField: 0
   <IsDead>k__BackingField: 0
   rb: {fileID: 0}
@@ -6011,20 +6013,15 @@ MonoBehaviour:
   attackTime: 1
   dashAttackDist: 0
   dashAttackTime: 0
+  rangedAttackTime: 0
+  rangedAttackDamage: 0
   nDashCharges: 0
+  nMagicCharges: 0
   restTime: 3
   pillarID: 0
   wanderCenter: {fileID: 0}
   maxWanderDist: 0
-  collider: {fileID: 0}
   maxWanderTime: 0
-  isAttacking: 0
-  isResting: 0
-  isDead: 0
-  isDashing: 0
-  isCasting: 0
-  minDistToRangedAttack: 150
-  rangedattackTime: 3.5
   prefabRangedAttack: {fileID: 7839349217143219840, guid: f18667aad33dd4f47b0633a21f933882,
     type: 3}
   rangedAttackPos:
@@ -6033,7 +6030,11 @@ MonoBehaviour:
   - {fileID: 1823998090028238401}
   - {fileID: 3895632812217263146}
   - {fileID: 3420490398954755476}
-  rewardPowerUpType: 0
+  isAttacking: 0
+  isResting: 0
+  isDead: 0
+  isDashing: 0
+  isCasting: 0
 --- !u!1 &2886302348526762407
 GameObject:
   m_ObjectHideFlags: 0
@@ -6258,13 +6259,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3388137058054506443}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.59767795, y: -0.000000028214545, z: -0.00000001696284, w: 0.8017363}
-  m_LocalPosition: {x: -1.110223e-14, y: 0.000000115484, z: 0.000000007450581}
-  m_LocalScale: {x: 1, y: 1.0000001, z: 1}
+  m_LocalRotation: {x: -0.991325, y: -4.2436454e-10, z: 0.0000000035490144, w: 0.13143352}
+  m_LocalPosition: {x: 0, y: -1.5579448, z: 0.5129471}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5738219609123687537}
-  m_Father: {fileID: 9000595263918972288}
+  m_Father: {fileID: 1629070241537603156}
   m_LocalEulerAnglesHint: {x: -73.40754, y: -0.0000050089525, z: 0.0000013095852}
 --- !u!1 &3610634876226614795
 GameObject:
@@ -7103,10 +7104,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.87
-  m_Height: 2.84
-  m_Direction: 0
-  m_Center: {x: 0.22146575, y: -0.18, z: -0.000000008035415}
+  m_Radius: 1.35
+  m_Height: 4.1
+  m_Direction: 1
+  m_Center: {x: 0.06, y: 0.97, z: -0.000000008035415}
 --- !u!1 &5885667690624553181
 GameObject:
   m_ObjectHideFlags: 0
@@ -7756,6 +7757,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2074409399560914116}
+  - {fileID: 5263288358474271491}
   m_Father: {fileID: 8036997847134477552}
   m_LocalEulerAnglesHint: {x: 3.5068655, y: -2.7072984e-15, z: -0.00000000294521}
 --- !u!1 &8099388224302973287

@@ -38,31 +38,50 @@ public class PlayerAttackState : PlayerBaseState
 
         HandleAcceleration();
 
-        if (_hasTarget)
-            HandleTargetedRotation();
+        HandleTargetedRotation();
     }
 
     public override void ExitState()
     {
-        
     }
 
     private void CheckAttackTargetDistance()
     {
-        _hasTarget = ((_ctx.InCombat) &&
-                      Vector3.Distance(_ctx.transform.position, _ctx.EnemyDetector.targetEnemy.transform.position) <=
-                      3f);
+        if (_ctx.EnemyDetector.targetEnemy)
+            _hasTarget = ((_ctx.InCombat) &&
+                          Vector3.Distance(_ctx.transform.position,
+                              _ctx.EnemyDetector.targetEnemy.transform.position) <= 3f);
+        else
+            _ctx.InCombat = false;
     }
 
     protected override void HandleAcceleration()
-    { 
-        if(_ctx.Acceleration > 0)
+    {
+        if (_ctx.Acceleration > 0)
             _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
         else
             _ctx.Acceleration = 0;
         
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
-        //_ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * 5);
+    }
+    
+    protected override void HandleForwardMove()
+    {
+        _cameraForward = _ctx.MainCam.transform.forward;
+        _cameraRight = _ctx.MainCam.transform.right;
+        
+        // Flatten the camera directions to ignore vertical movement
+        _cameraForward.y = 0;
+        _cameraRight.y = 0;
+        _cameraForward.Normalize();
+        _cameraRight.Normalize();
+        
+        _ctx.AppliedMovementX = _ctx.transform.forward.x * _ctx.BaseMoveSpeed * _ctx.Acceleration;
+        _ctx.AppliedMovementY = _ctx.BaseGravity;
+        _ctx.AppliedMovementZ = _ctx.transform.forward.z * _ctx.BaseMoveSpeed * _ctx.Acceleration;
+
+        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
+        
     }
 
     public override void CheckSwitchStates()
@@ -82,9 +101,9 @@ public class PlayerAttackState : PlayerBaseState
             _ctx.ResetAttacks();
             SwitchState(_factory.Dodge());
         }
-        
-        if(_ctx.IsBlocking)
-        {            
+
+        if (_ctx.IsBlocking)
+        {
             _ctx.ResetAttacks();
             _ctx.Animator.SetBool(_ctx.IsBlockingHash, true);
             SwitchState(_factory.Block());

@@ -1,4 +1,3 @@
-using UnityEditor.VersionControl;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using System.Threading.Tasks;
@@ -7,7 +6,7 @@ using Task = System.Threading.Tasks.Task;
 public class PlayerBlockState : PlayerCombatState
 {
     private new const float MaxAcceleration = 1f;
-    private const byte ParryDurationMs = 150, ParryCooldownMs = 150;
+    private const byte ParryDurationMs = 100, ParryCooldownMs = 150;
 
     public PlayerBlockState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)

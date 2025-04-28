@@ -181,6 +181,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         if (colliderPrincipal && healthBar && poiseSlider)
         {
             colliderPrincipal.enabled = false;
+            colliderPrincipal.gameObject.SetActive(false);
             healthBar.gameObject.SetActive(false);
             poiseSlider.gameObject.SetActive(false);
         }
@@ -225,6 +226,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
         if (colliderPrincipal && healthBar && poiseSlider)
         {
             colliderPrincipal.enabled = true;
+            colliderPrincipal.gameObject.SetActive(true);
             healthBar.gameObject.SetActive(true);
             poiseSlider.gameObject.SetActive(true);
         }

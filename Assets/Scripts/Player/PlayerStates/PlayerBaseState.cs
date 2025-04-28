@@ -9,7 +9,8 @@ public abstract class PlayerBaseState
     protected const float MaxAcceleration = 1.5f;
     private const byte RotationSpeed = 5;
     protected readonly byte AccelerationSpeed = 3, DecelerationSpeed = 10;
-    private Vector3 _appliedMovement, _cameraForward, _cameraRight;
+    private Vector3 _appliedMovement;
+    protected Vector3 _cameraForward, _cameraRight;
     protected Vector3 _targetDirection;
 
     protected PlayerBaseState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
@@ -35,23 +36,6 @@ public abstract class PlayerBaseState
         {
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
         }
-    }
-    protected void HandleRotation()
-    {
-        // Calcular direção resultante do input do player e rotacionar ele na direção para onde está indo.
-        var turnOrientation = Mathf.Atan2(_ctx.CurrentMovementInput.x, _ctx.CurrentMovementInput.y) * Mathf.Rad2Deg + _ctx.MainCam.transform.eulerAngles.y;
-        var smoothedTurnOrientation =
-            Mathf.SmoothDampAngle(_ctx.transform.eulerAngles.y, turnOrientation, ref _turnSmoothSpeed, _turnTime);
-
-        if (!_ctx.IsMovementPressed) return;
-
-        // Aplicar movimentação baseado na rotação do 
-        var groundedMovement = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
-
-        _ctx.CurrentMovement = new Vector3(groundedMovement.x, _ctx.CurrentMovement.y, groundedMovement.z);
-
-        // Rotacionar a direção do player
-        _ctx.transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
     }
     protected virtual void HandleJump(float jumpForceOverride = 1f)
     {
@@ -84,12 +68,36 @@ public abstract class PlayerBaseState
     }
     protected void HandleTargetedRotation()
     {
-        if (!_ctx.EnemyDetector.targetEnemy) return;
-        _targetDirection = _ctx.EnemyDetector.targetEnemy.transform.position - _ctx.transform.position;
+        if (_ctx.EnemyDetector.targetEnemy)
+            _targetDirection = _ctx.EnemyDetector.targetEnemy.transform.position - _ctx.transform.position;
+        else
+            _targetDirection = _ctx.MainCam.transform.forward;
+        
         _targetDirection.y = 0; // Keep rotation only on the Y-axis if needed
-
+    
         _ctx.transform.rotation = Quaternion.Slerp(_ctx.transform.rotation, Quaternion.LookRotation(_targetDirection),
             Time.deltaTime * RotationSpeed);
+    }
+    
+    protected void HandleRotation()
+    {
+        // Calculate the resulting direction from player input and rotate the player towards it.
+        float turnOrientation = Mathf.Atan2(_ctx.CurrentMovementInput.x, _ctx.CurrentMovementInput.y) * Mathf.Rad2Deg + _ctx.MainCam.transform.eulerAngles.y;
+        float smoothedTurnOrientation =
+            Mathf.SmoothDampAngle(_ctx.transform.eulerAngles.y, turnOrientation, ref _turnSmoothSpeed, _turnTime);
+    
+        if (!_ctx.IsMovementPressed) return;
+    
+        // Apply movement based on the player's rotation
+        var groundedMovement = Quaternion.Euler(0f, turnOrientation, 0f) * Vector3.forward;
+    
+        // Ensure consistent movement direction when switching between rotation modes
+        float forward = groundedMovement.z;
+        float right = groundedMovement.x;
+        _ctx.CurrentMovement = new Vector3(right, _ctx.CurrentMovement.y, forward);
+    
+        // Rotate the player's direction
+        _ctx.transform.rotation = Quaternion.Euler(0f, smoothedTurnOrientation, 0f);
     }
     
     protected void HandlePotion()
@@ -111,7 +119,7 @@ public abstract class PlayerBaseState
         _ctx.AppliedMovement = _appliedMovement;
         _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime ));
         
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude, 0.1f, Time.deltaTime);
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f);
     }
     
@@ -132,8 +140,8 @@ public abstract class PlayerBaseState
         _ctx.AppliedMovement = _appliedMovement;
         _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime));
         
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration * _ctx.CurrentMovementInput.x);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.y);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration * _ctx.CurrentMovementInput.x, 0.1f, Time.deltaTime);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.y, 0.1f, Time.deltaTime);
     }
     
     protected virtual void HandleForwardMove()
@@ -153,8 +161,8 @@ public abstract class PlayerBaseState
 
         _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
         
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.magnitude, 0.1f, Time.deltaTime);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f, 0.1f, Time.deltaTime);
     }
 
     protected void SwitchState(PlayerBaseState newState)

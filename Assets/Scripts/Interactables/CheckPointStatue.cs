@@ -74,8 +74,10 @@ public class CheckPointStatue : Interactable
     }
     void Interact(InputAction.CallbackContext context){
         if(inRange && !PlayerStateMachine.Instance.IsLocked){
-            PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasSavedHash);
-            PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasSavedHash);
+            PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasPrayedHash);
+            PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasPrayedHash);
+            PlayerStateMachine.Instance.Animator.SetFloat(PlayerStateMachine.Instance.PlayerVelocityXHash, 0f);
+            PlayerStateMachine.Instance.Animator.SetFloat(PlayerStateMachine.Instance.PlayerVelocityYHash, 0f);
             PlayerStateMachine.Instance.LockPlayer();
             LevelLoadingManager.instance?.RespawnEnemies();
             playerStats?.CheckPointStatue();

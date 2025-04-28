@@ -8,7 +8,9 @@ public class PlayerCombatState : PlayerGroundedState
     public PlayerCombatState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        
+        _ctx.AppliedMovementX = 0f;
+        _ctx.AppliedMovementZ = 0f;
+        _ctx.AppliedMovementY = _ctx.BaseGravity;
     }
     
     public sealed override void HandleAnimatorParameters()
@@ -29,8 +31,8 @@ public class PlayerCombatState : PlayerGroundedState
     {
         if(_ctx.EnemyDetector.targetEnemy)
         {
-            HandleTargetedRotation();
             HandleTargetedMove();
+            HandleTargetedRotation();
         }
         else
         {

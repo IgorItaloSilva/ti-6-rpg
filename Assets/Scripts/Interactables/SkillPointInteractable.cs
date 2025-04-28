@@ -67,8 +67,10 @@ public class SkillPointInteractable : Interactable, IDamagable
     void Interact(InputAction.CallbackContext context){
         if(inRange&&CanInteract&&!AlreadyInterated){
             PlayerStateMachine.Instance.CanInteract=false;
-            PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasSavedHash);
-            PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasSavedHash);
+            PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasPrayedHash);
+            PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasPrayedHash);
+            PlayerStateMachine.Instance.Animator.SetFloat(PlayerStateMachine.Instance.PlayerVelocityXHash, 0f);
+            PlayerStateMachine.Instance.Animator.SetFloat(PlayerStateMachine.Instance.PlayerVelocityYHash, 0f);
             PlayerStateMachine.Instance.LockPlayer();
             Rescue();
         }
