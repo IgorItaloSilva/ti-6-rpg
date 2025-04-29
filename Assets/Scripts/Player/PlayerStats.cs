@@ -262,6 +262,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         }
     }
     void RuneStatBuff(bool isActivate,string stat,int amount){
+        Debug.Log($"Foi chamado um rune stat buff com isActivavate{isActivate}, do stat {stat} e ammount {amount}");
         hasRuneBuff=true;
         int posNegDiscriminant = amount > 0 ? 1 : -1;
         if(isActivate){
@@ -286,6 +287,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             }
         }
         else{
+            Debug.Log("Entrei no false do rune stat buff");
             switch(stat){
                 case "vitalidade":
                     statHasRuneBuff[0]=0;
@@ -316,6 +318,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             hasRuneBuff = !allEqZero;
         }
         CalculateStats();
+        SendBaseStatsInfo();
+        SendAdvancedStatsInfo();
     }
     void GainExp(int exp){
         CarriedExp+=exp;
@@ -345,14 +349,14 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     #region Stats UI
     //Coisas de UI do level up
     void SendBaseStatsInfo(){
-        if(!hasRuneBuff){
-            StatsUIManager.instance?.ReciveBaseStatsInfo(Con,Dex,Str,Int,PotionLevel);
-        }
-        else{
+        //if(!hasRuneBuff){
+        //    StatsUIManager.instance?.ReciveBaseStatsInfo(Con,Dex,Str,Int,PotionLevel);
+        //}
+        //else{
             StatsUIManager.instance?.ReciveBaseStatsInfo(Con+runeBuffAmount[0],Dex+runeBuffAmount[1],Str+runeBuffAmount[2],
                                                             Int+runeBuffAmount[3],PotionLevel+runeBuffAmount[4]);
             StatsUIManager.instance?.ColorAtributes(runeBuffAmount);
-        }
+        //}
 
     }
     void SendExpStatsInfo(){

@@ -8,12 +8,13 @@ using UnityEngine.UI;
 public class RunesUiManager : MonoBehaviour
 {
     public static RunesUiManager instance;
-    [SerializeField]HorizontalLayoutGroup equipedRunesLayout;
+    [SerializeField]GameObject equipedBladeRuneSlot;
+    [SerializeField]GameObject equipedGuardRuneSlot;
+    [SerializeField]GameObject equipedHandleRuneSlot;
     [SerializeField]GameObject scrollContent;
     [SerializeField]GameObject runeButtonprefab;
-    RuneButton[]equipedRunes = new RuneButton[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
+    RuneButton[]equipedRunesButtons = new RuneButton[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
     List<RuneButton> allRunesButtons = new();
-    int equipedRunesAmmount;
     static int index;
     void Awake(){
         if(instance==null){
@@ -26,7 +27,6 @@ public class RunesUiManager : MonoBehaviour
     void Start()
     {
         index=0;
-        equipedRunesAmmount=0;
     }
     public void Setup(){
         foreach(RuneSO runeSO in RuneManager.instance.runeInventory ){
@@ -52,27 +52,34 @@ public class RunesUiManager : MonoBehaviour
     }
     public void EquipRune(int runeButtonindex){//esse parametro é o index que nos passamos pro runeButton ao criar ele
         RuneSO rune = allRunesButtons[runeButtonindex].rune;
-        if(equipedRunes[(int)rune.Part]==null){
-            GameObject newRuneButtonGO=Instantiate(runeButtonprefab,equipedRunesLayout.transform);
-            RuneButton runeButton = newRuneButtonGO.GetComponent<RuneButton>();
-            runeButton.SetRuneAndTexts(rune);
-            equipedRunes[(int)rune.Part]=runeButton;
-            equipedRunesAmmount++;
-            RuneManager.instance.EquipRune(runeButtonindex);
-        }else{
-            Destroy(equipedRunes[(int)rune.Part].gameObject);
-            GameObject newRuneButtonGO=Instantiate(runeButtonprefab,equipedRunesLayout.transform);
-            newRuneButtonGO.transform.SetSiblingIndex((int)rune.Part);
-            RuneButton runeButton = newRuneButtonGO.GetComponent<RuneButton>();
-            runeButton.SetRuneAndTexts(rune);
-            equipedRunes[(int)rune.Part]=runeButton;
-            RuneManager.instance.EquipRune(runeButtonindex);
-        }
-        if(equipedRunesAmmount>=3){
-            equipedRunesLayout.childControlWidth=true;
-        }
-        else{
-            equipedRunesLayout.childControlWidth=false;
-        }
+        GameObject parent=null;
+            switch(rune.Part){
+                case Enums.KatanaPart.Blade:
+                    parent=equipedBladeRuneSlot;
+                break;
+                case Enums.KatanaPart.Guard:
+                    parent=equipedGuardRuneSlot;
+                break;
+                case Enums.KatanaPart.Handle:
+                    parent=equipedHandleRuneSlot;
+                break;
+            }
+        if(equipedRunesButtons[(int)rune.Part]!=null)Destroy(equipedRunesButtons[(int)rune.Part].gameObject);
+        GameObject newRuneButtonGO=Instantiate(runeButtonprefab,parent.transform);
+        RuneButton runeButton = newRuneButtonGO.GetComponent<RuneButton>();
+        runeButton.SetRuneAndTexts(rune);
+        runeButton.id=runeButtonindex;
+        runeButton.isEquiped=true;
+        equipedRunesButtons[(int)rune.Part]=runeButton;
+        RuneManager.instance.EquipRune(runeButtonindex);
+    }
+    public void Unequip(int runeButtonindex){
+        RuneSO rune = allRunesButtons[runeButtonindex].rune;
+        Debug.Log($"A runa que vai ser desequipada é da part {rune.Part} e tem id de {runeButtonindex}");
+        if(equipedRunesButtons[(int)rune.Part]==null)Debug.LogError("Uma runa que não está equipada está tentando desequipar a categoria dela???");
+        Debug.Log($"Vou tentar destrui o rune button {rune.Part} que contem {equipedRunesButtons[(int)rune.Part]}");
+        Destroy(equipedRunesButtons[(int)rune.Part].gameObject);
+        equipedRunesButtons[(int)rune.Part]=null;
+        RuneManager.instance.UnequipRune(runeButtonindex);
     }
 }

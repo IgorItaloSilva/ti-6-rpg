@@ -24,15 +24,16 @@ public class RuneManager : MonoBehaviour
             Destroy(this.gameObject);
         }
         //runeInventory = new List<RuneSO>();
-        equipedRunes = new RuneSO[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
-        unequipedRunes = new RuneSO[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
-        hasChanged = new bool[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
+        int size = Enum.GetNames(typeof(Enums.KatanaPart)).Length;
+        equipedRunes = new RuneSO[size];
+        unequipedRunes = new RuneSO[size];
+        hasChanged = new bool[size];
     }
     public void GainRune(RuneSO newRune){
-        GameEventsManager.instance.uiEvents.NotificationPlayed("Você coletou a rune: "+newRune.Nome);
+        GameEventsManager.instance.uiEvents.NotificationPlayed("Você coletou a runa: "+newRune.Nome);
         runeInventory.Add(newRune);
     }
-    public void EquipRune(int index){//NOssa Ui passa o index do array de runas dela, que é igual ao nosso, por isso usado o ID diretamente
+    public void EquipRune(int index){//Nossa Ui passa o index do array de runas dela, que é igual ao nosso, por isso usado o ID diretamente
         Debug.Log($"Vou equipar a runa de {index}, que é a {runeInventory[index]}");
         RuneSO rune = runeInventory[index];
         if(equipedRunes[(int)rune.Part]==null){
@@ -44,6 +45,18 @@ public class RuneManager : MonoBehaviour
         }
         hasChanged[(int)rune.Part]=true;
     }
+    public void UnequipRune(int index){
+        Debug.Log($"Vou desequipar a runa de {index}, que é a {runeInventory[index]}");
+        RuneSO rune = runeInventory[index];
+        if(equipedRunes[(int)rune.Part]==null){
+            Debug.LogError($"tentaram tirar uma runa e o rune manager n tem uma runa equipada no slot pedido {rune.Part}");
+        }
+        else{
+            equipedRunes[(int)rune.Part]=null;
+            unequipedRunes[(int)rune.Part]=runeInventory[index];
+        }
+        hasChanged[(int)rune.Part]=true;
+    }
     public void ApplySelectedRunes(){//Called when we close the UI, applyes the buffs from the selected Runes
         for(int i =0;i<hasChanged.Length;i++){
             if(hasChanged[i]){
@@ -52,6 +65,7 @@ public class RuneManager : MonoBehaviour
                 if(rune!=null){
                     Debug.Log($"Estou dando deapply na runa {rune}");
                     ActivateDeactivateRune(rune,false);
+                    unequipedRunes[i]=null;
                 }
                 //Activate a nova esquipada
                 rune = equipedRunes[i];

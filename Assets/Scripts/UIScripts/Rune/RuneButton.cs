@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
 
-public class RuneButton : MonoBehaviour ,IPointerDownHandler
+public class RuneButton : MonoBehaviour
 {
     public int id;
     [SerializeField]TextMeshProUGUI nameText;
@@ -12,6 +12,7 @@ public class RuneButton : MonoBehaviour ,IPointerDownHandler
     [SerializeField]TextMeshProUGUI typeText;
     [SerializeField]TextMeshProUGUI qualityText;
     public RuneSO rune;
+    public bool isEquiped;
     public void SetRuneAndTexts(RuneSO rune){
         this.rune=rune;
         nameText.text=rune.Nome;
@@ -33,10 +34,16 @@ public class RuneButton : MonoBehaviour ,IPointerDownHandler
     {
         RunesUiManager.instance.EquipRune(id);
     }
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerDown()
     {
-        RunesUiManager.instance.EquipRune(id);
-        Debug.Log("Equip");
+        if(isEquiped){
+            Debug.Log("Cliquei em desequipar uma runa");
+            RunesUiManager.instance.Unequip(id);
+        }
+        else{
+            Debug.Log("Cliquei em equipar uma runa");
+            RunesUiManager.instance.EquipRune(id);
+        }
     }
     string GetTypeText(Enums.KatanaPart runeType){
         switch(runeType){
