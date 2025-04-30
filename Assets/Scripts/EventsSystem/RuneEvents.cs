@@ -13,4 +13,10 @@ public class RuneEvents{
             onRuneStatBuff(isApply,stat,value);
         }
     }
+    public event Action<bool,Enums.RuneOtherCode,int> onRuneOtherBuff;
+    public void RuneOtherBuff(bool isApply, Enums.RuneOtherCode code,int value){
+        if(onRuneOtherBuff!=null){
+            onRuneOtherBuff(isApply,code,value);
+        }
+    }
 }

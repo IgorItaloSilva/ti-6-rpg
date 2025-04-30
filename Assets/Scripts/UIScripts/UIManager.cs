@@ -83,7 +83,6 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onSavedGame+=FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened+=OpenDialogPanel;
-        GameEventsManager.instance.uiEvents.OnNotificationPlayed+=PlayNotification;
         GameEventsManager.instance.playerEvents.onPlayerGainExp+=PlayExpGain;
     }
 
@@ -94,7 +93,6 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onSavedGame -= FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened -= OpenDialogPanel;
-        GameEventsManager.instance.uiEvents.OnNotificationPlayed-=PlayNotification;
         GameEventsManager.instance.playerEvents.onPlayerGainExp-=PlayExpGain;
     }
 
@@ -208,7 +206,7 @@ public class UIManager : MonoBehaviour
             StartCoroutine(SpinSaveIcon());
         }
     }
-    void PlayNotification(string text){
+    public void PlayNotification(string text){
         notificationBox.SetActive(true);
         notificationText.text=text;
         StartCoroutine("PlayNotificationVFX");

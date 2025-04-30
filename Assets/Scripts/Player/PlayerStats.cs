@@ -337,7 +337,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         SendExpStatsInfo();
         SendLevelUpInfo();
         UIManager.instance?.DisplayExpAmmount(CarriedExp);
-        GameEventsManager.instance.uiEvents.NotificationPlayed("Você upou de nível!");
+        UIManager.instance?.PlayNotification("Você upou de nível!");
         DataPersistenceManager.instance.SaveGame();
     }
     int ExpToNextLevel(int level){//OBS: ESSA FUNÇÃO DEVERIA SER IDENTICA A FUNÇÃO DE MESMO NOME NO STATSUIMANAGER 

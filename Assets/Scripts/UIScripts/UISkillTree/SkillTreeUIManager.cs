@@ -109,7 +109,7 @@ public class SkillTreeUIManager : MonoBehaviour
     public void AjustButtonsSprites(){
         foreach(SkillNodeUI skillNode in powerUpNodes){
             int id = skillNode.powerUp.Id;
-            Debug.Log($"id do power up id é {id}");
+            //Debug.Log($"id do power up id é {id}");
             if(buyablePowerUps==null)Debug.LogWarning("o buyablePowerUps não existe");
             if(buyablePowerUps[id]){
                 skillNode.button.interactable=true;

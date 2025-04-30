@@ -30,6 +30,9 @@ public class Enums {
         TradeOff,
         OtherBonus
     }
+    public enum RuneOtherCode{
+        Critico
+    }
     public enum AttackType{
         HeavyAttack,
         LightAttack

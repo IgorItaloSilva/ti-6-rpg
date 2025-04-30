@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using UnityEngine;
 using Task = System.Threading.Tasks.Task;
 
@@ -9,6 +8,7 @@ public class PlayerWeapon : WeaponManager
     float lightAttackDamage = 0;
     float strBonusDamage;//recived from playerStats
     float dexBonusDamage;//recived from playerStats
+    float critRateBonus;//recived from runeManager
     //Weapon pinduricalhos
     float runeBonusDamage = 0;
     //Skill tree powerUps
@@ -18,10 +18,12 @@ public class PlayerWeapon : WeaponManager
     
     void OnEnable(){
         GameEventsManager.instance.runeEvents.onRuneDamageBuff+=RuneDamageBuff;
+        GameEventsManager.instance.runeEvents.onRuneOtherBuff+=RuneOtherBuff;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp+=ActivatePowerUps;
     }   
     void OnDisable(){
         GameEventsManager.instance.runeEvents.onRuneDamageBuff-=RuneDamageBuff;
+        GameEventsManager.instance.runeEvents.onRuneOtherBuff-=RuneOtherBuff;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp-=ActivatePowerUps;
     }
     protected override void Start()
@@ -53,7 +55,7 @@ public class PlayerWeapon : WeaponManager
         }
         damagedTargets.Add(alvo);
         //CritLogic
-        if(Random.Range(0f,100f)<=critRate){
+        if(Random.Range(0f,100f)<=critRate+critRateBonus){
             damageDealt=damage*2*doubleDamageMultiplier;
             crited=true;
         }
@@ -97,8 +99,8 @@ public class PlayerWeapon : WeaponManager
         }
         
     }
-     public void RuneDamageBuff(bool isApply, int value){
-        if(isApply){
+     public void RuneDamageBuff(bool isActivate, int value){
+        if(isActivate){
             runeBonusDamage = value;
         }
         else{
@@ -119,6 +121,22 @@ public class PlayerWeapon : WeaponManager
             case 14:
                 lifeStealPUActive=true;
             break;
+        }
+    }
+    public void RuneOtherBuff(bool isActivate,Enums.RuneOtherCode code,int amount){
+        if(isActivate){
+            switch(code){
+                case Enums.RuneOtherCode.Critico:
+                    critRateBonus = amount;
+                break;
+            }
+        }
+        else{
+            switch(code){
+                case Enums.RuneOtherCode.Critico:
+                    critRateBonus=0;
+                break;
+            }
         }
     }
 }

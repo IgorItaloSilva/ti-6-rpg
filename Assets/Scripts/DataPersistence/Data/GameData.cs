@@ -12,6 +12,7 @@ public class GameData
     public PlayerStatsData playerStatsData;
     public SkillTreeData skillTreeData;
     public SerializableDictionary<string,LevelData> levelsData;
+    public RuneData runeData;
     public string currentLevel;
     public DroppedExpData droppedExpData;
 
@@ -25,6 +26,7 @@ public class GameData
         skillTreeData = new SkillTreeData();
         levelsData = new SerializableDictionary<string,LevelData>();
         droppedExpData = new DroppedExpData();
+        runeData=new RuneData();
     }
 
     public GameData()
@@ -35,5 +37,6 @@ public class GameData
         playerStatsData = new PlayerStatsData();
         skillTreeData = new SkillTreeData();
         levelsData = new SerializableDictionary<string,LevelData>();
+        runeData=new RuneData();
     }
 }

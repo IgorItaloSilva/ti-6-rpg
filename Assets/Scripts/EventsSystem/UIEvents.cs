@@ -133,12 +133,6 @@ public class UIEvents
             onUnpauseGame();
         }
     }
-    public event Action<string> OnNotificationPlayed;
-    public void NotificationPlayed(string text){
-        if(OnNotificationPlayed!=null){
-            OnNotificationPlayed(text);
-        }
-    }
     public event Action<float,float,string> OnBossInfoDisplayed;
     public void BossInfoDisplay(float currentHp,float maxhp,string name){
         if(OnBossInfoDisplayed!=null){

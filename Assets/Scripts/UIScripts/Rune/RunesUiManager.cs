@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ public class RunesUiManager : MonoBehaviour
     [SerializeField]GameObject runeButtonprefab;
     RuneButton[]equipedRunesButtons = new RuneButton[Enum.GetNames(typeof(Enums.KatanaPart)).Length];
     List<RuneButton> allRunesButtons = new();
-    static int index;
+    int index;
     void Awake(){
         if(instance==null){
             instance=this;
@@ -29,13 +30,19 @@ public class RunesUiManager : MonoBehaviour
         index=0;
     }
     public void Setup(){
+        if(RuneManager.instance.runeInventory==null)return;
         foreach(RuneSO runeSO in RuneManager.instance.runeInventory ){
+            if(runeSO==null) continue;
             GameObject newRuneButtonGO=Instantiate(runeButtonprefab,scrollContent.transform);
             RuneButton runeButton = newRuneButtonGO.GetComponent<RuneButton>();
             runeButton.SetRuneAndTexts(runeSO);
             runeButton.id=index;
             index++;
             allRunesButtons.Add(runeButton);
+        }
+        for(int i =0; i<RuneManager.instance.equipedRunes.Count();i++){
+            int index=RuneManager.instance.runeInventory.IndexOf(RuneManager.instance.equipedRunes[i]);
+            if(index>=0)EquipRune(index);
         }
     }
     public void UpdateRunes(){
@@ -51,6 +58,7 @@ public class RunesUiManager : MonoBehaviour
         }
     }
     public void EquipRune(int runeButtonindex){//esse parametro é o index que nos passamos pro runeButton ao criar ele
+        Debug.Log($"a lista allRunesButton tem tamanho {allRunesButtons.Count}");
         RuneSO rune = allRunesButtons[runeButtonindex].rune;
         GameObject parent=null;
             switch(rune.Part){
