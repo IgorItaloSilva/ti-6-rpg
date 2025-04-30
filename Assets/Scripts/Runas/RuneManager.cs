@@ -12,6 +12,7 @@ public class RuneManager : MonoBehaviour,IDataPersistence
     bool[] hasChanged;
     [Header("COLOCAR TODAS AS RUNAS AQUI!")]
     [SerializeField]List<RuneSO>BibliotecaDeRunas;
+    public bool showRuneDebug;
 
     void OnEnable(){
 
@@ -48,7 +49,7 @@ public class RuneManager : MonoBehaviour,IDataPersistence
         runeInventory.Add(newRune);
     }
     public void EquipRune(int index){//Nossa Ui passa o index do array de runas dela, que é igual ao nosso, por isso usado o ID diretamente
-        Debug.Log($"Vou equipar a runa de {index}, que é a {runeInventory[index]}");
+        if(showRuneDebug)Debug.Log($"Vou equipar a runa de {index}, que é a {runeInventory[index]}");
         RuneSO rune = runeInventory[index];
         if(equipedRunes[(int)rune.Part]==null){
             equipedRunes[(int)rune.Part]=runeInventory[index];
@@ -60,10 +61,10 @@ public class RuneManager : MonoBehaviour,IDataPersistence
         hasChanged[(int)rune.Part]=true;
     }
     public void UnequipRune(int index){
-        Debug.Log($"Vou desequipar a runa de {index}, que é a {runeInventory[index]}");
+        if(showRuneDebug)Debug.Log($"Vou desequipar a runa de {index}, que é a {runeInventory[index]}");
         RuneSO rune = runeInventory[index];
         if(equipedRunes[(int)rune.Part]==null){
-            Debug.LogError($"tentaram tirar uma runa e o rune manager n tem uma runa equipada no slot pedido {rune.Part}");
+            if(showRuneDebug)Debug.LogError($"tentaram tirar uma runa e o rune manager n tem uma runa equipada no slot pedido {rune.Part}");
         }
         else{
             equipedRunes[(int)rune.Part]=null;
@@ -77,14 +78,14 @@ public class RuneManager : MonoBehaviour,IDataPersistence
                 //Deactivate a que estava esquipada
                 RuneSO rune = unequipedRunes[i];
                 if(rune!=null){
-                    Debug.Log($"Estou dando deapply na runa {rune}");
+                    if(showRuneDebug)Debug.Log($"Estou dando deapply na runa {rune}");
                     ActivateDeactivateRune(rune,false);
                     unequipedRunes[i]=null;
                 }
                 //Activate a nova esquipada
                 rune = equipedRunes[i];
                 if(rune!=null){
-                    Debug.Log($"Estou dando apply na runa {rune}");
+                    if(showRuneDebug)Debug.Log($"Estou dando apply na runa {rune}");
                     ActivateDeactivateRune(rune,true);
                 }
                 hasChanged[i]=false;
@@ -92,7 +93,7 @@ public class RuneManager : MonoBehaviour,IDataPersistence
         }
     }
     void ActivateDeactivateRune(RuneSO rune,bool isActivate){
-        Debug.Log($"Vou ativar a runa {rune.name}");
+        if(showRuneDebug)Debug.Log($"Vou ativar a runa {rune.name}");
         bool parseResult;
         switch(rune.runeActivationCode){
             case Enums.RuneActivationCode.DamageBuff:
@@ -100,12 +101,12 @@ public class RuneManager : MonoBehaviour,IDataPersistence
                 int dano = 0;
                 parseResult = false;
                 string[] strings = rune.DescriptionText.Split(" ");
-                Debug.Log(strings.Length);
+                if(showRuneDebug)Debug.Log(strings.Length);
                 foreach(string s in strings){
                     parseResult = int.TryParse(s,NumberStyles.AllowLeadingSign,CultureInfo.CurrentCulture,out dano);
                     if(parseResult)break;
                 }
-                Debug.Log($"resultado do parse {parseResult} e dano é {dano}");
+                if(showRuneDebug)Debug.Log($"resultado do parse {parseResult} e dano é {dano}");
                 if(parseResult){
                     GameEventsManager.instance.runeEvents.RuneDamageBuff(isActivate,dano);
                 }
@@ -117,17 +118,17 @@ public class RuneManager : MonoBehaviour,IDataPersistence
                 int amount = 0;
                 parseResult = false;
                 string[] strings = rune.DescriptionText.Split(" ");
-                Debug.Log(strings.Length);
+                if(showRuneDebug)Debug.Log(strings.Length);
                 foreach(string s in strings){
-                    Debug.Log(s);
+
                     if(!parseResult)parseResult = int.TryParse(s,NumberStyles.AllowLeadingSign,CultureInfo.CurrentCulture,out amount);
                     if(s.Equals("vitalidade",StringComparison.OrdinalIgnoreCase)){stat ="vitalidade"; }
                     if(s.Equals("destreza",StringComparison.OrdinalIgnoreCase)){stat ="destreza"; }
                     if(s.Equals("força",StringComparison.OrdinalIgnoreCase)){stat ="força"; }
                     if(s.Equals("inteligência",StringComparison.OrdinalIgnoreCase)){stat ="inteligência"; }
                 }
-                if(!parseResult)Debug.Log($"O parse da runa não funcionou, não sabemos quanto do stat: {stat} devemos aumentar");
-                Debug.Log($"resultado do parse {parseResult} e dano é {amount}");
+                if(!parseResult)if(showRuneDebug)Debug.Log($"O parse da runa não funcionou, não sabemos quanto do stat: {stat} devemos aumentar");
+                if(showRuneDebug)Debug.Log($"resultado do parse {parseResult} e dano é {amount}");
                 if(parseResult){
                     GameEventsManager.instance.runeEvents.RuneStatBuff(isActivate,stat,amount);
                 }
@@ -141,14 +142,13 @@ public class RuneManager : MonoBehaviour,IDataPersistence
                 parseResult = false;
                 string noPertentage = rune.DescriptionText.Replace('%',' ');
                 string[] strings = noPertentage.Split(" ");
-                Debug.Log(strings.Length);
+                if(showRuneDebug)Debug.Log(strings.Length);
                 foreach(string s in strings){
-                    Debug.Log(s);
                     //if(!parseResult)parseResult = int.TryParse(s,out amount);
                     if(!parseResult)parseResult = int.TryParse(s,NumberStyles.AllowLeadingSign,CultureInfo.CurrentCulture,out amount);
                 }
                 if(!parseResult)Debug.Log($"O parse da runa não funcionou, não sabemos quanto critico:");
-                Debug.Log($"resultado do parse {parseResult} e critico é {amount}");
+                if(showRuneDebug)Debug.Log($"resultado do parse {parseResult} e critico é {amount}");
                 if(parseResult){
                     GameEventsManager.instance.runeEvents.RuneOtherBuff(isActivate,Enums.RuneOtherCode.Critico,amount);
                 }
@@ -167,8 +167,9 @@ public class RuneManager : MonoBehaviour,IDataPersistence
         foreach(string runeName in gameData.runeData.equipedRunes){
             auxSaveLoadDictionary.TryGetValue(runeName,out auxRune);
             int index=runeInventory.IndexOf(auxRune);
-            Debug.Log($"index da runa {auxRune} é {index}");
+            if(showRuneDebug)Debug.Log($"index da runa {auxRune} é {index}");
             EquipRune(index);
+            ApplySelectedRunes();
             //if(index>=0)RunesUiManager.instance.EquipRune(index);
             
         }

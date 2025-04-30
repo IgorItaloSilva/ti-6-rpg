@@ -262,7 +262,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         }
     }
     void RuneStatBuff(bool isActivate,string stat,int amount){
-        Debug.Log($"Foi chamado um rune stat buff com isActivavate{isActivate}, do stat {stat} e ammount {amount}");
+        if(RuneManager.instance.showRuneDebug)Debug.Log($"Foi chamado um rune stat buff com isActivavate{isActivate}, do stat {stat} e ammount {amount}");
         hasRuneBuff=true;
         int posNegDiscriminant = amount > 0 ? 1 : -1;
         if(isActivate){

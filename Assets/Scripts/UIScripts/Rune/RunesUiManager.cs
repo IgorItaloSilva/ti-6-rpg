@@ -58,7 +58,7 @@ public class RunesUiManager : MonoBehaviour
         }
     }
     public void EquipRune(int runeButtonindex){//esse parametro é o index que nos passamos pro runeButton ao criar ele
-        Debug.Log($"a lista allRunesButton tem tamanho {allRunesButtons.Count}");
+        if(RuneManager.instance.showRuneDebug)Debug.Log($"a lista allRunesButton tem tamanho {allRunesButtons.Count}");
         RuneSO rune = allRunesButtons[runeButtonindex].rune;
         GameObject parent=null;
             switch(rune.Part){
@@ -83,9 +83,9 @@ public class RunesUiManager : MonoBehaviour
     }
     public void Unequip(int runeButtonindex){
         RuneSO rune = allRunesButtons[runeButtonindex].rune;
-        Debug.Log($"A runa que vai ser desequipada é da part {rune.Part} e tem id de {runeButtonindex}");
+        if(RuneManager.instance.showRuneDebug)Debug.Log($"A runa que vai ser desequipada é da part {rune.Part} e tem id de {runeButtonindex}");
         if(equipedRunesButtons[(int)rune.Part]==null)Debug.LogError("Uma runa que não está equipada está tentando desequipar a categoria dela???");
-        Debug.Log($"Vou tentar destrui o rune button {rune.Part} que contem {equipedRunesButtons[(int)rune.Part]}");
+        if(RuneManager.instance.showRuneDebug)Debug.Log($"Vou tentar destrui o rune button {rune.Part} que contem {equipedRunesButtons[(int)rune.Part]}");
         Destroy(equipedRunesButtons[(int)rune.Part].gameObject);
         equipedRunesButtons[(int)rune.Part]=null;
         RuneManager.instance.UnequipRune(runeButtonindex);

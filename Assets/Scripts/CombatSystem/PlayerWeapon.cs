@@ -35,11 +35,11 @@ public class PlayerWeapon : WeaponManager
         damage=baseDamage;
     }
     override protected void OnTriggerEnter(Collider other){
-        //Debug.Log("A arma colidiu com algo");
+        Debug.Log($"A arma colidiu com um {other.name}");
         if(!other.gameObject.CompareTag("EnemyDetection"))
         {
             IDamagable alvoAtacado = other.gameObject.GetComponentInParent<IDamagable>();
-            //Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
+            Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
             if (alvoAtacado != null && alvoAtacado.GetType() != typeof(PlayerStats))
             {
                 DealDamage(alvoAtacado, damage);

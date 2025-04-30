@@ -19,7 +19,7 @@ public class RunePickupable : Interactable
     public override void Load(InteractableData interactableData)
     {
         base.Load(interactableData);
-        Debug.Log("Passmaos da chamada de base maas to aqui ainda");
+        //Debug.Log("Passmaos da chamada de base maas to aqui ainda");
         if(Active==false)gameObject.SetActive(false);
     }
 }

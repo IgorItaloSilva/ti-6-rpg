@@ -11,16 +11,12 @@ public class BossDeathInteractable : SkillPointInteractable
     }
     protected override void Rescue()
     {
-        GameEventsManager.instance.playerEvents.PlayerGainExp(expIfRescued);
         base.Rescue();
+        GameEventsManager.instance.playerEvents.PlayerGainExp(expIfRescued);
     }
     public override void Die()
     {
-        SkillTree.instance?.GainMoney((int)Enums.PowerUpType.Dark);
-        AlreadyInterated=true;
-        Active=false;
-        Save();
-        gameObject.SetActive(false);
+        base.Die();
         bossController.ActualDeath();
         //Efeito de morrer no boss...
     }

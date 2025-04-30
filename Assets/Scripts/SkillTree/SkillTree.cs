@@ -76,10 +76,12 @@ public class SkillTree : MonoBehaviour,IDataPersistence
             }
         }
     }
-    public void GainMoney(int powerUpType){//Adicionar isso como resposta a um evento GanharPontos que já teria que
+    public void GainMoney(int powerUpType){
         if(powerUpType>=0&&powerUpType<Enum.GetNames(typeof(Enums.PowerUpType)).Length){
             //Debug.Log($"Ganhei dinheiro do tipo {powerUpType}");
-            currentMoney[powerUpType]++;          //Fazer a conversao do Enum pra int, chamado ao derotar um boss
+            currentMoney[powerUpType]++;
+            if((Enums.PowerUpType)powerUpType==Enums.PowerUpType.Light)UIManager.instance?.PlayNotification("Você ganhou uma moeda Meiyo");
+            else UIManager.instance?.PlayNotification("Você ganhou uma moeda Fuhai");
             GameEventsManager.instance.uiEvents.SkillTreeMoneyChange(powerUpType,currentMoney[powerUpType]);
         }
     }

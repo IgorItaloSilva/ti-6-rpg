@@ -14,8 +14,11 @@ public class RuneButton : MonoBehaviour
     public RuneSO rune;
     public bool isEquiped;
     public void SetRuneAndTexts(RuneSO rune){
-        if(rune==null)Debug.LogError("Recebemos uma runa vazia wtf");
-        else Debug.Log($"Recebemos a runa {rune}");
+        if(RuneManager.instance.showRuneDebug)
+        {
+            if(rune==null)Debug.LogError("Recebemos uma runa vazia wtf");
+            else Debug.Log($"Recebemos a runa {rune}");
+        }
         this.rune=rune;
         nameText.text=rune.Nome;
         icon.sprite = rune.Sprite;

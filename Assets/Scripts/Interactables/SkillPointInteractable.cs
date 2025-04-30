@@ -16,6 +16,11 @@ public class SkillPointInteractable : Interactable, IDamagable
     void OnDisable(){
         PlayerStateMachine.Instance.RemoveActionFromInteract(Interact);
     }
+    protected override void Awake()
+    {
+        base.Awake();
+        life = hitsToDestroy;
+    }
 
     protected override void Start()
     {
@@ -23,12 +28,11 @@ public class SkillPointInteractable : Interactable, IDamagable
             PlayerStateMachine.Instance?.AddActionToInteract(Interact);
         }
         base.Start();
-        life = hitsToDestroy;
     }
 
     public void TakeDamage(float damage, Enums.DamageType damageType, bool wasCrit)
     {
-        if(CanInteract){
+        if(CanInteract&&!AlreadyInterated){
             life--;
             if(life<=0){
                 Die();
@@ -92,4 +96,5 @@ public class SkillPointInteractable : Interactable, IDamagable
         base.Load(interactableData);
         if(AlreadyInterated||!Active)gameObject.SetActive(false);
     }
+
 }

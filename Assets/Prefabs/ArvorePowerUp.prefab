@@ -63,8 +63,9 @@ GameObject:
   m_Component:
   - component: {fileID: 793763383589750229}
   - component: {fileID: 1225928338926045538}
-  - component: {fileID: 4115860110314928174}
   - component: {fileID: 7987115494219917236}
+  - component: {fileID: 2313898575451923661}
+  - component: {fileID: 7258075152696465350}
   m_Layer: 9
   m_Name: MagicTreeSkillPointInteractable
   m_TagString: Untagged
@@ -109,7 +110,26 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 4.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &4115860110314928174
+--- !u!114 &7987115494219917236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2357184006509513404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2998c4fb5b0397048a31bd7f3328f3c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <saveId>k__BackingField: 
+  ignoreSaveLoad: 1
+  myEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  hitsToDestroy: 3
+  canvas: {fileID: 3737445708539044640}
+--- !u!136 &2313898575451923661
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,29 +148,37 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.038454
-  m_Height: 4.076908
+  m_Radius: 1.8834822
+  m_Height: 5.0770187
   m_Direction: 1
-  m_Center: {x: -0.2035923, y: 0, z: 0.032188416}
---- !u!114 &7987115494219917236
-MonoBehaviour:
+  m_Center: {x: -0.16978312, y: 0.22347069, z: -0.124436855}
+--- !u!54 &7258075152696465350
+Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2357184006509513404}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2998c4fb5b0397048a31bd7f3328f3c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <saveId>k__BackingField: 
-  ignoreSaveLoad: 0
-  myEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  hitsToDestroy: 3
-  canvas: {fileID: 3737445708539044640}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &2705819972288210270
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +190,7 @@ GameObject:
   - component: {fileID: 2824155093740371840}
   - component: {fileID: 884628733424574054}
   - component: {fileID: 5273109781594768114}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -299,7 +327,7 @@ GameObject:
   - component: {fileID: 3686355423305685672}
   m_Layer: 12
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -312,7 +340,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2838987481255160463}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -339,8 +367,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.86
-  m_Height: 5.868191
+  m_Radius: 2.44
+  m_Height: 9.42
   m_Direction: 1
   m_Center: {x: 0, y: 1.3258057, z: 0}
 --- !u!1 &2957860185473811401
@@ -354,7 +382,7 @@ GameObject:
   - component: {fileID: 8708517219828418671}
   - component: {fileID: 6523914293223995311}
   - component: {fileID: 2752658192636358931}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Fundo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -429,7 +457,7 @@ GameObject:
   - component: {fileID: 2089402956343198678}
   - component: {fileID: 1699918998817742588}
   - component: {fileID: 4865231939640872825}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -566,7 +594,7 @@ GameObject:
   - component: {fileID: 9085260144534794550}
   - component: {fileID: 7264487330020788120}
   - component: {fileID: 714239603770451496}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: 'Canvas '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -666,7 +694,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4387936443053471294}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: "Intera\xE7\xE3o"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -706,7 +734,7 @@ GameObject:
   - component: {fileID: 580594410733746227}
   - component: {fileID: 1345775074480356396}
   - component: {fileID: 3492093900528866299}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Fundo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -779,7 +807,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7888317555342128420}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Ataque
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -925,7 +953,7 @@ GameObject:
   - component: {fileID: 5665258902761671197}
   - component: {fileID: 8747245513045272908}
   - component: {fileID: 3913358784583079330}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Mouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -998,7 +1026,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3512863338276452491}
-  m_Layer: 12
+  m_Layer: 9
   m_Name: ArvorePowerUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1019,8 +1047,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8735457657175661143}
-  - {fileID: 793763383589750229}
   - {fileID: 441411925639153453}
+  - {fileID: 793763383589750229}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8336059607581449787
@@ -1034,7 +1062,7 @@ GameObject:
   - component: {fileID: 3928965779334949240}
   - component: {fileID: 4998333629981853026}
   - component: {fileID: 5087487127232570388}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1170,7 +1198,7 @@ GameObject:
   - component: {fileID: 8435522852751552773}
   - component: {fileID: 7561209812913970691}
   - component: {fileID: 8716684431475117644}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Tecla
   m_TagString: Untagged
   m_Icon: {fileID: 0}
