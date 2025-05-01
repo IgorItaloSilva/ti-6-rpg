@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -61,5 +62,18 @@ public class GameManager : MonoBehaviour
         DataPersistenceManager.instance.LoadGame();
         GameEventsManager.instance.playerEvents.PlayerRespawn();
         UnpauseGameAndLockCursor();
+    }
+    public void ChangeLevel(string levelName){
+        DataPersistenceManager.instance.SaveGame();
+        //Ligar a cena de carregamento, se quiser
+        StartCoroutine(LoadLevelAsync(levelName));
+    }
+    IEnumerator LoadLevelAsync(string levelName){
+        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(levelName,LoadSceneMode.Additive);
+        while(!loadOperation.isDone){
+            //float progressValue = mathf.Clamp01(loadOperation.progress/0.9f);
+            //atualizar o slider de progresso
+            yield return null;
+        }
     }
 }
