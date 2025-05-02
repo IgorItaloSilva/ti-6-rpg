@@ -63,9 +63,12 @@ public class GameManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.PlayerRespawn();
         UnpauseGameAndLockCursor();
     }
-    public void ChangeLevel(string levelName){
+    public void ChangeLevel(string levelName,Vector3 posToArrive){
+        string currentLevel = LevelLoadingManager.instance.LevelName;
+        GameEventsManager.instance.playerEvents.SetPosition(posToArrive);
         DataPersistenceManager.instance.SaveGame();
-        //Ligar a cena de carregamento, se quiser
+        //Ligar a tela de carregamento, se quiser
+        StartCoroutine(UnloadLevelAsync(currentLevel));
         StartCoroutine(LoadLevelAsync(levelName));
     }
     IEnumerator LoadLevelAsync(string levelName){
@@ -75,5 +78,13 @@ public class GameManager : MonoBehaviour
             //atualizar o slider de progresso
             yield return null;
         }
+    }
+    IEnumerator UnloadLevelAsync(string levelName){
+        AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(levelName);
+        //Pausar coisas que estão atrapalhando
+        while(!unloadOperation.isDone){
+            yield return null;
+        }
+        //Despausar
     }
 }

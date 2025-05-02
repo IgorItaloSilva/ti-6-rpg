@@ -46,6 +46,12 @@ public class PlayerEvents
             onPlayerGainExp(exp);
         }
     }
+    public event Action<Vector3>onPlayerPositionSet;
+    public void SetPosition(Vector3 pos){
+        if(onPlayerPositionSet!=null){
+            onPlayerPositionSet(pos);
+        }
+    }
     /* Um Evento com parametros tem a forma
     public event Action<int,float> onEventoOcorreu;
     public void EventoOcorreu(int inteiro, float flutuante){

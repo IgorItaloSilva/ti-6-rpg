@@ -80,7 +80,7 @@ public class SaveSlotMenu : Menu
             SaveGameAndLoadScene();
         }
     }
-    private void SaveGameAndLoadScene(){
+    public void SaveGameAndLoadScene(){
         DataPersistenceManager.instance.SaveGame();
         if(levelToBeLoaded==""){
             Debug.Log("Como não tinha um level indo pro indice 1");

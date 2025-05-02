@@ -79,6 +79,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.uiEvents.onRequestExpInfo+=SendExpInfo;
         GameEventsManager.instance.uiEvents.onBuyLevelClicked+=BuyLevel;
         GameEventsManager.instance.uiEvents.onRequestPotionAmmountInfo+=SendPotionAmmountInfo;
+        GameEventsManager.instance.playerEvents.onPlayerPositionSet+=AjustPosition;
     }
     void OnDisable(){
         GameEventsManager.instance.uiEvents.onRequestBaseStatsInfo-=SendBaseStatsInfo;
@@ -97,6 +98,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         GameEventsManager.instance.uiEvents.onRequestExpInfo-=SendExpInfo;
         GameEventsManager.instance.uiEvents.onBuyLevelClicked-=BuyLevel;
         GameEventsManager.instance.uiEvents.onRequestPotionAmmountInfo-=SendPotionAmmountInfo;
+        GameEventsManager.instance.playerEvents.onPlayerPositionSet-=AjustPosition;
         CancelInvoke();
     }
     void Start()
@@ -172,6 +174,10 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             }
         }
         AudioPlayer.instance.PlayMusic("MainTheme");
+        Physics.SyncTransforms();
+    }
+    void AjustPosition(Vector3 pos){
+        transform.position=pos;
         Physics.SyncTransforms();
     }
     public void CheckPointStatue(){//Interagir com uma estátua de save

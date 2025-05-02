@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6855044880312254410}
   - component: {fileID: 6480703045593612725}
   - component: {fileID: 2349897539341670890}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SaveStatue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 1343828731671562546}
   - component: {fileID: 6240652643931932723}
   - component: {fileID: 7245029946555222286}
-  m_Layer: 2
+  m_Layer: 13
   m_Name: Checkpoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 1608255158778934774}
   - component: {fileID: 892013808264409588}
   - component: {fileID: 4269706593315394461}
-  m_Layer: 2
+  m_Layer: 13
   m_Name: keyIndicationText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -353,8 +353,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1080354835145176247, guid: 8cdb344d8d769ed4fada0429becbda8a,
         type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1080354835145176247, guid: 8cdb344d8d769ed4fada0429becbda8a,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 1622829178799871515, guid: 8cdb344d8d769ed4fada0429becbda8a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 1622829178799871515, guid: 8cdb344d8d769ed4fada0429becbda8a,
         type: 3}
@@ -383,6 +393,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4466225190127219361, guid: 8cdb344d8d769ed4fada0429becbda8a,
         type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4466225190127219361, guid: 8cdb344d8d769ed4fada0429becbda8a,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -400,6 +415,11 @@ PrefabInstance:
         type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7487445076558689832, guid: 8cdb344d8d769ed4fada0429becbda8a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 7487445076558689832, guid: 8cdb344d8d769ed4fada0429becbda8a,
         type: 3}

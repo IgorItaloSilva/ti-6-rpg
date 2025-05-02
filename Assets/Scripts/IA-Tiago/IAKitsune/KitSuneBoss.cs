@@ -5,6 +5,7 @@ using UnityEngine;
 public class KitsuneBoss : KitsuneController
 {
     [Header("Coisas especificas da kitsuneBoss")]
+    [SerializeField]LevelLoaderInteractable nextLevelPortalInteractable;
     string nome = "Kitsune, a guardiã";
     bool hasDisplayedLife;
     bool lastActionWasMagic;
@@ -81,6 +82,7 @@ public class KitsuneBoss : KitsuneController
     {
         //Debug.Log("Chamando o boss death da classe boss");
         colliderPrincipal.enabled=false;
+        nextLevelPortalInteractable.Activate();
         isDead=true;
         base.BossDeath();
     }
