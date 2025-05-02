@@ -42,7 +42,7 @@ public class CheckPointStatue : Interactable
     {
         //Debug.Log("Entrei na area da status de save");
         if(collider.CompareTag("Player")){
-            Debug.Log("Um jogadore ntrou aqui");
+            //Debug.Log("Um jogadore ntrou aqui");
             keyIndicationText.gameObject.SetActive(true);
             inRange=true;
             playerStats=collider.GetComponent<PlayerStats>();

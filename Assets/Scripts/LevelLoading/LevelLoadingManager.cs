@@ -21,12 +21,19 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
         CurrentLevelData = new LevelData();
         enemies=new List<ActualEnemyController>();
         interactables=new List<Interactable>();
-        LevelName = SceneManager.GetActiveScene().name;
-        Debug.Log(CurrentLevelData);
+        int countLoaded = SceneManager.sceneCount;
+        Scene[] loadedScenes = new Scene[countLoaded];
+        for (int i = 0; i < countLoaded; i++)
+        {
+            loadedScenes[i] = SceneManager.GetSceneAt(i);
+            Debug.Log(loadedScenes[i].name);
+            if(loadedScenes[i].name!="Hud")LevelName=loadedScenes[i].name;
+        }
+        Debug.Log(LevelName);
     }
     void Start()
     {
-        DataPersistenceManager.instance.SaveLevelName();
+        DataPersistenceManager.instance.SetLevelName(LevelName);
         if(!loadSucceded){
             //no data to be loaded
             CurrentLevelData = new LevelData();

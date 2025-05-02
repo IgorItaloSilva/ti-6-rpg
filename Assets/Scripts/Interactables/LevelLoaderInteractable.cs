@@ -10,6 +10,7 @@ public class LevelLoaderInteractable : Interactable{
             if(Active&&CanInteract){
                 GameManager.instance.ChangeLevel(levelToGo,startingPosNextLevel);
             }
+            Activate();
         }
     }
     protected override void Awake()

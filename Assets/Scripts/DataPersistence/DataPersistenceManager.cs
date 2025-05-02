@@ -23,6 +23,7 @@ public class DataPersistenceManager : MonoBehaviour
     private FileDataHandler dataHandler;
     private string selectedProfileId = "";
     public static DataPersistenceManager instance {get; private set;}
+    public string LevelName {get; private set;}
     void Awake(){
         if(instance!=null){
             //if(DebugManager.debugManager.DEBUG){
@@ -85,8 +86,7 @@ public class DataPersistenceManager : MonoBehaviour
         //timestamp the data so we know when is was last saved
         gameData.lastUpdated = System.DateTime.Now.ToBinary();
         //save current scene name
-        Scene scene = SceneManager.GetActiveScene();
-        if(scene.name !="MainMenu")gameData.currentLevel=scene.name;
+        gameData.currentLevel=LevelName;
 
         //save data into a file using the data handler
         dataHandler.Save(gameData,selectedProfileId);
@@ -134,9 +134,13 @@ public class DataPersistenceManager : MonoBehaviour
             Debug.LogWarning("Demos override no profile que será loadado pelo profile: "+ testSelectedProfileId);
         }
     }
-    public void SaveLevelName(){
+    public void SetLevelName(string name){
         //save current scene name
-        Scene scene = SceneManager.GetActiveScene();
-        if(scene.name !="MainMenu")gameData.currentLevel=scene.name;
+        if(name !="MainMenu"){//não deveria ser nunca pq quem chama isso é o level loading manager
+            LevelName=name;
+        }
+    }
+    public string GetDataLevelName(){
+        return gameData.currentLevel;
     }
 }

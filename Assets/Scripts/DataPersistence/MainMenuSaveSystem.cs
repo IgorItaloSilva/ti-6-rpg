@@ -25,8 +25,17 @@ public class MainMenu : Menu
         DeactivateMenu();
     }
     public void ContinueButton(){
-        saveSlotMenu.SaveGameAndLoadScene();
-        //SceneManager.LoadScene(1);
+        string levelToBeLoaded=DataPersistenceManager.instance.GetDataLevelName();
+        Debug.Log($"o continue conseguiu {levelToBeLoaded}");
+        if(levelToBeLoaded==""){
+            Debug.Log("Como não tinha um level indo pro indice 1");
+            SceneManager.LoadSceneAsync(1);
+        }
+        else{
+            Debug.Log("Indo pro level " + levelToBeLoaded);
+            SceneManager.LoadSceneAsync(levelToBeLoaded);
+        }
+        SceneManager.LoadSceneAsync("Hud",LoadSceneMode.Additive);
     }
     public void DeactivateMenu(){
         gameObject.SetActive(false);

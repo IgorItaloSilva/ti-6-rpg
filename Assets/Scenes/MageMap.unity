@@ -10804,7 +10804,7 @@ PrefabInstance:
     - target: {fileID: 3801788683080794518, guid: b8e704c341178564ca82006832bb1262,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 321.6
+      value: 391
       objectReference: {fileID: 0}
     - target: {fileID: 3801788683080794518, guid: b8e704c341178564ca82006832bb1262,
         type: 3}
@@ -10860,6 +10860,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DeathCube
+      objectReference: {fileID: 0}
+    - target: {fileID: 6045037557154647923, guid: b8e704c341178564ca82006832bb1262,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13224,6 +13229,74 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 6019861425540743618, guid: c78c02eb575cdcf44a24c1ae8d4917b0, type: 3}
+--- !u!1001 &1025798084
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2734895931136490132, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734895931136490132, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734895931136490132, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734895931136490132, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734895931136490132, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734895931136490132, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734895931136490132, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734895931136490132, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734895931136490132, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734895931136490132, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4188156723316780000, guid: 3fd86352027e717408f249bca3eeb2f7,
+        type: 3}
+      propertyPath: m_Name
+      value: BolinhaExp
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3fd86352027e717408f249bca3eeb2f7, type: 3}
 --- !u!64 &1028159740
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -66096,3 +66169,4 @@ SceneRoots:
   - {fileID: 812975941}
   - {fileID: 1740331587}
   - {fileID: 1229488463}
+  - {fileID: 1025798084}
