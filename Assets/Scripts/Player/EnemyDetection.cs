@@ -21,6 +21,7 @@ public class EnemyDetection : MonoBehaviour
             targetEnemy = other.gameObject;
             RaycastEnemyAsync();
             Debug.Log("In enemy range, looking for line of sight");
+            other.GetComponent<EnemyBehaviour>().SetTarget(this.transform.parent);
         }
     }
 
