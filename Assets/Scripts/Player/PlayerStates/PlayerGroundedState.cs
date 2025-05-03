@@ -41,24 +41,17 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (_ctx.InCombat)
+        if (_ctx.InCombat && !_ctx.IsSprintPressed)
         {
-            _ctx.CurrentMovementX = _ctx.CurrentMovementInput.x;
+            _ctx.CurrentMovement = _ctx.CurrentMovementInput;
+            _ctx.CurrentMovementZ = _ctx.CurrentMovementInput.y;
             SwitchState(_factory.Combat());
             return;
         }
         if (!_ctx.CC.isGrounded)
         {
-            
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             SwitchState(_factory.InAir());
-            return;
-        }
-        if(_ctx.IsBlockPressed)
-        {
-            _ctx.Animator.SetBool(_ctx.InCombatHash, true);
-            _ctx.Animator.SetBool(_ctx.IsBlockingHash, true);
-            SwitchState(_factory.Block());
             return;
         }
         if (_ctx.IsJumpPressed)
@@ -66,11 +59,6 @@ public class PlayerGroundedState : PlayerBaseState
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             HandleJump();
             SwitchState(_factory.InAir());
-        }
-
-        if (_ctx.IsSprintPressed)
-        {
-            SwitchState(_factory.Sprint());
         }
 
         if (_ctx.IsDodgePressed)
