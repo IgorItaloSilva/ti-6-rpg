@@ -6,11 +6,11 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerCombatState : PlayerGroundedState
 {
-    private const byte CombatCooldownMs = 200;
+    private const byte CombatCooldownMs = 255;
     public PlayerCombatState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        _maxAcceleration = 1f;
+        _maxAcceleration = 1.5f;
         _ctx.AppliedMovementY = _ctx.BaseGravity;
     }
     
@@ -68,7 +68,7 @@ public class PlayerCombatState : PlayerGroundedState
 
         if (_ctx.IsSprintPressed)
         {
-            SwitchState(_factory.Sprint());
+            SwitchState(_factory.Grounded());
         }
 
         if (_ctx.IsDodgePressed)

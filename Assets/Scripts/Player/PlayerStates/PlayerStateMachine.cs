@@ -252,6 +252,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         get => _currentMovement.y;
         set => _currentMovement.y = value;
     }
+    public float CurrentMovementZ
+    {
+        get => _currentMovement.z;
+        set => _currentMovement.z = value;
+    }
 
     public Vector3 AppliedMovement
     {
