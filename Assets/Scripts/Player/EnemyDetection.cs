@@ -17,6 +17,7 @@ public class EnemyDetection : MonoBehaviour
         {
             PlayerStateMachine.Instance.InCombat = true;
             targetEnemy = other.gameObject;
+            other.GetComponent<EnemyBehaviour>().SetTarget(this.transform.parent);
         }
     }
 
@@ -37,6 +38,7 @@ public class EnemyDetection : MonoBehaviour
             PlayerStateMachine.Instance.InCombat = false;
             targetEnemy = null;
             PlayerStateMachine.Instance.CameraTargetUnlock();
+            other.GetComponent<EnemyBehaviour>().ClearTarget();
         }
     }
 }
