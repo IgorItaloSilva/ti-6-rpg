@@ -114,6 +114,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int HasJumpedHash = Animator.StringToHash("hasJumped");
     public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
     public readonly int HasHealedHash = Animator.StringToHash("hasHealed");
+    public readonly int TookHitHash = Animator.StringToHash("tookHit");
     public readonly int HasParried = Animator.StringToHash("hasParried");
     public readonly int HasDiedHash = Animator.StringToHash("hasDied");
     public readonly int HasPrayedHash = Animator.StringToHash("hasPrayed");

@@ -34,17 +34,23 @@ public class WeaponManager : MonoBehaviour
                 if(PlayerStateMachine.Instance.IsBlocking){
                     if(PlayerStateMachine.Instance.ShouldParry){
                         actualEnemyController.WasParried();
+                        AudioPlayer.instance.PlaySFX("Parry");
                         PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasParried);
                         PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasParried);
                         DisableCollider();
                     }
                     else{
-                        PlayerStateMachine.Instance.Animator.ResetTrigger("tookHit");
-                        PlayerStateMachine.Instance.Animator.SetTrigger("tookHit");
+                        AudioPlayer.instance.PlaySFX("Block");
+                        PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.TookHitHash);
+                        PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.TookHitHash);
                         DealDamage(alvoAtacado,damage/3);
                     }
                 }
                 else{
+                    AudioPlayer.instance.PlaySFX("PlayerDamage" + Random.Range(1, 3));
+                    PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.TookHitHash);
+                    PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.TookHitHash);
+                    PlayerStateMachine.Instance.ResetAttacks();
                     DealDamage(alvoAtacado, damage);
                 }
             }

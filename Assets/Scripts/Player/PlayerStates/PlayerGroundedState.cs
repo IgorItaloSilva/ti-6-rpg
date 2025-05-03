@@ -43,8 +43,6 @@ public class PlayerGroundedState : PlayerBaseState
     {
         if (_ctx.InCombat && !_ctx.IsSprintPressed)
         {
-            _ctx.CurrentMovement = _ctx.CurrentMovementInput;
-            _ctx.CurrentMovementZ = _ctx.CurrentMovementInput.y;
             SwitchState(_factory.Combat());
             return;
         }

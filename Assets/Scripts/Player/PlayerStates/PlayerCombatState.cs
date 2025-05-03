@@ -12,6 +12,8 @@ public class PlayerCombatState : PlayerGroundedState
     {
         _maxAcceleration = 1.5f;
         _ctx.AppliedMovementY = _ctx.BaseGravity;
+        _ctx.CurrentMovement = _ctx.CurrentMovementInput;
+        _ctx.CurrentMovementZ = _ctx.CurrentMovementInput.y;
     }
     
     public sealed override void HandleAnimatorParameters()

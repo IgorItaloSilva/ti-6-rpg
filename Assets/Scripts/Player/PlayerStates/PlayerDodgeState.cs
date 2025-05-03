@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerDodgeState : PlayerBaseState
 {
-    private const byte DodgeDurationMs = 200;
+    private const byte DodgeDurationMs = 250;
     private new const byte DecelerationSpeed = 6;
     private const int DodgeCooldownMs = 500;
 
@@ -71,8 +71,6 @@ public class PlayerDodgeState : PlayerBaseState
         await Task.Delay(DodgeDurationMs);
         if(_ctx.InCombat)
             SwitchState(_factory.Combat());
-        else if(_ctx.IsSprintPressed)
-            SwitchState(_factory.Sprint());
         else
             SwitchState(_factory.Grounded());
     }
@@ -86,11 +84,5 @@ public class PlayerDodgeState : PlayerBaseState
         }
 
         _ctx.CanDodge = true;
-    }
-
-    protected override void HandleAcceleration()
-    {
-        _ctx.Acceleration -= (Time.fixedDeltaTime * DecelerationSpeed);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
     }
 }

@@ -88,12 +88,7 @@ public class PlayerAttackState : PlayerBaseState
     {
         if (_ctx.AttackCount is 0 || !_ctx.InCombat)
         {
-            if (_ctx.IsSprintPressed)
-                SwitchState(_factory.Sprint());
-            else if (_ctx.InCombat)
-                SwitchState(_factory.Combat());
-            else
-                SwitchState(_factory.Grounded());
+            SwitchState(_ctx.InCombat ? _factory.Combat() : _factory.Grounded());
         }
 
         if (_ctx.IsDodgePressed)

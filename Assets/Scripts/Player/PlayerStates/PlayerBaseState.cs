@@ -44,7 +44,7 @@ public abstract class PlayerBaseState
     {
         _lowestAccelerationSpeed = Mathf.Min(_ctx.Acceleration, _lowestAccelerationSpeed);
         
-        if (_ctx.IsMovementPressed && _ctx.Acceleration <= _maxAcceleration)
+        if ((_ctx.IsMovementPressed && _ctx.Acceleration <= _maxAcceleration) || _ctx.Acceleration < 0f)
         {
             _ctx.Acceleration += Time.fixedDeltaTime * AccelerationSpeed;
         }
@@ -53,7 +53,7 @@ public abstract class PlayerBaseState
             _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
         }
 
-        if (_lowestAccelerationSpeed < 1)
+        if (_lowestAccelerationSpeed < _maxAcceleration)
         {
             _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, _maxAcceleration);
         }
