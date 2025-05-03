@@ -6,6 +6,7 @@ public class PlayerSprintState : PlayerBaseState
     public PlayerSprintState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
+        _maxAcceleration = 2.5f;
     }
 
     public override void EnterState()
@@ -64,13 +65,6 @@ public class PlayerSprintState : PlayerBaseState
         {
             SwitchState(_factory.Climb());
         }
-    }
-
-    protected override void HandleAcceleration()
-    {
-        _ctx.Acceleration += (Time.fixedDeltaTime * AccelerationSpeed);
-        _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, 2.5f);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
     }
 
     protected override void HandleMove()

@@ -48,7 +48,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     #region Private Variables
 
-    private float _gravity, _initialJumpVelocity, _camYSpeed, _camXSpeed, _acceleration;
+    private float _gravity, _initialJumpVelocity, _camYSpeed, _camXSpeed, _acceleration, _maxAcceleration;
 
     private Vector3 _currentMovement, _appliedMovement;
     private Vector2 _currentMovementInput, _currentLookInput;
@@ -72,6 +72,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canAttack = true,
         _canBlock = true,
         _canHeal = true,
+        _canEnterCombat = true,
         _isBetweenAttacks,
         _isClimbing,
         _canMount = true,
@@ -192,6 +193,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         get => _canMount;
         set => _canMount = value;
     }
+    public bool CanEnterCombat
+    {
+        get => _canEnterCombat;
+        set => _canEnterCombat = value;
+    }
 
     public bool CanJump
     {
@@ -219,7 +225,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     
     public bool InCombat
     {
-        get => _inCombat;
+        get => _inCombat && _canEnterCombat;
         set => _inCombat = value;
     }
 
@@ -233,6 +239,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         get => _currentMovement;
         set => _currentMovement = value;
+    }
+    
+    public float CurrentMovementX
+    {
+        get => _currentMovement.x;
+        set => _currentMovement.x = value;
     }
 
     public float CurrentMovementY

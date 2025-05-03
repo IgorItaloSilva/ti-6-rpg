@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -5,11 +6,11 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerCombatState : PlayerGroundedState
 {
+    private const byte CombatCooldownMs = 200;
     public PlayerCombatState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        _ctx.AppliedMovementX = 0f;
-        _ctx.AppliedMovementZ = 0f;
+        _maxAcceleration = 1f;
         _ctx.AppliedMovementY = _ctx.BaseGravity;
     }
     
@@ -29,16 +30,8 @@ public class PlayerCombatState : PlayerGroundedState
     
     public override void UpdateState()
     {
-        if(_ctx.EnemyDetector.targetEnemy)
-        {
-            HandleTargetedMove();
-            HandleTargetedRotation();
-        }
-        else
-        {
-            HandleRotation();
-            HandleForwardMove();
-        }
+        HandleTargetedMove();
+        HandleTargetedRotation();
         HandlePotion();
         CheckSwitchStates();
     }
@@ -47,6 +40,8 @@ public class PlayerCombatState : PlayerGroundedState
     {
         if (!_ctx.InCombat)
         {
+            _ctx.CanEnterCombat = false;
+            HandleCombatCooldownAsync();
             SwitchState(_factory.Grounded());
             return;
         }
@@ -92,6 +87,12 @@ public class PlayerCombatState : PlayerGroundedState
             SwitchState(_factory.Climb());
         }
         
+    }
+    
+    private async void HandleCombatCooldownAsync()
+    {
+        await Task.Delay(CombatCooldownMs);
+        _ctx.CanEnterCombat = true;
     }
 
 }

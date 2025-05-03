@@ -6,17 +6,17 @@ using Debug = UnityEngine.Debug;
 public class PlayerGroundedState : PlayerBaseState
 {
     private Vector3 _appliedMovement;
-
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
+        _maxAcceleration = 2.5f;
+        _turnTime = _ctx.BaseTurnTime;
     }
 
     public override void EnterState()
     {
         HandleAnimatorParameters();
         if(_ctx.ShowDebugLogs) Debug.Log("Grounded");
-        _turnTime = _ctx.BaseTurnTime * 2;
     }
 
     public override void HandleAnimatorParameters()
@@ -43,6 +43,7 @@ public class PlayerGroundedState : PlayerBaseState
     {
         if (_ctx.InCombat)
         {
+            _ctx.CurrentMovementX = _ctx.CurrentMovementInput.x;
             SwitchState(_factory.Combat());
             return;
         }
