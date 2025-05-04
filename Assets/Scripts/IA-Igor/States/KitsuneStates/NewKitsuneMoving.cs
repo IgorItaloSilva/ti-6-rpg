@@ -4,7 +4,6 @@ public class NewKitsuneMoving : EnemyBaseState
 {
     protected override void OneExecution()
     {
-        lookTime = 0;
         animator.CrossFade("Run", 0.25f);
         steeringForce = 0.08f;
     }

@@ -9,7 +9,6 @@ public class NewKitsuneTurn : EnemyBaseState
 
     protected override void OneExecution()
     {
-        lookTime = 0;
         steeringForce = 0.5f;
         Vector3 directionToPlayer = (enemyBehave.GetTarget().position - charControl.transform.position).normalized;
         directionToPlayer.y = 0;
