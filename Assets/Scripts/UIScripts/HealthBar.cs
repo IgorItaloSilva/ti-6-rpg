@@ -9,6 +9,7 @@ public class HealthBar : MonoBehaviour
     protected RectTransform rectTransformColorido;
     [SerializeField]protected Slider sliderColorido;
     [SerializeField]protected Slider sliderVerde;
+    [SerializeField] Slider sliderPoise;
     [SerializeField]protected Image coloredSliderImage;
     [SerializeField]protected float timeToAjust = .5f;
     bool coroutineIsRunning;
@@ -19,15 +20,38 @@ public class HealthBar : MonoBehaviour
         rectTransformColorido=sliderColorido.GetComponent<RectTransform>();
         rectTransformVerde=sliderVerde.GetComponent<RectTransform>();
     }
-    void Update()
-    {
 
+    #region Setup health Bar
+    virtual public void SettupBarMax(float maxLife, float maxPoise){
+
+        sliderVerde.value = sliderVerde.maxValue = maxLife;
+        sliderColorido.value = sliderColorido.maxValue = maxLife;
+        sliderPoise.value = sliderPoise.maxValue = maxPoise;
     }
+
     virtual public void SettupBarMax(float maxLife){
-        sliderVerde.maxValue = maxLife;
-        sliderColorido.maxValue = maxLife;
+        sliderVerde.value = sliderVerde.maxValue = maxLife;
+        sliderColorido.value = sliderColorido.maxValue = maxLife;
     }
-    public void SetValue(float currentValue,bool wasCrit){
+    #endregion
+
+    #region Set Value
+    public void SetValue(float currentValue, float currentPoise, bool wasCrit){
+        if(currentValue<sliderVerde.value){
+            sliderVerde.value=currentValue;
+            if(coroutineIsRunning){
+                if(coroutine!=null)StopCoroutine(coroutine);
+            }
+            coroutine=StartCoroutine(AjustColoredValue(wasCrit));
+        }
+        else{
+            sliderVerde.value=currentValue;
+            sliderColorido.value=currentValue;
+        }
+        sliderPoise.value = currentPoise;
+    }
+
+    public void SetValue(float currentValue, bool wasCrit){
         if(currentValue<sliderVerde.value){
             sliderVerde.value=currentValue;
             if(coroutineIsRunning){
@@ -40,6 +64,7 @@ public class HealthBar : MonoBehaviour
             sliderColorido.value=currentValue;
         }
     }
+    #endregion
 
     IEnumerator AjustColoredValue(bool wasCrit){
         coroutineIsRunning=true;
@@ -56,5 +81,9 @@ public class HealthBar : MonoBehaviour
             yield return null;
         }
         coroutineIsRunning=false;
+    }
+
+    public void OnDeath(){
+        Destroy(gameObject);
     }
 }
