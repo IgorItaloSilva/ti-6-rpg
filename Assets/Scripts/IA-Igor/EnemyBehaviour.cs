@@ -25,7 +25,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     void Start()
     {
-        healthBar.SettupBarMax(hp);
+        healthBar.SettupBarMax(hp, poise);
         currentPoise = poise;
         charControl = GetComponent<CharacterController>();
 
@@ -56,7 +56,6 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     #endregion
 
-
     #region Target Get, Set and Clear
     public void SetTarget(Transform target) { this.target = target; }
     public Transform GetTarget() { return target; }
@@ -64,17 +63,18 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     public void ClearTarget() { target = null; }
     #endregion
 
-
     public void ResetPoise(){ currentPoise = poise; }
 
     #region IDamagable
     public void TakeDamage(float damage, Enums.DamageType damageType, bool wasCrit)
     {
-        if(wasCrit)
-            damage *= 2;
         hp -= damage;
-        healthBar.SetValue(hp, wasCrit);
         currentPoise -= 1;
+        healthBar.SetValue(hp, currentPoise, wasCrit);
+        if(hp <= 0){
+            Die();
+            return;
+        }
         if(currentPoise <= 0 && !(currentState is NewKitsuneStuned)){
             currentState = new NewKitsuneStuned();
             currentState.StateStart(this);
@@ -84,7 +84,10 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void Die()
     {
-        throw new System.NotImplementedException();
+        currentState = null;
+        animator.Play("Death", -1, 0.0f);
+        healthBar.OnDeath();
+        Destroy(this);
     }
     #endregion
 
