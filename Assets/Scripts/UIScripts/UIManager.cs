@@ -356,7 +356,7 @@ public class UIManager : MonoBehaviour
         bossHPBarAndName.SetActive(false);
     }
     public void SwitchToScreen(int destinationUiScreen){
-        Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");
+        //Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");
         //desativa a tela atual
         switch(currentUIScreen){
             case UIScreens.Closed: break;
