@@ -3,8 +3,10 @@ using UnityEngine;
 
 public abstract class EnemyBaseWeapon : MonoBehaviour
 {
-    Coroutine coroutine;
-    Transform target;
+    protected Coroutine coroutine;
+    protected Transform target;
+
+
 
     void OnEnable() {
         OneExecution();

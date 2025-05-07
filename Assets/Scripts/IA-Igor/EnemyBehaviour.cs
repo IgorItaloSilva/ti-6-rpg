@@ -45,7 +45,12 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         restTimer -= Time.deltaTime;
         return restTimer > 0;
     }
-    public void SetAttack(){ ia.ChoseSkill(); }
+
+    public void ChoseSkill(){ 
+        attackState = ia.ChoseSkill();
+    }
+
+    public bool IsRangeSkill() { return ia.IsRangeSkill();}
 
     #endregion
 
@@ -94,6 +99,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     #region Weapon
     public void EnableWeapon() { weapon.EnableCollider(); }
     public void DisableWeapon() { weapon.DisableCollider(); }
+    public void UseWeapon(){ ia.UseWeapon(target); }
     #endregion
 
 }

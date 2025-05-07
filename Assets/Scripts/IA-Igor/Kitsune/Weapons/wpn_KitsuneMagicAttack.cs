@@ -6,7 +6,9 @@ public class wpn_KitsuneMagicAttack : EnemyBaseWeapon
     [SerializeField] GameObject[] bullets;
     Vector3[] positions;
 
-    void Start()
+    bool skillUsed;
+
+    void Awake()
     {
         positions = new Vector3[bullets.Length];
         for(int i = 0; i < bullets.Length; i++ )
@@ -15,21 +17,37 @@ public class wpn_KitsuneMagicAttack : EnemyBaseWeapon
 
     protected override void OneExecution()
     {
-        
+        skillUsed = false;
         for(int i = 0; i < bullets.Length; i++){
             bullets[i].transform.SetParent(this.transform);
             bullets[i].SetActive(false);
         }
+        transform.LookAt(target);
     }
 
     protected override IEnumerator MultipleExecution()
     {
         for(int i = 0; i < bullets.Length; i++) {
             yield return new WaitForSeconds(0.1f);
+            bullets[i].GetComponent<KitsuneMagicBullet>().SetTarget(target);
             bullets[i].transform.localPosition = positions[i];
             bullets[i].transform.SetParent(null);
             bullets[i].SetActive(true);
 
+        }
+        skillUsed = true;
+
+    }
+
+    void FixedUpdate()
+    {
+        if(skillUsed){
+            bool bulletsUsed = true;
+            for(int i = 0; i < bullets.Length; i++)
+                bulletsUsed = bullets[i].activeSelf ? false : bulletsUsed;
+            
+            if(bulletsUsed)
+                gameObject.SetActive(false);
         }
 
     }
