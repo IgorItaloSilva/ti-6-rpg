@@ -1,13 +1,14 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 
 public class ObjectiveManager : MonoBehaviour,IDataPersistence
 {
     public static ObjectiveManager instance;
+    [Header("COLOCAR TODOS OS OBJETIVOS AQUI")]
     [SerializeField]List<ObjectiveSO> allQuests;
-    [SerializeField]GameObject objectiveGO;
-    string activeQuestId;
     [SerializeField] SerializableDictionary<string,ObjectiveData>objectivesData;
     ObjectiveData auxObjectiveData;
     [SerializeField] SerializableDictionary<string,ObjectiveSO>allQuestsDictionary;
@@ -41,7 +42,14 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
         objectivesData = gameData.objectivesData;
         
         if(objectivesData.Count>0)
-        foreach(string s in objectivesData.Keys){
+        /* foreach(KeyValuePair<string,ObjectiveData> keyValuePair in objectivesData){
+            if(keyValuePair.Key==null){Debug.Log("Por algum motivo tentamos dar laod numa key do objectives data que é nula, dando um continue");continue;}
+            if(keyValuePair.Value.hasStarted&&!keyValuePair.Value.hasFinished){
+                    LoadQuest(allQuestsDictionary[keyValuePair.Key],keyValuePair.Value.stringData);
+                }
+        } */
+        //versão antiga e errada 
+        foreach(string s in objectivesData.Keys.ToArray()){
             if(s==null){Debug.Log("Por algum motivo tentamos dar laod numa key do objectives data que é nula, dando um continue");continue;}
             if(objectivesData.TryGetValue(s,out auxObjectiveData)!=false){
                 if(auxObjectiveData.hasStarted&&!auxObjectiveData.hasFinished){
@@ -60,13 +68,13 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
         gameData.objectivesData = objectivesData;
     }
     public void StartQuest(ObjectiveSO objectiveSO){
-        GameObject newObjectiveInstantiableGO = Instantiate(objectiveGO);
+        GameObject newObjectiveInstantiableGO = Instantiate(objectiveSO.ObjectivePrefab);
         ObjectiveInstantiable newObjectiveInstantiable=newObjectiveInstantiableGO.GetComponent<ObjectiveInstantiable>();
         newObjectiveInstantiable.Settup(objectiveSO);
         newObjectiveInstantiable.StartObjective();
     }
     void LoadQuest(ObjectiveSO objectiveSO,string stringData){
-        GameObject newObjectiveInstantiableGO = Instantiate(objectiveGO);
+        GameObject newObjectiveInstantiableGO = Instantiate(objectiveSO.ObjectivePrefab);
         ObjectiveInstantiable newObjectiveInstantiable=newObjectiveInstantiableGO.GetComponent<ObjectiveInstantiable>();
         newObjectiveInstantiable.Settup(objectiveSO);
         newObjectiveInstantiable.StartObjective();
@@ -74,7 +82,7 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
     }
     public void UpdateQuestData(string id,ObjectiveData objectiveData){
         if(objectivesData.ContainsKey(id)){
-
+            objectivesData[id]=objectiveData;
         }
         else{
             objectivesData.Add(id,objectiveData);

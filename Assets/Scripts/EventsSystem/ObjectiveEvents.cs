@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class ObjectiveEvents
 {
-    public event Action<string> OnProgessMade;
+    public event Action<string> OnProgressMade;
     public void ProgressMade(string id){
-        if(OnProgessMade!=null){
-            OnProgessMade(id);
+        if(OnProgressMade!=null){
+            OnProgressMade(id);
         }
     } 
     public event Action<string> OnObjectiveStarted;
