@@ -1,11 +1,12 @@
-using System.Threading;
 using UnityEngine;
+
 
 public class NewKitsuneMagicAttack : EnemyBaseState
 {
-    bool useWeapon = false;
+    bool useWeapon;
     protected override void OneExecution()
     {
+        useWeapon = false;
         lookTime = 0;
         speed = 2;
         restTime = 2f;
@@ -21,8 +22,8 @@ public class NewKitsuneMagicAttack : EnemyBaseState
     {
         if(lookTime < 1.5f )
             charControl.Move(charControl.transform.up * speed * Time.fixedDeltaTime);
-        else if(lookTime > 3.5f){
-            charControl.Move(charControl.transform.up * -speed * Time.fixedDeltaTime);
+        else if(lookTime > 2.5f){
+            charControl.Move(charControl.transform.up * (-speed * 2)  * Time.fixedDeltaTime);
             if(charControl.isGrounded){
                 enemyBehave.SetRest(restTime); // Aplicar descanço da skill
                 enemyBehave.currentState = new NewKitsuneIdle(); // Colocar na posição de idle

@@ -2,41 +2,44 @@ using UnityEngine;
 
 public class KitsuneMagicBullet : MonoBehaviour
 {
-    Transform target;
+    Transform target; // alvo dos projeteis
     Rigidbody rb;
 
-    float speed = 6;
+    float speed = 20; // velocidade dos projeteis
+
+    bool isClose = false; // Checar se chegou proximo o suficiente e para de olhar pro player
+    float moveTimer; // Tempo ate os projeteis seguirem o player
 
 
-    bool isClose = false;
-    Vector3 moviment;
 
     void Start()
     {
+        target = PlayerStateMachine.Instance.transform;
         rb = GetComponent<Rigidbody>();
     }
 
     void OnEnable()
     {
+        moveTimer = 0.6f;
         isClose = false;
     }
 
     void Update() { 
         if(!isClose) {
             transform.LookAt(target);
-            if(Vector3.Distance(target.position, transform.position) < 1)
+            if(Vector3.Distance(target.position, transform.position) < 2f)
                 isClose = true;
         }
-        transform.position += transform.forward * speed * Time.deltaTime;
-        
+        if(moveTimer <= 0)
+            transform.position += transform.forward * speed * Time.deltaTime;
+        else
+            moveTimer -= Time.deltaTime;
         
     }
 
-    public void SetTarget(Transform target){ this.target = target; }
-
     void OnTriggerEnter(Collider other)
     {
-        if(!other.CompareTag("Enemy")){
+        if(other.CompareTag("Player") || other.CompareTag("Ground")){
             gameObject.SetActive(false);
         }
         

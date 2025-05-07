@@ -12,10 +12,7 @@ public abstract class ASkills : MonoBehaviour
 
     void Awake() { SetAllSkills(); }
 
-    protected virtual void SetAllSkills(){
-        allSkillsCheck = new bool[allSkills.Length];
-        
-    }
+    protected virtual void SetAllSkills(){ allSkillsCheck = new bool[allSkills.Length]; }
 
     public EnemyBaseState ChoseSkill() {
         count = (byte)allSkillsCheck.Length;
@@ -47,10 +44,7 @@ public abstract class ASkills : MonoBehaviour
 
     void SkillSelected(){ allSkillsCheck[indexSkill] = true; }
 
-    public void UseWeapon(Transform target) {
-            weapons[indexSkill].SetTarget(target);
-            weapons[indexSkill].gameObject.SetActive(true); 
-    }
+    public void UseWeapon() { Debug.Log("Usar : " + weapons[indexSkill].name); weapons[indexSkill].gameObject.SetActive(true); }
 
     public bool IsRangeSkill(){ return isRangeSkill[indexSkill]; }
 
