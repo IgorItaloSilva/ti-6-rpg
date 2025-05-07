@@ -13,7 +13,10 @@ public class NewKitsuneIdle : EnemyBaseState
             if(GetTargetAngle(charControl.transform, enemyBehave.GetTarget()) > 80){
                 enemyBehave.currentState = new NewKitsuneTurn();
                 StateExit();
-            }else if(GetPlayerDistance() > minDistPlayer && !enemyBehave.attackState.isRange) {
+            }else if(enemyBehave.IsRangeSkill()) {
+                enemyBehave.currentState = enemyBehave.attackState;
+                StateExit();
+            }else if(GetPlayerDistance() > minDistPlayer) {
                 enemyBehave.currentState = new NewKitsuneMoving();
                 StateExit();
             }else {

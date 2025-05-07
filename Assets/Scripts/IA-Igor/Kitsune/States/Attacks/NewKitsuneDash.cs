@@ -14,10 +14,11 @@ public class NewKitsuneDash : EnemyBaseState
         lookTime += Time.deltaTime;
 
         if(lookTime > 1f){ // acabou o ataque
-            enemyBehave.SetRest(restTime);
-            enemyBehave.currentState = new NewKitsuneIdle();
-            enemyBehave.DisableWeapon();
-            StateExit();
+            enemyBehave.SetRest(restTime); // Aplicar descanço da skill
+            enemyBehave.currentState = new NewKitsuneIdle(); // Colocar na posição de idle
+            enemyBehave.DisableWeapon(); // Desabilitar arma
+            enemyBehave.ChoseSkill(); // Escolher nova skill
+            StateExit(); // Sair do estado atual
         }
 
     }

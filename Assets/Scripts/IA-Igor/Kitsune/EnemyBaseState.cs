@@ -6,7 +6,7 @@ public abstract class EnemyBaseState
     protected EnemyBehaviour enemyBehave;
     protected CharacterController charControl;
     protected Animator animator;
-    protected float speed;
+    public float speed;
     #endregion
 
 
@@ -15,10 +15,7 @@ public abstract class EnemyBaseState
     protected float steeringForce; // Força de Rotação
     protected float lookTime; // Temporizador da rotação
     protected float restTime; // Tempo de descanço máximo
-    public bool isRange { get; }
 
-
-    // Escolher skill -> Checar se skill e range ? Usar : Aproximar -> Esperar -> Reinicia
 
 
     public virtual void StateStart(EnemyBehaviour enemyBehave) {
@@ -31,8 +28,7 @@ public abstract class EnemyBaseState
         OneExecution();
     }
 
-    public virtual void StateAttackEnd(){
-    }
+    //public virtual void StateAttackEnd(){  }
 
     protected virtual void OneExecution() {  }
 
