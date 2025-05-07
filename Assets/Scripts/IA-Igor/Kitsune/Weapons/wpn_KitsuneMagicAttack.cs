@@ -20,7 +20,6 @@ public class wpn_KitsuneMagicAttack : EnemyBaseWeapon
         skillUsed = false;
         for(int i = 0; i < bullets.Length; i++){
             bullets[i].transform.SetParent(this.transform);
-            bullets[i].SetActive(false);
         }
         transform.LookAt(target);
     }
@@ -28,8 +27,7 @@ public class wpn_KitsuneMagicAttack : EnemyBaseWeapon
     protected override IEnumerator MultipleExecution()
     {
         for(int i = 0; i < bullets.Length; i++) {
-            yield return new WaitForSeconds(0.1f);
-            bullets[i].GetComponent<KitsuneMagicBullet>().SetTarget(target);
+            yield return new WaitForSeconds(0.2f);
             bullets[i].transform.localPosition = positions[i];
             bullets[i].transform.SetParent(null);
             bullets[i].SetActive(true);
@@ -46,8 +44,10 @@ public class wpn_KitsuneMagicAttack : EnemyBaseWeapon
             for(int i = 0; i < bullets.Length; i++)
                 bulletsUsed = bullets[i].activeSelf ? false : bulletsUsed;
             
-            if(bulletsUsed)
+            if(bulletsUsed){
                 gameObject.SetActive(false);
+                skillUsed = false;
+            }
         }
 
     }
