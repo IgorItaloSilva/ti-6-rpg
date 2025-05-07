@@ -46,6 +46,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]GameObject bossHPBarAndName;
     [Header("Coisas poção")]
     [SerializeField]TextMeshProUGUI potionsAmmountText;
+    [Header("Coisas barra Objetivo")]
+    [SerializeField]TextMeshProUGUI objectiveTitle;
+    [SerializeField]TextMeshProUGUI objectiveText;
     //coisas do vfx ganahr exp
     int carriedExp;
     int gainedExp;
@@ -354,6 +357,10 @@ public class UIManager : MonoBehaviour
     }
     public void HideBossLife(){
         bossHPBarAndName.SetActive(false);
+    }
+    public void ObjectiveUpdate(string title, string text){
+        objectiveTitle.text = title;
+        objectiveText.text=text;
     }
     public void SwitchToScreen(int destinationUiScreen){
         //Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");

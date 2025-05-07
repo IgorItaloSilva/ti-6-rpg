@@ -9,19 +9,21 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
     }
     virtual public void Settup(ObjectiveSO objectiveSO){
         this.objectiveSO=objectiveSO;
-        GameEventsManager.instance.objectiveEvents.OnProgessMade+=Progress;
+        GameEventsManager.instance.objectiveEvents.OnProgressMade+=Progress;
     }
     virtual public void myDestroy(){
-        GameEventsManager.instance.objectiveEvents.OnProgessMade-=Progress;
+        GameEventsManager.instance.objectiveEvents.OnProgressMade-=Progress;
         Destroy(gameObject);
     }
     virtual public void StartObjective(){
         objectiveData.hasStarted=true;
         SaveObjective();
+        //update Ui
     }
         
     virtual public void CompleteObjective(){
         objectiveData.hasFinished=true;
+        //update Ui
         SaveObjective();
         myDestroy();
     }

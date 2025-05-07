@@ -4,8 +4,9 @@ using UnityEngine;
 public class ObjectiveSO : ScriptableObject
 {
     [field:SerializeField] public string Id {get;private set;}
-    [field:SerializeField] public string displaytext {get;private set;}
-    [field:SerializeField] public string displayTextProgress {get;private set;}
+    [field:SerializeField] public string objectiveTitle {get;private set;}
+    [field:SerializeField] public string objectiveTextProgress {get;private set;}
+    [field:SerializeField] public GameObject ObjectivePrefab {get;private set;}
     
     
 
