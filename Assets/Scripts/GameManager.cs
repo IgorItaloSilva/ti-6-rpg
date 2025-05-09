@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]bool shouldOpenHud;
     public bool shouldLoadTutorial;
     [HideInInspector] public AudioManager audioManager;//negocio do igor
-
     void OnEnable(){
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
     }
