@@ -8,22 +8,24 @@ public class KitsuneObjective : ObjectiveInstantiable
     public override void StartObjective()
     {
         base.StartObjective();
-        UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,UpdateString());
+        UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,displayCompletedMessage);
     
     }
     void Start(){
-        UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,UpdateString());
+        UpdateDisplayMessage();
+        UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,displayCompletedMessage);
     }
     public override void CompleteObjective()
     {
         base.CompleteObjective();
-        UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,UpdateString());
+        UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,displayCompletedMessage);
     }
     public override void Progress(string id)
     {
         if(id == objectiveSO.Id){
             ammountKitsunesKilled++;
-            UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,UpdateString());
+            UpdateDisplayMessage();
+            UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,displayCompletedMessage);
             SaveObjective();
             if(ammountKitsunesKilled>=4){
                 CompleteObjective();
@@ -33,7 +35,8 @@ public class KitsuneObjective : ObjectiveInstantiable
     public override void LoadObjective(string codedSave)
     {
          if(int.TryParse(codedSave, out ammountKitsunesKilled)){
-            UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,UpdateString());
+            UpdateDisplayMessage();
+            UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,displayCompletedMessage);
         }
         else{
             Debug.LogError("Não conseguimos decoficar o save do kitsuneObjective");
@@ -45,9 +48,11 @@ public class KitsuneObjective : ObjectiveInstantiable
     {
         string s = ammountKitsunesKilled.ToString();
         objectiveData.stringData=s;
+        objectiveData.displayCompletedMessage=displayCompletedMessage;
         ObjectiveManager.instance.UpdateQuestData(objectiveSO.Id,objectiveData);
     }
-    string UpdateString(){
-        return objectiveSO.objectiveTextProgress+ammountKitsunesKilled.ToString()+"/"+kitsunesToKill.ToString();
+    public override void UpdateDisplayMessage()
+    {
+        displayCompletedMessage= objectiveSO.objectiveTextProgress+ammountKitsunesKilled.ToString()+"/"+kitsunesToKill.ToString();
     }
 }

@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     public SkillTreeUIManager skillTreeUIManager;
     public StatsUIManager statsUIManager;
     public RunesUiManager runesUiManager;
+    public ObjectiveUiManager objectiveUiManager;
     [Header("Coisas do Save VFX ")]
     [SerializeField]float saveIconTotalTime;
     [SerializeField]private Image saveIcon;
@@ -28,6 +29,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]private GameObject painelDeath;
     [SerializeField]private GameObject painelDialog;
     [SerializeField]private GameObject painelTutorial;
+    [SerializeField]private GameObject painelQuest;
     [SerializeField]private GameObject painelWeapon;
     [SerializeField]private GameObject buttonMainMenu;
     [SerializeField]private GameObject buttonTutorial;
@@ -76,7 +78,8 @@ public class UIManager : MonoBehaviour
         System,
         Death,
         Dialog,
-        Tutorial
+        Tutorial,
+        QuestLog
     }
     
     
@@ -121,6 +124,7 @@ public class UIManager : MonoBehaviour
         currentUIScreen = UIScreens.Closed;
         runesUiManager=RunesUiManager.instance;
         runesUiManager.Setup();
+        objectiveUiManager=ObjectiveUiManager.instance;
         AjustUiOnStart();
         gainedExpText = gainedExpTextGO.GetComponent<TextMeshProUGUI>();
         youDiedVFXText = youDiedVFXTextGO.GetComponent<Text>();
@@ -245,6 +249,7 @@ public class UIManager : MonoBehaviour
         painelDialog.SetActive(false);
         painelTutorial.SetActive(false);
         painelWeapon.SetActive(false);
+        painelQuest.SetActive(false);
         bossHPBarAndName.SetActive(false);
     }
     public void PlayerDied(){
@@ -393,6 +398,9 @@ public class UIManager : MonoBehaviour
             case UIScreens.Tutorial:
                 painelTutorial.SetActive(false);
             break;
+            case UIScreens.QuestLog:
+                painelQuest.SetActive(false);
+            break;
             default: Debug.LogWarning("A tela atual é indefinida"); break;
         }
         //ativa a tela de destino
@@ -439,6 +447,11 @@ public class UIManager : MonoBehaviour
             case UIScreens.Tutorial:
                 painelTutorial.SetActive(true);
                 currentUIScreen=UIScreens.Tutorial;
+            break;
+            case UIScreens.QuestLog:
+                painelQuest.SetActive(true);
+                ObjectiveUiManager.instance?.WasOpened();
+                currentUIScreen=UIScreens.QuestLog;
             break;
             default: Debug.LogWarning("A tela destino é indefinida"); break;
         }

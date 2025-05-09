@@ -52,6 +52,7 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
         foreach(string s in objectivesData.Keys.ToArray()){
             if(s==null){Debug.Log("Por algum motivo tentamos dar laod numa key do objectives data que é nula, dando um continue");continue;}
             if(objectivesData.TryGetValue(s,out auxObjectiveData)!=false){
+                ObjectiveUiManager.instance?.CreateButton(allQuestsDictionary[s],auxObjectiveData);
                 if(auxObjectiveData.hasStarted&&!auxObjectiveData.hasFinished){
                     LoadQuest(allQuestsDictionary[s],auxObjectiveData.stringData);
                 }
@@ -70,6 +71,7 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
     public void StartQuest(ObjectiveSO objectiveSO){
         GameObject newObjectiveInstantiableGO = Instantiate(objectiveSO.ObjectivePrefab);
         ObjectiveInstantiable newObjectiveInstantiable=newObjectiveInstantiableGO.GetComponent<ObjectiveInstantiable>();
+        ObjectiveUiManager.instance?.CreateButton(objectiveSO,new ObjectiveData(true));
         newObjectiveInstantiable.Settup(objectiveSO);
         newObjectiveInstantiable.StartObjective();
     }
@@ -81,6 +83,7 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
         newObjectiveInstantiable.LoadObjective(stringData);
     }
     public void UpdateQuestData(string id,ObjectiveData objectiveData){
+        ObjectiveUiManager.instance?.UpdateData(id,objectiveData);
         if(objectivesData.ContainsKey(id)){
             objectivesData[id]=objectiveData;
         }
