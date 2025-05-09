@@ -4,6 +4,7 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
 {
     public ObjectiveSO objectiveSO;
     public ObjectiveData objectiveData;
+    public string displayCompletedMessage;
     void Awake(){
         objectiveData = new();
     }
@@ -17,12 +18,14 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
     }
     virtual public void StartObjective(){
         objectiveData.hasStarted=true;
+        UpdateDisplayMessage();
         SaveObjective();
         //update Ui
     }
         
     virtual public void CompleteObjective(){
         objectiveData.hasFinished=true;
+        UpdateDisplayMessage();
         //update Ui
         SaveObjective();
         myDestroy();
@@ -41,5 +44,5 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
         /* string encodedData="";
         encode the state into a string
         ObjectiveManager.instance.UpdateQuestData(encodedData); */
-    
+    abstract public void UpdateDisplayMessage();
 }
