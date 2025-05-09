@@ -40,6 +40,7 @@ public class CheckPointStatue : Interactable
     }
     protected override void OnTriggerEnter(Collider collider)
     {
+        myEvent.Invoke();
         //Debug.Log("Entrei na area da status de save");
         if(collider.CompareTag("Player")){
             //Debug.Log("Um jogadore ntrou aqui");
