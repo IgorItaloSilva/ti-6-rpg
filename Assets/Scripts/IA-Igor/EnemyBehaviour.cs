@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour, IDamagable
 {
-    [SerializeField] ASkills ia;
+    [SerializeField] protected ASkills allSkills;
     [SerializeField] CharacterController charControl;
     [SerializeField] Animator animator;
     [SerializeField] float hp;
@@ -10,11 +10,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     float currentPoise;
     [SerializeField] float speed;
 
-    float poiseValue;
 
 
-    public EnemyBaseState currentState;
-    public EnemyBaseState attackState;
+    protected EnemyBaseState idleState; // Estado inicial de idle - Settar no inimigo
+    public EnemyBaseState currentState; // Estado atual
+    public EnemyBaseState attackState; // Estado de ataque
     Transform target;
     float restTimer;
 
@@ -28,12 +28,13 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         healthBar.SettupBarMax(hp, poise);
         currentPoise = poise;
         charControl = GetComponent<CharacterController>();
-
-        attackState = ia.ChoseSkill();
-
-        currentState = new NewKitsuneIdle();
-        currentState.StateStart(this);
+        ChoseSkill();
+        OneExecution();
     }
+
+    protected virtual void OneExecution(){  }
+
+
 
     void Update() { currentState.StateUpdate(); }
 
@@ -47,10 +48,10 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     }
 
     public void ChoseSkill(){ 
-        attackState = ia.ChoseSkill();
+        attackState = allSkills.ChoseSkill();
     }
 
-    public bool IsRangeSkill() { return ia.IsRangeSkill();}
+    public bool IsRangeSkill() { return allSkills.IsRangeSkill();}
 
     #endregion
 
@@ -58,14 +59,14 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     public CharacterController GetCharControl(){ return charControl; }
     public Animator GetAnimator(){ return animator; }
     public float GetSpeed(){ return speed; }
-
     #endregion
 
     #region Target Get, Set and Clear
     public void SetTarget(Transform target) { this.target = target; }
     public Transform GetTarget() { return target; }
-
     public void ClearTarget() { target = null; }
+    public void IdleState(){ currentState = idleState; currentState.StateStart(this); }
+
     #endregion
 
     public void ResetPoise(){ currentPoise = poise; }
@@ -80,8 +81,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             Die();
             return;
         }
-        if(currentPoise <= 0 && !(currentState is NewKitsuneStuned)){
-            currentState = new NewKitsuneStuned();
+        if(currentPoise <= 0 && !(currentState is StateStuned)){
+            currentState = new StateStuned();
             currentState.StateStart(this);
         }
         
@@ -99,7 +100,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     #region Weapon
     public void EnableWeapon() { weapon.EnableCollider(); }
     public void DisableWeapon() { weapon.DisableCollider(); }
-    public void UseWeapon(){ ia.UseWeapon(); }
+    public void UseWeapon(){ allSkills.UseWeapon(); }
     #endregion
 
 }
