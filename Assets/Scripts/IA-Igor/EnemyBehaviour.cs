@@ -93,6 +93,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         currentState = null;
         animator.Play("Death", -1, 0.0f);
         healthBar.OnDeath();
+        target.gameObject.GetComponentInChildren<EnemyDetection>().ForgetEnemy();
         Destroy(this);
     }
     #endregion
