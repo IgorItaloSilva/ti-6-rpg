@@ -21,7 +21,7 @@ public class wpn_KitsuneMagicAttack : EnemyBaseWeapon
         for(int i = 0; i < bullets.Length; i++){
             bullets[i].transform.SetParent(this.transform);
         }
-        transform.LookAt(target);
+        
     }
 
     protected override IEnumerator MultipleExecution()
@@ -31,6 +31,7 @@ public class wpn_KitsuneMagicAttack : EnemyBaseWeapon
             bullets[i].transform.localPosition = positions[i];
             bullets[i].transform.SetParent(null);
             bullets[i].SetActive(true);
+            transform.LookAt(target);
 
         }
         skillUsed = true;

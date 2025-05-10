@@ -28,7 +28,6 @@ public abstract class EnemyBaseState
         OneExecution();
     }
 
-    //public virtual void StateAttackEnd(){  }
 
     protected virtual void OneExecution() {  }
 

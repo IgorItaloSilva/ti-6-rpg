@@ -5,7 +5,7 @@ public class NewKitsuneMoving : EnemyBaseState
     protected override void OneExecution()
     {
         animator.CrossFade("Run", 0.25f);
-        steeringForce = 0.08f;
+        steeringForce = 0.1f;
     }
 
     // Update is called once per frame

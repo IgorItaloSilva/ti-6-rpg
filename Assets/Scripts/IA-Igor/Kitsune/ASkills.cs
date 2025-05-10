@@ -12,7 +12,7 @@ public abstract class ASkills : MonoBehaviour
 
     void Awake() { SetAllSkills(); }
 
-    protected virtual void SetAllSkills(){ allSkillsCheck = new bool[allSkills.Length]; }
+    protected virtual void SetAllSkills(){ allSkillsCheck = isRangeSkill = new bool[allSkills.Length]; } // Settar todas as skills do inimigo, chamar esse metodo base e definir quais são range
 
     public EnemyBaseState ChoseSkill() {
         count = (byte)allSkillsCheck.Length;
