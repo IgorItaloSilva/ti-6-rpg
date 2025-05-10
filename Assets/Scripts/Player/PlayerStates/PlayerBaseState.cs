@@ -8,7 +8,7 @@ public abstract class PlayerBaseState
     protected float _turnTime, _turnSmoothSpeed, _lowestAccelerationSpeed = float.MaxValue;
     protected float _maxAcceleration;
     private const byte RotationSpeed = 5;
-    protected readonly byte AccelerationSpeed = 3, DecelerationSpeed = 10;
+    protected byte _accelerationSpeed = 3, _decelerationSpeed = 10;
     private Vector3 _appliedMovement;
     protected Vector3 _cameraForward, _cameraRight;
     protected Vector3 _targetDirection;
@@ -46,11 +46,11 @@ public abstract class PlayerBaseState
         
         if ((_ctx.IsMovementPressed && _ctx.Acceleration <= _maxAcceleration) || _ctx.Acceleration < 0f)
         {
-            _ctx.Acceleration += Time.fixedDeltaTime * AccelerationSpeed;
+            _ctx.Acceleration += Time.fixedDeltaTime * _accelerationSpeed;
         }
         else
         {
-            _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
+            _ctx.Acceleration -= Time.fixedDeltaTime * _decelerationSpeed;
         }
 
         if (_lowestAccelerationSpeed < _maxAcceleration)

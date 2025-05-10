@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class PlayerDodgeState : PlayerBaseState
 {
-    private const byte DodgeDurationMs = 250;
-    private new const byte DecelerationSpeed = 6;
-    private const int DodgeCooldownMs = 500;
+    private const int DodgeCooldownMs = 1000, DodgeDurationMs = 750;
 
     public PlayerDodgeState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
+        _decelerationSpeed = 7;
         HandleAnimatorParameters();
         _ctx.Acceleration = _ctx.IsMovementPressed ? 4f : -4f;
         if (_ctx.ShowDebugLogs) Debug.Log("Dodging");
@@ -49,6 +48,7 @@ public class PlayerDodgeState : PlayerBaseState
 
     public override void ExitState()
     {
+        _decelerationSpeed = 10;
         _ctx.IsDodging = false;
     }
 
