@@ -96,6 +96,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         target.gameObject.GetComponentInChildren<EnemyDetection>().ForgetEnemy();
         Destroy(this);
     }
+
     #endregion
 
     #region Weapon

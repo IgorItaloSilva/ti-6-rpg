@@ -10,11 +10,11 @@ public class WeaponManager : MonoBehaviour
     [SerializeField]protected float baseDamage = 10f;
     protected Collider damageCollider;
     protected List<IDamagable>damagedTargets = new List<IDamagable>();
-    protected ActualEnemyController actualEnemyController;
+    protected EnemyBehaviour actualEnemyController;
     
     protected virtual void Start(){
         damageCollider=GetComponent<Collider>();
-        actualEnemyController = GetComponentInParent<ActualEnemyController>();
+        actualEnemyController = GetComponentInParent<EnemyBehaviour>();
         if(actualEnemyController==null)Debug.LogWarning("A arma não achou o enemyControllerDela");
         if(damageCollider==null){
             Debug.LogWarning($"O weapon manager do {name} não achou o collider dela");
