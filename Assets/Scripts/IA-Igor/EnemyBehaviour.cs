@@ -9,6 +9,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [SerializeField] float poise;
     float currentPoise;
     [SerializeField] float speed;
+    [SerializeField] float knockbackDuration = 1f;
 
 
 
@@ -42,6 +43,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     #region Rest e ia 
     public void SetRest(float value) { restTimer = value; }
+
     public bool isResting(){
         restTimer -= Time.deltaTime;
         return restTimer > 0;
@@ -96,12 +98,22 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         target.gameObject.GetComponentInChildren<EnemyDetection>().ForgetEnemy();
         Destroy(this);
     }
+
+    public void WasParried()
+    {
+        SetRest(knockbackDuration);
+        currentState = new StateDamage();
+        currentState.StateStart(this);
+    }
+
+    
     #endregion
 
     #region Weapon
     public void EnableWeapon() { weapon.EnableCollider(); }
     public void DisableWeapon() { weapon.DisableCollider(); }
     public void UseWeapon(){ allSkills.UseWeapon(); }
+
     #endregion
 
 }
