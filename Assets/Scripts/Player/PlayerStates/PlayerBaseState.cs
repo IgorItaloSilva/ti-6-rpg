@@ -61,7 +61,7 @@ public abstract class PlayerBaseState
     }
     protected void HandleTargetedRotation()
     {
-        if (_ctx.EnemyDetector.targetEnemy)
+        if (_ctx.InCombat)
             _targetDirection = _ctx.EnemyDetector.targetEnemy.transform.position - _ctx.transform.position;
         else
             _targetDirection = _ctx.MainCam.transform.forward;
@@ -170,4 +170,5 @@ public abstract class PlayerBaseState
     {
         SwitchState(_factory.Locked(durationMs));
     }
+    
 }

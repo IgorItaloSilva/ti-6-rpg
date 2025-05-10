@@ -47,7 +47,7 @@ public class PlayerAttackState : PlayerBaseState
 
     private void CheckAttackTargetDistance()
     {
-        if (_ctx.EnemyDetector.targetEnemy)
+        if (_ctx.InCombat)
             _hasTarget = ((_ctx.InCombat) &&
                           Vector3.Distance(_ctx.transform.position,
                               _ctx.EnemyDetector.targetEnemy.transform.position) <= 3f);

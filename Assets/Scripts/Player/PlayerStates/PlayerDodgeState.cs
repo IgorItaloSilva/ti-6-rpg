@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class PlayerDodgeState : PlayerBaseState
 {
-    private const int DodgeCooldownMs = 1000, DodgeDurationMs = 750;
+    private const int DodgeCooldownMs = 1000, DodgeDurationMs = 500;
 
     public PlayerDodgeState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        _decelerationSpeed = 7;
+        _decelerationSpeed = 3;
         HandleAnimatorParameters();
         _ctx.Acceleration = _ctx.IsMovementPressed ? 4f : -4f;
         if (_ctx.ShowDebugLogs) Debug.Log("Dodging");
@@ -17,6 +17,7 @@ public class PlayerDodgeState : PlayerBaseState
         _ctx.CanDodge = false;
         HandleDodgeDurationAsync();
         _ctx.ResetAttacks();
+        _ctx.Animator.speed = 1.5f;
     }
 
     public override void EnterState()
@@ -33,7 +34,7 @@ public class PlayerDodgeState : PlayerBaseState
 
     public override void UpdateState()
     {
-        if (_ctx.EnemyDetector.targetEnemy)
+        if (_ctx.InCombat)
         {
             HandleTargetedRotation();
             HandleTargetedMove();
@@ -50,6 +51,7 @@ public class PlayerDodgeState : PlayerBaseState
     {
         _decelerationSpeed = 10;
         _ctx.IsDodging = false;
+        _ctx.Animator.speed = 1f;
     }
 
     public override void CheckSwitchStates()

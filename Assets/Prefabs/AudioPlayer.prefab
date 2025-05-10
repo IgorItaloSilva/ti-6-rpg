@@ -56,9 +56,6 @@ MonoBehaviour:
   - name: AirSlash
     clip: {fileID: 8300000, guid: 0a5e111505f918242bb5863e3b605e92, type: 3}
     source: {fileID: 0}
-  - name: SwordSlash
-    clip: {fileID: 8300000, guid: c427e0c2309940046b32c9c55468a218, type: 3}
-    source: {fileID: 0}
   - name: Stab
     clip: {fileID: 8300000, guid: 65b667adae508ab47b5d13a4b16dbd17, type: 3}
     source: {fileID: 0}
@@ -71,7 +68,25 @@ MonoBehaviour:
   - name: PlayerDamage2
     clip: {fileID: 8300000, guid: 73abc5bc7e44bf2448c3078a3d064177, type: 3}
     source: {fileID: 0}
+  - name: SwordSlash
+    clip: {fileID: 8300000, guid: c427e0c2309940046b32c9c55468a218, type: 3}
+    source: {fileID: 0}
+  - name: DrawKatana
+    clip: {fileID: 8300000, guid: 0c3f79c067047db49bfa05496ecd3576, type: 3}
+    source: {fileID: 0}
+  - name: SheathKatana
+    clip: {fileID: 8300000, guid: 95d934682034c154992910a5fc605c8c, type: 3}
+    source: {fileID: 0}
+  footstepSounds:
+  - {fileID: 8300000, guid: cb1a4765d0a42314099c4742fc5c90b9, type: 3}
+  - {fileID: 8300000, guid: 288ced08e51ed384ebac67a5091d5141, type: 3}
+  - {fileID: 8300000, guid: 16aea6df2108ca64383a627198efbc42, type: 3}
+  - {fileID: 8300000, guid: 0d11139f418a1e5419fc8446f52c0c7a, type: 3}
+  - {fileID: 8300000, guid: 68f03ce9b6c6fcf46a1e9c3a761e8807, type: 3}
+  - {fileID: 8300000, guid: 86a78375ff166cc44bbd1e0b98aa1035, type: 3}
+  - {fileID: 8300000, guid: c59414693ef170c4489a76d8ee1b797b, type: 3}
   musicSource: {fileID: 3702471209712790024}
+  footstepSource: {fileID: 0}
 --- !u!82 &3702471209712790024
 AudioSource:
   m_ObjectHideFlags: 0
@@ -87,7 +102,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 0.25
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

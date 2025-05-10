@@ -1,10 +1,12 @@
 using UnityEngine;
 using System;
+using Random = System.Random;
 
 public class AudioPlayer : MonoBehaviour
 {
     public Sound[] musicSounds, sfxSounds;
-    public AudioSource musicSource;
+    public AudioClip[] footstepSounds;
+    public AudioSource musicSource, footstepSource;
     public static AudioPlayer instance;
     private void Awake()
     {
@@ -17,10 +19,15 @@ public class AudioPlayer : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+
     }
     private void Start()
-    {
-        PlayMusic("MainTheme");
+    {        
+        footstepSource = PlayerStateMachine.Instance.gameObject.transform.GetChild(5).GetComponent<AudioSource>();
+
+        //PlayMusic("MainTheme");
+        PlaySFX("AmbientSound");
     }
 
     public void PlayMusic(string name)
@@ -53,5 +60,10 @@ public class AudioPlayer : MonoBehaviour
         {
             s.source.PlayOneShot(s.clip);
         }
+    }
+
+    public void PlayFootstepSound()
+    {
+        footstepSource.PlayOneShot(footstepSounds[UnityEngine.Random.Range(0, footstepSounds.Length)]);
     }
 }
