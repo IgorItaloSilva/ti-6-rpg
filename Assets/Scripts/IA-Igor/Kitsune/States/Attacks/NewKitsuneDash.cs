@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class NewKitsuneDash : EnemyBaseState
 {
+    bool canDamage;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void OneExecution()
     {
         restTime = 2f;
         animator.Play("Dash", -1, 0f);
+        canDamage = true;
     }
 
     public override void StateUpdate()
@@ -35,7 +37,10 @@ public class NewKitsuneDash : EnemyBaseState
                 lookTime += steeringForce * Time.fixedDeltaTime * 2;
         
         }else if(lookTime < 0.8f){
-            enemyBehave.EnableWeapon();
+            if(canDamage) {
+                enemyBehave.EnableWeapon();
+                canDamage = false;
+            }
             charControl.Move(charControl.transform.forward * speed * 2 + charControl.transform.up * ApplyGravity());
         }
         

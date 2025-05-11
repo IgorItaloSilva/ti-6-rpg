@@ -10,12 +10,12 @@ public class WeaponManager : MonoBehaviour
     [SerializeField]protected float baseDamage = 10f;
     protected Collider damageCollider;
     protected List<IDamagable>damagedTargets = new List<IDamagable>();
-    protected EnemyBehaviour actualEnemyController;
+    protected EnemyBehaviour enemyBehaviour;
     
     protected virtual void Start(){
         damageCollider=GetComponent<Collider>();
-        actualEnemyController = GetComponentInParent<EnemyBehaviour>();
-        if(actualEnemyController==null)Debug.LogWarning("A arma não achou o enemyControllerDela");
+        enemyBehaviour = GetComponentInParent<EnemyBehaviour>();
+        if(enemyBehaviour==null)Debug.LogWarning("A arma não achou o enemyControllerDela");
         if(damageCollider==null){
             Debug.LogWarning($"O weapon manager do {name} não achou o collider dela");
         }
@@ -33,7 +33,7 @@ public class WeaponManager : MonoBehaviour
             {
                 if(PlayerStateMachine.Instance.IsBlocking){
                     if(PlayerStateMachine.Instance.ShouldParry){
-                        //actualEnemyController.WasParried();
+                        enemyBehaviour.WasParried();
                         AudioPlayer.instance.PlaySFX("Parry");
                         PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasParried);
                         PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasParried);
