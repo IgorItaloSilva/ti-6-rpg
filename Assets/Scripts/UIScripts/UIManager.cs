@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public StatsUIManager statsUIManager;
     public RunesUiManager runesUiManager;
     public ObjectiveUiManager objectiveUiManager;
+    public DialogueManager dialogManager;
     [Header("Coisas do Save VFX ")]
     [SerializeField]float saveIconTotalTime;
     [SerializeField]private Image saveIcon;
@@ -125,6 +126,7 @@ public class UIManager : MonoBehaviour
         runesUiManager=RunesUiManager.instance;
         runesUiManager.Setup();
         objectiveUiManager=ObjectiveUiManager.instance;
+        dialogManager=DialogueManager.instance;
         AjustUiOnStart();
         gainedExpText = gainedExpTextGO.GetComponent<TextMeshProUGUI>();
         youDiedVFXText = youDiedVFXTextGO.GetComponent<Text>();
@@ -150,23 +152,20 @@ public class UIManager : MonoBehaviour
                 SwitchToScreen((int)UIScreens.MainPause);
                 if(isNearCampfire)SwitchToScreen((int)UIScreens.Stats);
             }else 
-            if(currentUIScreen == UIScreens.MainPause){
-                SwitchToScreen((int)UIScreens.Closed);
-            }
-            else{
-                SwitchToScreen((int)UIScreens.Closed);
+            {
+                dialogManager.EndDialogue();
             }
         }
         if(Keyboard.current.eKey.wasPressedThisFrame){
             if(currentUIScreen==UIScreens.Dialog){
-                SwitchToScreen((int)UIScreens.Closed);
+                if(dialogManager.isChatting)
+                {
+                    dialogManager.Skip();
+                }
             }
             if(currentUIScreen==UIScreens.Tutorial){
                 SwitchToScreen((int)UIScreens.Closed);
             }
-        }
-        if(Keyboard.current.numpad1Key.wasPressedThisFrame){
-            GameEventsManager.instance.uiEvents.DialogOpen();
         }
         if(Keyboard.current.pKey.wasPressedThisFrame){
             PlayNotification("teste");

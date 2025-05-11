@@ -27,6 +27,7 @@ public class ObjectiveUiManager : MonoBehaviour
         buttons = new Dictionary<string,ObjectiveButton>();
     }
     public void CreateButton(ObjectiveSO objectiveSO, ObjectiveData objectiveData){
+        if(buttons.ContainsKey(objectiveSO.Id))return;
         GameObject newButton = Instantiate(prefabQuestButton,VerticalLayoutGroup);
         ObjectiveButton objectiveButton = newButton.GetComponent<ObjectiveButton>();
         objectiveButton.SetObjectiveSO(objectiveSO);

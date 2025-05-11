@@ -5,8 +5,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class DialogueBox : MonoBehaviour
+public class DialogueManager : MonoBehaviour
 {
+    public static DialogueManager instance;
     public GameObject dialogueScreen;
     public Image profilePic, arrow;
     public TMP_Text nameSpace, text;
@@ -14,15 +15,22 @@ public class DialogueBox : MonoBehaviour
     public Queue<Speech> dialogue;
     private string current;
     private Coroutine op;
-    private bool chatting = false;
-
-    private void Update()
+    public bool isChatting {get; private set;}= false;
+    void Awake(){
+        if(instance==null){
+            instance=this;
+        }
+        else{
+            Destroy(this);
+        }
+    }
+    /* private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && chatting)
+        if (Input.GetKeyDown(KeyCode.Space) && isChatting)
         {
             Skip();
         }
-    }
+    } */
     public void Paste(Speech content)
     {
         DeactivateArrow();
@@ -54,7 +62,7 @@ public class DialogueBox : MonoBehaviour
         }
     }
 
-    // Este metodo deve ser usado unica e exclusivamente para a primeira execução de exibir o dialogo, ja que não é possivel invocar o metodo acima sem um Callback Context adequado
+    // Este metodo deve ser usado unica e exclusivamente para a primeira execuï¿½ï¿½o de exibir o dialogo, ja que nï¿½o ï¿½ possivel invocar o metodo acima sem um Callback Context adequado
     public void Commence()
     {
         StopAllCoroutines();
@@ -64,21 +72,23 @@ public class DialogueBox : MonoBehaviour
 
     public void EndDialogue()
     {
-        chatting = false;
-        dialogueScreen.SetActive(false);
-        GameManager.instance.UnpauseGameAndLockCursor();
+        isChatting = false;
+        UIManager.instance.SwitchToScreen((int)UIManager.UIScreens.Closed);
+        /* dialogueScreen.SetActive(false); moviods para o UIManagaer
+        GameManager.instance.UnpauseGameAndLockCursor(); */
     }
 
     public void StartDialogue(Dialogue source)
     {
-        GameManager.instance.PauseGameAndUnlockCursor();
+        //GameManager.instance.PauseGameAndUnlockCursor();movidos para o UIManagaer
+        UIManager.instance.SwitchToScreen((int)UIManager.UIScreens.Dialog);
         dialogue = new Queue<Speech>(source.dialogue.Count);
         foreach (var data in source.dialogue)
         {
             dialogue.Enqueue(data);
         }
-        dialogueScreen.SetActive(true);
-        chatting = true;
+        //dialogueScreen.SetActive(true);moviods para o UIManagaer
+        isChatting = true;
         Commence();
     }
 
