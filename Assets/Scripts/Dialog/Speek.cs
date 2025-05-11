@@ -4,16 +4,16 @@ public class Speek : MonoBehaviour
 {
     public Dialogue[] dialogues;
     protected int counter = 0;
-    public DialogueBox dialogueBox;
+    public DialogueManager dialogueManager;
 
     public void StartDialogue()
     {
-        dialogueBox = FindAnyObjectByType<DialogueBox>();
+        dialogueManager = DialogueManager.instance;
         Dialogue();
     }
     public void Dialogue()
     {
-        dialogueBox.StartDialogue(dialogues[counter]);
+        dialogueManager.StartDialogue(dialogues[counter]);
         if (counter < dialogues.Length - 1) counter++;
     }
 }

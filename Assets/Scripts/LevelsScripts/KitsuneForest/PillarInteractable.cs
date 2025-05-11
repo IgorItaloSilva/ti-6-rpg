@@ -6,6 +6,7 @@ public class PillarInteractabe : Interactable
 {
     [SerializeField]int spawnId;
     [SerializeField]GameObject effect;
+    [SerializeField]ObjectiveSO objectiveToBeProgressedSO;
     void OnEnable(){
         GameEventsManager.instance.levelEvents.onKitsuneDeath+=KitsuneDied;
     }
@@ -29,6 +30,7 @@ public class PillarInteractabe : Interactable
         GameEventsManager.instance.levelEvents.PillarActivated();
         AlreadyInterated = true;
         if(effect!=null)effect.SetActive(true);
+        if(objectiveToBeProgressedSO!=null)GameEventsManager.instance.objectiveEvents.ProgressMade(objectiveToBeProgressedSO.Id);
         Save();
     }
     
@@ -36,7 +38,8 @@ public class PillarInteractabe : Interactable
     {
         base.Load(interactableData);
         if(AlreadyInterated){
-            ActivatePillar();
+            if(effect!=null)effect.SetActive(true);
+            GameEventsManager.instance.levelEvents.PillarActivated();
         }
     }
 }

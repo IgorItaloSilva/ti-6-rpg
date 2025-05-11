@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     public SkillTreeUIManager skillTreeUIManager;
     public StatsUIManager statsUIManager;
     public RunesUiManager runesUiManager;
+    public ObjectiveUiManager objectiveUiManager;
+    public DialogueManager dialogManager;
     [Header("Coisas do Save VFX ")]
     [SerializeField]float saveIconTotalTime;
     [SerializeField]private Image saveIcon;
@@ -28,6 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]private GameObject painelDeath;
     [SerializeField]private GameObject painelDialog;
     [SerializeField]private GameObject painelTutorial;
+    [SerializeField]private GameObject painelQuest;
     [SerializeField]private GameObject painelWeapon;
     [SerializeField]private GameObject buttonMainMenu;
     [SerializeField]private GameObject buttonTutorial;
@@ -46,6 +49,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]GameObject bossHPBarAndName;
     [Header("Coisas poção")]
     [SerializeField]TextMeshProUGUI potionsAmmountText;
+    [Header("Coisas barra Objetivo")]
+    [SerializeField]TextMeshProUGUI objectiveTitle;
+    [SerializeField]TextMeshProUGUI objectiveText;
     //coisas do vfx ganahr exp
     int carriedExp;
     int gainedExp;
@@ -73,7 +79,8 @@ public class UIManager : MonoBehaviour
         System,
         Death,
         Dialog,
-        Tutorial
+        Tutorial,
+        QuestLog
     }
     
     
@@ -118,6 +125,8 @@ public class UIManager : MonoBehaviour
         currentUIScreen = UIScreens.Closed;
         runesUiManager=RunesUiManager.instance;
         runesUiManager.Setup();
+        objectiveUiManager=ObjectiveUiManager.instance;
+        dialogManager=DialogueManager.instance;
         AjustUiOnStart();
         gainedExpText = gainedExpTextGO.GetComponent<TextMeshProUGUI>();
         youDiedVFXText = youDiedVFXTextGO.GetComponent<Text>();
@@ -143,23 +152,20 @@ public class UIManager : MonoBehaviour
                 SwitchToScreen((int)UIScreens.MainPause);
                 if(isNearCampfire)SwitchToScreen((int)UIScreens.Stats);
             }else 
-            if(currentUIScreen == UIScreens.MainPause){
-                SwitchToScreen((int)UIScreens.Closed);
-            }
-            else{
-                SwitchToScreen((int)UIScreens.Closed);
+            {
+                dialogManager.EndDialogue();
             }
         }
         if(Keyboard.current.eKey.wasPressedThisFrame){
             if(currentUIScreen==UIScreens.Dialog){
-                SwitchToScreen((int)UIScreens.Closed);
+                if(dialogManager.isChatting)
+                {
+                    dialogManager.Skip();
+                }
             }
             if(currentUIScreen==UIScreens.Tutorial){
                 SwitchToScreen((int)UIScreens.Closed);
             }
-        }
-        if(Keyboard.current.numpad1Key.wasPressedThisFrame){
-            GameEventsManager.instance.uiEvents.DialogOpen();
         }
         if(Keyboard.current.pKey.wasPressedThisFrame){
             PlayNotification("teste");
@@ -242,6 +248,7 @@ public class UIManager : MonoBehaviour
         painelDialog.SetActive(false);
         painelTutorial.SetActive(false);
         painelWeapon.SetActive(false);
+        painelQuest.SetActive(false);
         bossHPBarAndName.SetActive(false);
     }
     public void PlayerDied(){
@@ -355,8 +362,12 @@ public class UIManager : MonoBehaviour
     public void HideBossLife(){
         bossHPBarAndName.SetActive(false);
     }
+    public void ObjectiveUpdate(string title, string text){
+        objectiveTitle.text = title;
+        objectiveText.text=text;
+    }
     public void SwitchToScreen(int destinationUiScreen){
-        Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");
+        //Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");
         //desativa a tela atual
         switch(currentUIScreen){
             case UIScreens.Closed: break;
@@ -385,6 +396,9 @@ public class UIManager : MonoBehaviour
             break;
             case UIScreens.Tutorial:
                 painelTutorial.SetActive(false);
+            break;
+            case UIScreens.QuestLog:
+                painelQuest.SetActive(false);
             break;
             default: Debug.LogWarning("A tela atual é indefinida"); break;
         }
@@ -432,6 +446,11 @@ public class UIManager : MonoBehaviour
             case UIScreens.Tutorial:
                 painelTutorial.SetActive(true);
                 currentUIScreen=UIScreens.Tutorial;
+            break;
+            case UIScreens.QuestLog:
+                painelQuest.SetActive(true);
+                ObjectiveUiManager.instance?.WasOpened();
+                currentUIScreen=UIScreens.QuestLog;
             break;
             default: Debug.LogWarning("A tela destino é indefinida"); break;
         }

@@ -47,6 +47,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     private int spentPointsIfCancel;
     public int[] simulatedStatChange;
     public bool isNearCampfire;
+    private bool haslessExp;
     //Coisas de controle geral
     public bool PlayerIsDead{get; private set;}
     private Vector3? respawnPos;
@@ -328,7 +329,14 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         SendAdvancedStatsInfo();
     }
     void GainExp(int exp){
+        int expToNextLevel = ExpToNextLevel(Level);
+        if(CarriedExp<expToNextLevel)
+            haslessExp = true;
         CarriedExp+=exp;
+        if(CarriedExp>=expToNextLevel&&haslessExp){
+            haslessExp=false;
+            UIManager.instance?.PlayNotification("Você pode upar de nível!");
+        }
     }
     void BuyLevel(){
         int expToNextLevel = ExpToNextLevel(Level);
@@ -343,7 +351,6 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         SendExpStatsInfo();
         SendLevelUpInfo();
         UIManager.instance?.DisplayExpAmmount(CarriedExp);
-        UIManager.instance?.PlayNotification("Você upou de nível!");
         DataPersistenceManager.instance.SaveGame();
     }
     int ExpToNextLevel(int level){//OBS: ESSA FUNÇÃO DEVERIA SER IDENTICA A FUNÇÃO DE MESMO NOME NO STATSUIMANAGER 
