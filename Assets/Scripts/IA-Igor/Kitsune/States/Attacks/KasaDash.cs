@@ -1,11 +1,14 @@
+using Codice.CM.Common.Replication;
 using UnityEngine;
 
 public class KasaDash : EnemyBaseState
 {
+    bool canDamage;
     protected override void OneExecution()
     {
         animator.CrossFade("Dash", 0.15f);
         restTime = 2f;
+        canDamage = true;
     }
 
     public override void StateUpdate()
@@ -33,7 +36,10 @@ public class KasaDash : EnemyBaseState
             lookTime += steeringForce * Time.fixedDeltaTime * 2;
             
         }else if (lookTime < 2.25f){
-            enemyBehave.EnableWeapon();
+            if(canDamage){
+                enemyBehave.EnableWeapon();
+                canDamage = false;
+            }
             charControl.Move(charControl.transform.forward * speed * 2 + charControl.transform.up * ApplyGravity());
         }
 
