@@ -36,7 +36,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private Animator _animator;
     private CharacterController _cc;
     [SerializeField] private PlayerWeapon _swordWeaponManager;
-    private PlayerInput _playerInput;
+    PlayerInput _playerInput;
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
     [SerializeField] private ParticleSystem _swordTrail;

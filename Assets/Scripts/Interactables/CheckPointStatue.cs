@@ -74,7 +74,7 @@ public class CheckPointStatue : Interactable
         }
     }
     void Interact(InputAction.CallbackContext context){
-        if(inRange && !PlayerStateMachine.Instance.IsLocked){
+        if(inRange && !PlayerStateMachine.Instance.IsLocked && !DialogueManager.instance.isChatting){
             PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasPrayedHash);
             PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasPrayedHash);
             PlayerStateMachine.Instance.Animator.SetFloat(PlayerStateMachine.Instance.PlayerVelocityXHash, 0f);
