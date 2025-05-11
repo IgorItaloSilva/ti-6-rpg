@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
 {
@@ -149,10 +150,14 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         PlayerIsDead = true;
         AudioPlayer.instance.PlaySFX("PlayerDeath");
         AudioPlayer.instance.PlayMusic("DeathMusic");
+        PlayerStateMachine.Instance.InCombat = false;
         PlayerIsDead = true;
     }
     private void PlayerRespawn()//chamado pelo game manager depois de dar load
     {
+        PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasRespawnedHash);
+        PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasRespawnedHash);
+        
         HealLife(maxLife);
         PlayerIsDead=false;
         CarriedExp=0;
@@ -218,9 +223,16 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         if(PUArmorActive) damage/=2;
         CurrentLife -= damage;
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,wasCrit);
+        Debug.Log("Player tomou dano");
         UIManager.instance?.UpdateHealth(CurrentLife,wasCrit);
         if(CurrentLife<=0&&!PlayerIsDead){
             Die();
+        }
+        else if(CurrentLife > 0)
+        {
+            AudioPlayer.instance.PlaySFX("PlayerDamage" + Random.Range(1, 3));
+            PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.TookHitHash);
+            PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.TookHitHash);
         }
     }
     private void ActivatePowerUp(int id){//OBS OS IDS SÃO HARD CODED, SE MUDAR A ORDEM DELES PRECISA MUDAR AQUI!!!!!!!

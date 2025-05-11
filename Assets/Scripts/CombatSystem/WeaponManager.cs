@@ -41,17 +41,13 @@ public class WeaponManager : MonoBehaviour
                     }
                     else{
                         AudioPlayer.instance.PlaySFX("Block");
-                        PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.TookHitHash);
-                        PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.TookHitHash);
                         DealDamage(alvoAtacado,damage/3);
                     }
                 }
                 else{
-                    AudioPlayer.instance.PlaySFX("PlayerDamage" + Random.Range(1, 3));
-                    PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.TookHitHash);
-                    PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.TookHitHash);
                     PlayerStateMachine.Instance.ResetAttacks();
                     DealDamage(alvoAtacado, damage);
+                    DisableCollider();
                 }
             }
         }

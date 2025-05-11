@@ -6,7 +6,7 @@ using Task = System.Threading.Tasks.Task;
 public class PlayerBlockState : PlayerCombatState
 {
     private new const float MaxAcceleration = 1f;
-    private const byte ParryDurationMs = 100, ParryCooldownMs = 150;
+    private const byte ParryDurationMs = 150, ParryCooldownMs = 150;
 
     public PlayerBlockState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
@@ -25,7 +25,6 @@ public class PlayerBlockState : PlayerCombatState
     {
         await Task.Delay(ParryDurationMs);
         _ctx.ShouldParry = false;
-        Debug.Log("Blocking");
     }
 
     public override void CheckSwitchStates()

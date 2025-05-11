@@ -134,6 +134,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public Camera MainCam => _mainCam;
     public EnemyDetection EnemyDetector => enemyDetector;
     public VisualEffect ParryVfx => _parryVfx;
+    public PlayerInput PlayerInput => _playerInput;
     public Vector3 CurrentMovementInput => _currentMovementInput;
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
@@ -153,7 +154,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     #region Public Setters
     
-
     public float Gravity
     {
         get => _gravity;

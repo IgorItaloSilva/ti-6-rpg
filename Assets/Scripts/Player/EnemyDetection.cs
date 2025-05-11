@@ -40,9 +40,9 @@ public class EnemyDetection : MonoBehaviour
             _raycastDirection = targetEnemy.transform.position - transform.position;
             if (Physics.Raycast(transform.position, _raycastDirection, out _raycastHit))
             {
-                Debug.Log("In enemy line of sight");
                 if (_raycastHit.collider.CompareTag("Enemy"))
                 {
+                    Debug.Log("In enemy line of sight");
                     _inLineOfSight = true;
                     PlayerStateMachine.Instance.InCombat = true;
                     return;

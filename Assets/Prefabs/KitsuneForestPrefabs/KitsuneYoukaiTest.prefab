@@ -1758,6 +1758,7 @@ MonoBehaviour:
   hp: 500
   poise: 10
   speed: 0.2
+  knockbackDuration: 1
   healthBar: {fileID: 1993550673834320566}
   weapon: {fileID: 4052853031580577442}
 --- !u!114 &8971259952069000762
@@ -1845,7 +1846,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showDebug: 0
   damageType: 0
-  baseDamage: 300
+  baseDamage: 75
 --- !u!1 &6690920327001736767
 GameObject:
   m_ObjectHideFlags: 0
