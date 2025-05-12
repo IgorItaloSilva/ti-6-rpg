@@ -80,7 +80,7 @@ public class FileDataHandler {
             //if it doesn't then this folder should be skipped
             string fullpath = Path.Combine(dataDirParth,profileId,dataFileName);
             if(!File.Exists(fullpath)){
-                Debug.LogWarning("Skipping directory when loading because it does not contain data: " + profileId);
+                if(DataPersistenceManager.instance.showWarnings)Debug.LogWarning("Skipping directory when loading because it does not contain data: " + profileId);
                 continue;
             }
             GameData profileData = Load(profileId);
@@ -127,7 +127,7 @@ public class FileDataHandler {
                 Directory.Delete(Path.GetDirectoryName(fullpath),true);
             }
             else{
-                Debug.LogWarning("Tried to delete a data file but there was no file. Fileid: "+ profileId);
+                if(DataPersistenceManager.instance.showWarnings)Debug.LogWarning("Tried to delete a data file but there was no file. Fileid: "+ profileId);
             }
         }
         catch(Exception e){

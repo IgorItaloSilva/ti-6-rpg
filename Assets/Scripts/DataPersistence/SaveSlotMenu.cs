@@ -83,11 +83,11 @@ public class SaveSlotMenu : Menu
     public void SaveGameAndLoadScene(){
         DataPersistenceManager.instance.SaveGame();
         if(levelToBeLoaded==""){
-            Debug.Log("Como não tinha um level indo pro indice 1");
+            if(DataPersistenceManager.instance.showDebug)Debug.Log("Como não tinha um level indo pro indice 1");
             SceneManager.LoadSceneAsync(1);
         }
         else{
-            Debug.Log("Indo pro level " + levelToBeLoaded);
+            if(DataPersistenceManager.instance.showDebug)Debug.Log("Indo pro level " + levelToBeLoaded);
             SceneManager.LoadSceneAsync(levelToBeLoaded);
         }
         SceneManager.LoadSceneAsync("Hud",LoadSceneMode.Additive);

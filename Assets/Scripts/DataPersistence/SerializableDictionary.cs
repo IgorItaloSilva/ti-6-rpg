@@ -11,7 +11,7 @@ public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, IS
     {
         this.Clear();
         if(keys.Count != values.Count){
-            Debug.Log("Tried to deserialize a SerializebleDictionary, but the amount of keys ("+keys.Count+
+            Debug.LogError("Tried to deserialize a SerializebleDictionary, but the amount of keys ("+keys.Count+
             ") does not match the number of values ("+values.Count+")");
         }
         for (int i=0;i<keys.Count;i++){

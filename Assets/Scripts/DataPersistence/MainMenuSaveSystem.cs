@@ -26,13 +26,13 @@ public class MainMenu : Menu
     }
     public void ContinueButton(){
         string levelToBeLoaded=DataPersistenceManager.instance.GetDataLevelName();
-        Debug.Log($"o continue conseguiu {levelToBeLoaded}");
+        if(DataPersistenceManager.instance.showDebug)Debug.Log($"o continue conseguiu {levelToBeLoaded}");
         if(levelToBeLoaded==""){
-            Debug.Log("Como não tinha um level indo pro indice 1");
+            if(DataPersistenceManager.instance.showDebug)Debug.Log("Como não tinha um level indo pro indice 1");
             SceneManager.LoadSceneAsync(1);
         }
         else{
-            Debug.Log("Indo pro level " + levelToBeLoaded);
+            if(DataPersistenceManager.instance.showDebug)Debug.Log("Indo pro level " + levelToBeLoaded);
             SceneManager.LoadSceneAsync(levelToBeLoaded);
         }
         SceneManager.LoadSceneAsync("Hud",LoadSceneMode.Additive);
@@ -45,7 +45,7 @@ public class MainMenu : Menu
         ActivateButtonsDependingOnData();
     }
     public void ActivateButtonsDependingOnData(){
-        Debug.Log($"temos data? {DataPersistenceManager.instance.HasData()}");
+        if(DataPersistenceManager.instance.showDebug)Debug.Log($"temos data? {DataPersistenceManager.instance.HasData()}");
         if(!DataPersistenceManager.instance.HasData()){
             continueGameButton.interactable = false;
             loadGameButton.interactable = false;

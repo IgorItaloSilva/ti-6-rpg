@@ -115,11 +115,11 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
         }
         if(!skillTreeUIManager){
-            Debug.Log("o skillTreeUIManager está vazio");
+            Debug.LogWarning("o skillTreeUIManager está vazio");
             skillTreeUIManager=GetComponent<SkillTreeUIManager>();
         }
         if(!statsUIManager){
-            Debug.Log("o statsUiManager está vazio");
+            Debug.LogWarning("o statsUiManager está vazio");
             statsUIManager=GetComponent<StatsUIManager>();
         }
         currentUIScreen = UIScreens.Closed;
@@ -265,7 +265,7 @@ public class UIManager : MonoBehaviour
     }
     int targetAmmount;
     void PlayExpGain(int quantidade){
-        Debug.Log("Chamando a função playExpGain da UI");
+        //Debug.Log("Chamando a função playExpGain da UI");
         if(isGainExpCouroutineRunning){
             StopCoroutine(gainExpCouroutine);
             if(isGainedExpTextActive){
@@ -416,7 +416,7 @@ public class UIManager : MonoBehaviour
                 currentUIScreen=UIScreens.MainPause;
             break;
             case UIScreens.SkillTree:
-            if(!skillTreeUIManager)Debug.Log("tentamos trocar de tela sem ter referencia ao skill tree manager");
+            if(!skillTreeUIManager)Debug.LogWarning("tentamos trocar de tela sem ter referencia ao skill tree manager");
                 skillTreeUIManager?.AlternarPainelSkillTree();
                 currentUIScreen=UIScreens.SkillTree; 
             break;
