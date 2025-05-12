@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
 {
@@ -145,14 +146,18 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     public void Die(){//não faz sentido mudar variaveis aqui, pois vamos chamar um load logo após
         DroppedExp.instance?.SetVariablesAndPos(CarriedExp,transform.position);
         GameEventsManager.instance.playerEvents.PlayerDied();
-        Debug.Log("Player morreu!");
+        //Debug.Log("Player morreu!");
         PlayerIsDead = true;
         AudioPlayer.instance.PlaySFX("PlayerDeath");
         AudioPlayer.instance.PlayMusic("DeathMusic");
+        PlayerStateMachine.Instance.InCombat = false;
         PlayerIsDead = true;
     }
     private void PlayerRespawn()//chamado pelo game manager depois de dar load
     {
+        PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasRespawnedHash);
+        PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasRespawnedHash);
+        
         HealLife(maxLife);
         PlayerIsDead=false;
         CarriedExp=0;
@@ -160,16 +165,16 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
         UIManager.instance?.DisplayExpAmmount(CarriedExp);
         if(respawnPos.HasValue){
-            Debug.Log("respawnPos tem valor, ent vou colocar minha posição nela");
+            //Debug.Log("respawnPos tem valor, ent vou colocar minha posição nela");
             transform.position=respawnPos.Value;
         }
         else{
             if(LevelLoadingManager.instance==null){
-                Debug.LogWarning("Não temos um levelLoadingManager, portanto não sabemos onde colocar o jogador ao renascer. Colocando ele no (0,0,0)");
+                //Debug.LogWarning("Não temos um levelLoadingManager, portanto não sabemos onde colocar o jogador ao renascer. Colocando ele no (0,0,0)");
                 transform.position=Vector3.zero;
             }
             else{
-                Debug.Log("Como não temos uma respawnPos, vamos voltar por onde o levelLoadingManager mandou");
+                //Debug.Log("Como não temos uma respawnPos, vamos voltar por onde o levelLoadingManager mandou");
                 respawnPos=LevelLoadingManager.instance.respawnPoint;
                 transform.position=respawnPos.Value;
             }
@@ -218,9 +223,16 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         if(PUArmorActive) damage/=2;
         CurrentLife -= damage;
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,wasCrit);
+        Debug.Log("Player tomou dano");
         UIManager.instance?.UpdateHealth(CurrentLife,wasCrit);
         if(CurrentLife<=0&&!PlayerIsDead){
             Die();
+        }
+        else if(CurrentLife > 0)
+        {
+            AudioPlayer.instance.PlaySFX("PlayerDamage" + Random.Range(1, 3));
+            PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.TookHitHash);
+            PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.TookHitHash);
         }
     }
     private void ActivatePowerUp(int id){//OBS OS IDS SÃO HARD CODED, SE MUDAR A ORDEM DELES PRECISA MUDAR AQUI!!!!!!!
@@ -263,7 +275,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
     void CalculateWeaponDamage(){
         PlayerWeapon katana = GetComponentInChildren<PlayerWeapon>();
         if(katana!=null){
-            Debug.Log("O player achou uma arma para setar o dano dela");
+            //Debug.Log("O player achou uma arma para setar o dano dela");
             katana.SetDamageAndValues(heavyAttackDamage,lightAttackDamage);
 
         }
@@ -294,7 +306,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
             }
         }
         else{
-            Debug.Log("Entrei no false do rune stat buff");
+            //Debug.Log("Entrei no false do rune stat buff");
             switch(stat){
                 case "vitalidade":
                     statHasRuneBuff[0]=0;

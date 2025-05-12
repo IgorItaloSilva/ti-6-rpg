@@ -45,7 +45,7 @@ public class PlayerInAirState : PlayerBaseState
     {
         if (_ctx.CC.isGrounded)
         {
-            SwitchState(_ctx.IsSprintPressed ? _factory.Sprint() : _factory.Grounded());
+            SwitchState(_factory.Grounded());
         }
 
         if (_ctx.IsClimbing && _ctx.CanMount)

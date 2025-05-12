@@ -48,7 +48,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     #region Private Variables
 
-    private float _gravity, _initialJumpVelocity, _camYSpeed, _camXSpeed, _acceleration;
+    private float _gravity, _initialJumpVelocity, _camYSpeed, _camXSpeed, _acceleration, _maxAcceleration;
 
     private Vector3 _currentMovement, _appliedMovement;
     private Vector2 _currentMovementInput, _currentLookInput;
@@ -72,6 +72,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canAttack = true,
         _canBlock = true,
         _canHeal = true,
+        _canEnterCombat = true,
         _isBetweenAttacks,
         _isClimbing,
         _canMount = true,
@@ -113,6 +114,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int HasJumpedHash = Animator.StringToHash("hasJumped");
     public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
     public readonly int HasHealedHash = Animator.StringToHash("hasHealed");
+    public readonly int TookHitHash = Animator.StringToHash("tookHit");
     public readonly int HasParried = Animator.StringToHash("hasParried");
     public readonly int HasDiedHash = Animator.StringToHash("hasDied");
     public readonly int HasPrayedHash = Animator.StringToHash("hasPrayed");
@@ -132,6 +134,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public Camera MainCam => _mainCam;
     public EnemyDetection EnemyDetector => enemyDetector;
     public VisualEffect ParryVfx => _parryVfx;
+    public PlayerInput PlayerInput => _playerInput;
     public Vector3 CurrentMovementInput => _currentMovementInput;
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
@@ -151,7 +154,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     #region Public Setters
     
-
     public float Gravity
     {
         get => _gravity;
@@ -192,6 +194,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         get => _canMount;
         set => _canMount = value;
     }
+    public bool CanEnterCombat
+    {
+        get => _canEnterCombat;
+        set => _canEnterCombat = value;
+    }
 
     public bool CanJump
     {
@@ -219,7 +226,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     
     public bool InCombat
     {
-        get => _inCombat;
+        get => _inCombat && _canEnterCombat;
         set => _inCombat = value;
     }
 
@@ -234,11 +241,22 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         get => _currentMovement;
         set => _currentMovement = value;
     }
+    
+    public float CurrentMovementX
+    {
+        get => _currentMovement.x;
+        set => _currentMovement.x = value;
+    }
 
     public float CurrentMovementY
     {
         get => _currentMovement.y;
         set => _currentMovement.y = value;
+    }
+    public float CurrentMovementZ
+    {
+        get => _currentMovement.z;
+        set => _currentMovement.z = value;
     }
 
     public Vector3 AppliedMovement

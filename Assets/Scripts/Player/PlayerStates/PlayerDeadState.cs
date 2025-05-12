@@ -10,8 +10,7 @@ namespace Player.PlayerStates
 
         public override void EnterState()
         {
-            
-            if(_ctx.ShowDebugLogs) Debug.Log("Dead");
+            if(_ctx.ShowDebugLogs) Debug.Log("Player Dead");
             _ctx.Animator.ResetTrigger(_ctx.HasDiedHash);
             _ctx.Animator.SetTrigger(_ctx.HasDiedHash);
         }

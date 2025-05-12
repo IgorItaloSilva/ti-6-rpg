@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerAttackState : PlayerBaseState
 {
     private new const byte DecelerationSpeed = 5;
-    private bool _hasTarget;
+    private bool _inSeekRange;
 
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
@@ -19,9 +19,9 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void UpdateState()
     {
-        if (!_hasTarget)
+        if (!_inSeekRange)
             HandleRotation();
-
+        
         HandleForwardMove();
         if (_ctx.IsAttackPressed)
         {
@@ -43,24 +43,18 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void ExitState()
     {
+        
     }
 
     private void CheckAttackTargetDistance()
     {
-        if (_ctx.EnemyDetector.targetEnemy)
-            _hasTarget = ((_ctx.InCombat) &&
-                          Vector3.Distance(_ctx.transform.position,
-                              _ctx.EnemyDetector.targetEnemy.transform.position) <= 3f);
-        else
-            _ctx.InCombat = false;
+        _inSeekRange = ((_ctx.InCombat) && Vector3.Distance(_ctx.transform.position, _ctx.EnemyDetector.targetEnemy.transform.position) <= 3f);
     }
 
     protected override void HandleAcceleration()
     {
-        if (_ctx.Acceleration > 0)
-            _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
-        else
-            _ctx.Acceleration = 0;
+        if (_ctx.Acceleration > 0) _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
+        else _ctx.Acceleration = 0;
         
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * 5);
     }
@@ -88,12 +82,7 @@ public class PlayerAttackState : PlayerBaseState
     {
         if (_ctx.AttackCount is 0 || !_ctx.InCombat)
         {
-            if (_ctx.IsSprintPressed)
-                SwitchState(_factory.Sprint());
-            else if (_ctx.InCombat)
-                SwitchState(_factory.Combat());
-            else
-                SwitchState(_factory.Grounded());
+            SwitchState(_ctx.InCombat ? _factory.Combat() : _factory.Grounded());
         }
 
         if (_ctx.IsDodgePressed)

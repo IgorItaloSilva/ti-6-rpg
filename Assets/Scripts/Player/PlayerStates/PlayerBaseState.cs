@@ -6,15 +6,16 @@ public abstract class PlayerBaseState
     protected readonly PlayerStateMachine _ctx;
     protected readonly PlayerStateFactory _factory;
     protected float _turnTime, _turnSmoothSpeed, _lowestAccelerationSpeed = float.MaxValue;
-    protected const float MaxAcceleration = 1.5f;
+    protected float _maxAcceleration;
     private const byte RotationSpeed = 5;
-    protected readonly byte AccelerationSpeed = 3, DecelerationSpeed = 10;
+    protected byte _accelerationSpeed = 3, _decelerationSpeed = 10;
     private Vector3 _appliedMovement;
     protected Vector3 _cameraForward, _cameraRight;
     protected Vector3 _targetDirection;
 
     protected PlayerBaseState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory)
     {
+        _maxAcceleration = 2f;
         _ctx = currentContext;
         _factory = playerStateFactory;
     }
@@ -28,14 +29,6 @@ public abstract class PlayerBaseState
     public virtual void FixedUpdateState()
     {
         HandleAcceleration();
-        if (_ctx.InCombat)
-        {
-            _ctx.Animator.SetBool(_ctx.InCombatHash, true);
-        }
-        else
-        {
-            _ctx.Animator.SetBool(_ctx.InCombatHash, false);
-        }
     }
     protected virtual void HandleJump(float jumpForceOverride = 1f)
     {
@@ -51,24 +44,24 @@ public abstract class PlayerBaseState
     {
         _lowestAccelerationSpeed = Mathf.Min(_ctx.Acceleration, _lowestAccelerationSpeed);
         
-        if (_ctx.IsMovementPressed && _ctx.Acceleration <= MaxAcceleration)
+        if ((_ctx.IsMovementPressed && _ctx.Acceleration <= _maxAcceleration) || _ctx.Acceleration < 0f)
         {
-            _ctx.Acceleration += Time.fixedDeltaTime * AccelerationSpeed;
+            _ctx.Acceleration += Time.fixedDeltaTime * _accelerationSpeed;
         }
         else
         {
-            _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
+            _ctx.Acceleration -= Time.fixedDeltaTime * _decelerationSpeed;
         }
 
-        if (_lowestAccelerationSpeed < 1)
+        if (_lowestAccelerationSpeed < _maxAcceleration)
         {
-            _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, MaxAcceleration);
+            _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, _maxAcceleration);
         }
 
     }
     protected void HandleTargetedRotation()
     {
-        if (_ctx.EnemyDetector.targetEnemy)
+        if (_ctx.InCombat)
             _targetDirection = _ctx.EnemyDetector.targetEnemy.transform.position - _ctx.transform.position;
         else
             _targetDirection = _ctx.MainCam.transform.forward;
@@ -177,4 +170,5 @@ public abstract class PlayerBaseState
     {
         SwitchState(_factory.Locked(durationMs));
     }
+    
 }

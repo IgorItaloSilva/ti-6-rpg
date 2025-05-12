@@ -6,17 +6,17 @@ using Debug = UnityEngine.Debug;
 public class PlayerGroundedState : PlayerBaseState
 {
     private Vector3 _appliedMovement;
-
     public PlayerGroundedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
+        _maxAcceleration = 2.5f;
+        _turnTime = _ctx.BaseTurnTime;
     }
 
     public override void EnterState()
     {
         HandleAnimatorParameters();
         if(_ctx.ShowDebugLogs) Debug.Log("Grounded");
-        _turnTime = _ctx.BaseTurnTime * 2;
     }
 
     public override void HandleAnimatorParameters()
@@ -41,23 +41,15 @@ public class PlayerGroundedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (_ctx.InCombat)
+        if (_ctx.InCombat && !_ctx.IsSprintPressed)
         {
             SwitchState(_factory.Combat());
             return;
         }
         if (!_ctx.CC.isGrounded)
         {
-            
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             SwitchState(_factory.InAir());
-            return;
-        }
-        if(_ctx.IsBlockPressed)
-        {
-            _ctx.Animator.SetBool(_ctx.InCombatHash, true);
-            _ctx.Animator.SetBool(_ctx.IsBlockingHash, true);
-            SwitchState(_factory.Block());
             return;
         }
         if (_ctx.IsJumpPressed)
@@ -65,11 +57,6 @@ public class PlayerGroundedState : PlayerBaseState
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             HandleJump();
             SwitchState(_factory.InAir());
-        }
-
-        if (_ctx.IsSprintPressed)
-        {
-            SwitchState(_factory.Sprint());
         }
 
         if (_ctx.IsDodgePressed)

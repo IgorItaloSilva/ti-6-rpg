@@ -12,11 +12,6 @@ public class PlayerStateFactory
     {
         _context = currentContext;
     }
-
-    public PlayerBaseState Sprint()
-    {
-        return new PlayerSprintState(_context, this);
-    }
     
     public PlayerBaseState Dodge()
     {

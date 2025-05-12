@@ -3,13 +3,12 @@ using UnityEngine;
 
 public class PlayerDodgeState : PlayerBaseState
 {
-    private const byte DodgeDurationMs = 200;
-    private new const byte DecelerationSpeed = 6;
-    private const int DodgeCooldownMs = 500;
+    private const int DodgeCooldownMs = 1000, DodgeDurationMs = 500;
 
     public PlayerDodgeState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
+        _decelerationSpeed = 3;
         HandleAnimatorParameters();
         _ctx.Acceleration = _ctx.IsMovementPressed ? 4f : -4f;
         if (_ctx.ShowDebugLogs) Debug.Log("Dodging");
@@ -18,6 +17,7 @@ public class PlayerDodgeState : PlayerBaseState
         _ctx.CanDodge = false;
         HandleDodgeDurationAsync();
         _ctx.ResetAttacks();
+        _ctx.Animator.speed = 1.5f;
     }
 
     public override void EnterState()
@@ -34,7 +34,7 @@ public class PlayerDodgeState : PlayerBaseState
 
     public override void UpdateState()
     {
-        if (_ctx.EnemyDetector.targetEnemy)
+        if (_ctx.InCombat)
         {
             HandleTargetedRotation();
             HandleTargetedMove();
@@ -49,7 +49,9 @@ public class PlayerDodgeState : PlayerBaseState
 
     public override void ExitState()
     {
+        _decelerationSpeed = 10;
         _ctx.IsDodging = false;
+        _ctx.Animator.speed = 1f;
     }
 
     public override void CheckSwitchStates()
@@ -71,8 +73,6 @@ public class PlayerDodgeState : PlayerBaseState
         await Task.Delay(DodgeDurationMs);
         if(_ctx.InCombat)
             SwitchState(_factory.Combat());
-        else if(_ctx.IsSprintPressed)
-            SwitchState(_factory.Sprint());
         else
             SwitchState(_factory.Grounded());
     }
@@ -86,11 +86,5 @@ public class PlayerDodgeState : PlayerBaseState
         }
 
         _ctx.CanDodge = true;
-    }
-
-    protected override void HandleAcceleration()
-    {
-        _ctx.Acceleration -= (Time.fixedDeltaTime * DecelerationSpeed);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration);
     }
 }
