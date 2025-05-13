@@ -57,6 +57,12 @@ public class GameManager : MonoBehaviour
         //A ui vai pausar o jogo apos o vfx
         //PauseInputs
     }
+    public void ExitGame(bool shouldSave){
+        if(shouldSave){
+            DataPersistenceManager.instance.SaveGame();
+        }
+        Application.Quit();
+    }
     public void ReturnFromDeath(){
         if(showDebug)Debug.Log("game manager chamou o respawn");
         DataPersistenceManager.instance.LoadGame();

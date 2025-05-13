@@ -44,6 +44,9 @@ public class MainMenu : Menu
         gameObject.SetActive(true);
         ActivateButtonsDependingOnData();
     }
+    public void ExitGame(){
+        GameManager.instance.ExitGame(false);
+    }
     public void ActivateButtonsDependingOnData(){
         if(DataPersistenceManager.instance.showDebug)Debug.Log($"temos data? {DataPersistenceManager.instance.HasData()}");
         if(!DataPersistenceManager.instance.HasData()){

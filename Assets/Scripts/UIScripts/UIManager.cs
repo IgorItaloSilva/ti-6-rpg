@@ -218,7 +218,7 @@ public class UIManager : MonoBehaviour
         StartCoroutine("PlayNotificationVFX");
     }
     public void QuitGame(){
-        Application.Quit();
+        GameManager.instance.ExitGame(true);
     }
     public void ReturnMainMenu(){
         DataPersistenceManager.instance?.SaveGame();
