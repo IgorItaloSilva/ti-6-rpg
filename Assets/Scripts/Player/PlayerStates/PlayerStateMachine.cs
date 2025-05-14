@@ -135,6 +135,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public EnemyDetection EnemyDetector => enemyDetector;
     public VisualEffect ParryVfx => _parryVfx;
     public PlayerInput PlayerInput => _playerInput;
+    public PlayerWeapon SwordWeaponManager => _swordWeaponManager;
     public Vector3 CurrentMovementInput => _currentMovementInput;
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
@@ -542,7 +543,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
-        Acceleration = 2.5f;
+        if(enemyDetector.targetEnemy && Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f)
+            Acceleration = 2.5f;
     }
 
     private void EnableSwordColliderAttack4()

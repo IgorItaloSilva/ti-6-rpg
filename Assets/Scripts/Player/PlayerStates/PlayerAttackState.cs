@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class PlayerAttackState : PlayerBaseState
 {
@@ -80,22 +82,21 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (_ctx.AttackCount is 0 || !_ctx.InCombat)
-        {
-            SwitchState(_ctx.InCombat ? _factory.Combat() : _factory.Grounded());
-        }
-
         if (_ctx.IsDodgePressed)
         {
             _ctx.ResetAttacks();
             SwitchState(_factory.Dodge());
         }
 
-        if (_ctx.IsBlocking)
+        if (_ctx.IsBlocking && _ctx.SwordWeaponManager.DamageCollider.enabled == false)
         {
             _ctx.ResetAttacks();
-            _ctx.Animator.SetBool(_ctx.IsBlockingHash, true);
             SwitchState(_factory.Block());
+        }
+        
+        if (_ctx.AttackCount is 0 || !_ctx.InCombat)
+        {
+            SwitchState(_ctx.InCombat ? _factory.Combat() : _factory.Grounded());
         }
     }
 }

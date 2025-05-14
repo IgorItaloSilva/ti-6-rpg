@@ -11,6 +11,8 @@ public class WeaponManager : MonoBehaviour
     protected Collider damageCollider;
     protected List<IDamagable>damagedTargets = new List<IDamagable>();
     protected EnemyBehaviour enemyBehaviour;
+
+    public Collider DamageCollider => damageCollider;
     
     protected virtual void Start(){
         damageCollider=GetComponent<Collider>();
