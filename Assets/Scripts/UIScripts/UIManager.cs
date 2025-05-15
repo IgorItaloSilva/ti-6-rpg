@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]private GameObject painelDeath;
     [SerializeField]private GameObject painelDialog;
     [SerializeField]private GameObject painelTutorial;
+    [SerializeField]private GameObject painelPopupTutorial;
     [SerializeField]private GameObject painelQuest;
     [SerializeField]private GameObject painelWeapon;
     [SerializeField]private GameObject buttonMainMenu;
@@ -80,7 +81,8 @@ public class UIManager : MonoBehaviour
         Death,
         Dialog,
         Tutorial,
-        QuestLog
+        QuestLog,
+        TutorialPopup
     }
     
     
@@ -91,6 +93,7 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened+=OpenDialogPanel;
         GameEventsManager.instance.playerEvents.onPlayerGainExp+=PlayExpGain;
+        
     }
 
     void OnDisable()
@@ -153,14 +156,17 @@ public class UIManager : MonoBehaviour
                 if(isNearCampfire)SwitchToScreen((int)UIScreens.Stats);
             }else 
             {
-                dialogManager.EndDialogue();
+                if(dialogManager.isChatting)
+                    dialogManager.EndDialogue();
+                else
+                    SwitchToScreen((int)UIScreens.Closed);
             }
         }
-        if(Keyboard.current.eKey.wasPressedThisFrame){
+        if(Keyboard.current.eKey.wasPressedThisFrame||Keyboard.current.spaceKey.wasPressedThisFrame||Mouse.current.leftButton.wasPressedThisFrame){
             if(currentUIScreen==UIScreens.Dialog){
                 if(dialogManager.isChatting)
                 {
-                    dialogManager.Skip();
+                    dialogManager.AdvanceDialog();
                 }
             }
             if(currentUIScreen==UIScreens.Tutorial){
@@ -169,6 +175,7 @@ public class UIManager : MonoBehaviour
         }
         if(Keyboard.current.pKey.wasPressedThisFrame){
             PlayNotification("teste");
+            
         }
     
         /* if(Mouse.current.leftButton.wasPressedThisFrame){
@@ -250,6 +257,7 @@ public class UIManager : MonoBehaviour
         painelWeapon.SetActive(false);
         painelQuest.SetActive(false);
         bossHPBarAndName.SetActive(false);
+        painelPopupTutorial.SetActive(false);
     }
     public void PlayerDied(){
         playerIsDead=true;
@@ -400,6 +408,10 @@ public class UIManager : MonoBehaviour
             case UIScreens.QuestLog:
                 painelQuest.SetActive(false);
             break;
+            case UIScreens.TutorialPopup:
+                GameManager.instance?.PauseGameAndUnlockCursor();
+                painelPopupTutorial.SetActive(false);
+            break;
             default: Debug.LogWarning("A tela atual é indefinida"); break;
         }
         //ativa a tela de destino
@@ -451,6 +463,9 @@ public class UIManager : MonoBehaviour
                 painelQuest.SetActive(true);
                 ObjectiveUiManager.instance?.WasOpened();
                 currentUIScreen=UIScreens.QuestLog;
+            break;
+            case UIScreens.TutorialPopup:
+                painelPopupTutorial.SetActive(false);
             break;
             default: Debug.LogWarning("A tela destino é indefinida"); break;
         }
