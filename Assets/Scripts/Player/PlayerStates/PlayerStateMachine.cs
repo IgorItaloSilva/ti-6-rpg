@@ -161,7 +161,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsSpecial2Pressed => _isSpecial2Pressed && _canSpecial2;
     public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3;
     public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4;
-    public bool IsClimbing => _isClimbing && _canMount;
+    public bool IsClimbing => _isClimbing;
     public bool IsBlocking => _isBlocking && _inCombat;
     public byte AttackCount => _attackCount;
     public float InitialJumpVelocity => _initialJumpVelocity;
