@@ -171,4 +171,9 @@ public abstract class PlayerBaseState
         SwitchState(_factory.Locked(durationMs));
     }
     
+    public void UnlockPlayer()
+    {
+        SwitchState(_ctx.InCombat? _factory.Combat() : _factory.Grounded());
+    }
+    
 }

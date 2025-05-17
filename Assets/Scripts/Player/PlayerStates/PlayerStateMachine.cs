@@ -1,4 +1,5 @@
 #region Imports
+
 using System;
 using Cinemachine;
 using UnityEngine;
@@ -59,13 +60,17 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isSprintPressed,
         _isJumping,
         _isBlocking,
+        _canInteract = true,
         _isJumpPressed,
         _isDodgePressed,
         _isAttackPressed,
+        _isSpecial1Pressed,
+        _isSpecial2Pressed,
+        _isSpecial3Pressed,
+        _isSpecial4Pressed,
         _isBlockPressed,
         _isPotionPressed,
         _isInteractPressed,
-        _canInteract = true,
         _isDodging,
         _canDodge = true,
         _canJump = true,
@@ -73,9 +78,13 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canBlock = true,
         _canHeal = true,
         _canEnterCombat = true,
+        _canMount = true,
+        _canSpecial1 = true,
+        _canSpecial2 = true,
+        _canSpecial3 = true,
+        _canSpecial4 = true,
         _isBetweenAttacks,
         _isClimbing,
-        _canMount = true,
         _isTargetPressed,
         _canTarget,
         _isOnTarget,
@@ -110,6 +119,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int Attack2Hash = Animator.StringToHash("Attack2");
     public readonly int Attack3Hash = Animator.StringToHash("Attack3");
     public readonly int Attack4Hash = Animator.StringToHash("Attack4");
+    public readonly int Special1Hash = Animator.StringToHash("Special1");
+    public readonly int Special2Hash = Animator.StringToHash("Special2");
+    public readonly int Special3Hash = Animator.StringToHash("Special3");
+    public readonly int Special4Hash = Animator.StringToHash("Special4");
     public readonly int IsClimbingHash = Animator.StringToHash("isClimbing");
     public readonly int HasJumpedHash = Animator.StringToHash("hasJumped");
     public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
@@ -133,10 +146,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public Animator Animator => _animator;
     public Camera MainCam => _mainCam;
     public EnemyDetection EnemyDetector => enemyDetector;
-    public VisualEffect ParryVfx => _parryVfx;
-    public PlayerInput PlayerInput => _playerInput;
     public PlayerWeapon SwordWeaponManager => _swordWeaponManager;
     public Vector3 CurrentMovementInput => _currentMovementInput;
+    public float Gravity => _gravity;
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
     public bool IsJumpPressed => _isJumpPressed && _canJump;
@@ -145,33 +157,25 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsPotionPressed => _isPotionPressed && _canHeal;
     public bool IsBlockPressed => _isBlockPressed;
     public bool IsSprintPressed => _isSprintPressed && _isMovementPressed;
-    public bool IsTargetPressed => _isTargetPressed && _canTarget;
+    public bool IsSpecial1Pressed => _isSpecial1Pressed && _canSpecial1;
+    public bool IsSpecial2Pressed => _isSpecial2Pressed && _canSpecial2;
+    public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3;
+    public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4;
     public bool IsClimbing => _isClimbing && _canMount;
-    public bool IsOnTarget => _isOnTarget;
+    public bool IsBlocking => _isBlocking && _inCombat;
     public byte AttackCount => _attackCount;
     public float InitialJumpVelocity => _initialJumpVelocity;
 
     #endregion
 
     #region Public Setters
-    
-    public float Gravity
-    {
-        get => _gravity;
-        set => _gravity = value;
-    }
 
     public bool IsDodging
     {
         get => _isDodging;
         set => _isDodging = value;
     }
-    
-    public bool IsBlocking
-    {
-        get => _isBlocking;
-        set => _isBlocking = value;
-    }
+
     public bool ShouldParry
     {
         get => _shouldParry;
@@ -195,46 +199,36 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         get => _canMount;
         set => _canMount = value;
     }
+
     public bool CanEnterCombat
     {
-        get => _canEnterCombat;
         set => _canEnterCombat = value;
     }
 
     public bool CanJump
     {
-        get => _canJump;
         set => _canJump = value;
     }
 
     public bool CanDodge
     {
-        get => _canDodge;
         set => _canDodge = value;
     }
 
     public bool CanHeal
     {
-        get => _canHeal;
         set => _canHeal = value;
     }
 
     public bool CanInteract
     {
-        get => _canInteract;
         set => _canInteract = value;
     }
-    
+
     public bool InCombat
     {
         get => _inCombat && _canEnterCombat;
         set => _inCombat = value;
-    }
-
-    public bool CanTarget
-    {
-        get => _canTarget;
-        set => _canTarget = value;
     }
 
     public Vector3 CurrentMovement
@@ -242,21 +236,15 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         get => _currentMovement;
         set => _currentMovement = value;
     }
-    
-    public float CurrentMovementX
-    {
-        get => _currentMovement.x;
-        set => _currentMovement.x = value;
-    }
 
     public float CurrentMovementY
     {
         get => _currentMovement.y;
         set => _currentMovement.y = value;
     }
+
     public float CurrentMovementZ
     {
-        get => _currentMovement.z;
         set => _currentMovement.z = value;
     }
 
@@ -268,19 +256,16 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     public float AppliedMovementX
     {
-        get => _appliedMovement.x;
         set => _appliedMovement.x = value;
     }
 
     public float AppliedMovementY
     {
-        get => _appliedMovement.y;
         set => _appliedMovement.y = value;
     }
-    
+
     public float AppliedMovementZ
     {
-        get => _appliedMovement.z;
         set => _appliedMovement.z = value;
     }
 
@@ -291,8 +276,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     #endregion
-
-    #region Initializers
 
     #region Input Initializers
 
@@ -335,6 +318,14 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _playerInput.Gameplay.Potion.canceled += OnPotionPressed;
         _playerInput.Gameplay.Block.started += OnBlockPressed;
         _playerInput.Gameplay.Block.canceled += OnBlockPressed;
+        _playerInput.Gameplay.Special1.started += OnSpecial1Pressed;
+        _playerInput.Gameplay.Special1.canceled += OnSpecial1Pressed;
+        _playerInput.Gameplay.Special2.started += OnSpecial2Pressed;
+        _playerInput.Gameplay.Special2.canceled += OnSpecial2Pressed;
+        _playerInput.Gameplay.Special3.started += OnSpecial3Pressed;
+        _playerInput.Gameplay.Special3.canceled += OnSpecial3Pressed;
+        _playerInput.Gameplay.Special4.started += OnSpecial4Pressed;
+        _playerInput.Gameplay.Special4.canceled += OnSpecial4Pressed;
     }
 
     private void OnMovementPressed(InputAction.CallbackContext context)
@@ -357,7 +348,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isAttackPressed = context.ReadValueAsButton();
         _canAttack = true;
     }
-    
+
     private void OnPotionPressed(InputAction.CallbackContext context)
     {
         _isPotionPressed = context.ReadValueAsButton();
@@ -375,7 +366,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isJumpPressed = context.ReadValueAsButton();
         _canJump = true;
     }
-    
+
     private void OnBlockPressed(InputAction.CallbackContext context)
     {
         _isBlockPressed = context.ReadValueAsButton();
@@ -394,6 +385,30 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canTarget = true;
     }
 
+    private void OnSpecial1Pressed(InputAction.CallbackContext context)
+    {
+        _isSpecial1Pressed = context.ReadValueAsButton();
+        _canSpecial3 = true;
+    }
+
+    private void OnSpecial2Pressed(InputAction.CallbackContext context)
+    {
+        _isSpecial2Pressed = context.ReadValueAsButton();
+        _canSpecial3 = true;
+    }
+
+    private void OnSpecial3Pressed(InputAction.CallbackContext context)
+    {
+        _isSpecial3Pressed = context.ReadValueAsButton();
+        _canSpecial3 = true;
+    }
+
+    private void OnSpecial4Pressed(InputAction.CallbackContext context)
+    {
+        _isSpecial4Pressed = context.ReadValueAsButton();
+        _canSpecial3 = true;
+    }
+
     private void SetupJumpVariables()
     {
         var timeToApex = MaxJumpTime / 2;
@@ -402,6 +417,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     #endregion
+
+    #region Initializers
 
     private void InitializeReferences()
     {
@@ -455,7 +472,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
         if (_isTargetPressed && _canTarget)
             HandleTarget();
-        
     }
 
     #region Collisions / Triggers
@@ -531,7 +547,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _attackCount = 0;
 
         DisableSwordCollider();
-        
+
+        _currentState.UnlockPlayer();
+
         if (ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
     }
 
@@ -543,7 +561,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
-        if(enemyDetector.targetEnemy && Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f)
+        if (enemyDetector.targetEnemy &&
+            Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f)
             Acceleration = 2.5f;
     }
 
@@ -569,6 +588,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         if (_isLocked) return;
         _isLocked = true;
         _currentState.LockPlayer(durationMs);
+    }
+
+    public void UnlockPlayer()
+    {
+        _isLocked = false;
+        _currentState.UnlockPlayer();
     }
 
     #endregion
@@ -616,7 +641,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         if (!_isOnTarget)
         {
             if (enemyDetector.targetEnemy)
-                CameraTargetLock(enemyDetector.targetEnemy.transform); 
+                CameraTargetLock(enemyDetector.targetEnemy.transform);
         }
         else
         {
@@ -644,8 +669,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     public void CameraTargetUnlock(bool shouldForgetTarget = false)
-    { 
-        if(shouldForgetTarget) enemyDetector.targetEnemy = null;
+    {
+        if (shouldForgetTarget) enemyDetector.targetEnemy = null;
         _camTargetGroup.m_Targets[0].target = null;
         playerCamera.enabled = true;
         _isOnTarget = false;
@@ -657,10 +682,14 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     #endregion
-    public void AddActionToInteract(Action<InputAction.CallbackContext> action){
-        _playerInput.Gameplay.Interact.started+=action;
+
+    public void AddActionToInteract(Action<InputAction.CallbackContext> action)
+    {
+        _playerInput.Gameplay.Interact.started += action;
     }
-    public void RemoveActionFromInteract(Action<InputAction.CallbackContext> action){
-        _playerInput.Gameplay.Interact.started-=action;
+
+    public void RemoveActionFromInteract(Action<InputAction.CallbackContext> action)
+    {
+        _playerInput.Gameplay.Interact.started -= action;
     }
 }

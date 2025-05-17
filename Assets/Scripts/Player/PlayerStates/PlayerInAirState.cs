@@ -75,7 +75,7 @@ public class PlayerInAirState : PlayerBaseState
     {
         _ctx.AppliedMovement = new Vector3(
             _ctx.transform.forward.x * AirSpeed * _ctx.Acceleration,
-            _ctx.AppliedMovementY,
+            _ctx.AppliedMovement.y,
             _ctx.transform.forward.z * AirSpeed * _ctx.Acceleration);
 
         _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);

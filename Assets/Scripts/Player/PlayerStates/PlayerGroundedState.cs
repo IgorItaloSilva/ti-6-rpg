@@ -68,7 +68,7 @@ public class PlayerGroundedState : PlayerBaseState
         {
             SwitchState(_factory.Attack());
         }
-
+        
         if (_ctx.IsClimbing)
         {
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);

@@ -4,12 +4,14 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerAttackState : PlayerBaseState
 {
-    private new const byte DecelerationSpeed = 5;
+    private const byte DecelerationSpeed = 5;
     private bool _inSeekRange;
+    private readonly bool _isSpecial;
 
-    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
+    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, bool isSpecial = false) : base(
         currentContext, playerStateFactory)
     {
+        _isSpecial = isSpecial;
         _turnTime = _ctx.BaseTurnTime * 2;
     }
 
@@ -94,9 +96,9 @@ public class PlayerAttackState : PlayerBaseState
             SwitchState(_factory.Block());
         }
         
-        if (_ctx.AttackCount is 0 || !_ctx.InCombat)
+        if (!_ctx.InCombat)
         {
-            SwitchState(_ctx.InCombat ? _factory.Combat() : _factory.Grounded());
+            SwitchState(_factory.Grounded());
         }
     }
 }

@@ -12,22 +12,18 @@ public class PlayerStateFactory
     {
         _context = currentContext;
     }
-    
     public PlayerBaseState Dodge()
     {
         return new PlayerDodgeState(_context, this);
     }
-    
-    public PlayerBaseState Attack()
+    public PlayerBaseState Attack(bool _isSpecial = false)
     {
-        return new PlayerAttackState(_context, this);
+        return new PlayerAttackState(_context, this, _isSpecial);
     }
-
     public PlayerBaseState Dead()
     {
         return new PlayerDeadState(_context, this);
     }
-
     public PlayerBaseState Grounded()
     {
         return new PlayerGroundedState(_context, this);
@@ -40,20 +36,16 @@ public class PlayerStateFactory
     {
         return new PlayerInAirState(_context, this, shouldRotate);
     }
-
     public PlayerBaseState Climb()
     {
         return new PlayerClimbState(_context, this);
     }
-
     public PlayerBaseState Locked(int duration)
     {
         return new PlayerLockedState(_context, this, duration);
     }
-    
     public PlayerBaseState Combat()
     {
         return new PlayerCombatState(_context, this);
     }
-
 }

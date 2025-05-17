@@ -159,8 +159,8 @@ ModelImporter:
       1.1 deg at time 0: 0 (0.0%) Frame 0\n\nRetargeting quality report for clip
       'Yami_Rig|YMS_D_NE':\n\tRetargeting quality is good. No significant differences
       with original animation were found.\n\nRetargeting quality report for clip
-      'Yami_Rig|YMS_D_NW':\n\tRightHand average position error 0.3 mm and maximum
-      position error 3.7 mm at time 0:30 (50.0%) Frame 30\n\nRetargeting quality
+      'Yami_Rig|YMS_D_NW':\n\tRightHand average position error 3.5 mm and maximum
+      position error 198.6 mm at time 0: 2 (3.3%) Frame 2\n\nRetargeting quality
       report for clip 'Yami_Rig|YMS_D_SE':\n\tRightHand average position error 0.4
       mm and maximum position error 4.1 mm at time 0:30 (50.0%) Frame 30\n\nRetargeting
       quality report for clip 'Yami_Rig|YMS_D_SW':\n\tRetargeting quality is good.
@@ -208,7 +208,7 @@ ModelImporter:
       differences with original animation were found.\n\nRetargeting quality report
       for clip 'Yami_Rig|YMS_Parry':\n\tLeftHand average position error 0.2 mm and
       maximum position error 2.0 mm at time 1: 1 (50.8%) Frame 61\n\tRightHand average
-      position error 0.3 mm and maximum position error 3.8 mm at time 1: 6 (55.0%)
+      position error 0.3 mm and maximum position error 3.7 mm at time 1: 6 (55.0%)
       Frame 66\n\nRetargeting quality report for clip 'Yami_Rig|YMS_Potion_A':\n\tLeftHand
       average position error 2.5 mm and maximum position error 4.3 mm at time 0:17
       (14.2%) Frame 17\n\nRetargeting quality report for clip 'Yami_Rig|YMS_Potion_B':\n\tLeftHand
@@ -227,13 +227,13 @@ ModelImporter:
       53\n\tHead average position error 1.4 mm and maximum position error 2.8 mm
       at time 0:52 (43.3%) Frame 52\n\nRetargeting quality report for clip 'Yami_Rig|YMS_Run_B':\n\tLeftUpperArm
       average position error 5.2 mm and maximum position error 10.2 mm at time 0:53
-      (44.2%) Frame 53\n\tLeftLowerArm average position error 10.0 mm and maximum
-      position error 21.3 mm at time 0:53 (44.2%) Frame 53\n\tLeftHand average position
-      error 13.3 mm and maximum position error 29.0 mm at time 0:54 (45.0%) Frame
-      54\n\tRightUpperArm average position error 5.2 mm and maximum position error
+      (44.2%) Frame 53\n\tLeftLowerArm average position error 9.4 mm and maximum
+      position error 19.5 mm at time 0:53 (44.2%) Frame 53\n\tLeftHand average position
+      error 12.6 mm and maximum position error 26.7 mm at time 0:53 (44.2%) Frame
+      53\n\tRightUpperArm average position error 5.2 mm and maximum position error
       10.2 mm at time 0:53 (44.2%) Frame 53\n\tRightLowerArm average position error
-      8.7 mm and maximum position error 16.0 mm at time 0:53 (44.2%) Frame 53\n\tRightHand
-      average position error 11.0 mm and maximum position error 19.7 mm at time 0:53
+      8.7 mm and maximum position error 16.2 mm at time 0:53 (44.2%) Frame 53\n\tRightHand
+      average position error 10.8 mm and maximum position error 19.2 mm at time 0:53
       (44.2%) Frame 53\n\tHead average position error 1.4 mm and maximum position
       error 2.8 mm at time 0:52 (43.3%) Frame 52\n\nRetargeting quality report for
       clip 'Yami_Rig|YMS_Strafe_A':\n\tLeftUpperArm average position error 5.2 mm
@@ -933,7 +933,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.75672555
+      - time: 0.67469877
         functionName: ResetAttacks
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -1120,7 +1120,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.735849
+      - time: 0.82730925
         functionName: ResetAttacks
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -1276,7 +1276,7 @@ ModelImporter:
       curves: []
       events:
       - time: 0.4
-        functionName: EnableSwordColliderAttack3
+        functionName: EnableSwordCollider
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
@@ -1291,7 +1291,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.509434
+      - time: 0.82730925
         functionName: ResetAttacks
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -1463,7 +1463,7 @@ ModelImporter:
         intParameter: 0
         messageOptions: 0
       - time: 0.509434
-        functionName: EnableSwordColliderAttack3
+        functionName: EnableSwordColliderAttack4
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
@@ -1478,7 +1478,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.61886793
+      - time: 0.75100404
         functionName: ResetAttacks
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
