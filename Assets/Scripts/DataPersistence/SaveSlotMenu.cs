@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -38,9 +39,11 @@ public class SaveSlotMenu : Menu
             if(button!=null){
                 if(profileData == null && isLoadingGame){
                     button.interactable=false;
+                    button.GetComponent<EventTrigger>().enabled=false;
                 }
                 else{
                     button.interactable=true;
+                    button.GetComponent<EventTrigger>().enabled=true;
                     if(firstSelected.Equals(backButton.gameObject)){
                         firstSelected = saveSlot.gameObject;
                     }

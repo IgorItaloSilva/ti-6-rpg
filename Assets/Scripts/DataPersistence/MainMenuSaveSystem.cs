@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -51,7 +52,9 @@ public class MainMenu : Menu
         if(DataPersistenceManager.instance.showDebug)Debug.Log($"temos data? {DataPersistenceManager.instance.HasData()}");
         if(!DataPersistenceManager.instance.HasData()){
             continueGameButton.interactable = false;
+            continueGameButton.GetComponent<EventTrigger>().enabled=false;
             loadGameButton.interactable = false;
+            loadGameButton.GetComponent<EventTrigger>().enabled=false;
         }
     }
 }
