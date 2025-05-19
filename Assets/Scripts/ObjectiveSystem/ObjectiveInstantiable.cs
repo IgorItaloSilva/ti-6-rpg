@@ -17,6 +17,7 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
         Destroy(gameObject);
     }
     virtual public void StartObjective(){
+        GameEventsManager.instance?.objectiveEvents.StartObjective(objectiveSO.Id);
         objectiveData.hasStarted=true;
         UpdateDisplayMessage();
         SaveObjective();
@@ -24,6 +25,7 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
     }
         
     virtual public void CompleteObjective(){
+        GameEventsManager.instance?.objectiveEvents.CompleteObjective(objectiveSO.Id);
         objectiveData.hasFinished=true;
         UpdateDisplayMessage();
         //update Ui
