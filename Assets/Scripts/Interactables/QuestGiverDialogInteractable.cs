@@ -1,10 +1,8 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class QuestGiverDialogInteractable : DialogueInteractable
 {
-    [SerializeField]TextMeshProUGUI textMeshProUGUI;
     [Header("Dialogos variaveis")]
     [SerializeField]Dialogue dialoguePosAceitarQuest;
     [SerializeField]Dialogue dialoguePosCompletarQuest;
@@ -21,14 +19,13 @@ public class QuestGiverDialogInteractable : DialogueInteractable
     {
         base.OnEnable();
         GameEventsManager.instance.objectiveEvents.OnObjectiveStarted+=QuestAccepted;
-        //se inscriver em evento para saber que completou a quest
-
+        GameEventsManager.instance.objectiveEvents.OnObjectiveCompleted+=QuestCompleted;
     }
     protected override void OnDisable()
     {
         base.OnDisable();
-        //se desinscriver em evento para saber que aceitou a quest
-        //se desinscriver em evento para saber que completou a quest
+        GameEventsManager.instance.objectiveEvents.OnObjectiveStarted-=QuestAccepted;
+        GameEventsManager.instance.objectiveEvents.OnObjectiveCompleted-=QuestCompleted;
     }
     protected override void Interact(InputAction.CallbackContext context){
         if(inRange && !PlayerStateMachine.Instance.IsLocked && !DialogueManager.instance.isChatting){

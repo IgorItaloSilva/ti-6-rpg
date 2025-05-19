@@ -20,7 +20,7 @@ public class Speech : ScriptableObject
             if(amountAnswers==0&&needsAnswer)Debug.LogError($"Mano vc marcou o needAnswer do {name} mas n colocou o numero de respostas");
             if(amountAnswers!=0&&!needsAnswer)Debug.LogError($"Mano vc colocou o numero de respostas do {name} mas não marcou o needAnswer");
             if(amountAnswers!=optionsTexts.Length)Debug.LogError($"Mano vc colocou um numero de respostas do {name} e n colou esse numero de opções");
-            if(dialogAnswer==null)Debug.LogError($"Animal vc esqueceu de colocar a porra da classe do dialogAnswer do {name}");
+            //if(dialogAnswer==null)Debug.LogError($"Animal vc esqueceu de colocar a porra da classe do dialogAnswer do {name}");
         }
     } 
 }

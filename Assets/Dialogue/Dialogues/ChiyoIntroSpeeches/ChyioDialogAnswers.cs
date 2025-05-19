@@ -15,6 +15,6 @@ public class ChyioDialogAnswers : DialogAnswer
 
     public override void Option3()
     {
-        throw new System.NotImplementedException();
+        
     }
 }

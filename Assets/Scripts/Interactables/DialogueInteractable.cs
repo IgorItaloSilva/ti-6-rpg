@@ -10,6 +10,9 @@ public class DialogueInteractable : Interactable{
     protected override void Awake()
     {
         base.Awake();
+        if(canvas==null){
+            canvas=GetComponentInChildren<Canvas>().gameObject;
+        }
     }
     protected virtual void OnEnable(){
         if(!PlayerStateMachine.Instance)didntAddInteract=true;
@@ -24,6 +27,7 @@ public class DialogueInteractable : Interactable{
         if(didntAddInteract){
             PlayerStateMachine.Instance?.AddActionToInteract(Interact);
         }
+        if(canvas.activeInHierarchy)canvas.SetActive(false);
     }
     public override void Load(InteractableData interactableData)
     {
