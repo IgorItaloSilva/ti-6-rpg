@@ -39,7 +39,7 @@ public class KasaDash : EnemyBaseState
                 enemyBehave.EnableWeapon();
                 canDamage = false;
             }
-            charControl.Move(charControl.transform.forward * speed * 2 + charControl.transform.up * ApplyGravity());
+            charControl.Move(charControl.transform.forward * speed * Time.fixedDeltaTime * 7 + charControl.transform.up * ApplyGravity());
         }
 
     }

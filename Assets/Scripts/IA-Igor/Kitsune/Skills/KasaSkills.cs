@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class KasaSkills : ASkills
 {
     protected override void SetAllSkills()
