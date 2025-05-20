@@ -1687,7 +1687,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5916864668602303621}
   - component: {fileID: 8151508215044251092}
-  - component: {fileID: 5971352531885356481}
+  - component: {fileID: 8653114096252313155}
   - component: {fileID: 8971259952069000762}
   m_Layer: 3
   m_Name: KitsuneYoukaiTest
@@ -1740,7 +1740,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.12, z: 0}
---- !u!114 &5971352531885356481
+--- !u!114 &8653114096252313155
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1749,16 +1749,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 6161496268793501050}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7080e11c2fd5884fbfa44ac23caef3e, type: 3}
+  m_Script: {fileID: 11500000, guid: 96116a5896f6b5f4e9a3e12b9b5647ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   allSkills: {fileID: 8971259952069000762}
   charControl: {fileID: 8151508215044251092}
   animator: {fileID: 7957502206457200544}
-  hp: 500
+  hp: 1000
   poise: 10
   speed: 0.2
   knockbackDuration: 1
+  meleeDist: 1.5
   healthBar: {fileID: 1993550673834320566}
   weapon: {fileID: 4052853031580577442}
 --- !u!114 &8971259952069000762

@@ -10,10 +10,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     float currentPoise;
     [SerializeField] float speed;
     [SerializeField] float knockbackDuration = 1f;
+    [SerializeField] float meleeDist = 1.5f;
 
 
 
-    protected EnemyBaseState idleState; // Estado inicial de idle - Settar no inimigo
+    //protected EnemyBaseState idleState; // Estado inicial de idle - Settar no inimigo
     public EnemyBaseState currentState; // Estado atual
     public EnemyBaseState attackState; // Estado de ataque
     Transform target;
@@ -30,64 +31,77 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         currentPoise = poise;
         charControl = GetComponent<CharacterController>();
         ChoseSkill();
-        OneExecution();
+        currentState = new StateIdle();
+        currentState.StateStart(this);
     }
 
-    protected virtual void OneExecution(){  }
-
-
-
-    void Update() { currentState.StateUpdate(); }
+    void Update() { currentState.StateUpdate(); Debug.Log(currentState); }
 
     void FixedUpdate() { currentState.StateFixedUpdate(); }
 
     #region Rest e ia 
-    public void SetRest(float value) { restTimer = value; }
+    public void SetRest(float value)
+    {
+        restTimer = value;
+        currentState = new StateIdle();
+        currentState.StateStart(this);
+    }
 
-    public bool isResting(){
+    public bool isResting()
+    {
         restTimer -= Time.deltaTime;
         return restTimer > 0;
     }
 
-    public void ChoseSkill(){ 
-        attackState = allSkills.ChoseSkill();
-    }
+    public void ChoseSkill() { attackState = allSkills.ChoseSkill(); }
 
     public bool IsRangeSkill() { return allSkills.IsRangeSkill();}
+
+    public void StartIdle()
+    {
+        currentState = new StateIdle();
+        currentState.StateStart(this);
+    }
 
     #endregion
 
     #region Get Variaveis
-    public CharacterController GetCharControl(){ return charControl; }
+
+    public CharacterController GetCharControl() { return charControl; }
     public Animator GetAnimator(){ return animator; }
     public float GetSpeed(){ return speed; }
+
     #endregion
 
     #region Target Get, Set and Clear
+
     public void SetTarget(Transform target) { this.target = target; }
     public Transform GetTarget() { return target; }
     public void ClearTarget() { target = null; }
-    public void IdleState(){ currentState = idleState; currentState.StateStart(this); }
+    public float GetMeleeDist(){ return meleeDist; }
 
     #endregion
 
-    public void ResetPoise(){ currentPoise = poise; }
+    public void ResetPoise() { currentPoise = poise; }
 
     #region IDamagable
+    
     public void TakeDamage(float damage, Enums.DamageType damageType, bool wasCrit)
     {
         hp -= damage;
         currentPoise -= 1;
         healthBar.SetValue(hp, currentPoise, wasCrit);
-        if(hp <= 0){
+        if (hp <= 0)
+        {
             Die();
             return;
         }
-        if(currentPoise <= 0 && !(currentState is StateStuned)){
+        if (currentPoise <= 0 && !(currentState is StateStuned))
+        {
             currentState = new StateStuned();
             currentState.StateStart(this);
         }
-        
+
     }
 
     public void Die()
@@ -107,10 +121,10 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         currentState.StateStart(this);
     }
 
-    
     #endregion
 
     #region Weapon
+    
     public void EnableWeapon() { weapon.EnableCollider(); }
     public void DisableWeapon() { weapon.DisableCollider(); }
     public void UseWeapon(){ allSkills.UseWeapon(); }
