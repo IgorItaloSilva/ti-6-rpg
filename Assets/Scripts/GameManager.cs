@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance {get;private set;}
     [SerializeField]bool shouldOpenHud;
     public bool shouldLoadTutorial;
+    public bool shouldShowTutorials = true;
+    public bool showDebug;
     [HideInInspector] public AudioManager audioManager;//negocio do igor
     void OnEnable(){
         GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
@@ -21,7 +23,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
         else{
-            Debug.Log("Temos 2 gameManagers, estou me destruindo");
+            if(showDebug)Debug.Log("Temos 2 gameManagers, estou me destruindo");
             Destroy(gameObject);  
         }
     }
@@ -56,8 +58,14 @@ public class GameManager : MonoBehaviour
         //A ui vai pausar o jogo apos o vfx
         //PauseInputs
     }
+    public void ExitGame(bool shouldSave){
+        if(shouldSave){
+            DataPersistenceManager.instance.SaveGame();
+        }
+        Application.Quit();
+    }
     public void ReturnFromDeath(){
-        Debug.Log("game manager chamou o respawn");
+        if(showDebug)Debug.Log("game manager chamou o respawn");
         DataPersistenceManager.instance.LoadGame();
         GameEventsManager.instance.playerEvents.PlayerRespawn();
         UnpauseGameAndLockCursor();

@@ -20,13 +20,17 @@ public class GameEventsManager : MonoBehaviour
     public RuneEvents runeEvents;
     public LevelEvents levelEvents;
     public ObjectiveEvents objectiveEvents;
+    public TutorialEvents tutorialEvents;
     //EXEMPLO DE NOVA CLASSE
     //public NovaClasseEvents novaClasseEvents;
-    private void Awake(){
-        if(instance!=null){
+    private void Awake()
+    {
+        if (instance != null)
+        {
             Destroy(gameObject);
         }
-        else{
+        else
+        {
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
@@ -36,6 +40,7 @@ public class GameEventsManager : MonoBehaviour
         runeEvents = new RuneEvents();
         levelEvents = new LevelEvents();
         objectiveEvents = new ObjectiveEvents();
+        tutorialEvents = new TutorialEvents();
         //novaClasseEvents = new NovaClasseEvents();
     }
 

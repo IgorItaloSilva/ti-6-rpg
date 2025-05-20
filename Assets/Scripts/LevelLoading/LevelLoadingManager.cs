@@ -10,13 +10,14 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
     public List<Interactable>interactables;
     public LevelData CurrentLevelData;
     public Vector3 respawnPoint;
+    public bool showDebug;
     public string LevelName {get;private set;}
     bool loadSucceded;
     void Awake(){
         if(instance!=null){
             Destroy(gameObject);
         }
-        Debug.Log("Estou no awake do level loading manager");
+        if(showDebug)Debug.Log("Estou no awake do level loading manager");
         instance=this;
         CurrentLevelData = new LevelData();
         enemies=new List<ActualEnemyController>();
@@ -26,10 +27,10 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
         for (int i = 0; i < countLoaded; i++)
         {
             loadedScenes[i] = SceneManager.GetSceneAt(i);
-            Debug.Log(loadedScenes[i].name);
+            if(showDebug)Debug.Log(loadedScenes[i].name);
             if(loadedScenes[i].name!="Hud")LevelName=loadedScenes[i].name;
         }
-        Debug.Log(LevelName);
+        if(showDebug)Debug.Log(LevelName);
     }
     void Start()
     {

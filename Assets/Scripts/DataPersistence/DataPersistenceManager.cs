@@ -13,6 +13,8 @@ public class DataPersistenceManager : MonoBehaviour
     [SerializeField] private bool initializeDataIfNull= false;
     [SerializeField] private bool overrideSelectedProfileId = false;
     [SerializeField] private string testSelectedProfileId = "test";
+    public bool showDebug;
+    public bool showWarnings;
     [Header("File Storage Config")]
     [SerializeField]private string fileName;
     [SerializeField]private bool useEncryption;
@@ -27,7 +29,7 @@ public class DataPersistenceManager : MonoBehaviour
     void Awake(){
         if(instance!=null){
             //if(DebugManager.debugManager.DEBUG){
-                Debug.Log("Já temos um DataPersistenceManager, então me destrui");
+                if(showDebug)Debug.Log("Já temos um DataPersistenceManager, então me destrui");
             //}
             Destroy(this.gameObject);
             return;
@@ -35,13 +37,13 @@ public class DataPersistenceManager : MonoBehaviour
         instance=this;
         DontDestroyOnLoad(this.gameObject);
         if(disableDataPersistence){
-            Debug.LogWarning("Salvamento está desativado!!");
+            if(showWarnings)Debug.LogWarning("Salvamento está desativado!!");
         }
         this.dataHandler = new FileDataHandler(Application.persistentDataPath, fileName,useEncryption);
         InitializeSelectedProfileId();
     }
     public void NewGame(){
-        Debug.LogWarning("Foi criada uma nova gameData");
+        if(showWarnings)Debug.LogWarning("Foi criada uma nova gameData");
         if(playerStatsDefaultSO==null){
             this.gameData = new GameData();
         }
@@ -60,7 +62,7 @@ public class DataPersistenceManager : MonoBehaviour
             NewGame();
         }
         if(this.gameData==null){
-            Debug.LogWarning("No data was found. We must create a new save first");
+            if(showWarnings)Debug.LogWarning("No data was found. We must create a new save first");
             return;
         }
         //TODO- push the loaded data to all scripts that need it
@@ -74,10 +76,10 @@ public class DataPersistenceManager : MonoBehaviour
             return;
         }
         if(this.gameData==null){
-            Debug.LogWarning("No data was Found, must start a new save before saving");
+            if(showDebug)Debug.LogWarning("No data was Found, must start a new save before saving");
             return;
         }
-        Debug.LogWarning("We are saving the game!");
+        if(showWarnings)Debug.LogWarning("We are saving the game!");
         GameEventsManager.instance?.uiEvents.SavedGame();
         //pass data to other scripts so they can update it
         foreach (IDataPersistence dataPersistenceObj in  dataPersistenceObjects){
@@ -112,7 +114,7 @@ public class DataPersistenceManager : MonoBehaviour
     }
 
     public bool HasData(){
-        Debug.Log(gameData);
+        if(showDebug)Debug.Log(gameData);
         return gameData != null;
     }
     public Dictionary<string, GameData> GetAllProfilesGameData(){
@@ -131,7 +133,7 @@ public class DataPersistenceManager : MonoBehaviour
         this.selectedProfileId = dataHandler.GetMostRecentProfileId();
         if(overrideSelectedProfileId){
             this.selectedProfileId=testSelectedProfileId;
-            Debug.LogWarning("Demos override no profile que será loadado pelo profile: "+ testSelectedProfileId);
+            if(showWarnings)Debug.LogWarning("Demos override no profile que será loadado pelo profile: "+ testSelectedProfileId);
         }
     }
     public void SetLevelName(string name){

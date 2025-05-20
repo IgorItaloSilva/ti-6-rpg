@@ -345,9 +345,11 @@ public class PlayerStats : MonoBehaviour, IDataPersistence,IDamagable
         if(CarriedExp<expToNextLevel)
             haslessExp = true;
         CarriedExp+=exp;
-        if(CarriedExp>=expToNextLevel&&haslessExp){
-            haslessExp=false;
+        if (CarriedExp >= expToNextLevel && haslessExp)
+        {
+            haslessExp = false;
             UIManager.instance?.PlayNotification("Você pode upar de nível!");
+            GameEventsManager.instance?.tutorialEvents.LevelUpTutorial();
         }
     }
     void BuyLevel(){

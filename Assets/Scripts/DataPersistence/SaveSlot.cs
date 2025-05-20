@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class SaveSlot : MonoBehaviour
 {
@@ -53,5 +54,6 @@ public class SaveSlot : MonoBehaviour
     }
     public void SetInteractable(bool interactable){
         saveSlotButton.interactable = interactable;
+        saveSlotButton.GetComponent<EventTrigger>().enabled=false;
     }
 }
