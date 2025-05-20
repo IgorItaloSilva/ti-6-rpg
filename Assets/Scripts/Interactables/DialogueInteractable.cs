@@ -51,9 +51,9 @@ public class DialogueInteractable : Interactable{
         inRange = false;
         canvas.SetActive(false);
     }
-    void OnTriggerStay(Collider collider){
+    /* void OnTriggerStay(Collider collider){
          Vector3 lookAt = new Vector3(collider.transform.position.x,canvas.transform.position.y,collider.transform.position.z);
             canvas.transform.LookAt(lookAt);
             canvas.transform.Rotate(new Vector3(0,180,0));
-    }
+    } */
 }

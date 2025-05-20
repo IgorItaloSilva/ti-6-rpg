@@ -13,4 +13,9 @@ public class EnemyData{
         currentLife = actualEnemyController.CurrentHp;
         lastPosition=actualEnemyController.transform.position;
     }
+    public EnemyData(EnemyBehaviour enemyBehaviour){
+        isDead=enemyBehaviour.IsDead;
+        currentLife = enemyBehaviour.Hp;
+        lastPosition=enemyBehaviour.transform.position;
+    }
 }
