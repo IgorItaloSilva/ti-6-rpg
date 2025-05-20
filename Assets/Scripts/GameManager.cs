@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance {get;private set;}
     [SerializeField]bool shouldOpenHud;
     public bool shouldLoadTutorial;
+    public bool shouldShowTutorials = true;
     public bool showDebug;
     [HideInInspector] public AudioManager audioManager;//negocio do igor
     void OnEnable(){

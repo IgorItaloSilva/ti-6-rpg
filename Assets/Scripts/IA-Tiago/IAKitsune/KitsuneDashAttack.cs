@@ -9,7 +9,7 @@ public class KitsuneDashAttack : EnemyActions
     public override void EnterAction()
     {
         kitsuneController.rb.constraints=RigidbodyConstraints.FreezePosition;
-        Debug.Log("Entrei num dash");
+        //Debug.Log("Entrei num dash");
         kitsuneController.animator.SetTrigger("isAttacking");
         kitsuneController.isDashing=true;
         time=0;
@@ -26,7 +26,7 @@ public class KitsuneDashAttack : EnemyActions
     {
         time+=Time.fixedDeltaTime;
         if(!alreadyDashed){
-            Debug.Log(kitsuneController.target.GetPosition());
+            //Debug.Log(kitsuneController.target.GetPosition());
             kitsuneController.steeringManager.LookAtTargetToAttack(kitsuneController.target.GetPosition());
         }
         if((time>timeWaitDash)&&(!alreadyDashed)){

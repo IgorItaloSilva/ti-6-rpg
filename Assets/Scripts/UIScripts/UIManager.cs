@@ -15,44 +15,50 @@ public class UIManager : MonoBehaviour
     public ObjectiveUiManager objectiveUiManager;
     public DialogueManager dialogManager;
     [Header("Coisas do Save VFX ")]
-    [SerializeField]float saveIconTotalTime;
-    [SerializeField]private Image saveIcon;
+    [SerializeField] float saveIconTotalTime;
+    [SerializeField] private Image saveIcon;
     [Header("Coisas das barras de Stats ")]
-    [SerializeField]private PlayerHealthBar playerhealthBar;
+    [SerializeField] private PlayerHealthBar playerhealthBar;
     [Header("Coisas de Exp ")]
     [SerializeField] private TextMeshProUGUI carriedExpText;
     [SerializeField] private GameObject gainedExpTextGO;
-    
+
     [Header("Referencias Internas")]
-    [SerializeField]private GameObject painelPause;
-    [SerializeField]private GameObject hideblePausePartUI;
-    [SerializeField]private GameObject painelStats;
-    [SerializeField]private GameObject painelDeath;
-    [SerializeField]private GameObject painelDialog;
-    [SerializeField]private GameObject painelTutorial;
-    [SerializeField]private GameObject painelPopupTutorial;
-    [SerializeField]private GameObject painelQuest;
-    [SerializeField]private GameObject painelWeapon;
-    [SerializeField]private GameObject buttonMainMenu;
-    [SerializeField]private GameObject buttonTutorial;
+    [SerializeField] private GameObject painelPause;
+    [SerializeField] private GameObject hideblePausePartUI;
+    [SerializeField] private GameObject painelStats;
+    [SerializeField] private GameObject painelDeath;
+    [SerializeField] private GameObject painelDialog;
+    [SerializeField] private GameObject painelTutorial;
+    [SerializeField] private GameObject painelPopupTutorial;
+    [SerializeField] private GameObject painelQuest;
+    [SerializeField] private GameObject painelWeapon;
+    [SerializeField] private GameObject buttonMainMenu;
+    [SerializeField] private GameObject buttonTutorial;
     [Header("Coisas do VFX de You Died ")]
-    [SerializeField]private GameObject youDiedVFXParent;
-    [SerializeField]private GameObject youDiedVFXBackgroundGO;
-    [SerializeField]private GameObject youDiedVFXTextGO;
+    [SerializeField] private GameObject youDiedVFXParent;
+    [SerializeField] private GameObject youDiedVFXBackgroundGO;
+    [SerializeField] private GameObject youDiedVFXTextGO;
     [Header("Coisas da notification box")]
-    [SerializeField]private GameObject notificationBox;
-    [SerializeField]private TextMeshProUGUI notificationText;
-    [SerializeField]private int iterationSteps;
-    [SerializeField]private float totalTime;
+    [SerializeField] private GameObject notificationBox;
+    [SerializeField] private TextMeshProUGUI notificationText;
+    [SerializeField] private int iterationSteps;
+    [SerializeField] private float totalTime;
     [Header("Coisas da barra de vida do boss")]
-    [SerializeField]HealthBar bossHealthBar;
-    [SerializeField]TextMeshProUGUI bossName;
-    [SerializeField]GameObject bossHPBarAndName;
+    [SerializeField] HealthBar bossHealthBar;
+    [SerializeField] TextMeshProUGUI bossName;
+    [SerializeField] GameObject bossHPBarAndName;
     [Header("Coisas poção")]
-    [SerializeField]TextMeshProUGUI potionsAmmountText;
+    [SerializeField] TextMeshProUGUI potionsAmmountText;
     [Header("Coisas barra Objetivo")]
-    [SerializeField]TextMeshProUGUI objectiveTitle;
-    [SerializeField]TextMeshProUGUI objectiveText;
+    [SerializeField] TextMeshProUGUI objectiveTitle;
+    [SerializeField] TextMeshProUGUI objectiveText;
+    [Header("Coisas Tutorial Popup")]
+    [SerializeField] GameObject tutorialImageLayoutGroup;
+    [SerializeField] GameObject tutorialTextLayoutGroup;
+    [SerializeField] TextMeshProUGUI tutorialTitle;
+    [SerializeField] GameObject tutorialTextPrefab;
+    [SerializeField] GameObject tutorialImagePrefab;
     //coisas do vfx ganahr exp
     int carriedExp;
     int gainedExp;
@@ -71,7 +77,8 @@ public class UIManager : MonoBehaviour
 
     bool playerIsDead;//VARIAVEL DE CONTROLE PRO JOGADOR N CONSEGUIR ABRIR O MENU MORTO
     private UIScreens currentUIScreen;
-    public enum UIScreens{
+    public enum UIScreens
+    {
         Closed = -1,
         MainPause = 0,
         Stats,
@@ -84,16 +91,17 @@ public class UIManager : MonoBehaviour
         QuestLog,
         TutorialPopup
     }
-    
-    
-    void OnEnable(){
-        GameEventsManager.instance.uiEvents.onUpdateSliders+=UpdateSliders;
-        GameEventsManager.instance.uiEvents.onLifeChange+=UpdateHealth;
-        GameEventsManager.instance.uiEvents.onSavedGame+=FeedBackSave;
-        GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
-        GameEventsManager.instance.uiEvents.OnDialogOpened+=OpenDialogPanel;
-        GameEventsManager.instance.playerEvents.onPlayerGainExp+=PlayExpGain;
-        
+
+
+    void OnEnable()
+    {
+        GameEventsManager.instance.uiEvents.onUpdateSliders += UpdateSliders;
+        GameEventsManager.instance.uiEvents.onLifeChange += UpdateHealth;
+        GameEventsManager.instance.uiEvents.onSavedGame += FeedBackSave;
+        GameEventsManager.instance.playerEvents.onPlayerDied += PlayerDied;
+        GameEventsManager.instance.uiEvents.OnDialogOpened += OpenDialogPanel;
+        GameEventsManager.instance.playerEvents.onPlayerGainExp += PlayExpGain;
+
     }
 
     void OnDisable()
@@ -103,7 +111,7 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.onSavedGame -= FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened -= OpenDialogPanel;
-        GameEventsManager.instance.playerEvents.onPlayerGainExp-=PlayExpGain;
+        GameEventsManager.instance.playerEvents.onPlayerGainExp -= PlayExpGain;
     }
 
     void Start()
@@ -117,31 +125,35 @@ public class UIManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        if(!skillTreeUIManager){
+        if (!skillTreeUIManager)
+        {
             Debug.LogWarning("o skillTreeUIManager está vazio");
-            skillTreeUIManager=GetComponent<SkillTreeUIManager>();
+            skillTreeUIManager = GetComponent<SkillTreeUIManager>();
         }
-        if(!statsUIManager){
+        if (!statsUIManager)
+        {
             Debug.LogWarning("o statsUiManager está vazio");
-            statsUIManager=GetComponent<StatsUIManager>();
+            statsUIManager = GetComponent<StatsUIManager>();
         }
         currentUIScreen = UIScreens.Closed;
-        runesUiManager=RunesUiManager.instance;
+        runesUiManager = RunesUiManager.instance;
         runesUiManager.Setup();
-        objectiveUiManager=ObjectiveUiManager.instance;
-        dialogManager=DialogueManager.instance;
+        objectiveUiManager = ObjectiveUiManager.instance;
+        dialogManager = DialogueManager.instance;
         AjustUiOnStart();
         gainedExpText = gainedExpTextGO.GetComponent<TextMeshProUGUI>();
         youDiedVFXText = youDiedVFXTextGO.GetComponent<Text>();
         youDiedVFXImage = youDiedVFXBackgroundGO.GetComponentInChildren<Image>();
-        if(GameManager.instance.shouldLoadTutorial){
+        if (GameManager.instance.shouldLoadTutorial)
+        {
             SwitchToScreen((int)UIScreens.Tutorial);
             GameManager.instance.PauseGameAndUnlockCursor();
         }
         RequestStartingInfo();
         //youDiedVFXText.color = new Color32(255,0,0,0);
     }
-    void RequestStartingInfo(){
+    void RequestStartingInfo()
+    {
         RequestHealthBarInfo();
         RequestExpInfo();
         RequestPotionInfo();
@@ -149,57 +161,71 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerIsDead)return;
-        if(Keyboard.current.escapeKey.wasPressedThisFrame){
-            if(currentUIScreen==UIScreens.Closed){
-                SwitchToScreen((int)UIScreens.MainPause);
-                if(isNearCampfire)SwitchToScreen((int)UIScreens.Stats);
-            }else 
+        if (playerIsDead) return;
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            if (currentUIScreen == UIScreens.Closed)
             {
-                if(dialogManager.isChatting)
+                SwitchToScreen((int)UIScreens.MainPause);
+                if (isNearCampfire) SwitchToScreen((int)UIScreens.Stats);
+            }
+            else
+            {
+                if (dialogManager.isChatting)
                     dialogManager.EndDialogue();
                 else
                     SwitchToScreen((int)UIScreens.Closed);
             }
         }
-        if(Keyboard.current.eKey.wasPressedThisFrame||Keyboard.current.spaceKey.wasPressedThisFrame||Mouse.current.leftButton.wasPressedThisFrame){
-            if(currentUIScreen==UIScreens.Dialog){
-                if(dialogManager.isChatting)
+        if (Keyboard.current.eKey.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            if (currentUIScreen == UIScreens.Dialog)
+            {
+                if (dialogManager.isChatting)
                 {
                     dialogManager.AdvanceDialog();
                 }
             }
-            if(currentUIScreen==UIScreens.Tutorial){
+            if (currentUIScreen == UIScreens.TutorialPopup)
+            {
                 SwitchToScreen((int)UIScreens.Closed);
             }
         }
-        if(Keyboard.current.pKey.wasPressedThisFrame){
+        if (Keyboard.current.pKey.wasPressedThisFrame)
+        {
             PlayNotification("teste");
-            
+
         }
-    
+
         /* if(Mouse.current.leftButton.wasPressedThisFrame){
             Debug.Log($"pos do mouse = {Mouse.current.position.ReadValue()}");
         } */
     }
-    private void RequestHealthBarInfo(){//deppois mudar pra mandar a mana tambem
+    private void RequestHealthBarInfo()
+    {//deppois mudar pra mandar a mana tambem
         GameEventsManager.instance.uiEvents.RequestPlayerHealthInfo();
     }
-    private void RequestExpInfo(){
+    private void RequestExpInfo()
+    {
         GameEventsManager.instance.uiEvents.RequestExpInfo();
     }
-    private void RequestPotionInfo(){
+    private void RequestPotionInfo()
+    {
         GameEventsManager.instance.uiEvents.RequestPotionAmmountInfo();
     }
 
-    
-    public void UpdateHealth(float vidaAtual,bool wasCrit){
-        if(playerhealthBar!=null){
-            playerhealthBar.SetValue(vidaAtual,wasCrit);
+
+    public void UpdateHealth(float vidaAtual, bool wasCrit)
+    {
+        if (playerhealthBar != null)
+        {
+            playerhealthBar.SetValue(vidaAtual, wasCrit);
         }
     }
-    private void UpdateSliders(int id,float maxValue){
-        switch(id){
+    private void UpdateSliders(int id, float maxValue)
+    {
+        switch (id)
+        {
             case 0:
                 if (playerhealthBar != null)
                 {
@@ -210,42 +236,53 @@ public class UIManager : MonoBehaviour
             default: return;
         }
     }
-    public void DisplayPotionAmmount(int nPotions){
-        potionsAmmountText.text=nPotions.ToString();
+    public void DisplayPotionAmmount(int nPotions)
+    {
+        potionsAmmountText.text = nPotions.ToString();
     }
-    private void FeedBackSave(){//OK
-        if(saveIcon!=null){
+    private void FeedBackSave()
+    {//OK
+        if (saveIcon != null)
+        {
             saveIcon.gameObject.SetActive(true);
             StartCoroutine(SpinSaveIcon());
         }
     }
-    public void PlayNotification(string text){
+    public void PlayNotification(string text)
+    {
         notificationBox.SetActive(true);
-        notificationText.text=text;
+        notificationText.text = text;
         StartCoroutine("PlayNotificationVFX");
     }
-    public void QuitGame(){
+    public void QuitGame()
+    {
         GameManager.instance.ExitGame(true);
     }
-    public void ReturnMainMenu(){
+    public void ReturnMainMenu()
+    {
         DataPersistenceManager.instance?.SaveGame();
-        Time.timeScale=1f;
+        Time.timeScale = 1f;
         SceneManager.LoadScene(0);
         Destroy(gameObject);
     }
-    private void AjustUiOnStart(){
-        if(!painelPause){
+    private void AjustUiOnStart()
+    {
+        if (!painelPause)
+        {
             Debug.LogWarning("O nosso uiManager não tem referencia ao menu de pause");
         }
-        else{
+        else
+        {
             painelPause.SetActive(false);
-            currentUIScreen=UIScreens.Closed;
+            currentUIScreen = UIScreens.Closed;
         }
-        if(notificationBox==null){
+        if (notificationBox == null)
+        {
             Debug.LogWarning("Não temos a caixa de notificação");
         }
-        else{
-            notificationBox.transform.localPosition=new Vector3(960,0,0);
+        else
+        {
+            notificationBox.transform.localPosition = new Vector3(960, 0, 0);
             notificationBox.SetActive(false);
         }
         skillTreeUIManager?.AjustUiOnStart();
@@ -259,227 +296,286 @@ public class UIManager : MonoBehaviour
         bossHPBarAndName.SetActive(false);
         painelPopupTutorial.SetActive(false);
     }
-    public void PlayerDied(){
-        playerIsDead=true;
+    public void PlayerDied()
+    {
+        playerIsDead = true;
         StartCoroutine("PlayYouDiedAnimation");
     }
     #region Exp
-    void OpenDialogPanel(){
+    void OpenDialogPanel()
+    {
         SwitchToScreen((int)UIScreens.Dialog);
     }
-    public void DisplayExpAmmount(int expAmmount){
+    public void DisplayExpAmmount(int expAmmount)
+    {
         carriedExpText.text = expAmmount.ToString();
-        carriedExp=expAmmount;
+        carriedExp = expAmmount;
     }
     int targetAmmount;
-    void PlayExpGain(int quantidade){
+    void PlayExpGain(int quantidade)
+    {
         //Debug.Log("Chamando a função playExpGain da UI");
-        if(isGainExpCouroutineRunning){
+        if (isGainExpCouroutineRunning)
+        {
             StopCoroutine(gainExpCouroutine);
-            if(isGainedExpTextActive){
+            if (isGainedExpTextActive)
+            {
                 gainedExp += quantidade;
             }
-            else{
-                gainedExp=quantidade;
+            else
+            {
+                gainedExp = quantidade;
             }
-            targetAmmount+=quantidade;
+            targetAmmount += quantidade;
         }
-        else{
-            targetAmmount=carriedExp+quantidade;
-            gainedExp=quantidade;
+        else
+        {
+            targetAmmount = carriedExp + quantidade;
+            gainedExp = quantidade;
         }
-        gainedExpText.text=gainedExp.ToString();
+        gainedExpText.text = gainedExp.ToString();
         gainedExpTextGO.SetActive(true);
-        isGainedExpTextActive=true;
-        gainExpCouroutine=StartCoroutine(PlayExpGainAnimation());        
+        isGainedExpTextActive = true;
+        gainExpCouroutine = StartCoroutine(PlayExpGainAnimation());
     }
-    IEnumerator PlayExpGainAnimation(){
+    IEnumerator PlayExpGainAnimation()
+    {
         //Debug.Log($"Quantidade foi definido como = {targetAmmount}");
-        isGainExpCouroutineRunning=true;
+        isGainExpCouroutineRunning = true;
         yield return new WaitForSeconds(1f);
         gainedExpTextGO.SetActive(false);
-        isGainedExpTextActive=false;
-        for(;carriedExp<targetAmmount;){//por algum motivo desconhecido o while n tava funcionando, ent é um for só com a condição kkk
-            carriedExp+=1;
-            carriedExpText.text=carriedExp.ToString();
+        isGainedExpTextActive = false;
+        for (; carriedExp < targetAmmount;)
+        {//por algum motivo desconhecido o while n tava funcionando, ent é um for só com a condição kkk
+            carriedExp += 1;
+            carriedExpText.text = carriedExp.ToString();
             yield return null;
         }
-        gainedExp=0;
-        targetAmmount=0;
-        isGainExpCouroutineRunning=false;
+        gainedExp = 0;
+        targetAmmount = 0;
+        isGainExpCouroutineRunning = false;
     }
     #endregion
-    IEnumerator SpinSaveIcon(){//OK
-        float timerTotal=saveIconTotalTime;
-        while(timerTotal>0){
-            timerTotal-=Time.unscaledDeltaTime;
-            saveIcon.rectTransform.Rotate(Vector3.forward,-5);
+    IEnumerator SpinSaveIcon()
+    {//OK
+        float timerTotal = saveIconTotalTime;
+        while (timerTotal > 0)
+        {
+            timerTotal -= Time.unscaledDeltaTime;
+            saveIcon.rectTransform.Rotate(Vector3.forward, -5);
             yield return null;
         }
         saveIcon.gameObject.SetActive(false);
     }
-    IEnumerator PlayYouDiedAnimation(){
+    IEnumerator PlayYouDiedAnimation()
+    {
         yield return new WaitForSecondsRealtime(secondsBeforeYouDiedVfxAppears);
         youDiedVFXParent.SetActive(true);
         byte youDiedTextColor = 0;
-        float youDiedImageColor= 1;
-        youDiedVFXText.color= new Color32(255,0,0,youDiedTextColor);
-        youDiedVFXImage.color = new Color(0,0,0,youDiedImageColor);
-        for(int i=0;i<20;i++){
-            youDiedTextColor+=(byte)(transparencyRatioYouDiedVfx*255);
-            if(i%4==0)youDiedTextColor+=3;//correção do erro de arredondamendo de float pra byte
+        float youDiedImageColor = 1;
+        youDiedVFXText.color = new Color32(255, 0, 0, youDiedTextColor);
+        youDiedVFXImage.color = new Color(0, 0, 0, youDiedImageColor);
+        for (int i = 0; i < 20; i++)
+        {
+            youDiedTextColor += (byte)(transparencyRatioYouDiedVfx * 255);
+            if (i % 4 == 0) youDiedTextColor += 3;//correção do erro de arredondamendo de float pra byte
             //Debug.Log(youDiedTextColor);
-            youDiedVFXText.color= new Color32(255,0,0,youDiedTextColor);
+            youDiedVFXText.color = new Color32(255, 0, 0, youDiedTextColor);
             yield return new WaitForSecondsRealtime(tranparacyTimeRatioDivideByTen);
         }
         yield return new WaitForSecondsRealtime(2);
-        for(int i=10;i>0;i--){
-            youDiedTextColor-=(byte)(transparencyRatioYouDiedVfx*2*255);
+        for (int i = 10; i > 0; i--)
+        {
+            youDiedTextColor -= (byte)(transparencyRatioYouDiedVfx * 2 * 255);
             //Debug.Log(youDiedTextColor);
-            youDiedVFXText.color= new Color32(255,0,0,youDiedTextColor);
-            youDiedImageColor-=transparencyRatioYouDiedBackgroundVfx;
-            youDiedVFXImage.color=new Color(0,0,0,youDiedImageColor);
+            youDiedVFXText.color = new Color32(255, 0, 0, youDiedTextColor);
+            youDiedImageColor -= transparencyRatioYouDiedBackgroundVfx;
+            youDiedVFXImage.color = new Color(0, 0, 0, youDiedImageColor);
             yield return new WaitForSecondsRealtime(tranparacyTimeRatioDivideByTen);
         }
         youDiedVFXParent.SetActive(false);
         SwitchToScreen((int)UIScreens.Death);
     }
-    IEnumerator PlayNotificationVFX(){
+    IEnumerator PlayNotificationVFX()
+    {
         //valor x no local position, inicial = 960, valor final = 560
-        int ratio = 400/iterationSteps;
-        float yCoor= 0;//notificationBox.transform.localPosition.y;
-        for(int i=0,x=960;i<=iterationSteps;i++,x-=ratio){
-            notificationBox.transform.localPosition=new Vector3(x,yCoor,0);
-            yield return new WaitForSecondsRealtime(totalTime/iterationSteps);
+        int ratio = 400 / iterationSteps;
+        float yCoor = 0;//notificationBox.transform.localPosition.y;
+        for (int i = 0, x = 960; i <= iterationSteps; i++, x -= ratio)
+        {
+            notificationBox.transform.localPosition = new Vector3(x, yCoor, 0);
+            yield return new WaitForSecondsRealtime(totalTime / iterationSteps);
         }
         yield return new WaitForSecondsRealtime(2);
-        for(int i=0,x=560;i<=iterationSteps;i++,x+=ratio){
-            notificationBox.transform.localPosition=new Vector3(x,yCoor,0);
-            yield return new WaitForSecondsRealtime(totalTime/iterationSteps);
+        for (int i = 0, x = 560; i <= iterationSteps; i++, x += ratio)
+        {
+            notificationBox.transform.localPosition = new Vector3(x, yCoor, 0);
+            yield return new WaitForSecondsRealtime(totalTime / iterationSteps);
         }
     }
-    public void BossLifeSettup(float currentLife,float maxLife,string name){
+    public void BossLifeSettup(float currentLife, float maxLife, string name)
+    {
         bossHPBarAndName.SetActive(true);
         bossHealthBar.SettupBarMax(maxLife);
-        bossHealthBar.SetValue(currentLife,false);
-        bossName.text=name;
+        bossHealthBar.SetValue(currentLife, false);
+        bossName.text = name;
     }
-    public void UpdateBossLife(float currentHp,bool wasCrit){
-        bossHealthBar.SetValue(currentHp,wasCrit);
+    public void UpdateBossLife(float currentHp, bool wasCrit)
+    {
+        bossHealthBar.SetValue(currentHp, wasCrit);
     }
-    public void HideBossLife(){
+    public void HideBossLife()
+    {
         bossHPBarAndName.SetActive(false);
     }
-    public void ObjectiveUpdate(string title, string text){
+    public void ObjectiveUpdate(string title, string text)
+    {
         objectiveTitle.text = title;
-        objectiveText.text=text;
+        objectiveText.text = text;
     }
-    public void SwitchToScreen(int destinationUiScreen){
+    public void SwitchToScreen(int destinationUiScreen)
+    {
         //Debug.Log($"Trocado Para a tela {(UIScreens)destinationUiScreen}");
         //desativa a tela atual
-        switch(currentUIScreen){
+        switch (currentUIScreen)
+        {
             case UIScreens.Closed: break;
             case UIScreens.MainPause:
                 hideblePausePartUI.SetActive(false);
-            break;
+                break;
             case UIScreens.Stats:
-                if(statsUIManager.isSimulating)statsUIManager.CancelSimulation();
+                if (statsUIManager.isSimulating) statsUIManager.CancelSimulation();
                 painelStats.SetActive(false);
-            break;
+                break;
             case UIScreens.SkillTree:
                 skillTreeUIManager?.AlternarPainelSkillTree();
-            break;
+                break;
             case UIScreens.Weapon:
                 RuneManager.instance?.ApplySelectedRunes();
                 painelWeapon.SetActive(false);
-            break;
+                break;
             case UIScreens.System: break;
             case UIScreens.Death:
                 GameManager.instance.ReturnFromDeath();
                 painelDeath.SetActive(false);
-                playerIsDead=false;
-            break;
+                playerIsDead = false;
+                break;
             case UIScreens.Dialog:
                 painelDialog.SetActive(false);
-            break;
+                break;
             case UIScreens.Tutorial:
                 painelTutorial.SetActive(false);
-            break;
+                break;
             case UIScreens.QuestLog:
                 painelQuest.SetActive(false);
-            break;
+                break;
             case UIScreens.TutorialPopup:
                 GameManager.instance?.PauseGameAndUnlockCursor();
                 painelPopupTutorial.SetActive(false);
-            break;
+                break;
             default: Debug.LogWarning("A tela atual é indefinida"); break;
         }
         //ativa a tela de destino
-        switch((UIScreens)destinationUiScreen){
+        switch ((UIScreens)destinationUiScreen)
+        {
             case UIScreens.Closed:
                 GameManager.instance.UnpauseGameAndLockCursor();
                 painelPause.SetActive(false);
-                currentUIScreen=UIScreens.Closed;
-            break;
+                currentUIScreen = UIScreens.Closed;
+                break;
             case UIScreens.MainPause:
                 GameManager.instance.PauseGameAndUnlockCursor();
                 painelPause.SetActive(true);
                 hideblePausePartUI.SetActive(true);
-                currentUIScreen=UIScreens.MainPause;
-            break;
+                currentUIScreen = UIScreens.MainPause;
+                break;
             case UIScreens.SkillTree:
-            if(!skillTreeUIManager)Debug.LogWarning("tentamos trocar de tela sem ter referencia ao skill tree manager");
+                if (!skillTreeUIManager) Debug.LogWarning("tentamos trocar de tela sem ter referencia ao skill tree manager");
                 skillTreeUIManager?.AlternarPainelSkillTree();
-                currentUIScreen=UIScreens.SkillTree; 
-            break;
+                currentUIScreen = UIScreens.SkillTree;
+                break;
             case UIScreens.Stats:
                 painelStats.SetActive(true);
                 statsUIManager.UpdateValues();
-                currentUIScreen=UIScreens.Stats;
-            break;
+                currentUIScreen = UIScreens.Stats;
+                break;
             case UIScreens.Weapon:
                 painelWeapon.SetActive(true);
                 runesUiManager.UpdateRunes();
-                currentUIScreen=UIScreens.Weapon;
-            break;
-            case UIScreens.System: 
-                currentUIScreen=UIScreens.System;
-            break;
+                currentUIScreen = UIScreens.Weapon;
+                break;
+            case UIScreens.System:
+                currentUIScreen = UIScreens.System;
+                break;
             case UIScreens.Death:
                 GameManager.instance.PauseGameAndUnlockCursor();
                 painelDeath.SetActive(true);
-                currentUIScreen=UIScreens.Death;
-            break;
+                currentUIScreen = UIScreens.Death;
+                break;
             case UIScreens.Dialog:
                 GameManager.instance.PauseGameAndUnlockCursor();
                 painelDialog.SetActive(true);
-                currentUIScreen=UIScreens.Dialog;
-            break;
+                currentUIScreen = UIScreens.Dialog;
+                break;
             case UIScreens.Tutorial:
                 painelTutorial.SetActive(true);
-                currentUIScreen=UIScreens.Tutorial;
-            break;
+                currentUIScreen = UIScreens.Tutorial;
+                break;
             case UIScreens.QuestLog:
                 painelQuest.SetActive(true);
                 ObjectiveUiManager.instance?.WasOpened();
-                currentUIScreen=UIScreens.QuestLog;
-            break;
+                currentUIScreen = UIScreens.QuestLog;
+                break;
             case UIScreens.TutorialPopup:
-                painelPopupTutorial.SetActive(false);
-            break;
+                GameManager.instance.PauseGameAndUnlockCursor();
+                painelPopupTutorial.SetActive(true);
+                currentUIScreen = UIScreens.TutorialPopup;
+                break;
             default: Debug.LogWarning("A tela destino é indefinida"); break;
         }
     }
-    public void NearCampfire(bool isNear){
-        if(isNear){
-            isNearCampfire=true;
+    public void NearCampfire(bool isNear)
+    {
+        if (isNear)
+        {
+            isNearCampfire = true;
             buttonTutorial.SetActive(false);
             buttonMainMenu.SetActive(false);
         }
-        else{
-            isNearCampfire=false;
+        else
+        {
+            isNearCampfire = false;
             buttonTutorial.SetActive(true);
             buttonMainMenu.SetActive(true);
+        }
+    }
+    public void DisplayPopupTutorial(TutorialSO tutorialSo)
+    {
+        Debug.LogWarning("chamando o tutorial aqui");
+        SwitchToScreen((int)UIScreens.TutorialPopup);
+        tutorialTitle.text = tutorialSo.Title;
+        int childCount = tutorialImageLayoutGroup.transform.childCount;
+        Transform aux;
+        for (int child = 0; child < childCount; child++)
+        {
+            aux = tutorialImageLayoutGroup.transform.GetChild(child);
+            Destroy(aux.gameObject);
+        }
+        childCount = tutorialTextLayoutGroup.transform.childCount;
+        for (int child = 0; child < childCount; child++)
+        {
+            aux = tutorialTextLayoutGroup.transform.GetChild(child);
+            Destroy(aux.gameObject);
+        }
+        for (int i = 0; i < tutorialSo.Sprites.Length; i++)
+        {
+            GameObject newImage = Instantiate(tutorialImagePrefab, tutorialImageLayoutGroup.transform, false);
+            newImage.GetComponent<Image>().sprite = tutorialSo.Sprites[i];
+        }
+        for (int i = 0; i < tutorialSo.Texts.Length; i++)
+        {
+            GameObject newText = Instantiate(tutorialTextPrefab, tutorialTextLayoutGroup.transform, false);
+            newText.GetComponent<TextMeshProUGUI>().text = tutorialSo.Texts[i];
         }
     }
     
