@@ -1689,6 +1689,7 @@ GameObject:
   - component: {fileID: 8151508215044251092}
   - component: {fileID: 8653114096252313155}
   - component: {fileID: 8971259952069000762}
+  - component: {fileID: 7001642017143546853}
   m_Layer: 3
   m_Name: KitsuneYoukaiTest
   m_TagString: Enemy
@@ -1755,11 +1756,16 @@ MonoBehaviour:
   allSkills: {fileID: 8971259952069000762}
   charControl: {fileID: 8151508215044251092}
   animator: {fileID: 7957502206457200544}
-  hp: 1000
+  maxHp: 500
   poise: 10
-  speed: 0.2
+  timeToDie: 3
+  speed: 5
   knockbackDuration: 1
-  meleeDist: 1.5
+  meleeDist: 2
+  expGain: 100
+  enemyType: 0
+  ignoreSaveLoad: 0
+  <SaveId>k__BackingField: 
   healthBar: {fileID: 1993550673834320566}
   weapon: {fileID: 4052853031580577442}
 --- !u!114 &8971259952069000762
@@ -1777,6 +1783,19 @@ MonoBehaviour:
   weapons:
   - {fileID: 0}
   - {fileID: 3294223873572679683}
+--- !u!114 &7001642017143546853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6161496268793501050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98af6033f14de7e4bae868859a36e300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pillarID: 1
 --- !u!1 &6435025620274646819
 GameObject:
   m_ObjectHideFlags: 0

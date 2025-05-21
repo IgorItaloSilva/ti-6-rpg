@@ -7,6 +7,7 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
 {
     public static LevelLoadingManager instance;
     public List<ActualEnemyController>enemies;
+    public List<EnemyBehaviour>enemiesIgor;
     public List<Interactable>interactables;
     public LevelData CurrentLevelData;
     public Vector3 respawnPoint;
@@ -40,15 +41,30 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
             CurrentLevelData = new LevelData();
         }
         else{
-            foreach(ActualEnemyController enemy in enemies){
+            if(enemies!=null)
+            foreach (ActualEnemyController enemy in enemies)
+            {
                 EnemyData enemieData;
-                if(CurrentLevelData.enemiesData.TryGetValue(enemy.SaveId,out enemieData)){
+                if (CurrentLevelData.enemiesData.TryGetValue(enemy.SaveId, out enemieData))
+                {
                     enemy.Load(enemieData);
                 }
             }
-            foreach(Interactable interactable in interactables){
+            if(enemiesIgor!=null)
+            foreach (EnemyBehaviour enemy in enemiesIgor)
+            {
+                EnemyData enemyData;
+                if (CurrentLevelData.enemiesData.TryGetValue(enemy.SaveId, out enemyData))
+                {
+                    enemy.Load(enemyData);
+                }
+            }
+            if(interactables!=null)
+            foreach (Interactable interactable in interactables)
+            {
                 InteractableData interactableData;
-                if(CurrentLevelData.interactablesData.TryGetValue(interactable.saveId,out interactableData)){
+                if (CurrentLevelData.interactablesData.TryGetValue(interactable.saveId, out interactableData))
+                {
                     interactable.Load(interactableData);
                 }
             }
@@ -82,6 +98,13 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
             }
             enemy.Respawn();
             enemy.Save();
+        }
+        foreach(EnemyBehaviour enemyBehaviour in enemiesIgor){
+            if(!enemyBehaviour.gameObject.activeInHierarchy){
+                enemyBehaviour.gameObject.SetActive(true);
+            }
+            enemyBehaviour.Respawn();
+            enemyBehaviour.Save();
         }
     }
 }
