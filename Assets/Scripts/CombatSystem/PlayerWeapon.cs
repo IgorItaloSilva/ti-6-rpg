@@ -43,6 +43,7 @@ public class PlayerWeapon : WeaponManager
             if (alvoAtacado != null && alvoAtacado.GetType() != typeof(PlayerStats))
             {
                 DealDamage(alvoAtacado, damage);
+                DisableCollider();
             }
         }
     }

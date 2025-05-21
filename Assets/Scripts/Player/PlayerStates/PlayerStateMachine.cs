@@ -36,8 +36,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private Camera _mainCam;
     private Animator _animator;
     private CharacterController _cc;
-    [SerializeField] private PlayerWeapon _swordWeaponManager;
-    PlayerInput _playerInput;
+    [SerializeField] private PlayerWeapon _swordWeaponManager, _magicWeaponManager;
+    private PlayerInput _playerInput;
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
     [SerializeField] private ParticleSystem _swordTrail;
@@ -68,6 +68,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isSpecial2Pressed,
         _isSpecial3Pressed,
         _isSpecial4Pressed,
+        _isMagicPressed,
         _isBlockPressed,
         _isPotionPressed,
         _isInteractPressed,
@@ -79,6 +80,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canHeal = true,
         _canEnterCombat = true,
         _canMount = true,
+        _canCastMagic = true,
         _canSpecial1 = true,
         _canSpecial2 = true,
         _canSpecial3 = true,
@@ -115,6 +117,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int IsRunningHash = Animator.StringToHash("isRunning");
     public readonly int IsBlockingHash = Animator.StringToHash("isBlocking");
     public readonly int IsGroundedHash = Animator.StringToHash("isGrounded");
+    public readonly int IsCastingMagicHash = Animator.StringToHash("isCastingMagic");
     public readonly int Attack1Hash = Animator.StringToHash("Attack1");
     public readonly int Attack2Hash = Animator.StringToHash("Attack2");
     public readonly int Attack3Hash = Animator.StringToHash("Attack3");
@@ -147,6 +150,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public Camera MainCam => _mainCam;
     public EnemyDetection EnemyDetector => enemyDetector;
     public PlayerWeapon SwordWeaponManager => _swordWeaponManager;
+    public PlayerWeapon MagicWeaponManager => _magicWeaponManager;
     public Vector3 CurrentMovementInput => _currentMovementInput;
     public float Gravity => _gravity;
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
@@ -161,9 +165,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsSpecial2Pressed => _isSpecial2Pressed && _canSpecial2;
     public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3;
     public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4;
+    public bool IsCastingMagic => _isMagicPressed && _canCastMagic;
     public bool IsClimbing => _isClimbing;
     public bool IsBlocking => _isBlocking && _inCombat;
-    public byte AttackCount => _attackCount;
     public float InitialJumpVelocity => _initialJumpVelocity;
 
     #endregion
@@ -223,6 +227,23 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool CanInteract
     {
         set => _canInteract = value;
+    }
+    
+    public bool CanSpecial1
+    {
+        set => _canSpecial1 = value;
+    }
+    public bool CanSpecial2
+    {
+        set => _canSpecial2 = value;
+    }
+    public bool CanSpecial3
+    {
+        set => _canSpecial3 = value;
+    }
+    public bool CanSpecial4
+    {
+        set => _canSpecial4 = value;
     }
 
     public bool InCombat
@@ -326,6 +347,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _playerInput.Gameplay.Special3.canceled += OnSpecial3Pressed;
         _playerInput.Gameplay.Special4.started += OnSpecial4Pressed;
         _playerInput.Gameplay.Special4.canceled += OnSpecial4Pressed;
+        _playerInput.Gameplay.Magic.started += OnMagicPressed;
+        _playerInput.Gameplay.Magic.canceled += OnMagicPressed;
     }
 
     private void OnMovementPressed(InputAction.CallbackContext context)
@@ -358,7 +381,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private void OnSprintPressed(InputAction.CallbackContext context)
     {
         _isSprintPressed = context.ReadValueAsButton();
-        Animator.SetBool(IsRunningHash, IsSprintPressed);
     }
 
     private void OnJumpPressed(InputAction.CallbackContext context)
@@ -378,6 +400,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         _isDodgePressed = context.ReadValueAsButton();
     }
+    
+    private void OnMagicPressed(InputAction.CallbackContext context)
+    {
+        _isMagicPressed = context.ReadValueAsButton();
+        _canCastMagic = true;
+    }
 
     private void OnTargetPressed(InputAction.CallbackContext context)
     {
@@ -388,13 +416,13 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private void OnSpecial1Pressed(InputAction.CallbackContext context)
     {
         _isSpecial1Pressed = context.ReadValueAsButton();
-        _canSpecial3 = true;
+        _canSpecial1 = true;
     }
 
     private void OnSpecial2Pressed(InputAction.CallbackContext context)
     {
         _isSpecial2Pressed = context.ReadValueAsButton();
-        _canSpecial3 = true;
+        _canSpecial2 = true;
     }
 
     private void OnSpecial3Pressed(InputAction.CallbackContext context)
@@ -406,7 +434,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private void OnSpecial4Pressed(InputAction.CallbackContext context)
     {
         _isSpecial4Pressed = context.ReadValueAsButton();
-        _canSpecial3 = true;
+        _canSpecial4 = true;
     }
 
     private void SetupJumpVariables()
@@ -583,13 +611,14 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordWeaponManager.DisableCollider();
     }
 
-    public void LockPlayer(int durationMs = 1667)
+    public void LockPlayer()
     {
         if (_isLocked) return;
         _isLocked = true;
-        _currentState.LockPlayer(durationMs);
+        _currentState.LockPlayer();
     }
 
+    // ReSharper disable once UnusedMember.Global
     public void UnlockPlayer()
     {
         _isLocked = false;

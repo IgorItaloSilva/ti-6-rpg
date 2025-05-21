@@ -158,7 +158,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""a4f1dcef-a322-43b8-a2e0-6fcbc64a79d6"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -221,6 +221,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""name"": ""Special4"",
                     ""type"": ""Button"",
                     ""id"": ""6d20d090-a955-4fa6-83e1-dcb085308a87"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Magic"",
+                    ""type"": ""Button"",
+                    ""id"": ""b74d8049-66ef-47e4-a5b6-b2acb0fbea9f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -483,6 +492,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""3c51767d-2f3c-417d-b8e5-10f4d21c21d2"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""a91389d7-5936-4d1a-8a58-9a4760cf4465"",
                     ""path"": ""<Keyboard>/t"",
                     ""interactions"": """",
@@ -498,7 +518,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/middleButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";Keyboard + Mouse"",
+                    ""action"": ""Target"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08586275-4b0a-4273-ad39-4774fce9b79f"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
                     ""action"": ""Target"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -510,6 +541,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard + Mouse"",
+                    ""action"": ""Potion"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15a918b8-46ea-4a50-9b3b-3860ed751111"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
                     ""action"": ""Potion"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -621,6 +663,28 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Controller"",
                     ""action"": ""Special4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc8acfdf-82e6-4118-a563-739bd6afd403"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard + Mouse"",
+                    ""action"": ""Magic"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0a708081-63c1-4b93-a4e3-b25e53196f67"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Controller"",
+                    ""action"": ""Magic"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1175,6 +1239,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Gameplay_Special2 = m_Gameplay.FindAction("Special2", throwIfNotFound: true);
         m_Gameplay_Special3 = m_Gameplay.FindAction("Special3", throwIfNotFound: true);
         m_Gameplay_Special4 = m_Gameplay.FindAction("Special4", throwIfNotFound: true);
+        m_Gameplay_Magic = m_Gameplay.FindAction("Magic", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1282,6 +1347,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Special2;
     private readonly InputAction m_Gameplay_Special3;
     private readonly InputAction m_Gameplay_Special4;
+    private readonly InputAction m_Gameplay_Magic;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -1354,6 +1420,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Special4 => m_Wrapper.m_Gameplay_Special4;
         /// <summary>
+        /// Provides access to the underlying input action "Gameplay/Magic".
+        /// </summary>
+        public InputAction @Magic => m_Wrapper.m_Gameplay_Magic;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
@@ -1424,6 +1494,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Special4.started += instance.OnSpecial4;
             @Special4.performed += instance.OnSpecial4;
             @Special4.canceled += instance.OnSpecial4;
+            @Magic.started += instance.OnMagic;
+            @Magic.performed += instance.OnMagic;
+            @Magic.canceled += instance.OnMagic;
         }
 
         /// <summary>
@@ -1480,6 +1553,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Special4.started -= instance.OnSpecial4;
             @Special4.performed -= instance.OnSpecial4;
             @Special4.canceled -= instance.OnSpecial4;
+            @Magic.started -= instance.OnMagic;
+            @Magic.performed -= instance.OnMagic;
+            @Magic.canceled -= instance.OnMagic;
         }
 
         /// <summary>
@@ -1835,6 +1911,13 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSpecial4(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Magic" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMagic(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

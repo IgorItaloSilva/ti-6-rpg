@@ -65,60 +65,81 @@ public class PlayerCombatState : PlayerGroundedState
             return;
         }
 
+        if (_ctx.IsCastingMagic)
+        {
+            _ctx.Animator.SetBool(_ctx.InCombatHash, true);
+            _ctx.Animator.SetBool(_ctx.IsCastingMagicHash, true);
+            SwitchState(_factory.Magic());
+            return;
+        }
+
         if (_ctx.IsJumpPressed)
         {
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             HandleJump();
             SwitchState(_factory.InAir());
+            return;
         }
 
         if (_ctx.IsSprintPressed)
         {
             SwitchState(_factory.Grounded());
+            return;
         }
 
         if (_ctx.IsDodgePressed)
         {
             SwitchState(_factory.Dodge());
+            return;
         }
 
         if (_ctx.IsAttackPressed)
         {
             SwitchState(_factory.Attack());
+            return;
         }
 
         if (_ctx.IsClimbing)
         {
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             SwitchState(_factory.Climb());
+            return;
         }
 
         if (_ctx.IsSpecial1Pressed)
         {
             _ctx.Animator.ResetTrigger(_ctx.Special1Hash);
             _ctx.Animator.SetTrigger(_ctx.Special1Hash);
+            _ctx.CanSpecial1 = false;
             SwitchState(_factory.Attack(_isSpecial: true));
+            return;
         }
 
         if (_ctx.IsSpecial2Pressed)
         {
             _ctx.Animator.ResetTrigger(_ctx.Special2Hash);
             _ctx.Animator.SetTrigger(_ctx.Special2Hash);
+            _ctx.CanSpecial2 = false;
             SwitchState(_factory.Attack(_isSpecial: true));
+            return;
         }
 
         if (_ctx.IsSpecial3Pressed)
         {
             _ctx.Animator.ResetTrigger(_ctx.Special3Hash);
             _ctx.Animator.SetTrigger(_ctx.Special3Hash);
+            _ctx.CanSpecial3 = false;
             SwitchState(_factory.Attack(_isSpecial: true));
+            return;
         }
 
         if (_ctx.IsSpecial4Pressed)
         {
             _ctx.Animator.ResetTrigger(_ctx.Special4Hash);
             _ctx.Animator.SetTrigger(_ctx.Special4Hash);
+            _ctx.CanSpecial4 = false;
             SwitchState(_factory.Attack(_isSpecial: true));
+            return;
         }
     }
 

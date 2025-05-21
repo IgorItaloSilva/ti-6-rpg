@@ -4,16 +4,16 @@ using UnityEngine;
 public class PlayerLockedState : PlayerBaseState
 {
     
-    public PlayerLockedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, int lockDurationMs) : base(
+    public PlayerLockedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        HandleLockDurationAsync(lockDurationMs);
     }
 
     public override void EnterState()
     {
         if(_ctx.ShowDebugLogs) Debug.Log("Locked");
         _turnTime = int.MaxValue;
+        _ctx.Acceleration = 0f;
     }
 
     public override void UpdateState()
@@ -28,17 +28,11 @@ public class PlayerLockedState : PlayerBaseState
 
     public override void ExitState()
     {
+        
     }
 
     public override void CheckSwitchStates()
     {
 
-    }
-
-    private async void HandleLockDurationAsync(int _lockDurationMs)
-    {
-        await Task.Delay(_lockDurationMs);
-        SwitchState(_factory.Grounded());
-        _ctx.IsLocked = false;
     }
 }

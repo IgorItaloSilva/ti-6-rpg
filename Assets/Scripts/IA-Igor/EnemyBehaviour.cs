@@ -35,7 +35,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         currentState.StateStart(this);
     }
 
-    void Update() { currentState.StateUpdate(); Debug.Log(currentState); }
+    void Update() { currentState.StateUpdate(); }
 
     void FixedUpdate() { currentState.StateFixedUpdate(); }
 
