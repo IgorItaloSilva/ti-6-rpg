@@ -578,5 +578,9 @@ public class UIManager : MonoBehaviour
             newText.GetComponent<TextMeshProUGUI>().text = tutorialSo.Texts[i];
         }
     }
-    
+    public void HandleCooldowns(int special)
+    {
+        //fazer toda a logica de cooldown e ai avisa o playerStateMachine
+        PlayerStateMachine.Instance.EndSpecialCooldown(special);
+    }
 }

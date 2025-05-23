@@ -44,8 +44,10 @@ public class SkillTree : MonoBehaviour,IDataPersistence
             }
         }
     }
-    private void ActivatePowerUp(int id){
+    private void ActivatePowerUp(int id)
+    {
         GameEventsManager.instance.skillTreeEvents.ActivatePowerUp(id);
+        PlayerStateMachine.Instance?.UnlockSpecial(id);
     }
     public bool BuyPowerUp(int id){//Vai ser chamado por uma função da UI, que vai responder um click de um botão
         //Debug.Log($"Tentaram comprar o powerUp de Id {id}");

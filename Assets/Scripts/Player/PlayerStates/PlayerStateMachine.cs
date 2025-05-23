@@ -1,6 +1,7 @@
 #region Imports
 
 using System;
+using System.Runtime.CompilerServices;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -110,7 +111,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     [FormerlySerializedAs("ShowStateLogs")]
     public bool ShowDebugLogs;
-
+    #endregion
     #region AnimatorHashes
 
     public readonly int IsWalkingHash = Animator.StringToHash("isWalking");
@@ -140,7 +141,78 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int InCombatHash = Animator.StringToHash("inCombat");
 
     #endregion
+    #region Coisas skill tree
+    public bool IsSpecial1Unlocked{ get; private set; }
+    public bool IsSpecial2Unlocked{ get; private set; }
+    public bool IsSpecial3Unlocked{ get; private set; }
+    public bool IsSpecial4Unlocked{ get; private set; }
+    public bool IsSpecial1OnCooldown{ get; private set; }
+    public bool IsSpecial2OnCooldown{ get; private set; }
+    public bool IsSpecial3OnCooldown{ get; private set; }
+    public bool IsSpecial4OnCooldown{ get; private set; }
 
+    public void UnlockSpecial(int id)
+    {
+        switch (id)//sim essa merda é hardcoded  ¯\_(ツ)_/¯
+        {
+            case 1://tier 1 (primeiro a ser comprado) skill tree do bem
+                IsSpecial1Unlocked = true;
+                break;
+            case 5://tier 3 (2 pré requisitos) skill tree do bem
+                IsSpecial2Unlocked = true;
+                break;
+            case 10://tier 2 (1 pré requisito) skill tree do mal
+                IsSpecial3Unlocked = true;
+                break;
+            case 9://tier 3 (2 pré requisitos) skill tree do mal (sim o 9 vem depois do 10)
+                IsSpecial4Unlocked = true;
+                break;
+            default:Debug.LogWarning("Tentamos ativar um power up que a State machine não reconhece");
+                break;
+        }
+    }
+    public void StartSpecialCooldown(int special)
+    {
+        switch (special)
+        {
+            case 1:
+                IsSpecial1OnCooldown = true;
+                break;
+            case 2:
+                IsSpecial2OnCooldown = true;
+                break;
+            case 3:
+                IsSpecial3OnCooldown = true;
+                break;
+            case 4:
+                IsSpecial4OnCooldown = true;
+                break;
+            default:
+                Debug.LogWarning("Tentamos ativar o cooldown de uma skill que não existe");
+                break;
+        }
+        UIManager.instance?.HandleCooldowns(special);//Essa função vai cuidar do cooldown e nos avisar quando ele tiver acabado, o tempo de cooldown será definido la
+    }
+    public void EndSpecialCooldown(int special)//chamdo pela UI quando o cooldown acabar
+    {
+        switch (special)
+        {
+            case 1:
+                IsSpecial1OnCooldown = false;
+                break;
+            case 2:
+                IsSpecial2OnCooldown = false;
+                break;
+            case 3:
+                IsSpecial3OnCooldown = false;
+                break;
+            case 4:
+                IsSpecial4OnCooldown = false;
+                break;
+            default:Debug.LogWarning("Tentamos desativar o cooldown de uma skill que não existe");
+                break;
+        }
+    }
     #endregion
 
     #region Public Getters
@@ -161,10 +233,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsPotionPressed => _isPotionPressed && _canHeal;
     public bool IsBlockPressed => _isBlockPressed;
     public bool IsSprintPressed => _isSprintPressed && _isMovementPressed;
-    public bool IsSpecial1Pressed => _isSpecial1Pressed && _canSpecial1;
-    public bool IsSpecial2Pressed => _isSpecial2Pressed && _canSpecial2;
-    public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3;
-    public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4;
+    public bool IsSpecial1Pressed => _isSpecial1Pressed && _canSpecial1 && IsSpecial1Unlocked;
+    public bool IsSpecial2Pressed => _isSpecial2Pressed && _canSpecial2 && IsSpecial2Unlocked;
+    public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3 && IsSpecial3Unlocked;
+    public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4 && IsSpecial4Unlocked;
     public bool IsCastingMagic => _isMagicPressed && _canCastMagic;
     public bool IsClimbing => _isClimbing;
     public bool IsBlocking => _isBlocking && _inCombat;

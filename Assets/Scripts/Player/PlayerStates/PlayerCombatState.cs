@@ -111,6 +111,7 @@ public class PlayerCombatState : PlayerGroundedState
             _ctx.Animator.ResetTrigger(_ctx.Special1Hash);
             _ctx.Animator.SetTrigger(_ctx.Special1Hash);
             _ctx.CanSpecial1 = false;
+            _ctx.StartSpecialCooldown(1);
             SwitchState(_factory.Attack(_isSpecial: true));
             return;
         }
@@ -120,6 +121,7 @@ public class PlayerCombatState : PlayerGroundedState
             _ctx.Animator.ResetTrigger(_ctx.Special2Hash);
             _ctx.Animator.SetTrigger(_ctx.Special2Hash);
             _ctx.CanSpecial2 = false;
+            _ctx.StartSpecialCooldown(2);
             SwitchState(_factory.Attack(_isSpecial: true));
             return;
         }
@@ -129,6 +131,7 @@ public class PlayerCombatState : PlayerGroundedState
             _ctx.Animator.ResetTrigger(_ctx.Special3Hash);
             _ctx.Animator.SetTrigger(_ctx.Special3Hash);
             _ctx.CanSpecial3 = false;
+            _ctx.StartSpecialCooldown(3);
             SwitchState(_factory.Attack(_isSpecial: true));
             return;
         }
@@ -138,6 +141,7 @@ public class PlayerCombatState : PlayerGroundedState
             _ctx.Animator.ResetTrigger(_ctx.Special4Hash);
             _ctx.Animator.SetTrigger(_ctx.Special4Hash);
             _ctx.CanSpecial4 = false;
+            _ctx.StartSpecialCooldown(4);
             SwitchState(_factory.Attack(_isSpecial: true));
             return;
         }
