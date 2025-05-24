@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -38,9 +39,11 @@ public class SaveSlotMenu : Menu
             if(button!=null){
                 if(profileData == null && isLoadingGame){
                     button.interactable=false;
+                    button.GetComponent<EventTrigger>().enabled=false;
                 }
                 else{
                     button.interactable=true;
+                    button.GetComponent<EventTrigger>().enabled=true;
                     if(firstSelected.Equals(backButton.gameObject)){
                         firstSelected = saveSlot.gameObject;
                     }
@@ -83,11 +86,11 @@ public class SaveSlotMenu : Menu
     public void SaveGameAndLoadScene(){
         DataPersistenceManager.instance.SaveGame();
         if(levelToBeLoaded==""){
-            Debug.Log("Como não tinha um level indo pro indice 1");
+            if(DataPersistenceManager.instance.showDebug)Debug.Log("Como não tinha um level indo pro indice 1");
             SceneManager.LoadSceneAsync(1);
         }
         else{
-            Debug.Log("Indo pro level " + levelToBeLoaded);
+            if(DataPersistenceManager.instance.showDebug)Debug.Log("Indo pro level " + levelToBeLoaded);
             SceneManager.LoadSceneAsync(levelToBeLoaded);
         }
         SceneManager.LoadSceneAsync("Hud",LoadSceneMode.Additive);

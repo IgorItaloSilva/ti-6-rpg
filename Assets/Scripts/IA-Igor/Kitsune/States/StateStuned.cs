@@ -11,7 +11,7 @@ public class StateStuned : EnemyBaseState
     public override void StateUpdate() {
         lookTime += Time.deltaTime;
         if(lookTime >= 4.15f){
-            enemyBehave.IdleState();
+            enemyBehave.StartIdle();
             enemyBehave.ResetPoise();
             StateExit();
         }

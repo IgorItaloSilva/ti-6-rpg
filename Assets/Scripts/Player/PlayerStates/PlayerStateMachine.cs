@@ -1,9 +1,10 @@
 #region Imports
+
 using System;
+using System.Threading.Tasks;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
 #endregion
@@ -30,13 +31,14 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public CinemachineFreeLook playerCamera;
     public CinemachineVirtualCamera targetCamera;
     private CinemachineTargetGroup _camTargetGroup;
+    private CinemachineBasicMultiChannelPerlin[] _camNoises = new CinemachineBasicMultiChannelPerlin[2];
     public GameObject enemyDetectionObject;
     private EnemyDetection enemyDetector;
     private Camera _mainCam;
     private Animator _animator;
     private CharacterController _cc;
-    [SerializeField] private PlayerWeapon _swordWeaponManager;
-    PlayerInput _playerInput;
+    [SerializeField] private PlayerWeapon _swordWeaponManager, _magicWeaponManager;
+    private PlayerInput _playerInput;
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
     [SerializeField] private ParticleSystem _swordTrail;
@@ -59,13 +61,18 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isSprintPressed,
         _isJumping,
         _isBlocking,
+        _canInteract = true,
         _isJumpPressed,
         _isDodgePressed,
         _isAttackPressed,
+        _isSpecial1Pressed,
+        _isSpecial2Pressed,
+        _isSpecial3Pressed,
+        _isSpecial4Pressed,
+        _isMagicPressed,
         _isBlockPressed,
         _isPotionPressed,
         _isInteractPressed,
-        _canInteract = true,
         _isDodging,
         _canDodge = true,
         _canJump = true,
@@ -73,9 +80,14 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _canBlock = true,
         _canHeal = true,
         _canEnterCombat = true,
+        _canMount = true,
+        _canCastMagic = true,
+        _canSpecial1 = true,
+        _canSpecial2 = true,
+        _canSpecial3 = true,
+        _canSpecial4 = true,
         _isBetweenAttacks,
         _isClimbing,
-        _canMount = true,
         _isTargetPressed,
         _canTarget,
         _isOnTarget,
@@ -94,11 +106,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly float MaxJumpHeight = 1f,
         MaxJumpTime = .75f,
         BaseGravity = -9.8f,
-        BaseTurnTime = 0.15f,
+        BaseTurnTime = 0.2f,
         SlowTurnTimeModifier = 1.5f;
 
-    [FormerlySerializedAs("ShowStateLogs")]
-    public bool ShowDebugLogs;
+    public bool ShowDebugLogs, TestHitFeedback;
+
+    #endregion
 
     #region AnimatorHashes
 
@@ -106,10 +119,15 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int IsRunningHash = Animator.StringToHash("isRunning");
     public readonly int IsBlockingHash = Animator.StringToHash("isBlocking");
     public readonly int IsGroundedHash = Animator.StringToHash("isGrounded");
+    public readonly int IsCastingMagicHash = Animator.StringToHash("isCastingMagic");
     public readonly int Attack1Hash = Animator.StringToHash("Attack1");
     public readonly int Attack2Hash = Animator.StringToHash("Attack2");
     public readonly int Attack3Hash = Animator.StringToHash("Attack3");
     public readonly int Attack4Hash = Animator.StringToHash("Attack4");
+    public readonly int Special1Hash = Animator.StringToHash("Special1");
+    public readonly int Special2Hash = Animator.StringToHash("Special2");
+    public readonly int Special3Hash = Animator.StringToHash("Special3");
+    public readonly int Special4Hash = Animator.StringToHash("Special4");
     public readonly int IsClimbingHash = Animator.StringToHash("isClimbing");
     public readonly int HasJumpedHash = Animator.StringToHash("hasJumped");
     public readonly int HasDodgedHash = Animator.StringToHash("hasDodged");
@@ -125,6 +143,87 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     #endregion
 
+    #region Coisas skill tree
+
+    public bool IsSpecial1Unlocked { get; private set; }
+    public bool IsSpecial2Unlocked { get; private set; }
+    public bool IsSpecial3Unlocked { get; private set; }
+    public bool IsSpecial4Unlocked { get; private set; }
+    public bool IsSpecial1OnCooldown { get; private set; }
+    public bool IsSpecial2OnCooldown { get; private set; }
+    public bool IsSpecial3OnCooldown { get; private set; }
+    public bool IsSpecial4OnCooldown { get; private set; }
+
+    public void UnlockSpecial(int id)
+    {
+        switch (id) //sim essa merda é hardcoded  ¯\_(ツ)_/¯
+        {
+            case 1: //tier 1 (primeiro a ser comprado) skill tree do bem
+                IsSpecial1Unlocked = true;
+                break;
+            case 5: //tier 3 (2 pré requisitos) skill tree do bem
+                IsSpecial2Unlocked = true;
+                break;
+            case 10: //tier 2 (1 pré requisito) skill tree do mal
+                IsSpecial3Unlocked = true;
+                break;
+            case 9: //tier 3 (2 pré requisitos) skill tree do mal (sim o 9 vem depois do 10)
+                IsSpecial4Unlocked = true;
+                break;
+            default:
+                Debug.LogWarning("Tentamos ativar um power up que a State machine não reconhece");
+                break;
+        }
+    }
+
+    public void StartSpecialCooldown(int special)
+    {
+        switch (special)
+        {
+            case 1:
+                IsSpecial1OnCooldown = true;
+                break;
+            case 2:
+                IsSpecial2OnCooldown = true;
+                break;
+            case 3:
+                IsSpecial3OnCooldown = true;
+                break;
+            case 4:
+                IsSpecial4OnCooldown = true;
+                break;
+            default:
+                Debug.LogWarning("Tentamos ativar o cooldown de uma skill que não existe");
+                break;
+        }
+
+        UIManager.instance
+            ?.HandleCooldowns(
+                special); //Essa função vai cuidar do cooldown e nos avisar quando ele tiver acabado, o tempo de cooldown será definido la
+    }
+
+    public void EndSpecialCooldown(int special) //chamdo pela UI quando o cooldown acabar
+    {
+        switch (special)
+        {
+            case 1:
+                IsSpecial1OnCooldown = false;
+                break;
+            case 2:
+                IsSpecial2OnCooldown = false;
+                break;
+            case 3:
+                IsSpecial3OnCooldown = false;
+                break;
+            case 4:
+                IsSpecial4OnCooldown = false;
+                break;
+            default:
+                Debug.LogWarning("Tentamos desativar o cooldown de uma skill que não existe");
+                break;
+        }
+    }
+
     #endregion
 
     #region Public Getters
@@ -132,10 +231,13 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public CharacterController CC => _cc;
     public Animator Animator => _animator;
     public Camera MainCam => _mainCam;
+    public CinemachineTargetGroup CamTargetGroup => _camTargetGroup;
     public EnemyDetection EnemyDetector => enemyDetector;
-    public VisualEffect ParryVfx => _parryVfx;
-    public PlayerInput PlayerInput => _playerInput;
+    public PlayerWeapon SwordWeaponManager => _swordWeaponManager;
+    public PlayerWeapon MagicWeaponManager => _magicWeaponManager;
     public Vector3 CurrentMovementInput => _currentMovementInput;
+    public float Gravity => _gravity;
+    public byte AttackCount => _attackCount;
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
     public bool IsJumpPressed => _isJumpPressed && _canJump;
@@ -144,33 +246,25 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsPotionPressed => _isPotionPressed && _canHeal;
     public bool IsBlockPressed => _isBlockPressed;
     public bool IsSprintPressed => _isSprintPressed && _isMovementPressed;
-    public bool IsTargetPressed => _isTargetPressed && _canTarget;
-    public bool IsClimbing => _isClimbing && _canMount;
-    public bool IsOnTarget => _isOnTarget;
-    public byte AttackCount => _attackCount;
+    public bool IsSpecial1Pressed => _isSpecial1Pressed && _canSpecial1 && IsSpecial1Unlocked;
+    public bool IsSpecial2Pressed => _isSpecial2Pressed && _canSpecial2 && IsSpecial2Unlocked;
+    public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3 && IsSpecial3Unlocked;
+    public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4 && IsSpecial4Unlocked;
+    public bool IsCastingMagic => _isMagicPressed && _canCastMagic;
+    public bool IsClimbing => _isClimbing;
+    public bool IsBlocking => _isBlocking && _inCombat;
     public float InitialJumpVelocity => _initialJumpVelocity;
 
     #endregion
 
     #region Public Setters
-    
-    public float Gravity
-    {
-        get => _gravity;
-        set => _gravity = value;
-    }
 
     public bool IsDodging
     {
         get => _isDodging;
         set => _isDodging = value;
     }
-    
-    public bool IsBlocking
-    {
-        get => _isBlocking;
-        set => _isBlocking = value;
-    }
+
     public bool ShouldParry
     {
         get => _shouldParry;
@@ -194,46 +288,56 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         get => _canMount;
         set => _canMount = value;
     }
+
     public bool CanEnterCombat
     {
-        get => _canEnterCombat;
         set => _canEnterCombat = value;
     }
 
     public bool CanJump
     {
-        get => _canJump;
         set => _canJump = value;
     }
 
     public bool CanDodge
     {
-        get => _canDodge;
         set => _canDodge = value;
     }
 
     public bool CanHeal
     {
-        get => _canHeal;
         set => _canHeal = value;
     }
 
     public bool CanInteract
     {
-        get => _canInteract;
         set => _canInteract = value;
     }
-    
+
+    public bool CanSpecial1
+    {
+        set => _canSpecial1 = value;
+    }
+
+    public bool CanSpecial2
+    {
+        set => _canSpecial2 = value;
+    }
+
+    public bool CanSpecial3
+    {
+        set => _canSpecial3 = value;
+    }
+
+    public bool CanSpecial4
+    {
+        set => _canSpecial4 = value;
+    }
+
     public bool InCombat
     {
         get => _inCombat && _canEnterCombat;
         set => _inCombat = value;
-    }
-
-    public bool CanTarget
-    {
-        get => _canTarget;
-        set => _canTarget = value;
     }
 
     public Vector3 CurrentMovement
@@ -241,21 +345,15 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         get => _currentMovement;
         set => _currentMovement = value;
     }
-    
-    public float CurrentMovementX
-    {
-        get => _currentMovement.x;
-        set => _currentMovement.x = value;
-    }
 
     public float CurrentMovementY
     {
         get => _currentMovement.y;
         set => _currentMovement.y = value;
     }
+
     public float CurrentMovementZ
     {
-        get => _currentMovement.z;
         set => _currentMovement.z = value;
     }
 
@@ -267,19 +365,16 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     public float AppliedMovementX
     {
-        get => _appliedMovement.x;
         set => _appliedMovement.x = value;
     }
 
     public float AppliedMovementY
     {
-        get => _appliedMovement.y;
         set => _appliedMovement.y = value;
     }
-    
+
     public float AppliedMovementZ
     {
-        get => _appliedMovement.z;
         set => _appliedMovement.z = value;
     }
 
@@ -290,8 +385,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     #endregion
-
-    #region Initializers
 
     #region Input Initializers
 
@@ -334,6 +427,16 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _playerInput.Gameplay.Potion.canceled += OnPotionPressed;
         _playerInput.Gameplay.Block.started += OnBlockPressed;
         _playerInput.Gameplay.Block.canceled += OnBlockPressed;
+        _playerInput.Gameplay.Special1.started += OnSpecial1Pressed;
+        _playerInput.Gameplay.Special1.canceled += OnSpecial1Pressed;
+        _playerInput.Gameplay.Special2.started += OnSpecial2Pressed;
+        _playerInput.Gameplay.Special2.canceled += OnSpecial2Pressed;
+        _playerInput.Gameplay.Special3.started += OnSpecial3Pressed;
+        _playerInput.Gameplay.Special3.canceled += OnSpecial3Pressed;
+        _playerInput.Gameplay.Special4.started += OnSpecial4Pressed;
+        _playerInput.Gameplay.Special4.canceled += OnSpecial4Pressed;
+        _playerInput.Gameplay.Magic.started += OnMagicPressed;
+        _playerInput.Gameplay.Magic.canceled += OnMagicPressed;
     }
 
     private void OnMovementPressed(InputAction.CallbackContext context)
@@ -356,7 +459,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isAttackPressed = context.ReadValueAsButton();
         _canAttack = true;
     }
-    
+
     private void OnPotionPressed(InputAction.CallbackContext context)
     {
         _isPotionPressed = context.ReadValueAsButton();
@@ -366,7 +469,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private void OnSprintPressed(InputAction.CallbackContext context)
     {
         _isSprintPressed = context.ReadValueAsButton();
-        Animator.SetBool(IsRunningHash, IsSprintPressed);
     }
 
     private void OnJumpPressed(InputAction.CallbackContext context)
@@ -374,7 +476,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isJumpPressed = context.ReadValueAsButton();
         _canJump = true;
     }
-    
+
     private void OnBlockPressed(InputAction.CallbackContext context)
     {
         _isBlockPressed = context.ReadValueAsButton();
@@ -387,10 +489,40 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isDodgePressed = context.ReadValueAsButton();
     }
 
+    private void OnMagicPressed(InputAction.CallbackContext context)
+    {
+        _isMagicPressed = context.ReadValueAsButton();
+        _canCastMagic = true;
+    }
+
     private void OnTargetPressed(InputAction.CallbackContext context)
     {
         _isTargetPressed = context.ReadValueAsButton();
         _canTarget = true;
+    }
+
+    private void OnSpecial1Pressed(InputAction.CallbackContext context)
+    {
+        _isSpecial1Pressed = context.ReadValueAsButton();
+        _canSpecial1 = true;
+    }
+
+    private void OnSpecial2Pressed(InputAction.CallbackContext context)
+    {
+        _isSpecial2Pressed = context.ReadValueAsButton();
+        _canSpecial2 = true;
+    }
+
+    private void OnSpecial3Pressed(InputAction.CallbackContext context)
+    {
+        _isSpecial3Pressed = context.ReadValueAsButton();
+        _canSpecial3 = true;
+    }
+
+    private void OnSpecial4Pressed(InputAction.CallbackContext context)
+    {
+        _isSpecial4Pressed = context.ReadValueAsButton();
+        _canSpecial4 = true;
     }
 
     private void SetupJumpVariables()
@@ -401,6 +533,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     #endregion
+
+    #region Initializers
 
     private void InitializeReferences()
     {
@@ -442,6 +576,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordSlash.Stop();
     }
 
+    private void Start()
+    {
+        _camNoises[0] = targetCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        _camNoises[1] = playerCamera.GetRig(1).GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+    }
+
     private void FixedUpdate()
     {
         _currentState.FixedUpdateState();
@@ -454,7 +594,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
         if (_isTargetPressed && _canTarget)
             HandleTarget();
-        
     }
 
     #region Collisions / Triggers
@@ -530,7 +669,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _attackCount = 0;
 
         DisableSwordCollider();
-        
+
+        _currentState.UnlockPlayer();
+
         if (ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
     }
 
@@ -542,7 +683,13 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
-        Acceleration = 2.5f;
+        _acceleration = 2f;
+        if (TestHitFeedback)
+        {
+            HitAnimatorPause();
+            CameraShake();
+            AudioPlayer.instance.PlaySFX("Stab");
+        }
     }
 
     private void EnableSwordColliderAttack4()
@@ -552,7 +699,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordSlash.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("SwordSlash");
-        Acceleration = 3f;
+        _acceleration = 2.5f;
     }
 
     private void DisableSwordCollider()
@@ -562,11 +709,18 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordWeaponManager.DisableCollider();
     }
 
-    public void LockPlayer(int durationMs = 1667)
+    public void LockPlayer()
     {
         if (_isLocked) return;
         _isLocked = true;
-        _currentState.LockPlayer(durationMs);
+        _currentState.LockPlayer();
+    }
+
+    // ReSharper disable once UnusedMember.Global
+    public void UnlockPlayer()
+    {
+        _isLocked = false;
+        _currentState.UnlockPlayer();
     }
 
     #endregion
@@ -614,7 +768,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         if (!_isOnTarget)
         {
             if (enemyDetector.targetEnemy)
-                CameraTargetLock(enemyDetector.targetEnemy.transform); 
+                CameraTargetLock(enemyDetector.targetEnemy.transform);
         }
         else
         {
@@ -642,23 +796,65 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     }
 
     public void CameraTargetUnlock(bool shouldForgetTarget = false)
-    { 
-        if(shouldForgetTarget) enemyDetector.targetEnemy = null;
+    {
+        if (shouldForgetTarget) enemyDetector.targetEnemy = null;
         _camTargetGroup.m_Targets[0].target = null;
         playerCamera.enabled = true;
         _isOnTarget = false;
     }
 
-    public void PlayParryVFX()
+    public async void CameraShake(float strength = 1f, float duration = .3f)
     {
-        _parryVfx.Play();
+        await Task.Delay(25);
+        foreach (var camNoise in _camNoises)
+        {
+            if (camNoise != null)
+                camNoise.m_AmplitudeGain = strength;
+        }
+
+        var elapsed = 0f;
+        while (elapsed < duration)
+        {
+            await Task.Delay(10);
+            elapsed += 0.01f;
+            foreach (var camNoise in _camNoises)
+            {
+                if (camNoise != null)
+                    camNoise.m_AmplitudeGain = Mathf.Lerp(strength, 0f, elapsed / duration);
+            }
+        }
+
+        foreach (var camNoise in _camNoises)
+        {
+            if (camNoise != null)
+                camNoise.m_AmplitudeGain = 0f;
+        }
+    }
+
+
+    public async void HitAnimatorPause()
+    {
+        await Task.Delay(25);
+        if (ShowDebugLogs) Debug.Log("Paused animation");
+        _animator.speed = 0f;
+        await Task.Delay(125);
+        _animator.speed = 1f;
     }
 
     #endregion
-    public void AddActionToInteract(Action<InputAction.CallbackContext> action){
-        _playerInput.Gameplay.Interact.started+=action;
+
+    public void AddActionToInteract(Action<InputAction.CallbackContext> action)
+    {
+        _playerInput.Gameplay.Interact.started += action;
     }
-    public void RemoveActionFromInteract(Action<InputAction.CallbackContext> action){
-        _playerInput.Gameplay.Interact.started-=action;
+
+    public void RemoveActionFromInteract(Action<InputAction.CallbackContext> action)
+    {
+        _playerInput.Gameplay.Interact.started -= action;
+    }
+
+    public void PlayParryVFX()
+    {
+        _parryVfx.Play();
     }
 }

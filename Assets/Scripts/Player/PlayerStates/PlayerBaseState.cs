@@ -5,10 +5,10 @@ public abstract class PlayerBaseState
 {
     protected readonly PlayerStateMachine _ctx;
     protected readonly PlayerStateFactory _factory;
-    protected float _turnTime, _turnSmoothSpeed, _lowestAccelerationSpeed = float.MaxValue;
+    protected float _turnTime, _turnSmoothSpeed, _lowestAccelerationSpeed = float.MaxValue, _accelerationSpeed = 2.5f;
     protected float _maxAcceleration;
     private const byte RotationSpeed = 5;
-    protected byte _accelerationSpeed = 3, _decelerationSpeed = 10;
+    protected byte _decelerationSpeed = 10;
     private Vector3 _appliedMovement;
     protected Vector3 _cameraForward, _cameraRight;
     protected Vector3 _targetDirection;
@@ -116,27 +116,29 @@ public abstract class PlayerBaseState
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f);
     }
     
-    protected virtual void HandleTargetedMove()
-    {
-        _cameraForward = _ctx.MainCam.transform.forward;
-        _cameraRight = _ctx.MainCam.transform.right;
-        
-        // Flatten the camera directions to ignore vertical movement
-        _cameraForward.y = 0;
-        _cameraRight.y = 0;
-        _cameraForward.Normalize();
-        _cameraRight.Normalize();
-        
-        _appliedMovement = (_cameraForward * _ctx.CurrentMovement.z + _cameraRight * _ctx.CurrentMovement.x) * _ctx.Acceleration;
-        _appliedMovement.y = _ctx.BaseGravity;
-        
-        _ctx.AppliedMovement = _appliedMovement;
-        _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime));
-        
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration * _ctx.CurrentMovementInput.x, 0.1f, Time.deltaTime);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.y, 0.1f, Time.deltaTime);
-    }
-    
+protected virtual void HandleTargetedMove()
+{
+    _cameraForward = _ctx.MainCam.transform.forward;
+    _cameraRight = _ctx.MainCam.transform.right;
+
+    // Flatten the camera directions to ignore vertical movement
+    _cameraForward.y = 0;
+    _cameraRight.y = 0;
+    _cameraForward.Normalize();
+    _cameraRight.Normalize();
+
+    // Calculate desired movement in world space
+    Vector3 desiredMovement = (_cameraForward * _ctx.CurrentMovement.z + _cameraRight * _ctx.CurrentMovement.x) * _ctx.Acceleration;
+    desiredMovement.y = _ctx.BaseGravity;
+
+    _appliedMovement = Vector3.Lerp(_appliedMovement, desiredMovement, .15f);
+
+    _ctx.AppliedMovement = _appliedMovement;
+    _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime));
+
+    _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.transform.InverseTransformDirection(_appliedMovement).x, 0.15f, Time.deltaTime);
+    _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.transform.InverseTransformDirection(_appliedMovement).z, 0.15f, Time.deltaTime);
+}
     protected virtual void HandleForwardMove()
     {
         _cameraForward = _ctx.MainCam.transform.forward;
@@ -166,9 +168,14 @@ public abstract class PlayerBaseState
         _ctx.CurrentState = newState;
     }
 
-    public void LockPlayer(int durationMs)
+    public void LockPlayer()
     {
-        SwitchState(_factory.Locked(durationMs));
+        SwitchState(_factory.Locked());
+    }
+    
+    public void UnlockPlayer()
+    {
+        SwitchState(_ctx.InCombat? _factory.Combat() : _factory.Grounded());
     }
     
 }

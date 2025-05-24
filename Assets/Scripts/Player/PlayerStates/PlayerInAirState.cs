@@ -19,19 +19,17 @@ public class PlayerInAirState : PlayerBaseState
     public override void EnterState()
     {
         if(_ctx.ShowDebugLogs) Debug.Log("In Air");
-        _turnTime = _ctx.BaseTurnTime * _ctx.SlowTurnTimeModifier;
+        _turnTime = 1f;
     }
 
     public sealed override void HandleAnimatorParameters()
     {
-        _ctx.Animator.SetBool(_ctx.IsGroundedHash, false);
+        if(Time.timeScale > 0f)
+            _ctx.Animator.SetBool(_ctx.IsGroundedHash, false);
     }
 
     public override void UpdateState()
     {
-        if(_shouldRotate)
-            HandleRotation();
-        
         HandleAirMove();
         HandleAirGravity();
         CheckSwitchStates();
@@ -75,7 +73,7 @@ public class PlayerInAirState : PlayerBaseState
     {
         _ctx.AppliedMovement = new Vector3(
             _ctx.transform.forward.x * AirSpeed * _ctx.Acceleration,
-            _ctx.AppliedMovementY,
+            _ctx.AppliedMovement.y,
             _ctx.transform.forward.z * AirSpeed * _ctx.Acceleration);
 
         _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);

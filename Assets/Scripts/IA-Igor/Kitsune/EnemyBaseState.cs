@@ -18,7 +18,8 @@ public abstract class EnemyBaseState
 
 
 
-    public virtual void StateStart(EnemyBehaviour enemyBehave) {
+    public virtual void StateStart(EnemyBehaviour enemyBehave)
+    {
         this.enemyBehave = enemyBehave;
         this.charControl = enemyBehave.GetCharControl();
         this.animator = enemyBehave.GetAnimator();
@@ -29,36 +30,53 @@ public abstract class EnemyBaseState
     }
 
 
-    protected virtual void OneExecution() {  }
+    protected virtual void OneExecution() { }
 
-    public virtual void StateUpdate() {  }
+    public virtual void StateUpdate() { }
 
-    public virtual void StateFixedUpdate() {  }
-    
+    public virtual void StateFixedUpdate() { }
+
     protected virtual void StateExit() { enemyBehave.currentState.StateStart(enemyBehave); }
 
-    protected float GetPlayerDistance(){
-        
-        if(enemyBehave.GetTarget()){
+    protected float GetPlayerDistance() {
+
+        if (enemyBehave.GetTarget())
+        {
             Transform newTarget = enemyBehave.GetTarget().transform;
             return Vector3.Distance(newTarget.position, charControl.transform.position);
 
-        }else return 0f;
+        }
+        else return 0f;
 
     }
 
-    protected float GetTargetAngle(Transform from, Transform to){
+    protected float GetTargetAngle(Transform from, Transform to) {
         Vector3 desiredDir = (to.position - from.position).normalized;
         return Vector3.Angle(from.forward, desiredDir);
     }
 
     protected float ApplyGravity() {
-        if(charControl.isGrounded){
+        if (charControl.isGrounded)
+        {
             verticalVel = -1f;
-        }else{
+        }
+        else
+        {
             verticalVel -= 9.81f * Time.deltaTime;
         }
         return verticalVel;
     }
 
+
+    protected Quaternion ApplyRotation()
+    {
+        float newSteering = steeringForce;
+        // Rotation
+        Vector3 directionToPlayer = (enemyBehave.GetTarget().position - charControl.transform.position).normalized;
+        directionToPlayer.y = 0;
+        Quaternion rotationDesired = Quaternion.LookRotation(directionToPlayer);
+        if(lookTime < 1)
+                lookTime += newSteering * Time.fixedDeltaTime;
+        return Quaternion.Slerp(charControl.transform.rotation, rotationDesired, lookTime);
+    }
 }

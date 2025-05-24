@@ -13,20 +13,18 @@ public class AudioPlayer : MonoBehaviour
         if(instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
-
-
+        
     }
     private void Start()
     {        
         footstepSource = PlayerStateMachine.Instance.gameObject.transform.GetChild(5).GetComponent<AudioSource>();
 
-        //PlayMusic("MainTheme");
+        PlayMusic("MainTheme");
         PlaySFX("AmbientSound");
     }
 

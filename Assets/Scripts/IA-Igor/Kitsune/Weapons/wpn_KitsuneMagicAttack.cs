@@ -11,14 +11,16 @@ public class wpn_KitsuneMagicAttack : EnemyBaseWeapon
     void Awake()
     {
         positions = new Vector3[bullets.Length];
-        for(int i = 0; i < bullets.Length; i++ )
+        for (int i = 0; i < bullets.Length; i++) {
             positions[i] = bullets[i].transform.localPosition;
+            bullets[i].SetActive(false);
+        }
     }
 
     protected override void OneExecution()
     {
         skillUsed = false;
-        for(int i = 0; i < bullets.Length; i++){
+        for(int i = 0; i < bullets.Length; i++) {
             bullets[i].transform.SetParent(this.transform);
         }
         

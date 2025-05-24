@@ -12,13 +12,13 @@ public abstract class ASkills : MonoBehaviour
 
     void Awake() { SetAllSkills(); }
 
-    protected virtual void SetAllSkills(){ allSkillsCheck = isRangeSkill = new bool[allSkills.Length]; } // Settar todas as skills do inimigo, chamar esse metodo base e definir quais são range
+    protected virtual void SetAllSkills(){ allSkillsCheck = new bool[allSkills.Length]; isRangeSkill = new bool[allSkills.Length]; } // Settar todas as skills do inimigo, chamar esse metodo base e definir quais são range
 
     public EnemyBaseState ChoseSkill() {
         count = (byte)allSkillsCheck.Length;
-        Debug.Log("Index atual : " + indexSkill + " || Skill atual : " + allSkills[indexSkill]);
+        //Debug.Log("Index atual : " + indexSkill + " || Skill atual : " + allSkills[indexSkill]);
         indexSkill = Random.Range(0, allSkills.Length);
-        Debug.Log("Index Depois : " + indexSkill + " || Skill Depois : " + allSkills[indexSkill]);
+        //Debug.Log("Index Depois : " + indexSkill + " || Skill Depois : " + allSkills[indexSkill]);
 
         if(!allSkillsCheck[indexSkill]){ // Não usou skill ?
             SkillSelected();
@@ -44,7 +44,7 @@ public abstract class ASkills : MonoBehaviour
 
     void SkillSelected(){ allSkillsCheck[indexSkill] = true; }
 
-    public void UseWeapon() { Debug.Log("Usar : " + weapons[indexSkill].name); weapons[indexSkill].gameObject.SetActive(true); }
+    public void UseWeapon() { weapons[indexSkill].gameObject.SetActive(true); }
 
     public bool IsRangeSkill(){ return isRangeSkill[indexSkill]; }
 

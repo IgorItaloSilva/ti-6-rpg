@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 
 public class ObjectiveManager : MonoBehaviour,IDataPersistence
@@ -55,6 +54,10 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
                 ObjectiveUiManager.instance?.CreateButton(allQuestsDictionary[s],auxObjectiveData);
                 if(auxObjectiveData.hasStarted&&!auxObjectiveData.hasFinished){
                     LoadQuest(allQuestsDictionary[s],auxObjectiveData.stringData);
+                    GameEventsManager.instance.objectiveEvents.StartObjective(s);
+                }
+                if(auxObjectiveData.hasFinished){
+                    GameEventsManager.instance.objectiveEvents.CompleteObjective(s);
                 }
             }
             else{
