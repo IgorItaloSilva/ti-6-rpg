@@ -13,6 +13,7 @@ public class PlayerAttackState : PlayerBaseState
     {
         _isSpecial = isSpecial;
         _turnTime = _ctx.BaseTurnTime * 2;
+        _maxAcceleration = 1f;
     }
 
     public override void EnterState()
@@ -60,7 +61,7 @@ public class PlayerAttackState : PlayerBaseState
         if (_ctx.Acceleration > 0) _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
         else _ctx.Acceleration = 0;
         
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * 5);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration / 1.5f);
     }
     
     protected override void HandleForwardMove()

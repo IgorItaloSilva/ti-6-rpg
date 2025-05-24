@@ -2099,12 +2099,6 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: isRunning
-    m_Type: 4
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
   - m_Name: isBlocking
     m_Type: 4
     m_DefaultFloat: 0
@@ -2482,7 +2476,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Sheath
-  m_Speed: 1.5
+  m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7415346940460136190}
@@ -4022,9 +4016,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.3131715
-  m_TransitionOffset: 0.2508739
-  m_ExitTime: 0.9381552
+  m_TransitionDuration: 0.27894688
+  m_TransitionOffset: 0.038990173
+  m_ExitTime: 0.85165787
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 3
@@ -4087,11 +4081,11 @@ AnimatorStateMachine:
   - {fileID: -6952791099561616291}
   m_EntryTransitions: []
   m_StateMachineTransitions:
-  - first: {fileID: -455105052929918061}
-    second: []
   - first: {fileID: -5276642049830901351}
     second:
     - {fileID: 5064475429194699009}
+  - first: {fileID: -455105052929918061}
+    second: []
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: 10, y: 280, z: 0}
   m_EntryPosition: {x: 390, y: 140, z: 0}
