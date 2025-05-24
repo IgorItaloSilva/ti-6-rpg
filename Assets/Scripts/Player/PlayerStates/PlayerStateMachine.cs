@@ -1,12 +1,10 @@
 #region Imports
 
 using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
 #endregion
@@ -233,11 +231,13 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public CharacterController CC => _cc;
     public Animator Animator => _animator;
     public Camera MainCam => _mainCam;
+    public CinemachineTargetGroup CamTargetGroup => _camTargetGroup;
     public EnemyDetection EnemyDetector => enemyDetector;
     public PlayerWeapon SwordWeaponManager => _swordWeaponManager;
     public PlayerWeapon MagicWeaponManager => _magicWeaponManager;
     public Vector3 CurrentMovementInput => _currentMovementInput;
     public float Gravity => _gravity;
+    public byte AttackCount => _attackCount;
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
     public bool IsJumpPressed => _isJumpPressed && _canJump;
@@ -683,12 +683,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordTrail.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
-        if (enemyDetector.targetEnemy)
-            Acceleration = 2f;
+        _acceleration = 2f;
         if (TestHitFeedback)
         {
             HitAnimatorPause();
             CameraShake();
+            AudioPlayer.instance.PlaySFX("Stab");
         }
     }
 
@@ -699,7 +699,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordSlash.Play();
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("SwordSlash");
-        Acceleration = 2.5f;
+        _acceleration = 2.5f;
     }
 
     private void DisableSwordCollider()
@@ -803,8 +803,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _isOnTarget = false;
     }
 
-    public async void CameraShake(byte strength = 1, float duration = 0.15f)
+    public async void CameraShake(float strength = 1f, float duration = .3f)
     {
+        await Task.Delay(25);
         foreach (var camNoise in _camNoises)
         {
             if (camNoise != null)

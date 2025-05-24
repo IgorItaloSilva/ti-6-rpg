@@ -54,11 +54,11 @@ public class PlayerWeapon : WeaponManager
             {
                 DealDamage(alvoAtacado, damage);
                 DisableCollider();
-                PlayerStateMachine.Instance.CameraShake(duration: 0.15f);
+                AudioPlayer.instance.PlaySFX("Stab");
                 
                 if(!PlayerStateMachine.Instance.TestHitFeedback)
                 {
-                    AudioPlayer.instance.PlaySFX("Stab");
+                    PlayerStateMachine.Instance.CameraShake();
                     PlayerStateMachine.Instance.HitAnimatorPause();
                 }
 

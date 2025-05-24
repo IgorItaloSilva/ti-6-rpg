@@ -116,27 +116,29 @@ public abstract class PlayerBaseState
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f);
     }
     
-    protected virtual void HandleTargetedMove()
-    {
-        _cameraForward = _ctx.MainCam.transform.forward;
-        _cameraRight = _ctx.MainCam.transform.right;
-        
-        // Flatten the camera directions to ignore vertical movement
-        _cameraForward.y = 0;
-        _cameraRight.y = 0;
-        _cameraForward.Normalize();
-        _cameraRight.Normalize();
-        
-        _appliedMovement = (_cameraForward * _ctx.CurrentMovement.z + _cameraRight * _ctx.CurrentMovement.x) * _ctx.Acceleration;
-        _appliedMovement.y = _ctx.BaseGravity;
-        
-        _ctx.AppliedMovement = _appliedMovement;
-        _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime));
-        
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.Acceleration * _ctx.CurrentMovementInput.x, 0.1f, Time.deltaTime);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * _ctx.CurrentMovementInput.y, 0.1f, Time.deltaTime);
-    }
-    
+protected virtual void HandleTargetedMove()
+{
+    _cameraForward = _ctx.MainCam.transform.forward;
+    _cameraRight = _ctx.MainCam.transform.right;
+
+    // Flatten the camera directions to ignore vertical movement
+    _cameraForward.y = 0;
+    _cameraRight.y = 0;
+    _cameraForward.Normalize();
+    _cameraRight.Normalize();
+
+    // Calculate desired movement in world space
+    Vector3 desiredMovement = (_cameraForward * _ctx.CurrentMovement.z + _cameraRight * _ctx.CurrentMovement.x) * _ctx.Acceleration;
+    desiredMovement.y = _ctx.BaseGravity;
+
+    _appliedMovement = Vector3.Lerp(_appliedMovement, desiredMovement, .15f);
+
+    _ctx.AppliedMovement = _appliedMovement;
+    _ctx.CC.Move(_ctx.AppliedMovement * (_ctx.BaseMoveSpeed * Time.deltaTime));
+
+    _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _ctx.transform.InverseTransformDirection(_appliedMovement).x, 0.15f, Time.deltaTime);
+    _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.transform.InverseTransformDirection(_appliedMovement).z, 0.15f, Time.deltaTime);
+}
     protected virtual void HandleForwardMove()
     {
         _cameraForward = _ctx.MainCam.transform.forward;
