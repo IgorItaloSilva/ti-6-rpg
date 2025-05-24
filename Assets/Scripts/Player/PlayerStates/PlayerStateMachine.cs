@@ -106,7 +106,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly float MaxJumpHeight = 1f,
         MaxJumpTime = .75f,
         BaseGravity = -9.8f,
-        BaseTurnTime = 0.15f,
+        BaseTurnTime = 0.2f,
         SlowTurnTimeModifier = 1.5f;
 
     public bool ShowDebugLogs, TestHitFeedback;

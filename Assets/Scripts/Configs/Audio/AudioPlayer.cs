@@ -24,7 +24,7 @@ public class AudioPlayer : MonoBehaviour
     {        
         footstepSource = PlayerStateMachine.Instance.gameObject.transform.GetChild(5).GetComponent<AudioSource>();
 
-        //PlayMusic("MainTheme");
+        PlayMusic("MainTheme");
         PlaySFX("AmbientSound");
     }
 
@@ -62,6 +62,6 @@ public class AudioPlayer : MonoBehaviour
 
     public void PlayFootstepSound()
     {
-        //footstepSource.PlayOneShot(footstepSounds[UnityEngine.Random.Range(0, footstepSounds.Length)]);
+        footstepSource.PlayOneShot(footstepSounds[UnityEngine.Random.Range(0, footstepSounds.Length)]);
     }
 }

@@ -89,12 +89,6 @@ public class PlayerAttackState : PlayerBaseState
             SwitchState(_factory.Dodge());
         }
 
-        if (_ctx.IsBlocking && _ctx.SwordWeaponManager.DamageCollider.enabled == false)
-        {
-            _ctx.ResetAttacks();
-            SwitchState(_factory.Block());
-        }
-
         if (_ctx.AttackCount == 0)
         {
             SwitchState(_factory.Grounded());

@@ -5,10 +5,10 @@ public abstract class PlayerBaseState
 {
     protected readonly PlayerStateMachine _ctx;
     protected readonly PlayerStateFactory _factory;
-    protected float _turnTime, _turnSmoothSpeed, _lowestAccelerationSpeed = float.MaxValue;
+    protected float _turnTime, _turnSmoothSpeed, _lowestAccelerationSpeed = float.MaxValue, _accelerationSpeed = 2.5f;
     protected float _maxAcceleration;
     private const byte RotationSpeed = 5;
-    protected byte _accelerationSpeed = 3, _decelerationSpeed = 10;
+    protected byte _decelerationSpeed = 10;
     private Vector3 _appliedMovement;
     protected Vector3 _cameraForward, _cameraRight;
     protected Vector3 _targetDirection;
