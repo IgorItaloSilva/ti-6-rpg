@@ -69,7 +69,7 @@ public class Configuracao : MonoBehaviour, IDataPersistence
     {
         currentResolutionIndex = resolutionIndex;
     }
-    void SetMasterVolume(float value)//Colocado manualmente pelo slider
+    public void SetMasterVolume(float value)//Colocado manualmente pelo slider
     {
         volumeMaster = value;
         if (value <= -29)
@@ -83,7 +83,7 @@ public class Configuracao : MonoBehaviour, IDataPersistence
 
     }
 
-    void SetMusicVolume(float value)//Colocado manualmente pelo slider
+    public void SetMusicVolume(float value)//Colocado manualmente pelo slider
     {
         volumeMusic = value;
         if (value <= -29)
@@ -96,7 +96,7 @@ public class Configuracao : MonoBehaviour, IDataPersistence
         }
     }
 
-    void SetEffectVolume(float value)//Colocado manualmente pelo slider
+    public void SetEffectVolume(float value)//Colocado manualmente pelo slider
     {
         volumeVFX = value;
         if (value <= -29)
