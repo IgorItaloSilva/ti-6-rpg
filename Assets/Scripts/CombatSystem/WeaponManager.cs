@@ -49,25 +49,33 @@ public class WeaponManager : MonoBehaviour
                 else{
                     PlayerStateMachine.Instance.ResetAttacks();
                     DealDamage(alvoAtacado, damage);
-                    DisableCollider();
                 }
             }
         }
     }
-    protected virtual void DealDamage(IDamagable alvo, float dano){
-        if(damagedTargets.Contains(alvo)){
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+            damagedTargets.Clear();
+    }
+    
+    protected virtual void DealDamage(IDamagable alvo, float dano)
+    {
+        if (damagedTargets.Contains(alvo))
+        {
             return;
         }
         damagedTargets.Add(alvo);
-        if(!PlayerStateMachine.Instance.IsDodging)
+        if (!PlayerStateMachine.Instance.IsDodging)
         {
             alvo.TakeDamage(dano, damageType, false);
             //Criar um texto de dano na tela
-            if(showDebug)Debug.Log($"Enviei {dano} de dano para ser tomado para {alvo}");
+            if (showDebug) Debug.Log($"Enviei {dano} de dano para ser tomado para {alvo}");
         }
         else
         {
-            if(showDebug)Debug.Log($"Não enviei {dano} de dano para ser tomado para {alvo}. Ele está desviando!");
+            if (showDebug) Debug.Log($"Não enviei {dano} de dano para ser tomado para {alvo}. Ele está desviando!");
         }
     }
     public void EnableCollider(){
