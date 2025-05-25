@@ -170,9 +170,14 @@ public class UIManager : MonoBehaviour
                 if (isNearCampfire) SwitchToScreen((int)UIScreens.Stats);
             }
             else
-            {
+            {//n conferimos o currentUiScreen == chatting pq n precisa, o dialog manager já tem o ischatting
                 if (dialogManager.isChatting)
-                    dialogManager.EndDialogue();
+                {
+                    if (!dialogManager.CurrentSpeech.needsAnswer)
+                    {
+                        dialogManager.EndDialogue();
+                    }
+                }
                 else
                     SwitchToScreen((int)UIScreens.Closed);
             }
