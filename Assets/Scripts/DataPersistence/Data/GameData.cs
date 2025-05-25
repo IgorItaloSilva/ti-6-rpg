@@ -16,6 +16,7 @@ public class GameData
     public string currentLevel;
     public DroppedExpData droppedExpData;
     public SerializableDictionary<string,ObjectiveData>objectivesData;
+    public ConfigData configData;
 
     //esses valores são os valores iniciais pra quando a gente começar o jogo.
     public GameData(PlayerStatsDefaultSO playerStatsDefaultSO)
@@ -25,10 +26,11 @@ public class GameData
         currentLevel = "";
         playerStatsData = new PlayerStatsData(playerStatsDefaultSO);
         skillTreeData = new SkillTreeData();
-        levelsData = new SerializableDictionary<string,LevelData>();
+        levelsData = new SerializableDictionary<string, LevelData>();
         droppedExpData = new DroppedExpData();
-        runeData=new RuneData();
+        runeData = new RuneData();
         objectivesData = new SerializableDictionary<string, ObjectiveData>();
+        configData = new ConfigData();
     }
 
     public GameData()
