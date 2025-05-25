@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject painelTutorial;
     [SerializeField] private GameObject painelPopupTutorial;
     [SerializeField] private GameObject painelQuest;
+    [SerializeField] private GameObject painelConfig;
     [SerializeField] private GameObject painelWeapon;
     [SerializeField] private GameObject buttonMainMenu;
     [SerializeField] private GameObject buttonTutorial;
@@ -70,6 +71,7 @@ public class UIManager : MonoBehaviour
     private Text youDiedVFXText;
     private Image youDiedVFXImage;
     public bool isNearCampfire;
+    bool toggleConfig = false;
     private const float transparencyRatioYouDiedVfx = 0.05f;
     private const float transparencyRatioYouDiedBackgroundVfx = 0.1f;
     private const float secondsBeforeYouDiedVfxAppears = 2f;
@@ -170,16 +172,22 @@ public class UIManager : MonoBehaviour
                 if (isNearCampfire) SwitchToScreen((int)UIScreens.Stats);
             }
             else
-            {//n conferimos o currentUiScreen == chatting pq n precisa, o dialog manager já tem o ischatting
-                if (dialogManager.isChatting)
-                {
-                    if (!dialogManager.CurrentSpeech.needsAnswer)
-                    {
-                        dialogManager.EndDialogue();
-                    }
-                }
+            {
+                if (toggleConfig)
+                    ToggleConfig();
                 else
-                    SwitchToScreen((int)UIScreens.Closed);
+                {
+                    //n conferimos o currentUiScreen == chatting pq n precisa, o dialog manager já tem o ischatting
+                    if (dialogManager.isChatting)
+                    {
+                        if (!dialogManager.CurrentSpeech.needsAnswer)
+                        {
+                            dialogManager.EndDialogue();
+                        }
+                    }
+                    else
+                        SwitchToScreen((int)UIScreens.Closed);
+                }
             }
         }
         if (Keyboard.current.eKey.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame || Mouse.current.leftButton.wasPressedThisFrame)
@@ -300,6 +308,8 @@ public class UIManager : MonoBehaviour
         painelQuest.SetActive(false);
         bossHPBarAndName.SetActive(false);
         painelPopupTutorial.SetActive(false);
+        painelConfig.SetActive(false);
+        toggleConfig = false;
     }
     public void PlayerDied()
     {
@@ -587,5 +597,18 @@ public class UIManager : MonoBehaviour
     {
         //fazer toda a logica de cooldown e ai avisa o playerStateMachine
         PlayerStateMachine.Instance.EndSpecialCooldown(special);
+    }
+    public void ToggleConfig()
+    {
+        if (toggleConfig)
+        {
+            toggleConfig = false;
+            painelConfig.SetActive(false);
+        }
+        else
+        {
+            toggleConfig = true;
+            painelConfig.SetActive(true);
+        }
     }
 }
