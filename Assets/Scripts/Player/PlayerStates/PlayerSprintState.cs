@@ -21,7 +21,6 @@ public class PlayerSprintState : PlayerBaseState
     public override void HandleAnimatorParameters()
     {
         _ctx.Animator.SetBool(_ctx.IsWalkingHash, true);
-        _ctx.Animator.SetBool(_ctx.IsRunningHash, true);
         _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
     }
 

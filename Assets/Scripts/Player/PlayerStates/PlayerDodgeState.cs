@@ -17,7 +17,8 @@ public class PlayerDodgeState : PlayerBaseState
         _ctx.CanDodge = false;
         HandleDodgeDurationAsync();
         _ctx.ResetAttacks();
-        _ctx.Animator.speed = 1.5f;
+        _ctx.Animator.speed = 1.25f;
+        _ctx.SwordTrail.emitting = true;
     }
 
     public override void EnterState()
@@ -52,6 +53,7 @@ public class PlayerDodgeState : PlayerBaseState
         _decelerationSpeed = 10;
         _ctx.IsDodging = false;
         _ctx.Animator.speed = 1f;
+        _ctx.SwordTrail.emitting = false;
     }
 
     public override void CheckSwitchStates()

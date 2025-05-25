@@ -39,7 +39,6 @@ public class WeaponManager : MonoBehaviour
                         AudioPlayer.instance.PlaySFX("Parry");
                         PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasParried);
                         PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasParried);
-                        DisableCollider();
                     }
                     else{
                         AudioPlayer.instance.PlaySFX("Block");
