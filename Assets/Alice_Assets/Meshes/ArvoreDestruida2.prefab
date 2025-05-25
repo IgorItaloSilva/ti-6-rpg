@@ -97,7 +97,8 @@ GameObject:
   - component: {fileID: 3070899770155672916}
   - component: {fileID: 3662182260618265029}
   - component: {fileID: 3467680574095614414}
-  m_Layer: 0
+  - component: {fileID: 6798397475161460251}
+  m_Layer: 12
   m_Name: ArvoreVariacao3_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -172,6 +173,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!136 &6798397475161460251
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5264129206654452114}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.49
+  m_Height: 5.4912333
+  m_Direction: 1
+  m_Center: {x: 0.2, y: 2.61, z: 0}
 --- !u!1 &7231509891869979572
 GameObject:
   m_ObjectHideFlags: 0
