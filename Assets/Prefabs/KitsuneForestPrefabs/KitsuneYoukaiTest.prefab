@@ -6707,7 +6707,7 @@ MonoBehaviour:
   allSkills: {fileID: 8971259952069000762}
   charControl: {fileID: 8151508215044251092}
   animator: {fileID: 7957502206457200544}
-  maxHp: 500
+  maxHp: 100
   poise: 10
   timeToDie: 3
   speed: 5.5
@@ -6715,6 +6715,9 @@ MonoBehaviour:
   meleeDist: 3
   expGain: 100
   enemyType: 0
+  isBoss: 0
+  Nome: 
+  kitsuneBossDeathAux: {fileID: 0}
   ignoreSaveLoad: 0
   <SaveId>k__BackingField: 
   healthBar: {fileID: 1993550673834320566}
@@ -6818,7 +6821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showDebug: 0
   damageType: 0
-  baseDamage: 75
+  baseDamage: 150
 --- !u!1 &6690920327001736767
 GameObject:
   m_ObjectHideFlags: 0
@@ -7314,6 +7317,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516282451681878592, guid: 0fdd31d69739586449b5b98f837df48a,
+        type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8088212208249239677, guid: 0fdd31d69739586449b5b98f837df48a, type: 3}

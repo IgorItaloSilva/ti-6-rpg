@@ -28,9 +28,9 @@ public class wpn_KitsuneAoe : EnemyBaseWeapon
     async void Wait()
     {
         await Task.Delay(2500);
-        collider.enabled = true;
         time = 2;
         do {
+            collider.enabled = true;
             await Task.Delay(400);
             collider.radius = 1.5f;
             time--;

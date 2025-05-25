@@ -22,7 +22,6 @@ public class NewKitsuneDash : EnemyBaseState
             enemyBehave.ChoseSkill(); // Escolher nova skill
             StateExit(); // Sair do estado atual
         }
-
     }
 
     public override void StateFixedUpdate()

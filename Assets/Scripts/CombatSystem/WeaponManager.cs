@@ -49,8 +49,8 @@ public class WeaponManager : MonoBehaviour
                     PlayerStateMachine.Instance.ResetAttacks();
                     DealDamage(alvoAtacado, damage);
                 }
+                DisableCollider();
             }
-            DisableCollider();
         }
     }
 

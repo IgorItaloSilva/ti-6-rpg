@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 
 public class KitsuneMagicBullet : MonoBehaviour
 {
     Transform target; // alvo dos projeteis
+    private WeaponManager _weaponManager;
     Rigidbody rb;
 
     float speed = 25; // velocidade dos projeteis
@@ -10,7 +12,10 @@ public class KitsuneMagicBullet : MonoBehaviour
     bool isClose = false; // Checar se chegou proximo o suficiente e para de olhar pro player
     float moveTimer; // Tempo ate os projeteis seguirem o player
 
-
+    private void Awake()
+    {
+        _weaponManager = GetComponent<WeaponManager>();
+    }
 
     void Start()
     {
@@ -20,6 +25,7 @@ public class KitsuneMagicBullet : MonoBehaviour
 
     void OnEnable()
     {
+        _weaponManager.EnableCollider();
         moveTimer = 0.6f;
         isClose = false;
     }
