@@ -240,12 +240,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allSkills: {fileID: 7947671066532953246}
   charControl: {fileID: 6690789587079485574}
-  animator: {fileID: 0}
-  hp: 500
+  animator: {fileID: 1361353175230562885}
+  maxHp: 0
   poise: 10
+  timeToDie: 0
   speed: 4
   knockbackDuration: 1
-  meleeDist: 1.5
+  meleeDist: 2
+  expGain: 0
+  enemyType: 0
+  ignoreSaveLoad: 0
+  <SaveId>k__BackingField: 
   healthBar: {fileID: 2253834713390333375}
   weapon: {fileID: 7751229636511217109}
 --- !u!114 &7947671066532953246
