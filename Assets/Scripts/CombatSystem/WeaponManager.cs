@@ -84,5 +84,8 @@ public class WeaponManager : MonoBehaviour
         damageCollider.enabled=false;
         damagedTargets.Clear();
     }
-    
+    void OnDisable()
+    {
+        damagedTargets.Clear();
+    }
 }
