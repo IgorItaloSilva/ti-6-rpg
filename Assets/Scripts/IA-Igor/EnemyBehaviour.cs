@@ -132,6 +132,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         }
         if (currentPoise <= 0 && !(currentState is StateStuned))
         {
+            allSkills.DisableWeapon();
             currentState = new StateStuned();
             currentState.StateStart(this);
         }
@@ -161,6 +162,14 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void WasParried()
     {
+        currentPoise -= 4;
+        healthBar.SetValue(Hp, currentPoise, false);
+        if (currentPoise <= 0 && !(currentState is StateStuned))
+        {
+            currentState = new StateStuned();
+            currentState.StateStart(this);
+            return;
+        }
         SetRest(knockbackDuration);
         currentState = new StateDamage();
         currentState.StateStart(this);
