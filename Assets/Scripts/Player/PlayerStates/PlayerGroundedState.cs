@@ -58,11 +58,6 @@ public class PlayerGroundedState : PlayerBaseState
             SwitchState(_factory.InAir());
         }
 
-        if (_ctx.IsDodgePressed)
-        {
-            SwitchState(_factory.Dodge());
-        }
-
         if (_ctx.IsAttackPressed)
         {
             SwitchState(_factory.Attack());

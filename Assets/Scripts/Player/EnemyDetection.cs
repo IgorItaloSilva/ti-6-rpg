@@ -33,7 +33,6 @@ public class EnemyDetection : MonoBehaviour
         {
             ForgetEnemy();
             targetEnemy = other.gameObject;
-            other.GetComponent<EnemyBehaviour>()?.SetTarget(null);
             other.GetComponent<EnemyBehaviour>().HideBossInfo();
         }
     }
@@ -61,6 +60,7 @@ public class EnemyDetection : MonoBehaviour
     {
         PlayerStateMachine.Instance.InCombat = false;
         PlayerStateMachine.Instance.Animator.SetBool(PlayerStateMachine.Instance.InCombatHash, false);
+        targetEnemy.GetComponent<EnemyBehaviour>()?.SetTarget(null);
         targetEnemy = null;
         _inLineOfSight = false;
         PlayerStateMachine.Instance.CameraTargetUnlock();

@@ -50,6 +50,7 @@ public class WeaponManager : MonoBehaviour
                     DealDamage(alvoAtacado, damage);
                 }
             }
+            DisableCollider();
         }
     }
 

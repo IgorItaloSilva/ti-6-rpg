@@ -180,6 +180,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         //não faz sentido mudar variaveis aqui, pois vamos chamar um load logo após
         DroppedExp.instance?.SetVariablesAndPos(CarriedExp, transform.position);
         GameEventsManager.instance.playerEvents.PlayerDied();
+        PlayerStateMachine.Instance.LockPlayer();
         //Debug.Log("Player morreu!");
         PlayerIsDead = true;
         AudioPlayer.instance.PlaySFX("PlayerDeath");
@@ -192,7 +193,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
     {
         PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasRespawnedHash);
         PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasRespawnedHash);
-
+        
+        PlayerStateMachine.Instance.UnlockPlayer();
         HealLife(maxLife);
         PlayerIsDead = false;
         CarriedExp = 0;
@@ -270,6 +272,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
 
     public void TakeDamage(float damage, Enums.DamageType damageType, bool wasCrit)
     {
+        if (PlayerIsDead) return;
         if (PUArmorActive) damage /= 2;
         CurrentLife -= damage;
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,wasCrit);
