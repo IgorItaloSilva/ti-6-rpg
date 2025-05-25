@@ -23,7 +23,6 @@ public class PlayerGroundedState : PlayerBaseState
     {
         _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
         _ctx.Animator.SetBool(_ctx.InCombatHash, _ctx.EnemyDetector.targetEnemy);
-        _ctx.Animator.SetBool(_ctx.IsRunningHash, false);
         _ctx.Animator.SetBool(_ctx.IsWalkingHash, _ctx.IsMovementPressed);
     }
     
