@@ -29,7 +29,7 @@ public class KitsuneMagicBullet : MonoBehaviour
             Vector3 pos = target.position;
             pos.y += 0.5f;
             transform.LookAt(pos);
-            if(Vector3.Distance(target.position, transform.position) < 1.75f)
+            if(Vector3.Distance(target.position, transform.position) < 2f)
                 isClose = true;
         }
         if(moveTimer <= 0)

@@ -14,7 +14,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField]GameObject[] optionButtons;
     TextMeshProUGUI[] optionButtonsText;
     private string current;
-    private Speech currentSpeech;
+    public Speech CurrentSpeech{ get; private set; }
     private Coroutine op;
     public bool isChatting {get; private set;}= false;
     void Awake(){
@@ -51,7 +51,7 @@ public class DialogueManager : MonoBehaviour
         StopCoroutine(op);
         op = null;
         text.text = content;
-        if(currentSpeech.needsAnswer){
+        if(CurrentSpeech.needsAnswer){
             ActivateAnswerButtons();
         }
         else{
@@ -68,10 +68,10 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            if(!currentSpeech.needsAnswer){
+            if(!CurrentSpeech.needsAnswer){
                 if (dialogue.Count > 0){
-                    currentSpeech = dialogue.Dequeue();
-                    Paste(currentSpeech);
+                    CurrentSpeech = dialogue.Dequeue();
+                    Paste(CurrentSpeech);
                 }
                 else EndDialogue();
             }
@@ -80,23 +80,23 @@ public class DialogueManager : MonoBehaviour
     }
     void AdvanceDialogAfterAnswer(){
         if(dialogue.Count > 0){
-            currentSpeech = dialogue.Dequeue();
-            Paste(currentSpeech);
+            CurrentSpeech = dialogue.Dequeue();
+            Paste(CurrentSpeech);
         }
         else EndDialogue();
     }
     public void Option1(){
-        currentSpeech.dialogAnswer?.Option1();
+        CurrentSpeech.dialogAnswer?.Option1();
         DeactivateAnswerButtons();
         AdvanceDialogAfterAnswer();
     }
     public void Option2(){
-        currentSpeech.dialogAnswer?.Option2();
+        CurrentSpeech.dialogAnswer?.Option2();
         DeactivateAnswerButtons();
         AdvanceDialogAfterAnswer();
     }
     public void Option3(){
-        currentSpeech.dialogAnswer?.Option3();
+        CurrentSpeech.dialogAnswer?.Option3();
         DeactivateAnswerButtons();
         AdvanceDialogAfterAnswer();
     }
@@ -106,8 +106,8 @@ public class DialogueManager : MonoBehaviour
     {
         StopAllCoroutines();
         if (dialogue.Count > 0){
-            currentSpeech = dialogue.Dequeue();
-            Paste(currentSpeech);
+            CurrentSpeech = dialogue.Dequeue();
+            Paste(CurrentSpeech);
         }
         else EndDialogue();
     }
@@ -141,7 +141,7 @@ public class DialogueManager : MonoBehaviour
 
     private void ActivateArrow()
     {
-        if(currentSpeech.needsAnswer)return;
+        if(CurrentSpeech.needsAnswer)return;
         arrow.gameObject.SetActive(true);
     }
 
@@ -153,7 +153,7 @@ public class DialogueManager : MonoBehaviour
             text.text += value;
             yield return new WaitForSecondsRealtime(0.02f);
         }
-        if(currentSpeech.needsAnswer){
+        if(CurrentSpeech.needsAnswer){
             ActivateAnswerButtons();
         }
         else{
@@ -162,10 +162,10 @@ public class DialogueManager : MonoBehaviour
         op = null;
     }
     void ActivateAnswerButtons(){
-        if(currentSpeech.needsAnswer){
-            for(int i=0;i<currentSpeech.amountAnswers;i++){
+        if(CurrentSpeech.needsAnswer){
+            for(int i=0;i<CurrentSpeech.amountAnswers;i++){
                 optionButtons[i].SetActive(true);
-                optionButtonsText[i].text=currentSpeech.optionsTexts[i];
+                optionButtonsText[i].text=CurrentSpeech.optionsTexts[i];
             }
         }
     }
