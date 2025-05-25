@@ -4,15 +4,14 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerAttackState : PlayerBaseState
 {
-    private const byte DecelerationSpeed = 5;
+    private const byte DecelerationSpeed = 2;
     private bool _inSeekRange;
-    private readonly bool _isSpecial;
 
-    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, bool isSpecial = false) : base(
+    public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        _isSpecial = isSpecial;
         _turnTime = _ctx.BaseTurnTime * 2;
+        _maxAcceleration = 1f;
     }
 
     public override void EnterState()
@@ -60,7 +59,7 @@ public class PlayerAttackState : PlayerBaseState
         if (_ctx.Acceleration > 0) _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
         else _ctx.Acceleration = 0;
         
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration * 5);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration, 0.1f, Time.deltaTime);
     }
     
     protected override void HandleForwardMove()
@@ -90,13 +89,7 @@ public class PlayerAttackState : PlayerBaseState
             SwitchState(_factory.Dodge());
         }
 
-        if (_ctx.IsBlocking && _ctx.SwordWeaponManager.DamageCollider.enabled == false)
-        {
-            _ctx.ResetAttacks();
-            SwitchState(_factory.Block());
-        }
-        
-        if (!_ctx.InCombat)
+        if (_ctx.AttackCount == 0)
         {
             SwitchState(_factory.Grounded());
         }

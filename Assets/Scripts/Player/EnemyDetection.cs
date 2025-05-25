@@ -56,6 +56,7 @@ public class EnemyDetection : MonoBehaviour
     public void ForgetEnemy()
     {
         PlayerStateMachine.Instance.InCombat = false;
+        PlayerStateMachine.Instance.Animator.SetBool(PlayerStateMachine.Instance.InCombatHash, false);
         targetEnemy = null;
         _inLineOfSight = false;
         PlayerStateMachine.Instance.CameraTargetUnlock();

@@ -16,9 +16,9 @@ public class PlayerStateFactory
     {
         return new PlayerDodgeState(_context, this);
     }
-    public PlayerBaseState Attack(bool _isSpecial = false)
+    public PlayerBaseState Attack()
     {
-        return new PlayerAttackState(_context, this, _isSpecial);
+        return new PlayerAttackState(_context, this);
     }
     public PlayerBaseState Dead()
     {
