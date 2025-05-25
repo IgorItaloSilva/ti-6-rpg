@@ -670,8 +670,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
         DisableSwordCollider();
 
-        _currentState.UnlockPlayer();
-
         if (ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
     }
 
@@ -717,6 +715,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     // ReSharper disable once UnusedMember.Global
     public void UnlockPlayer()
     {
+        if (ShowDebugLogs) Debug.Log("Unlocked player");
         _isLocked = false;
         _currentState.UnlockPlayer();
     }
