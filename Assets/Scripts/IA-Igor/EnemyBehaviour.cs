@@ -18,11 +18,16 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [Header("Coisas dos outros Sistemas")]
     [SerializeField] int expGain;
     [SerializeField] EnemyType enemyType;
+    //Coisas de boss
+    [Header("Coisas de boss")]
+    [SerializeField] bool isBoss;
+    [SerializeField] string Nome;
+    [SerializeField] KitsuneBossDeathAux kitsuneBossDeathAux;
     //Coisas do level loading manager (reload e spawn)
     [Header("Coisas do LevelLoadingManager")]
     public bool IsDead { get; private set; }
     [SerializeField] bool ignoreSaveLoad;
-    [field:SerializeField] public string SaveId { get; private set; }
+    [field: SerializeField] public string SaveId { get; private set; }
     Vector3 startingPos;
 
     public enum EnemyType
@@ -61,7 +66,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     }
     void Start()
     {
-        healthBar.SettupBarMax(Hp, poise);
+        healthBar?.SettupBarMax(Hp, poise);
         currentPoise = poise;
         charControl = GetComponent<CharacterController>();
         ChoseSkill();
@@ -124,7 +129,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     {
         Hp -= damage;
         currentPoise -= 1;
-        healthBar.SetValue(Hp, currentPoise, wasCrit);
+        healthBar?.SetValue(Hp, currentPoise, wasCrit);
+        if(isBoss)UIManager.instance?.UpdateBossLife(Hp,wasCrit);
         if (Hp <= 0)
         {
             Die();
@@ -140,6 +146,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void Die()
     {
+        
         currentState = null;
         animator.Play("Death", -1, 0.0f);
         charControl.enabled = false;
@@ -150,7 +157,15 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         }
         IsDead = true;
         Save();
-        Invoke("ActualDeath", timeToDie);
+        if (isBoss)
+        {
+            HideBossInfo();
+            kitsuneBossDeathAux?.Activate();
+        }
+        else
+        {
+            Invoke("ActualDeath", timeToDie);
+        }
     }
     public void ActualDeath()
     {
@@ -163,7 +178,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     public void WasParried()
     {
         currentPoise -= 4;
-        healthBar.SetValue(Hp, currentPoise, false);
+        healthBar?.SetValue(Hp, currentPoise, false);
         if (currentPoise <= 0 && !(currentState is StateStuned))
         {
             currentState = new StateStuned();
@@ -187,41 +202,45 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     #region Save e Load
     public void Save()
     {
-        if(ignoreSaveLoad)return;
-        if(LevelLoadingManager.instance==null){
+        if (ignoreSaveLoad) return;
+        if (LevelLoadingManager.instance == null)
+        {
             Debug.Log($"O inimigo {SaveId} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
         }
         //Debug.Log(LevelLoadingManager.instance.CurrentLevelData);
         //see if we have this data in dictionary        
-        if(LevelLoadingManager.instance.CurrentLevelData.enemiesData.ContainsKey(SaveId)){
+        if (LevelLoadingManager.instance.CurrentLevelData.enemiesData.ContainsKey(SaveId))
+        {
             //if so change it
             EnemyData newData = new EnemyData(this);
-            LevelLoadingManager.instance.CurrentLevelData.enemiesData[SaveId]=newData;
+            LevelLoadingManager.instance.CurrentLevelData.enemiesData[SaveId] = newData;
         }
-        else{
+        else
+        {
             //if not add it
             EnemyData newData = new EnemyData(this);
-            LevelLoadingManager.instance.CurrentLevelData.enemiesData.Add(SaveId,newData);
+            LevelLoadingManager.instance.CurrentLevelData.enemiesData.Add(SaveId, newData);
         }
     }
     public void Load(EnemyData enemyData)
     {
-        if(ignoreSaveLoad)return;
-        IsDead=enemyData.isDead;
-        Hp=enemyData.currentLife;
-        transform.position=enemyData.lastPosition;
+        if (ignoreSaveLoad) return;
+        IsDead = enemyData.isDead;
+        Hp = enemyData.currentLife;
+        transform.position = enemyData.lastPosition;
         Physics.SyncTransforms();
         //initiationThroughLoad=true;
-        if(IsDead)gameObject.SetActive(false);
+        if (IsDead) gameObject.SetActive(false);
     }
     public void Respawn()
     {
+        if (isBoss) return;
         charControl.enabled = true;
         currentPoise = poise;
         Hp = maxHp;
         IsDead = false;
         transform.position = startingPos;
-        if(healthBar)
+        if (healthBar)
         {
             healthBar.gameObject.SetActive(true);
             healthBar.SettupBarMax(Hp, poise);
@@ -230,4 +249,12 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         Save();
     }
     #endregion
+    public void DisplayBossInfoIfBoss()
+    {
+        if(isBoss)UIManager.instance?.BossLifeSettup(Hp, maxHp, Nome);
+    }
+    public void HideBossInfo()
+    {
+        UIManager.instance?.HideBossLife();
+    }
 }

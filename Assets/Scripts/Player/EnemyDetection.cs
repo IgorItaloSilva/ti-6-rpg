@@ -23,6 +23,7 @@ public class EnemyDetection : MonoBehaviour
             RaycastEnemyAsync();
             Debug.Log("In enemy range, looking for line of sight");
             other.GetComponent<EnemyBehaviour>().SetTarget(transform.parent);
+            other.GetComponent<EnemyBehaviour>().DisplayBossInfoIfBoss();
         }
     }
 
@@ -31,6 +32,9 @@ public class EnemyDetection : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             ForgetEnemy();
+            targetEnemy = other.gameObject;
+            other.GetComponent<EnemyBehaviour>()?.SetTarget(null);
+            other.GetComponent<EnemyBehaviour>().HideBossInfo();
         }
     }
 
