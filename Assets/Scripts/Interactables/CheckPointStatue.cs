@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class CheckPointStatue : Interactable
 {
-    [SerializeField]TextMeshPro keyIndicationText;
+    [SerializeField]GameObject canvas;
     [SerializeField]bool isDefaultSpawnPoint;
     PlayerStats playerStats;
     bool didntAddInteract = false;
@@ -44,7 +44,7 @@ public class CheckPointStatue : Interactable
         //Debug.Log("Entrei na area da status de save");
         if(collider.CompareTag("Player")){
             //Debug.Log("Um jogadore ntrou aqui");
-            keyIndicationText.gameObject.SetActive(true);
+            canvas.gameObject.SetActive(true);
             inRange=true;
             playerStats=collider.GetComponent<PlayerStats>();
             if(playerStats!=null){
@@ -62,17 +62,17 @@ public class CheckPointStatue : Interactable
             if(playerStats!=null){
                 playerStats.isNearCampfire=false;
             }
-            keyIndicationText.gameObject.SetActive(false);
+            canvas.gameObject.SetActive(false);
             UIManager.instance.NearCampfire(false);
         }
     }
-    void OnTriggerStay(Collider collider){
+    /* void OnTriggerStay(Collider collider){
         if(collider.CompareTag("Player")){
             Vector3 lookAt = new Vector3(collider.transform.position.x,keyIndicationText.transform.position.y,collider.transform.position.z);
             keyIndicationText.transform.LookAt(lookAt);
             keyIndicationText.transform.Rotate(new Vector3(0,180,0));
         }
-    }
+    } */
     void Interact(InputAction.CallbackContext context){
         if(inRange && !PlayerStateMachine.Instance.IsLocked && !DialogueManager.instance.isChatting){
             PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasPrayedHash);

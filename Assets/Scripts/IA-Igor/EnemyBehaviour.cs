@@ -160,7 +160,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if (isBoss)
         {
             HideBossInfo();
-            kitsuneBossDeathAux?.Activate();
+            kitsuneBossDeathAux?.Activate(this);
         }
         else
         {
