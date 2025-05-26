@@ -22,8 +22,8 @@ public class BossSpawner : MonoBehaviour
             SpawnBoss();
     }
     void SpawnBoss(){
-        statue.SetActive(false);
-        boss.SetActive(true);
-        vfxRoxo.Activate();
+        statue?.SetActive(false);
+        boss?.SetActive(true);
+        vfxRoxo?.Activate();
     }
 }
