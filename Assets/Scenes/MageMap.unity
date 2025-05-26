@@ -2176,6 +2176,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1604159903533748858, guid: c54de51f69303544c9206b898197c79f,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604159903533748858, guid: c54de51f69303544c9206b898197c79f,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604159903533748858, guid: c54de51f69303544c9206b898197c79f,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604159903533748858, guid: c54de51f69303544c9206b898197c79f,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604159903533748858, guid: c54de51f69303544c9206b898197c79f,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1604159903533748858, guid: c54de51f69303544c9206b898197c79f,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8019482847307691923, guid: c54de51f69303544c9206b898197c79f,
         type: 3}
       propertyPath: m_Name
@@ -12508,6 +12538,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: RunaRedonda_Azul
       objectReference: {fileID: 0}
+    - target: {fileID: 2606809093679683739, guid: 064e50cb5dec4af4e89c875be986e735,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093157900505999848, guid: 064e50cb5dec4af4e89c875be986e735,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8702011005138044365, guid: 064e50cb5dec4af4e89c875be986e735,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12820,7 +12860,7 @@ GameObject:
   - component: {fileID: 424688595}
   - component: {fileID: 424688594}
   - component: {fileID: 424688593}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RunaCritComum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21296,7 +21336,7 @@ GameObject:
   - component: {fileID: 909333713}
   - component: {fileID: 909333712}
   - component: {fileID: 909333711}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RunaInteligencia
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21519,7 +21559,7 @@ PrefabInstance:
     - target: {fileID: 3406205791008514422, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.009712582
+      value: -0.009712623
       objectReference: {fileID: 0}
     - target: {fileID: 3406205791008514422, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
@@ -21529,7 +21569,7 @@ PrefabInstance:
     - target: {fileID: 3406205791008514422, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.050517187
+      value: 0.05051735
       objectReference: {fileID: 0}
     - target: {fileID: 3677728396453495975, guid: e3a5558b14fb02d47bf241bea8333e09,
         type: 3}
@@ -23900,7 +23940,12 @@ PrefabInstance:
     - target: {fileID: 4062478661446953458, guid: 649f07d43a6ba0e4091cf65cc951901a,
         type: 3}
       propertyPath: maxHp
-      value: 100
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 4062478661446953458, guid: 649f07d43a6ba0e4091cf65cc951901a,
+        type: 3}
+      propertyPath: speed
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6278841551135667028, guid: 649f07d43a6ba0e4091cf65cc951901a,
         type: 3}
@@ -38503,10 +38548,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5072366465032371762, guid: a1f3e76efcc7feb45a7b6b6a8e56112f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 9143450655352703046, guid: a1f3e76efcc7feb45a7b6b6a8e56112f,
         type: 3}
       propertyPath: m_Name
       value: RunaQuadrada_Amarela
+      objectReference: {fileID: 0}
+    - target: {fileID: 9143450655352703046, guid: a1f3e76efcc7feb45a7b6b6a8e56112f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
