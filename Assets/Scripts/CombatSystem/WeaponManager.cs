@@ -39,7 +39,6 @@ public class WeaponManager : MonoBehaviour
                         AudioPlayer.instance.PlaySFX("Parry");
                         PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasParried);
                         PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasParried);
-                        DisableCollider();
                     }
                     else{
                         AudioPlayer.instance.PlaySFX("Block");
@@ -50,6 +49,7 @@ public class WeaponManager : MonoBehaviour
                     PlayerStateMachine.Instance.ResetAttacks();
                     DealDamage(alvoAtacado, damage);
                 }
+                DisableCollider();
             }
         }
     }
@@ -85,5 +85,8 @@ public class WeaponManager : MonoBehaviour
         damageCollider.enabled=false;
         damagedTargets.Clear();
     }
-    
+    void OnDisable()
+    {
+        damagedTargets.Clear();
+    }
 }

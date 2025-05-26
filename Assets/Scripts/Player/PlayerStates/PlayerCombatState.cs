@@ -21,7 +21,6 @@ public class PlayerCombatState : PlayerGroundedState
     {
         _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
         _ctx.Animator.SetBool(_ctx.InCombatHash, true);
-        _ctx.Animator.SetBool(_ctx.IsRunningHash, false);
         _ctx.Animator.SetBool(_ctx.IsWalkingHash, _ctx.IsMovementPressed);
     }
 

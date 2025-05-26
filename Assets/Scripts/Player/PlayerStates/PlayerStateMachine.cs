@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
 #endregion
@@ -41,8 +42,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private PlayerInput _playerInput;
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
-    [SerializeField] private ParticleSystem _swordTrail;
-    [SerializeField] private TrailRenderer _swordMainTrail;
+    [FormerlySerializedAs("_swordMainTrail")] [SerializeField] private TrailRenderer _swordTrail;
     [SerializeField] private VisualEffect _swordSlash;
     [SerializeField] private VisualEffect _parryVfx;
 
@@ -116,7 +116,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     #region AnimatorHashes
 
     public readonly int IsWalkingHash = Animator.StringToHash("isWalking");
-    public readonly int IsRunningHash = Animator.StringToHash("isRunning");
     public readonly int IsBlockingHash = Animator.StringToHash("isBlocking");
     public readonly int IsGroundedHash = Animator.StringToHash("isGrounded");
     public readonly int IsCastingMagicHash = Animator.StringToHash("isCastingMagic");
@@ -233,6 +232,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public Camera MainCam => _mainCam;
     public CinemachineTargetGroup CamTargetGroup => _camTargetGroup;
     public EnemyDetection EnemyDetector => enemyDetector;
+    public TrailRenderer SwordTrail => _swordTrail;
     public PlayerWeapon SwordWeaponManager => _swordWeaponManager;
     public PlayerWeapon MagicWeaponManager => _magicWeaponManager;
     public Vector3 CurrentMovementInput => _currentMovementInput;
@@ -670,8 +670,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
         DisableSwordCollider();
 
-        _currentState.UnlockPlayer();
-
         if (ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
     }
 
@@ -679,8 +677,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         if (_isDodging) return;
         _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
-        _swordMainTrail.emitting = true;
-        _swordTrail.Play();
+        _swordTrail.emitting = true;
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
         _acceleration = 2f;
@@ -704,8 +701,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     private void DisableSwordCollider()
     {
-        _swordMainTrail.emitting = false;
-        _swordTrail.Stop();
+        _swordTrail.emitting = false;
         _swordWeaponManager.DisableCollider();
     }
 
@@ -719,6 +715,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     // ReSharper disable once UnusedMember.Global
     public void UnlockPlayer()
     {
+        if (ShowDebugLogs) Debug.Log("Unlocked player");
         _isLocked = false;
         _currentState.UnlockPlayer();
     }

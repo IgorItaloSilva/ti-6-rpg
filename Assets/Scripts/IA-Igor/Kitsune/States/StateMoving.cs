@@ -14,7 +14,7 @@ public class StateMoving : EnemyBaseState
 
     public override void StateUpdate()
     {
-        if (GetPlayerDistance() < minDistPlayer) {
+        if (GetPlayerDistance() < enemyBehave.GetMeleeDist()) {
             enemyBehave.currentState = new StateIdle();
             StateExit();
         }

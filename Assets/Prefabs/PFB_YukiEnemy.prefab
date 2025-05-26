@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1594504840168518126
 Transform:
   m_ObjectHideFlags: 0
@@ -84,6 +84,9 @@ MonoBehaviour:
   meleeDist: 2
   expGain: 0
   enemyType: 0
+  isBoss: 0
+  Nome: 
+  kitsuneBossDeathAux: {fileID: 0}
   ignoreSaveLoad: 0
   <SaveId>k__BackingField: 
   healthBar: {fileID: 2090046711323446417}
