@@ -1,9 +1,11 @@
-Shader "Unlit/NewUnlitShader"
+Shader "Unlit/ShearTopOnly"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
         _Slider  ("Slider", Range(-2, 2)) = 1
+        _HeightMin("Height Min", Float) = 0
+        _HeightMax("Height Max", Float) = 1
     }
     SubShader
     {
@@ -36,18 +38,29 @@ Shader "Unlit/NewUnlitShader"
             sampler2D _MainTex;
             float4 _MainTex_ST;
             float _Slider;
+            float _HeightMin;
+            float _HeightMax;
 
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                float4x4 m = float4x4 (
-                    1, sin(_Time.y + v.vertex.y * _Slider) * 0.03 ,0,0,
+                
+                float localY = v.vertex.y;
+
+                // Normaliza a altura entre 0 e 1
+                float normalizedY = saturate((localY - _HeightMin) / (_HeightMax - _HeightMin));
+
+                // Calcula o fator de deslocamento apenas para a parte de cima
+                float shearOffset = sin(_Time.y + v.vertex.y * _Slider) * 0.08 * normalizedY;
+
+                float4x4 m = float4x4(
+                    1, shearOffset, 0, 0,
                     0, 1, 0, 0,
                     0, 0, 1, 0,
                     0, 0, 0, 1
                 );
-                o.vertex = mul(m, o.vertex);
+
+                o.vertex = UnityObjectToClipPos(mul(m, v.vertex));
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 return o;
             }
