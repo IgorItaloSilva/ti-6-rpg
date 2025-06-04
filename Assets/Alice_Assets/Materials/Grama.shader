@@ -3,7 +3,9 @@ Shader "Unlit/ShearTopOnly"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Slider  ("Slider", Range(-2, 2)) = 1
+        _Color("Cor",Color)= (1,1,1,1)
+        _Slider  ("Slider", Range(-2, 20)) = 1
+        _Slider2  ("Slider2", Range(0, 1)) = 1
         _HeightMin("Height Min", Float) = 0
         _HeightMax("Height Max", Float) = 1
     }
@@ -21,6 +23,7 @@ Shader "Unlit/ShearTopOnly"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma multi_compile_fog
             #include "UnityCG.cginc"
 
             struct appdata 
@@ -32,12 +35,15 @@ Shader "Unlit/ShearTopOnly"
             struct v2f
             {
                 float2 uv : TEXCOORD0;
+                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
+            float4 _Color;
             float _Slider;
+            float _Slider2;
             float _HeightMin;
             float _HeightMax;
 
@@ -51,7 +57,7 @@ Shader "Unlit/ShearTopOnly"
                 float normalizedY = saturate((localY - _HeightMin) / (_HeightMax - _HeightMin));
 
                 // Calcula o fator de deslocamento apenas para a parte de cima
-                float shearOffset = sin(_Time.y + v.vertex.y * _Slider) * 0.08 * normalizedY;
+                float shearOffset = sin(_Time.y + v.vertex.y * _Slider) * _Slider2 * normalizedY;
 
                 float4x4 m = float4x4(
                     1, shearOffset, 0, 0,
@@ -62,12 +68,15 @@ Shader "Unlit/ShearTopOnly"
 
                 o.vertex = UnityObjectToClipPos(mul(m, v.vertex));
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
+                col = col*_Color;
+                UNITY_APPLY_FOG(i.fogCoord, col);
                 return col;
             }
             ENDCG
