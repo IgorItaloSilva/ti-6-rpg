@@ -13,20 +13,24 @@ public class Interactable : MonoBehaviour
     protected SphereCollider sphereCollider;
     [SerializeField] protected UnityEvent myEvent;
     protected virtual void Awake(){
-        if(!ignoreSaveLoad){
-            if(LevelLoadingManager.instance==null){
+        sphereCollider=GetComponent<SphereCollider>();
+        sphereCollider.isTrigger=true;
+        if (!ignoreSaveLoad)
+        {
+            if (LevelLoadingManager.instance == null)
+            {
                 Debug.LogWarning($"O interactable {saveId} está tentando se adicionar na lista de interactables, mas não temos um LevelLoadingManger na cena");
             }
             LevelLoadingManager.instance.interactables.Add(this);
-            if(saveId==""){
+            if (saveId == "")
+            {
                 //Debug.LogWarning($"O GameObject "+gameObject.name+" está sem id e marcado para salvar, dando o nome do Objeto para ele");
-                saveId=gameObject.name;
+                saveId = gameObject.name;
             }
         }
     }
     protected virtual void Start(){
-        sphereCollider=GetComponent<SphereCollider>();
-        sphereCollider.isTrigger=true;
+        //
     }
     protected virtual void OnTriggerEnter(Collider collider){
         myEvent.Invoke();
