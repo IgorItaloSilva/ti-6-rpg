@@ -1,11 +1,14 @@
 using System;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class EnemyBehaviour : MonoBehaviour, IDamagable
 {
     [SerializeField] protected ASkills allSkills;
     [SerializeField] CharacterController charControl;
     [SerializeField] Animator animator;
+    [SerializeField] private ParticleSystem _dashVFX;
+    [SerializeField] private VisualEffect _headbuttVFX;
     [SerializeField] public float Hp { get; private set; }
     [SerializeField] float maxHp;
     [SerializeField] float poise;
@@ -256,5 +259,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     public void HideBossInfo()
     {
         UIManager.instance?.HideBossLife();
+    }
+
+    public void PlayDashVFX()
+    {
+        _dashVFX.Play();
+        _headbuttVFX.Play();
     }
 }

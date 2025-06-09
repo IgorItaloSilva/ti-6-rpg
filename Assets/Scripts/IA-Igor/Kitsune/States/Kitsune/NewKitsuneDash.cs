@@ -1,3 +1,5 @@
+using System.Dynamic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class NewKitsuneDash : EnemyBaseState
@@ -9,6 +11,7 @@ public class NewKitsuneDash : EnemyBaseState
         restTime = 2f;
         animator.Play("Dash", -1, 0f);
         canDamage = true;
+        PlayVFXAsync();
     }
 
     public override void StateUpdate()
@@ -43,6 +46,12 @@ public class NewKitsuneDash : EnemyBaseState
             charControl.Move(charControl.transform.forward * speed * Time.fixedDeltaTime * 7 + charControl.transform.up * ApplyGravity());
         }
         
+    }
+
+    private async void PlayVFXAsync()
+    {
+        await Task.Delay(500);
+        enemyBehave.PlayDashVFX();
     }
 
 }

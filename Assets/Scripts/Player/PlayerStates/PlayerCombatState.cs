@@ -17,7 +17,7 @@ public class PlayerCombatState : PlayerGroundedState
         _ctx.CurrentMovementZ = _ctx.CurrentMovementInput.y;
     }
 
-    public sealed override void HandleAnimatorParameters()
+    public override void HandleAnimatorParameters()
     {
         _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
         _ctx.Animator.SetBool(_ctx.InCombatHash, true);
@@ -58,7 +58,6 @@ public class PlayerCombatState : PlayerGroundedState
 
         if (_ctx.IsBlockPressed)
         {
-            _ctx.Animator.SetBool(_ctx.InCombatHash, true);
             _ctx.Animator.SetBool(_ctx.IsBlockingHash, true);
             SwitchState(_factory.Block());
             return;
@@ -66,7 +65,6 @@ public class PlayerCombatState : PlayerGroundedState
 
         if (_ctx.IsCastingMagic)
         {
-            _ctx.Animator.SetBool(_ctx.InCombatHash, true);
             _ctx.Animator.SetBool(_ctx.IsCastingMagicHash, true);
             SwitchState(_factory.Magic());
             return;
@@ -74,7 +72,6 @@ public class PlayerCombatState : PlayerGroundedState
 
         if (_ctx.IsJumpPressed)
         {
-            _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             HandleJump();
             SwitchState(_factory.InAir());
             return;

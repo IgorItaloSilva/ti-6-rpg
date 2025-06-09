@@ -19,7 +19,6 @@ public class PlayerLockedState : PlayerBaseState
 
     public override void UpdateState()
     {
-        CheckSwitchStates();
     }
 
     public override void FixedUpdateState()
