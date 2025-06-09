@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7004662553146889246}
   - component: {fileID: 4394504097118877562}
   - component: {fileID: 3875322497911055877}
+  - component: {fileID: 5646391478286338393}
+  - component: {fileID: 2028393907158386140}
   m_Layer: 0
   m_Name: CasaComprida_LOD0
   m_TagString: Untagged
@@ -90,6 +92,48 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5646391478286338393
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400075364221150882}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 13.140263, y: 14.851012, z: 14.354302}
+  m_Center: {x: -0.049446426, y: 7.4255714, z: -8.440576}
+--- !u!65 &2028393907158386140
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400075364221150882}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 9.90081, y: 14.851012, z: 7.747741}
+  m_Center: {x: -0.07626922, y: 7.4255714, z: -19.5388}
 --- !u!1 &5633968555545994368
 GameObject:
   m_ObjectHideFlags: 0

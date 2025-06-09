@@ -52,4 +52,8 @@ public class PlayerStateFactory
     {
         return new PlayerCombatState(_context, this);
     }
+    public PlayerBaseState Staggered()
+    {
+        return new PlayerStaggeredState(_context, this);
+    }
 }

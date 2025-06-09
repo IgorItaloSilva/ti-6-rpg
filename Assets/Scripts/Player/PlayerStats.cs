@@ -138,7 +138,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
 
     private void HealLife(float life)
     {
-        if (CurrentLife <= maxLife)
+        if (CurrentLife < maxLife)
         {
             CurrentLife += life;
             if (CurrentLife > maxLife) CurrentLife = maxLife;
@@ -153,6 +153,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
             HealLife(lifeToheal);
             PotionsAmmount--;
             UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
+            AudioPlayer.instance.PlaySFX("Drinking");
+            AudioPlayer.instance.PlaySFX("Heal");
         }
     }
 
@@ -285,6 +287,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
             AudioPlayer.instance.PlaySFX("PlayerDamage" + Random.Range(1, 3));
             PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.TookHitHash);
             PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.TookHitHash);
+            PlayerStateMachine.Instance.StaggerPlayer();
         }
     }
 

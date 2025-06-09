@@ -56,6 +56,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private Vector2 _currentMovementInput, _currentLookInput;
 
     private bool
+        _playerStaggered = false,
         _hasJumped,
         _isMovementPressed,
         _isSprintPressed,
@@ -250,6 +251,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsSpecial2Pressed => _isSpecial2Pressed && _canSpecial2 && IsSpecial2Unlocked;
     public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3 && IsSpecial3Unlocked;
     public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4 && IsSpecial4Unlocked;
+    public bool IsMagicPressed => _isMagicPressed;
     public bool IsCastingMagic => _isMagicPressed && _canCastMagic;
     public bool IsClimbing => _isClimbing;
     public bool IsBlocking => _isBlocking && _inCombat;
@@ -287,6 +289,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         get => _canMount;
         set => _canMount = value;
+    }
+
+    public bool CanCastMagic
+    {
+        get => _canCastMagic;
+        set => _canCastMagic = value;
     }
 
     public bool CanEnterCombat
@@ -492,7 +500,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private void OnMagicPressed(InputAction.CallbackContext context)
     {
         _isMagicPressed = context.ReadValueAsButton();
-        _canCastMagic = true;
     }
 
     private void OnTargetPressed(InputAction.CallbackContext context)
@@ -680,7 +687,9 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordTrail.emitting = true;
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
-        _acceleration = 2f;
+        if((enemyDetector.targetEnemy &&
+            Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f) || !_inCombat)
+            _acceleration = 2f;
         if (TestHitFeedback)
         {
             HitAnimatorPause();
@@ -695,8 +704,16 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordWeaponManager.SetDamageType(Enums.AttackType.HeavyAttack);
         _swordSlash.Play();
         _swordWeaponManager.EnableCollider();
+        AudioPlayer.instance.PlaySFX("AirSlash");
         AudioPlayer.instance.PlaySFX("SwordSlash");
-        _acceleration = 2.5f;
+        if((enemyDetector.targetEnemy &&
+            Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f) || !_inCombat)
+            _acceleration = 2.5f;
+    }
+
+    public void StaggerPlayer()
+    {
+        _currentState.StaggerPlayer();
     }
 
     private void DisableSwordCollider()
