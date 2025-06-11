@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7335535973016262471}
   - component: {fileID: 8413864634659211262}
   - component: {fileID: 877635790364348980}
+  - component: {fileID: 5212439297537577912}
   m_Layer: 0
   m_Name: Corrupted_Particle
   m_TagString: Untagged
@@ -31,7 +32,7 @@ Transform:
   m_GameObject: {fileID: 1351405527254120336}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.8656878, y: -0.3531177, z: -0.66709363}
+  m_LocalPosition: {x: 5.63, y: -2.63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -59,14 +60,17 @@ VisualEffect:
       m_Array: []
     m_Vector3f:
       m_Array:
-      - m_Value: {x: -2.1456878, y: 4.5531178, z: 1.4470936}
+      - m_Value: {x: -8.190601, y: 5.2539997, z: 3.83}
         m_Name: pos1
         m_Overridden: 1
-      - m_Value: {x: 2.1343122, y: 3.7631178, z: -2.8629065}
+      - m_Value: {x: -13.6483, y: 0.21399987, z: -2.6030107}
         m_Name: pos2
         m_Overridden: 1
-      - m_Value: {x: -0.24568784, y: 4.103118, z: 4.567094}
+      - m_Value: {x: -9.778519, y: 2.8639998, z: 2.3796477}
         m_Name: pos3
+        m_Overridden: 1
+      - m_Value: {x: -5.51, y: 0.22000003, z: 0.23000006}
+        m_Name: spawnpos
         m_Overridden: 1
     m_Vector4f:
       m_Array: []
@@ -144,6 +148,7 @@ MonoBehaviour:
   - {fileID: 7335535973016262471}
   - {fileID: 8413864634659211262}
   - {fileID: 877635790364348980}
+  - {fileID: 5212439297537577912}
   m_VisualEffect: {fileID: 490247155981538766}
 --- !u!114 &7335535973016262471
 MonoBehaviour:
@@ -192,7 +197,23 @@ MonoBehaviour:
   Space: 0
   m_Property:
     m_Name: pos3
-  Target: {fileID: 7678569810355424233}
+  Target: {fileID: 0}
+--- !u!114 &5212439297537577912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1351405527254120336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07c3070554d0a8944a95ff8f018c2c9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Space: 2
+  m_Property:
+    m_Name: spawnpos
+  Target: {fileID: 7557545064571079622}
 --- !u!1 &2462589238947583505
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +239,7 @@ Transform:
   m_GameObject: {fileID: 2462589238947583505}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.28, y: 4.2, z: 0.78}
+  m_LocalPosition: {x: -0, y: 1.32, z: 6.87}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -254,12 +275,12 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 633620428142038744}
+  - {fileID: 7557545064571079622}
   - {fileID: 7822039900270403535}
   - {fileID: 4208178986152027673}
-  - {fileID: 7678569810355424233}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5298157553614821126
+--- !u!1 &5893438883460468148
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -267,24 +288,24 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7678569810355424233}
+  - component: {fileID: 7557545064571079622}
   m_Layer: 0
-  m_Name: Pos3
+  m_Name: SpawnPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7678569810355424233
+--- !u!4 &7557545064571079622
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5298157553614821126}
+  m_GameObject: {fileID: 5893438883460468148}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.62, y: 3.75, z: 3.9}
+  m_LocalPosition: {x: 0.12, y: -2.41, z: 0.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -300,7 +321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4208178986152027673}
   m_Layer: 0
-  m_Name: Pos2
+  m_Name: FinalPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -315,7 +336,7 @@ Transform:
   m_GameObject: {fileID: 7969805037777119144}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 3.41, z: -3.53}
+  m_LocalPosition: {x: -8.3, y: -3.72, z: 8.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
