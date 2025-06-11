@@ -300,10 +300,10 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
                 PUArmorActive = true;
                 Debug.Log("Ativei o powerUp armor");
                 break;
-            case 7:
+            case 6:
                 PULifeRegenActive = true;
                 InvokeRepeating("LifeRegenPowerUp", 0f, 5f);
-                Debug.Log("Ativei o powerUp 7");
+                Debug.Log("Ativei o powerUp 6");
                 break;
             default: break;
         }

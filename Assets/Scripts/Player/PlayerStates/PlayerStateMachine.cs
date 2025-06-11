@@ -196,9 +196,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
                 Debug.LogWarning("Tentamos ativar o cooldown de uma skill que não existe");
                 break;
         }
-
-        UIManager.instance
-            ?.HandleCooldowns(
+        SpecialAttackUIManager.instance
+            ?.StartCooldown(
                 special); //Essa função vai cuidar do cooldown e nos avisar quando ele tiver acabado, o tempo de cooldown será definido la
     }
 
@@ -247,10 +246,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsPotionPressed => _isPotionPressed && _canHeal;
     public bool IsBlockPressed => _isBlockPressed;
     public bool IsSprintPressed => _isSprintPressed && _isMovementPressed;
-    public bool IsSpecial1Pressed => _isSpecial1Pressed && _canSpecial1 && IsSpecial1Unlocked;
-    public bool IsSpecial2Pressed => _isSpecial2Pressed && _canSpecial2 && IsSpecial2Unlocked;
-    public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3 && IsSpecial3Unlocked;
-    public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4 && IsSpecial4Unlocked;
+    public bool IsSpecial1Pressed => _isSpecial1Pressed && _canSpecial1 && IsSpecial1Unlocked && !IsSpecial1OnCooldown;
+    public bool IsSpecial2Pressed => _isSpecial2Pressed && _canSpecial2 && IsSpecial2Unlocked && !IsSpecial2OnCooldown;
+    public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3 && IsSpecial3Unlocked && !IsSpecial3OnCooldown;
+    public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4 && IsSpecial4Unlocked && !IsSpecial4OnCooldown;
     public bool IsMagicPressed => _isMagicPressed;
     public bool IsCastingMagic => _isMagicPressed && _canCastMagic;
     public bool IsClimbing => _isClimbing;
