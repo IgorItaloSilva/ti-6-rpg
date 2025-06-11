@@ -63,7 +63,6 @@ MonoBehaviour:
   _swordWeaponManager: {fileID: 5906097556296090593}
   _magicWeaponManager: {fileID: 2822298986470714372}
   _swordTrail: {fileID: 2440447049323101871}
-  _swordMainTrail: {fileID: 8536636421571461040}
   _swordSlash: {fileID: 3789666863310744281}
   _parryVfx: {fileID: 6547711465386495470}
   ShowDebugLogs: 0
@@ -2567,7 +2566,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.39839876, y: -0.59981626, z: 0.59175676, w: -0.3623851}
   m_LocalPosition: {x: 0.00011, y: 0.00756, z: -0.00009}
-  m_LocalScale: {x: 0.018926999, y: 0.018926997, z: 0.018926993}
+  m_LocalScale: {x: 0.025786145, y: 0.025786141, z: 0.025786137}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2915594071529478334}
@@ -2595,7 +2594,13 @@ VisualEffect:
     m_Vector3f:
       m_Array: []
     m_Vector4f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 28.679245, y: 6.530159, z: 0.2867922, w: 1}
+        m_Name: ParryColor_Center
+        m_Overridden: 1
+      - m_Value: {x: 256, y: 59.002266, z: 0, w: 1}
+        m_Name: ParryColor_External
+        m_Overridden: 1
     m_Uint:
       m_Array: []
     m_Int:

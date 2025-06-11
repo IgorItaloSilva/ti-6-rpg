@@ -15,7 +15,8 @@ public abstract class EnemyBaseState
     protected float steeringForce; // Força de Rotação
     protected float lookTime; // Temporizador da rotação
     protected float restTime; // Tempo de descanço máximo
-
+    protected Vector3 _knockbackDir, _appliedMovement;
+    protected float _acceleration = 1.5f;
 
 
     public virtual void StateStart(EnemyBehaviour enemyBehave)
@@ -78,5 +79,23 @@ public abstract class EnemyBaseState
         if(lookTime < 1)
                 lookTime += newSteering * Time.fixedDeltaTime;
         return Quaternion.Slerp(charControl.transform.rotation, rotationDesired, lookTime);
+    }
+    
+    protected void Knockback()
+    {
+        if (_acceleration <= 0)
+        {
+            _acceleration = 0;
+            return;
+        }
+        
+        _appliedMovement.x = _knockbackDir.x * 5 * _acceleration;
+        _appliedMovement.z = _knockbackDir.z * 5 * _acceleration;
+
+        charControl.Move(_appliedMovement * Time.fixedDeltaTime);
+        
+        
+        _acceleration -= Time.fixedDeltaTime * 3;
+
     }
 }

@@ -6,20 +6,26 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerStaggeredState : PlayerCombatState
 {
+    private readonly Vector3 _knockbackDir;
     public PlayerStaggeredState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
         _maxAcceleration = 1.5f;
+        _ctx.Acceleration = _ctx.IsBlocking ? 0.75f : 1.5f;
         _ctx.AppliedMovementY = _ctx.BaseGravity;
         _ctx.CurrentMovement = _ctx.CurrentMovementInput;
         _ctx.CurrentMovementZ = _ctx.CurrentMovementInput.y;
+        _turnTime = _ctx.BaseTurnTime * 5;
+        if (_ctx.EnemyDetector.targetEnemy)
+            _knockbackDir = (_ctx.transform.position - _ctx.EnemyDetector.targetEnemy.transform.position).normalized;
+        else
+            _knockbackDir = -_ctx.transform.forward;
     }
 
     public override void EnterState()
     {
         HandleAnimatorParameters();
         if (_ctx.ShowDebugLogs) Debug.Log("Staggered");
-        _turnTime = _ctx.BaseTurnTime * 5;
     }
 
     public override void ExitState()
@@ -30,7 +36,6 @@ public class PlayerStaggeredState : PlayerCombatState
 
     public override void UpdateState()
     {
-        Knockback();
         CheckSwitchStates();
         
         if (!_ctx.IsBlockPressed)
@@ -39,16 +44,30 @@ public class PlayerStaggeredState : PlayerCombatState
         }
     }
 
+    public override void FixedUpdateState()
+    {
+        Knockback();
+        HandleAcceleration();
+    }
+
+    protected override void HandleAcceleration()
+    {
+        if (_ctx.Acceleration > 0f)
+            _ctx.Acceleration -= Time.fixedDeltaTime * 3;
+        else
+            _ctx.Acceleration = 0f;
+    }
+
     private void Knockback()
     {
-        _ctx.AppliedMovementX = -_ctx.transform.forward.x * _ctx.BaseMoveSpeed * 2;
+        _ctx.AppliedMovementX = _knockbackDir.x * _ctx.BaseMoveSpeed * _ctx.Acceleration;
         _ctx.AppliedMovementY = _ctx.BaseGravity;
-        _ctx.AppliedMovementZ = -_ctx.transform.forward.z * _ctx.BaseMoveSpeed * 2;
+        _ctx.AppliedMovementZ = _knockbackDir.z * _ctx.BaseMoveSpeed * _ctx.Acceleration;
 
-        _ctx.CC.Move(_ctx.AppliedMovement * Time.deltaTime);
+        _ctx.CC.Move(_ctx.AppliedMovement * Time.fixedDeltaTime);
 
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, -1.5f, 0.1f, Time.deltaTime);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f, 0.1f, Time.deltaTime);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _knockbackDir.x, 0.1f, Time.fixedDeltaTime);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _knockbackDir.z, 0.1f, Time.fixedDeltaTime);
     }
 
     public override void CheckSwitchStates()

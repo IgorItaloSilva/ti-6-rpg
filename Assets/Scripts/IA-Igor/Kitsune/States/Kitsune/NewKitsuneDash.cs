@@ -1,5 +1,6 @@
 using System.Dynamic;
 using System.Threading.Tasks;
+using System.Xml;
 using UnityEngine;
 
 public class NewKitsuneDash : EnemyBaseState
@@ -29,7 +30,7 @@ public class NewKitsuneDash : EnemyBaseState
 
     public override void StateFixedUpdate()
     {
-        if(lookTime < 0.5f){
+        if(lookTime < 0.5f && enemyBehave.GetTarget()){
             // Rotation
             Vector3 directionToPlayer = (enemyBehave.GetTarget().position - charControl.transform.position).normalized;
             directionToPlayer.y = 0;
@@ -51,7 +52,11 @@ public class NewKitsuneDash : EnemyBaseState
     private async void PlayVFXAsync()
     {
         await Task.Delay(500);
-        enemyBehave.PlayDashVFX();
+        if (enemyBehave.currentState is NewKitsuneDash && GetPlayerDistance() > enemyBehave.GetMeleeDist())
+            enemyBehave._dashVFX.Play();
+        enemyBehave._headbuttVFX.Play();
     }
+    
+
 
 }
