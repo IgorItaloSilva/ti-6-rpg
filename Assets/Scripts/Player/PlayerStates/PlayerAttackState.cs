@@ -58,8 +58,8 @@ public class PlayerAttackState : PlayerBaseState
     {
         if (_ctx.Acceleration > 0) _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
         else _ctx.Acceleration = 0;
-        
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _ctx.Acceleration, 0.1f, Time.deltaTime);
+
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, Mathf.Max(_ctx.Acceleration,1f), 0.1f, Time.deltaTime);
     }
     
     protected override void HandleForwardMove()

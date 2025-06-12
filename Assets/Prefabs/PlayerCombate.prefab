@@ -62,7 +62,8 @@ MonoBehaviour:
   enemyDetectionObject: {fileID: 2914544773607033269}
   _swordWeaponManager: {fileID: 5906097556296090593}
   _magicWeaponManager: {fileID: 2822298986470714372}
-  _swordTrail: {fileID: 2440447049323101871}
+  PlayerStats: {fileID: 7001136559969210805}
+  _swordTrail: {fileID: 8536636421571461040}
   _swordSlash: {fileID: 3789666863310744281}
   _parryVfx: {fileID: 6547711465386495470}
   ShowDebugLogs: 0
@@ -369,6 +370,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6763814527616854095}
   - {fileID: 2915594071529478334}
   - {fileID: 4461986394837953370}
   m_Father: {fileID: 4133643009367029584}
@@ -1086,7 +1088,7 @@ GameObject:
   - component: {fileID: 7424531297390244172}
   - component: {fileID: 8079934294172697342}
   - component: {fileID: 5391340577207457527}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: EnemyDetection
   m_TagString: EnemyDetection
   m_Icon: {fileID: 0}
@@ -1557,7 +1559,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8441664400860395981}
-  - {fileID: 6763814527616854095}
   m_Father: {fileID: 4812831020247945296}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4241883055777025688
@@ -2564,12 +2565,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7910115061004626382}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.39839876, y: -0.59981626, z: 0.59175676, w: -0.3623851}
-  m_LocalPosition: {x: 0.00011, y: 0.00756, z: -0.00009}
-  m_LocalScale: {x: 0.025786145, y: 0.025786141, z: 0.025786137}
+  m_LocalRotation: {x: -0.00000026822087, y: -0.7071067, z: -0.70710695, w: -0.00000032596287}
+  m_LocalPosition: {x: 0.00076, y: -0.00885, z: 0.01397}
+  m_LocalScale: {x: 0.025786137, y: 0.025786141, z: 0.025786147}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2915594071529478334}
+  m_Father: {fileID: 4812831020247945296}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!2083052967 &6547711465386495470
 VisualEffect:

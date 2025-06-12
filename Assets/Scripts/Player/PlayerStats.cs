@@ -281,7 +281,11 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         Debug.Log("Player tomou dano");
         UIManager.instance?.UpdateHealth(CurrentLife, wasCrit);
         PlayerStateMachine.Instance.CameraShake(2f, 0.5f);
-        if (CurrentLife <= 0 && !PlayerIsDead) Die();
+        if (CurrentLife <= 0 && !PlayerIsDead)
+        {
+            PlayerStateMachine.Instance.LockPlayer();
+            Die();
+        }
         else if (CurrentLife > 0)
         {
             AudioPlayer.instance.PlaySFX("PlayerDamage" + Random.Range(1, 3));

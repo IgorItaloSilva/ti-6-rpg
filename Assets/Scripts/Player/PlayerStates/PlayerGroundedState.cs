@@ -10,7 +10,7 @@ public class PlayerGroundedState : PlayerBaseState
         currentContext, playerStateFactory)
     {
         _maxAcceleration = 2.5f;
-        _turnTime = _ctx.BaseTurnTime;
+        _turnTime = _ctx.BaseTurnTime / 2;
     }
 
     public override void EnterState()

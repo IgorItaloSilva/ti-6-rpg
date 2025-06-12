@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class PlayerDodgeState : PlayerBaseState
+public class PlayerDodgeState : PlayerCombatState
 {
     private const int DodgeCooldownMs = 1000, DodgeDurationMs = 500;
 
@@ -33,20 +33,6 @@ public class PlayerDodgeState : PlayerBaseState
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f);
     }
 
-    public override void UpdateState()
-    {
-        if (_ctx.InCombat)
-        {
-            HandleTargetedRotation();
-            HandleTargetedMove();
-        }
-        else
-        {
-            HandleRotation();
-            HandleMove();
-        }
-        CheckSwitchStates();
-    }
 
     public override void ExitState()
     {

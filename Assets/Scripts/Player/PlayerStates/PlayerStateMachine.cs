@@ -39,10 +39,14 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private Animator _animator;
     private CharacterController _cc;
     [SerializeField] private PlayerWeapon _swordWeaponManager, _magicWeaponManager;
+    public PlayerStats PlayerStats;
     private PlayerInput _playerInput;
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
-    [FormerlySerializedAs("_swordMainTrail")] [SerializeField] private TrailRenderer _swordTrail;
+
+    [FormerlySerializedAs("_swordMainTrail")] [SerializeField]
+    private TrailRenderer _swordTrail;
+
     [SerializeField] private VisualEffect _swordSlash;
     [SerializeField] private VisualEffect _parryVfx;
 
@@ -196,6 +200,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
                 Debug.LogWarning("Tentamos ativar o cooldown de uma skill que não existe");
                 break;
         }
+
         SpecialAttackUIManager.instance
             ?.StartCooldown(
                 special); //Essa função vai cuidar do cooldown e nos avisar quando ele tiver acabado, o tempo de cooldown será definido la
@@ -344,7 +349,13 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool InCombat
     {
         get => _inCombat && _canEnterCombat;
-        set => _inCombat = value;
+        set
+        {
+            _inCombat = value;
+            Animator.SetBool(InCombatHash, false);
+            Animator.SetBool(IsBlockingHash, false);
+            Animator.SetBool(IsCastingMagicHash, false);
+        }
     }
 
     public Vector3 CurrentMovement
@@ -686,8 +697,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordTrail.emitting = true;
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
-        if((enemyDetector.targetEnemy &&
-            Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f) || !_inCombat)
+        if ((enemyDetector.targetEnemy &&
+             Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f) || !_inCombat)
             _acceleration = 2f;
         if (TestHitFeedback)
         {
@@ -705,8 +716,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
         AudioPlayer.instance.PlaySFX("SwordSlash");
-        if((enemyDetector.targetEnemy &&
-            Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f) || !_inCombat)
+        if ((enemyDetector.targetEnemy &&
+             Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f) || !_inCombat)
             _acceleration = 2.5f;
     }
 
