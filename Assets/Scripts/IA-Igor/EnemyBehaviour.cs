@@ -136,6 +136,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if(isBoss)UIManager.instance?.UpdateBossLife(Hp,wasCrit);
         if (Hp <= 0)
         {
+            allSkills.DisableWeapon();
             Die();
             return;
         }
