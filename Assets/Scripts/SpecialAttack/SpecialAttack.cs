@@ -11,4 +11,4 @@ public class SpecialAttack : MonoBehaviour
     [field: SerializeField] public Image BackgorundImage { get; private set; }
     [field: SerializeField] public Image CooldownImage { get; private set; }
     [field: SerializeField] public GameObject LockedImageGO { get; private set; }
-}
+} 

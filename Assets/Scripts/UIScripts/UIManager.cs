@@ -517,6 +517,7 @@ public class UIManager : MonoBehaviour
             case UIScreens.Weapon:
                 painelWeapon.SetActive(true);
                 runesUiManager.UpdateRunes();
+                runesUiManager.DisableAllTexts();
                 currentUIScreen = UIScreens.Weapon;
                 break;
             case UIScreens.System:
