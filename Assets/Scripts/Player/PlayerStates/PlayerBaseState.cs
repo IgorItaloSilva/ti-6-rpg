@@ -188,7 +188,7 @@ public abstract class PlayerBaseState
     
     public async void StaggerPlayer()
     {
-        SwitchState(_factory.Staggered());
+        SwitchState(_factory.Damage());
         await Task.Delay(600);
         UnlockPlayer();
     }

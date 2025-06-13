@@ -1,35 +1,35 @@
-Shader "Custom/URPWater"
+Shader "URP/SimpleWater"
 {
     Properties
     {
-        _Color ("Color", Color) = (0.2, 0.4, 0.6, 0.6)
-        _MainTex ("Water Texture", 2D) = "white" {}
-        _NoiseTex ("Noise", 2D) = "white" {}
-        _WaveStrength ("Wave Height", Range(0, 1)) = 0.1
-        _Distortion ("Refraction Distortion", Range(0, 0.2)) = 0.0
-        _SpecularStrength ("Specular Strength", Range(0,1)) = 0.5
-        _TessellationFactor ("Tessellation Factor", Range(1,64)) = 16
+        _BaseMap("Water Texture", 2D) = "white" {}
+        _Color("Color Tint", Color) = (0.3, 0.5, 0.7, 1)
+        _WaveSpeed("Wave Speed", Float) = 1
+        _WaveScale("Wave Scale", Float) = 1
+        _WaveStrength("Wave Strength", Float) = 0.05
+        _Smoothness("Smoothness", Range(0, 1)) = 0.8
+        _Metallic("Metallic", Range(0, 1)) = 0
     }
+
     SubShader
     {
-        Tags
-        {
-            "RenderType"="Transparent" "Queue"="Transparent"
-        }
+        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
         LOD 200
+
         Pass
         {
             Name "ForwardLit"
-            Tags
-            {
-                "LightMode"="UniversalForward"
-            }
+            Tags { "LightMode" = "UniversalForward" }
+
+            Blend SrcAlpha OneMinusSrcAlpha
+            Cull Back
+            ZWrite Off
 
             HLSLPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma multi_compile_fog
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             struct Attributes
             {
@@ -44,73 +44,62 @@ Shader "Custom/URPWater"
                 float2 uv : TEXCOORD0;
                 float3 normalWS : TEXCOORD1;
                 float3 viewDirWS : TEXCOORD2;
-                float4 screenPos : TEXCOORD3;
             };
 
-            CBUFFER_START(UnityPerMaterial)
-                float4 _Color;
-                float _WaveStrength;
-                float _Distortion;
-                float _SpecularStrength;
-                float _TessellationFactor;
-            CBUFFER_END
+            sampler2D _BaseMap;
+            float4 _BaseMap_ST;
+            float4 _Color;
+            float _WaveSpeed;
+            float _WaveScale;
+            float _WaveStrength;
+            float _Smoothness;
+            float _Metallic;
 
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
-            TEXTURE2D(_NoiseTex);
-            SAMPLER(sampler_NoiseTex);
-
-            Varyings vert(Attributes IN)
+            Varyings vert(Attributes input)
             {
-                Varyings OUT;
-                float2 uv = IN.uv;
-                float time = _Time.y;
-                float noise = SAMPLE_TEXTURE2D_LOD(_NoiseTex, sampler_NoiseTex, uv + float2(time * 0.2, time * 0.15),
-                                                   0).r;
-                float wave = sin(uv.x * 10 + time) * 0.5 + sin(uv.y * 15 + time * 0.8) * 0.5;
-                float height = (noise + wave) * 0.5 * _WaveStrength;
-                float3 posWS = TransformObjectToWorld(IN.positionOS.xyz + IN.normalOS * height);
-                OUT.positionHCS = TransformWorldToHClip(posWS);
-                OUT.uv = uv;
-                OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
-                OUT.viewDirWS = GetWorldSpaceViewDir(posWS);
-                OUT.screenPos = ComputeScreenPos(OUT.positionHCS);
-                return OUT;
+                Varyings output;
+
+                float wave = sin(_Time.y * _WaveSpeed + input.positionOS.x * _WaveScale + input.positionOS.z * _WaveScale);
+                float3 displaced = input.positionOS.xyz;
+                displaced.y += wave * _WaveStrength;
+
+                float3 worldPos = TransformObjectToWorld(displaced);
+                float3 normalWS = TransformObjectToWorldNormal(input.normalOS);
+                output.normalWS = normalize(normalWS);
+                output.viewDirWS = GetCameraPositionWS() - worldPos;
+
+                output.positionHCS = TransformWorldToHClip(worldPos);
+                output.uv = TRANSFORM_TEX(input.uv, _BaseMap);
+                return output;
             }
 
-            half4 frag(Varyings IN) : SV_Target
+            half4 frag(Varyings i) : SV_Target
             {
-                float2 movingUV = IN.uv + float2(_Time.y * 0.05, _Time.y * 0.02);
-                half4 waterTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, movingUV) * _Color;
-                float2 noiseUV = IN.uv * 1.5;
-                float2 distortion = SAMPLE_TEXTURE2D(_NoiseTex, sampler_NoiseTex, noiseUV).rg - 0.5;
-                float2 distortionUV = IN.screenPos.xy / IN.screenPos.w + distortion * _Distortion;
+                float3 normal = normalize(i.normalWS);
+                float3 viewDir = normalize(i.viewDirWS);
 
-                // Refraction: use _CameraOpaqueTexture if enabled in URP
-                #ifdef UNITY_DECLARE_SCREENSPACE_TEXTURE
-                        half4 refracted = UNITY_SAMPLE_SCREENSPACE_TEXTURE(_CameraOpaqueTexture, distortionUV);
-                #else
-                half4 refracted = half4(0, 0, 0, 1);
-                #endif
+                float4 texColor = tex2D(_BaseMap, i.uv);
+                texColor.rgb *= _Color.rgb;
 
-                half3 baseColor = lerp(refracted.rgb, waterTex.rgb, 0.5) * 0.4;
-                half alpha = _Color.a;
+                // Lighting
+                Light light = GetMainLight();
+                float3 lightDir = normalize(light.direction);
+                float NdotL = max(0.1, dot(normal, -lightDir)); // ambient minimum light
+                float3 diffuse = texColor.rgb * NdotL * light.color;
 
-                // Simple specular
-                half3 normal = normalize(IN.normalWS);
-                half3 viewDir = normalize(IN.viewDirWS);
-                half3 lightDir = normalize(_MainLightPosition.xyz);
-                half NdotL = saturate(dot(normal, lightDir));
-                half3 halfDir = normalize(lightDir + viewDir);
-                half NdotH = saturate(dot(normal, halfDir));
-                half spec = pow(NdotH, 32) * _SpecularStrength;
+                // Specular reflection fix
+                float3 reflection = reflect(-viewDir, normal);
+                float specPower = lerp(4.0, 128.0, _Smoothness);
+                float spec = pow(max(dot(lightDir, reflection), 0.0), specPower);
+                spec *= _Smoothness;
 
-                baseColor += spec * _MainLightColor.rgb * NdotL;
+                float3 finalColor = diffuse + spec * light.color.rgb;
 
-                return half4(baseColor, alpha);
+                return float4(finalColor, _Color.a);
             }
             ENDHLSL
         }
     }
-    FallBack "Universal Render Pipeline/Unlit"
+
+    FallBack "Hidden/Universal Render Pipeline/FallbackError"
 }
