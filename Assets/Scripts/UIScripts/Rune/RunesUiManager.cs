@@ -36,6 +36,7 @@ public class RunesUiManager : MonoBehaviour
             GameObject newRuneButtonGO=Instantiate(runeButtonprefab,scrollContent.transform);
             RuneButton runeButton = newRuneButtonGO.GetComponent<RuneButton>();
             runeButton.SetRuneAndTexts(runeSO);
+            runeButton.textos.SetActive(false);
             runeButton.id=index;
             index++;
             allRunesButtons.Add(runeButton);
@@ -45,14 +46,31 @@ public class RunesUiManager : MonoBehaviour
             if(index>=0)EquipRune(index);
         }
     }
-    public void UpdateRunes(){
-        if(allRunesButtons.Count!=RuneManager.instance.runeInventory.Count){
-            for(int i=allRunesButtons.Count;i<RuneManager.instance.runeInventory.Count;i++){
-                GameObject newRuneButtonGO=Instantiate(runeButtonprefab,scrollContent.transform);
+    public void DisableAllTexts()
+    {
+        if (RuneManager.instance.runeInventory == null) return;
+        foreach (RuneButton rb in allRunesButtons)
+        {
+            rb.textos.SetActive(false);
+        }
+        if (equipedRunesButtons.Length == 0) return;
+        for(int i = 0;i<equipedRunesButtons.Length;i++)
+        {
+            equipedRunesButtons[i]?.textos.SetActive(false);
+        }
+    }
+    public void UpdateRunes()
+    {
+        if (allRunesButtons.Count != RuneManager.instance.runeInventory.Count)
+        {
+            for (int i = allRunesButtons.Count; i < RuneManager.instance.runeInventory.Count; i++)
+            {
+                GameObject newRuneButtonGO = Instantiate(runeButtonprefab, scrollContent.transform);
                 RuneButton runeButton = newRuneButtonGO.GetComponent<RuneButton>();
                 runeButton.SetRuneAndTexts(RuneManager.instance.runeInventory[i]);
+                runeButton.textos.SetActive(false);
                 allRunesButtons.Add(runeButton);
-                runeButton.id=index;
+                runeButton.id = index;
                 index++;
             }
         }

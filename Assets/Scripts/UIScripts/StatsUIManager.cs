@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-using System;
-using Unity.VisualScripting;
+
 
 public class StatsUIManager : MonoBehaviour
 {
@@ -28,7 +25,8 @@ public class StatsUIManager : MonoBehaviour
     [SerializeField]TextMeshProUGUI potionHeal;
     [Header("Coisas Level Up")]
     [SerializeField]GameObject levelUpStuff;
-    [SerializeField]TextMeshProUGUI pointsToSpend;
+    [SerializeField] GameObject applyButton;
+    [SerializeField] TextMeshProUGUI pointsToSpend;
     [Header("Cor dos Textos")]
     [SerializeField]Color textColor = Color.white; //ESTÁ AQUI CASO A GENTE QUEIRA MUDAR ELAS DEPOIS
     public bool isSimulating{get;private set;}
@@ -161,19 +159,23 @@ public class StatsUIManager : MonoBehaviour
     }
     public void IncreaseStatusButtonPressed(int statusId){//Chamado pelo Botão da UI
         isSimulating=true;
+        applyButton.SetActive(true);
         GameEventsManager.instance.uiEvents.ChangeStatusButtonPressed(statusId,true);
     }
     public void DecreaseStatusButtonPressed(int statusId){//Chamado pelo Botão da UI
         isSimulating=true;
+        applyButton.SetActive(true);
         GameEventsManager.instance.uiEvents.ChangeStatusButtonPressed(statusId,false);
     }
     public void ConfirmLevelUp(){//Chamado pelo Botão da UI
         isSimulating=false;
+        applyButton.SetActive(false);
         ResetColors();
         GameEventsManager.instance.uiEvents.ConfirmLevelUp();
     }
     public void CancelSimulation(){//Chamado ao sair da tela de Stats da Ui, se ainda estivermos simulando
         isSimulating=false;
+        applyButton.SetActive(false);
         ResetColors();
         GameEventsManager.instance.uiEvents.DiscardLevelUp();
     }
@@ -223,7 +225,4 @@ public class StatsUIManager : MonoBehaviour
         potionLevel.color=textColor;
         potionHeal.color=textColor;
     }
-    public void BuyLevel(){
-        GameEventsManager.instance.uiEvents.BuyLevelClicked();
-    } 
 }

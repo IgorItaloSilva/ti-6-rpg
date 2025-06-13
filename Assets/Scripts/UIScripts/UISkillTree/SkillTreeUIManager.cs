@@ -55,22 +55,54 @@ public class SkillTreeUIManager : MonoBehaviour
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp-=AjustBuy;
         GameEventsManager.instance.uiEvents.onSkillTreeMoneyChange-=ChangeMoney;
     }
-    public void ActivatePowerUpDescriptionBox(int id){
-        if(!powerUpBoxIsOpen){
-            SkillNodeUI node = powerUpNodes[id];
-            powerUpUIBox.SetActive(true);
-            Vector2 pos = Mouse.current.position.ReadValue() + new Vector2(pixelOffset,pixelOffset);
-            powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos,Quaternion.identity);
-            powerUpNameText.text = node.powerUp.Name;
-            powerUpDescriptionText.text = node.powerUp.UiDescription;
-            powerUpBoxIsOpen=true;
-            if(node.powerUp.PUType==Enums.PowerUpType.Light){
+    public void ActivatePowerUpDescriptionBox(int id)
+    {
+        if (id >= 0)
+        {
+            if (!powerUpBoxIsOpen)
+            {
+                SkillNodeUI node = powerUpNodes[id];
+                powerUpUIBox.SetActive(true);
+                Vector2 pos = Mouse.current.position.ReadValue() + new Vector2(pixelOffset, pixelOffset);
+                powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos, Quaternion.identity);
+                powerUpNameText.text = node.powerUp.Name;
+                powerUpDescriptionText.text = node.powerUp.UiDescription;
+                powerUpBoxIsOpen = true;
+                if (node.powerUp.PUType == Enums.PowerUpType.Light)
+                {
+                    puBoxMoedaHonra.SetActive(true);
+                    puBoxMoedaTrevas.SetActive(false);
+                }
+                else
+                {
+                    puBoxMoedaHonra.SetActive(false);
+                    puBoxMoedaTrevas.SetActive(true);
+                }
+            }
+        }
+        else//MIGUE PRA TER TOOLTIP NAS MOEDAS
+        {
+            if (id == -1)//HONRA
+            {
+                powerUpUIBox.SetActive(true);
+                Vector2 pos = Mouse.current.position.ReadValue() + new Vector2(pixelOffset, pixelOffset);
+                powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos, Quaternion.identity);
+                powerUpNameText.text = "Moeda Meyio";
+                powerUpDescriptionText.text = "Usada para comprar talentos. Recebida por fazer ações boas.";
                 puBoxMoedaHonra.SetActive(true);
                 puBoxMoedaTrevas.SetActive(false);
+                powerUpBoxIsOpen = true;
             }
-            else{
-                puBoxMoedaHonra.SetActive(false);
+            if (id == -2)//Corrupção
+            {
+                powerUpUIBox.SetActive(true);
+                Vector2 pos = Mouse.current.position.ReadValue() + new Vector2(pixelOffset, pixelOffset);
+                powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos-new Vector2(200,0), Quaternion.identity);
+                powerUpNameText.text = "Moeda Fuhai";
+                powerUpDescriptionText.text = "Usada para comprar talentos. Recebida por fazer ações más.";
                 puBoxMoedaTrevas.SetActive(true);
+                puBoxMoedaHonra.SetActive(false);
+                powerUpBoxIsOpen = true;
             }
         }
     }

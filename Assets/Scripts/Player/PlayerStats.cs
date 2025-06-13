@@ -53,8 +53,6 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
     public int[] simulatedStatChange;
     public bool isNearCampfire;
 
-    private bool haslessExp;
-
     //Coisas de controle geral
     public bool PlayerIsDead { get; private set; }
 
@@ -93,7 +91,6 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         GameEventsManager.instance.skillTreeEvents.onLifeStealHit += HealLife;
         GameEventsManager.instance.uiEvents.onRequestPlayerHealthInfo += SendHealthInfo;
         GameEventsManager.instance.uiEvents.onRequestExpInfo += SendExpInfo;
-        GameEventsManager.instance.uiEvents.onBuyLevelClicked += BuyLevel;
         GameEventsManager.instance.uiEvents.onRequestPotionAmmountInfo += SendPotionAmmountInfo;
         GameEventsManager.instance.playerEvents.onPlayerPositionSet += AjustPosition;
     }
@@ -114,7 +111,6 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         GameEventsManager.instance.skillTreeEvents.onLifeStealHit += HealLife;
         GameEventsManager.instance.uiEvents.onRequestPlayerHealthInfo -= SendHealthInfo;
         GameEventsManager.instance.uiEvents.onRequestExpInfo -= SendExpInfo;
-        GameEventsManager.instance.uiEvents.onBuyLevelClicked -= BuyLevel;
         GameEventsManager.instance.uiEvents.onRequestPotionAmmountInfo -= SendPotionAmmountInfo;
         GameEventsManager.instance.playerEvents.onPlayerPositionSet -= AjustPosition;
         CancelInvoke();
@@ -432,24 +428,12 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
     void GainExp(int exp)
     {
         int expToNextLevel = ExpToNextLevel(Level);
-        if (CarriedExp < expToNextLevel)
-            haslessExp = true;
         CarriedExp += exp;
-        if (CarriedExp >= expToNextLevel && haslessExp)
-        {
-            haslessExp = false;
-            UIManager.instance?.PlayNotification("Você pode upar de nível!");
-            GameEventsManager.instance?.tutorialEvents.LevelUpTutorial();
-        }
-    }
-
-    void BuyLevel()
-    {
-        int expToNextLevel = ExpToNextLevel(Level);
         if (CarriedExp >= expToNextLevel)
         {
             CarriedExp -= expToNextLevel;
             LevelUp();
+            GameEventsManager.instance?.tutorialEvents.LevelUpTutorial();
         }
     }
 
@@ -459,6 +443,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         LevelUpPoints += 3;
         SendExpStatsInfo();
         SendLevelUpInfo();
+        UIManager.instance?.PlayNotification("Você upou de nível!");
         UIManager.instance?.DisplayExpAmmount(CarriedExp);
         DataPersistenceManager.instance.SaveGame();
     }

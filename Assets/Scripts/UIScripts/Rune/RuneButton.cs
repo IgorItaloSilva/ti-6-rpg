@@ -11,22 +11,24 @@ public class RuneButton : MonoBehaviour
     [SerializeField]TextMeshProUGUI descriptionText;
     [SerializeField]TextMeshProUGUI typeText;
     [SerializeField]TextMeshProUGUI qualityText;
+    [field:SerializeField]public GameObject textos { get; private set; }
     public RuneSO rune;
     public bool isEquiped;
-    public void SetRuneAndTexts(RuneSO rune){
-        if(RuneManager.instance.showRuneDebug)
+    public void SetRuneAndTexts(RuneSO rune)
+    {
+        if (RuneManager.instance.showRuneDebug)
         {
-            if(rune==null)Debug.LogError("Recebemos uma runa vazia wtf");
+            if (rune == null) Debug.LogError("Recebemos uma runa vazia wtf");
             else Debug.Log($"Recebemos a runa {rune}");
         }
-        this.rune=rune;
-        nameText.text=rune.Nome;
+        this.rune = rune;
+        nameText.text = rune.Nome;
         icon.sprite = rune.Sprite;
-        descriptionText.text=rune.DescriptionText;
-        typeText.text=GetTypeText(rune.Part);
+        descriptionText.text = rune.DescriptionText;
+        typeText.text = GetTypeText(rune.Part);
         SetQualityText(rune.Quality);
     }
-    public void LoadRuneAndTexts(GameObject textos)
+     public void LoadRuneAndTexts(GameObject textos)//chamado pelo event do botão
     {
         textos.SetActive(true);
         nameText.text = rune.Nome;
@@ -34,7 +36,7 @@ public class RuneButton : MonoBehaviour
         descriptionText.text = rune.DescriptionText;
         typeText.text = GetTypeText(rune.Part);
         SetQualityText(rune.Quality);
-    }
+    } 
     public void Equip()
     {
         RunesUiManager.instance.EquipRune(id);
