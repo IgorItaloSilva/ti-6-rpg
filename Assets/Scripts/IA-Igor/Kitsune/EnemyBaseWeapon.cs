@@ -6,10 +6,16 @@ public abstract class EnemyBaseWeapon : MonoBehaviour
     protected Coroutine coroutine;
     protected Transform target;
 
-    void Start()
+    [SerializeField] protected WeaponManager weaponManager;
+
+    protected void Start()
     {
         target = PlayerStateMachine.Instance.transform;
+        weaponManager = GetComponentInChildren<WeaponManager>();
+        CustomStart();
     }
+
+    protected virtual void CustomStart() {  }
 
     void OnEnable() {
         OneExecution();
@@ -18,7 +24,7 @@ public abstract class EnemyBaseWeapon : MonoBehaviour
 
     protected virtual void OneExecution(){  }
 
-    protected virtual IEnumerator MultipleExecution() { yield return new WaitForSeconds(0); }
+    protected virtual IEnumerator MultipleExecution() { yield return null; }
 
 
 }
