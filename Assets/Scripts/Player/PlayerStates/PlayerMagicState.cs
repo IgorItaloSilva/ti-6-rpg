@@ -56,6 +56,7 @@ public class PlayerMagicState : PlayerCombatState
     public async void HandleMagicDamageRateAsync()
     {
         await Task.Delay(TimeBetweenDamagesMs);
+        AudioPlayer.instance.PlaySFX("Fire");
         SmoothEnableLightAsync();
         while (_ctx.IsMagicPressed && _ctx.CurrentState is PlayerMagicState)
         {
@@ -63,6 +64,7 @@ public class PlayerMagicState : PlayerCombatState
             _ctx.MagicWeaponManager.EnableCollider();
             await Task.Delay(TimeBetweenDamagesMs);
         }
+        AudioPlayer.instance.StopSFX("Fire");
         SmoothDisableLightAsync(_lightIntensity);
         _ctx.CanCastMagic = false;
         _ctx.MagicWeaponManager.DisableCollider();

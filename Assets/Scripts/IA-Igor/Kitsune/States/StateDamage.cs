@@ -7,6 +7,7 @@ public class StateDamage : EnemyBaseState
 
     protected override void OneExecution()
     {
+        enemyBehave.EnemySounds.PlaySound(EnemySounds.SoundType.Damage, enemyBehave.SoundSource);
         animator.CrossFade("Damage", 0.25f);
         restTime = 2f;
         _appliedMovement.y = -9.8f;

@@ -60,7 +60,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private Vector2 _currentMovementInput, _currentLookInput;
 
     private bool
-        _playerStaggered = false,
         _hasJumped,
         _isMovementPressed,
         _isSprintPressed,

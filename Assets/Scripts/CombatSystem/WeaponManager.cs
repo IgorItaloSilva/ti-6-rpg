@@ -52,7 +52,7 @@ public class WeaponManager : MonoBehaviour
                     }
                     else
                     {
-                        AudioPlayer.instance.PlaySFX("Block");
+                        AudioPlayer.instance.PlaySFX("Parry");
                         DealDamage(alvoAtacado, damage / 3);
                     }
                 }

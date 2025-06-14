@@ -59,6 +59,24 @@ public class AudioPlayer : MonoBehaviour
             s.source.PlayOneShot(s.clip);
         }
     }
+    
+public void StopSFX(string name)
+{
+    Sound s = Array.Find(sfxSounds, x => x.name == name);
+
+    if (s == null)
+    {
+        Debug.Log("SFX Not Found");
+        return;
+    }
+
+    AudioSource playSource = s.source ?? musicSource;
+
+    if (playSource.isPlaying)
+    {
+        playSource.Stop();
+    }
+}
 
     public void PlayFootstepSound()
     {
