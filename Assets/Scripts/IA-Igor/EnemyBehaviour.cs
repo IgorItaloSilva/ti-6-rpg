@@ -1,16 +1,26 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.VFX;
+using Random = UnityEngine.Random;
 
 public class EnemyBehaviour : MonoBehaviour, IDamagable
 {
     [SerializeField] protected ASkills allSkills;
     [SerializeField] CharacterController charControl;
     [SerializeField] Animator animator;
+    
+    [Header("VFX")]
     [SerializeField] public ParticleSystem _dashVFX;
     [SerializeField] public VisualEffect _headbuttVFX;
     [SerializeField] private GameObject _bloodGameObject;
     [SerializeField] private VisualEffect _bloodVFX;
+    
+    [FormerlySerializedAs("_enemySounds")] [Header("Audio")]
+    public EnemySounds EnemySounds;
+    [FormerlySerializedAs("_soundSource")] public AudioSource SoundSource;
+    
+    [Header("Valores")]
     [SerializeField] public float Hp { get; private set; }
     [SerializeField] float maxHp;
     [SerializeField] float poise;
@@ -141,7 +151,10 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         _bloodVFX?.Play();
         if(isBoss)UIManager.instance?.UpdateBossLife(Hp,wasCrit);
         if(currentState?.GetType() == typeof(StateIdle))
+        {
             animator.Play("Damage", 0, 0);
+            EnemySounds.PlaySound(EnemySounds.SoundType.Damage, SoundSource);
+        }
         if (Hp <= 0) {
             allSkills.DisableWeapon();
             Die();
