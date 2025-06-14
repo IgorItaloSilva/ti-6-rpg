@@ -9,6 +9,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [SerializeField] Animator animator;
     [SerializeField] public ParticleSystem _dashVFX;
     [SerializeField] public VisualEffect _headbuttVFX;
+    [SerializeField] private GameObject _bloodGameObject;
+    [SerializeField] private VisualEffect _bloodVFX;
     [SerializeField] public float Hp { get; private set; }
     [SerializeField] float maxHp;
     [SerializeField] float poise;
@@ -133,6 +135,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         Hp -= damage;
         currentPoise -= 1;
         healthBar?.SetValue(Hp, currentPoise, wasCrit);
+        _bloodGameObject?.transform.LookAt(target.position);
+        _bloodVFX?.Play();
         if(isBoss)UIManager.instance?.UpdateBossLife(Hp,wasCrit);
         if (Hp <= 0)
         {

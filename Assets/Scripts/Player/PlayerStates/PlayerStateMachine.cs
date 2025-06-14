@@ -44,10 +44,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     private PlayerBaseState _currentState;
     private PlayerStateFactory _states;
 
-    [FormerlySerializedAs("_swordMainTrail")] [SerializeField]
-    private TrailRenderer _swordTrail;
+    [SerializeField] private TrailRenderer _swordTrail;
 
     [SerializeField] private VisualEffect _swordSlash;
+    [SerializeField] private ParticleSystem _magicVFX;
     [SerializeField] private VisualEffect _parryVfx;
 
     #endregion
@@ -238,6 +238,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public CinemachineTargetGroup CamTargetGroup => _camTargetGroup;
     public EnemyDetection EnemyDetector => enemyDetector;
     public TrailRenderer SwordTrail => _swordTrail;
+    public ParticleSystem MagicVFX => _magicVFX;
     public PlayerWeapon SwordWeaponManager => _swordWeaponManager;
     public PlayerWeapon MagicWeaponManager => _magicWeaponManager;
     public Vector3 CurrentMovementInput => _currentMovementInput;
