@@ -1,4 +1,5 @@
 using System.Collections;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 
@@ -6,7 +7,7 @@ public class wpn_MagoMagicPunch : EnemyBaseWeapon
 {
     [SerializeField] CharacterController charControl;
     [SerializeField] float speed;
-    [SerializeField] int miliseconds;
+    [SerializeField] float disableSeconds;
     [SerializeField] Vector3 startPos;
     Coroutine thisCoroutine;
 
@@ -21,7 +22,7 @@ public class wpn_MagoMagicPunch : EnemyBaseWeapon
     protected override void OneExecution()
     {
         transform.localPosition = startPos;
-        weaponManager.EnableCollider();
+        
         Physics.SyncTransforms();
         StartCoroutine(Disable());
     }
@@ -33,7 +34,9 @@ public class wpn_MagoMagicPunch : EnemyBaseWeapon
 
     IEnumerator Disable()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForFixedUpdate();
+        weaponManager.EnableCollider();
+        yield return new WaitForSeconds(disableSeconds);
         gameObject.SetActive(false);
     }
 
