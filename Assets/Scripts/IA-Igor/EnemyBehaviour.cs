@@ -52,6 +52,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [SerializeField] WeaponManager weapon;
     void Awake()
     {
+        GameEventsManager.instance.playerEvents.onPlayerRespawned += OnPlayerDied;
         if (!ignoreSaveLoad)
         {
             if (LevelLoadingManager.instance == null)
@@ -67,6 +68,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         }
         Hp = maxHp;
     }
+
     void Start()
     {
         healthBar?.SettupBarMax(Hp, poise);
@@ -134,14 +136,14 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         currentPoise -= 1;
         healthBar?.SetValue(Hp, currentPoise, wasCrit);
         if(isBoss)UIManager.instance?.UpdateBossLife(Hp,wasCrit);
-        if (Hp <= 0)
-        {
+        if(currentState?.GetType() == typeof(StateIdle))
+            animator.Play("Damage", 0, 0);
+        if (Hp <= 0) {
             allSkills.DisableWeapon();
             Die();
             return;
         }
-        if (currentPoise <= 0 && !(currentState is StateStuned))
-        {
+        if (currentPoise <= 0 && !(currentState is StateStuned)) {
             allSkills.DisableWeapon();
             currentState = new StateStuned();
             currentState.StateStart(this);
@@ -150,7 +152,6 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void Die()
     {
-        
         currentState = null;
         animator.Play("Death", -1, 0.0f);
         charControl.enabled = false;
@@ -171,6 +172,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             Invoke("ActualDeath", timeToDie);
         }
     }
+
+    void OnPlayerDied() {
+        allSkills.DisableWeapon();
+    }
+
     public void ActualDeath()
     {
         //fazer o bicho sumir
@@ -236,6 +242,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         //initiationThroughLoad=true;
         if (IsDead) gameObject.SetActive(false);
     }
+
     public void Respawn()
     {
         if (isBoss) return;
