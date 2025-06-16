@@ -11,6 +11,7 @@ public class NewKitsuneMagicAttack : EnemyBaseState
         speed = 2;
         restTime = 2f;
         animator.Play("RangeAttack", -1, 0.0f);
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Damageble"), true);
     }
 
     public override void StateUpdate()
@@ -29,6 +30,7 @@ public class NewKitsuneMagicAttack : EnemyBaseState
                 enemyBehave.StartIdle(); // Colocar na posição de idle
                 enemyBehave.DisableWeapon(); // Desabilitar arma
                 enemyBehave.ChoseSkill(); // Escolher nova skill
+                Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Enemy"), LayerMask.NameToLayer("Damageble"), false);
                 StateExit(); // Sair do estado atual
             }
 

@@ -25,9 +25,14 @@ public class KitsuneMagicBullet : MonoBehaviour
 
     void OnEnable()
     {
-        _weaponManager.EnableCollider();
         moveTimer = 0.6f;
         isClose = false;
+        Invoke(nameof(EnableWeaponCollider), 0.1f);
+    }
+
+    void EnableWeaponCollider()
+    {
+        _weaponManager.EnableCollider();
     }
 
     void Update() { 

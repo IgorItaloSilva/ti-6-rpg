@@ -13,7 +13,7 @@ public class PlayerInAirState : PlayerBaseState
         HandleAirGravity();
         HandleAnimatorParameters();
         _shouldRotate = shouldRotate;
-        MaxAcceleration = Mathf.Min(_ctx.Acceleration,1.5f);
+        MaxAcceleration = Mathf.Min(_ctx.Acceleration,1f);
     }
 
     public override void EnterState()

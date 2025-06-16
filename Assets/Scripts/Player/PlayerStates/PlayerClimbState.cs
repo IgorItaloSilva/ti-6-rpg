@@ -36,10 +36,7 @@ namespace Player.PlayerStates
 
         private void HandleClimb()
         {
-            _localMovement =
-                ((_ctx.transform.right * _ctx.CurrentMovementInput.x) + (Vector3.up * _ctx.CurrentMovementInput.y)) *
-                _ctx.Acceleration;
-            _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _localMovement.x);
+            _localMovement = Vector3.up * (_ctx.CurrentMovementInput.y * _ctx.Acceleration);
             _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _localMovement.y);
             _ctx.CC.Move(_localMovement * (ClimbSpeed * Time.deltaTime));
         }
@@ -78,7 +75,7 @@ namespace Player.PlayerStates
                     }
                     else
                     {
-                        if (_ctx.CurrentMovementInput is { x: < 0.5f, y: > 0.5f }) HandleJump();
+                        if (_ctx.CurrentMovementInput is { x: < 0.5f, y: > 0.5f }) HandleJump(0.5f);
                         SwitchState(_factory.InAir());
                     }
                 }

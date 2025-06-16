@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class PlayerDodgeState : PlayerBaseState
+public class PlayerDodgeState : PlayerCombatState
 {
     private const int DodgeCooldownMs = 1000, DodgeDurationMs = 500;
 
@@ -33,20 +33,6 @@ public class PlayerDodgeState : PlayerBaseState
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, 0f);
     }
 
-    public override void UpdateState()
-    {
-        if (_ctx.InCombat)
-        {
-            HandleTargetedRotation();
-            HandleTargetedMove();
-        }
-        else
-        {
-            HandleRotation();
-            HandleMove();
-        }
-        CheckSwitchStates();
-    }
 
     public override void ExitState()
     {
@@ -54,6 +40,7 @@ public class PlayerDodgeState : PlayerBaseState
         _ctx.IsDodging = false;
         _ctx.Animator.speed = 1f;
         _ctx.SwordTrail.emitting = false;
+        HandleDodgeCooldownAsync();
     }
 
     public override void CheckSwitchStates()
@@ -71,7 +58,6 @@ public class PlayerDodgeState : PlayerBaseState
 
     private async void HandleDodgeDurationAsync()
     {
-        HandleDodgeCooldownAsync();
         await Task.Delay(DodgeDurationMs);
         if(_ctx.InCombat)
             SwitchState(_factory.Combat());
@@ -81,7 +67,7 @@ public class PlayerDodgeState : PlayerBaseState
 
     private async void HandleDodgeCooldownAsync()
     {
-        await Task.Delay(DodgeDurationMs + DodgeCooldownMs);
+        await Task.Delay(DodgeCooldownMs);
         while (_ctx.IsDodgePressed)
         {
             await Task.Yield();

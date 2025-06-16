@@ -1,10 +1,11 @@
-using PlasticGui;
-using Debug = UnityEngine.Debug;
+using UnityEngine;
 using Task = System.Threading.Tasks.Task;
 
 public class PlayerMagicState : PlayerCombatState
 {
     private readonly int TimeBetweenDamagesMs;
+    private Light _fireLight;
+    private float _lightIntensity;
 
     public PlayerMagicState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
@@ -12,10 +13,15 @@ public class PlayerMagicState : PlayerCombatState
         TimeBetweenDamagesMs = 500;
         _ctx.CanCastMagic = false;
         _ctx.Animator.SetBool(_ctx.IsCastingMagicHash, true);
+        _fireLight = _ctx.MagicVFX.transform.GetChild(0).GetComponent<Light>();
+        _lightIntensity = _fireLight.intensity;
+        _fireLight.intensity = 0f;
+        _fireLight.enabled = true;
     }
 
     public override void EnterState()
     {
+        _ctx.MagicVFX.Play();
         HandleMagicDamageRateAsync();
         if (_ctx.ShowDebugLogs) Debug.Log("Casting Magic");
         _turnTime = _ctx.BaseTurnTime * 2;
@@ -26,6 +32,7 @@ public class PlayerMagicState : PlayerCombatState
         _ctx.CanCastMagic = false;
         _ctx.MagicWeaponManager.DisableCollider();
         _ctx.Animator.SetBool(_ctx.IsCastingMagicHash, false);
+        _ctx.MagicVFX.Stop();
     }
 
     public override void CheckSwitchStates()
@@ -33,14 +40,12 @@ public class PlayerMagicState : PlayerCombatState
         if (!_ctx.CC.isGrounded)
         {
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
-            _ctx.Animator.SetBool(_ctx.IsCastingMagicHash, false);
             SwitchState(_factory.InAir());
             return;
         }
 
-        if (!_ctx.IsMagicPressed)
+        if (!_ctx.IsMagicPressed || !_ctx.InCombat)
         {
-            _ctx.Animator.SetBool(_ctx.IsCastingMagicHash, false);
             if (_ctx.InCombat)
                 SwitchState(_factory.Combat());
             else
@@ -51,15 +56,42 @@ public class PlayerMagicState : PlayerCombatState
     public async void HandleMagicDamageRateAsync()
     {
         await Task.Delay(TimeBetweenDamagesMs);
+        AudioPlayer.instance.PlaySFX("Fire");
+        SmoothEnableLightAsync();
         while (_ctx.IsMagicPressed && _ctx.CurrentState is PlayerMagicState)
         {
             if (_ctx.ShowDebugLogs) Debug.Log("Magic Damage Tick");
             _ctx.MagicWeaponManager.EnableCollider();
             await Task.Delay(TimeBetweenDamagesMs);
         }
+        AudioPlayer.instance.StopSFX("Fire");
+        SmoothDisableLightAsync(_lightIntensity);
         _ctx.CanCastMagic = false;
         _ctx.MagicWeaponManager.DisableCollider();
         await Task.Delay(TimeBetweenDamagesMs);
         _ctx.CanCastMagic = true;
+    }
+
+    private async void SmoothDisableLightAsync(float initialLightIntensity)
+    {
+        while (_fireLight.intensity > 0)
+        {
+            _fireLight.intensity -= Time.fixedDeltaTime * 200;
+            await Task.Delay((int)(Time.fixedDeltaTime * 1000));
+        }
+
+        _fireLight.enabled = false;
+        _fireLight.intensity = initialLightIntensity;
+    }
+    
+    private async void SmoothEnableLightAsync()
+    {
+        _fireLight.enabled = true;
+        while (_fireLight.intensity < _lightIntensity)
+        {
+            _fireLight.intensity += Time.fixedDeltaTime * 50;
+            await Task.Delay((int)(Time.fixedDeltaTime * 1000));
+        }
+        _fireLight.intensity = _lightIntensity;
     }
 }

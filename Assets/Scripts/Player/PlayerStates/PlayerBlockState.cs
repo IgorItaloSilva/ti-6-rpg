@@ -29,6 +29,9 @@ public class PlayerBlockState : PlayerCombatState
 
     public override void CheckSwitchStates()
     {
+        if (_ctx.PlayerStats.PlayerIsDead)
+            return;
+        
         if (!_ctx.CC.isGrounded)
         {
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);

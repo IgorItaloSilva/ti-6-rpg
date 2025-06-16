@@ -50,7 +50,7 @@ public class CheckPointStatue : Interactable
             if(playerStats!=null){
                 playerStats.isNearCampfire=true;
             }
-            UIManager.instance.NearCampfire(true);
+            UIManager.instance?.NearCampfire(true);
         }
     }
     void OnTriggerExit(Collider collider){

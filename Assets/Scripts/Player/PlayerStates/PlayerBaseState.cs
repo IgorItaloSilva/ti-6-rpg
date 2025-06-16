@@ -6,7 +6,7 @@ public abstract class PlayerBaseState
 {
     protected readonly PlayerStateMachine _ctx;
     protected readonly PlayerStateFactory _factory;
-    protected float _turnTime, _turnSmoothSpeed, _lowestAccelerationSpeed = float.MaxValue, _accelerationSpeed = 2.5f;
+    protected float _turnTime, _turnSmoothSpeed, _lowestAccelerationSpeed = float.MaxValue, _accelerationSpeed = 3.5f;
     protected float _maxAcceleration;
     private const byte RotationSpeed = 5;
     protected byte _decelerationSpeed = 10;
@@ -188,7 +188,7 @@ public abstract class PlayerBaseState
     
     public async void StaggerPlayer()
     {
-        SwitchState(_factory.Staggered());
+        SwitchState(_factory.Damage());
         await Task.Delay(600);
         UnlockPlayer();
     }

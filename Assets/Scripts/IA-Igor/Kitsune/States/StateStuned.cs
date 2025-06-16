@@ -5,7 +5,13 @@ public class StateStuned : EnemyBaseState
 {
     
     protected override void OneExecution() {
+        enemyBehave.EnemySounds.PlaySound(EnemySounds.SoundType.Death, enemyBehave.SoundSource);
         animator.Play("Stun", -1, 0.0f);
+        
+        if (enemyBehave.GetTarget())
+            _knockbackDir = (enemyBehave.transform.position - enemyBehave.GetTarget().position).normalized;
+        else
+            _knockbackDir = -enemyBehave.transform.forward;
     }
 
     public override void StateUpdate() {
@@ -16,6 +22,11 @@ public class StateStuned : EnemyBaseState
             StateExit();
         }
 
+    }
+
+    public override void StateFixedUpdate()
+    {
+        Knockback();
     }
 
 }
