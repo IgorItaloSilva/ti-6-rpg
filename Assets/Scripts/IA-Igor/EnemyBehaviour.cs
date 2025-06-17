@@ -185,16 +185,13 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if (isBoss)
         {
             HideBossInfo();
+            Invoke("OpenDialog", timeToDie);
         }
         else
         {
             if (hasDialogChoice && neverDied)
             {
-                if (dialogChoiceAux != null )
-                {
-                    dialogChoiceAux.Activate();
-                    neverDied = false;
-                }
+                Invoke("OpenDialog", timeToDie);
             }
             else
             {
@@ -301,5 +298,12 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     {
         UIManager.instance?.HideBossLife();
     }
-
+    void OpenDialog()
+    {
+        if (dialogChoiceAux != null)
+        {
+            dialogChoiceAux.Activate();
+            neverDied = false;
+        }
+    }
 }
