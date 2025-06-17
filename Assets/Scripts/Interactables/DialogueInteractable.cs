@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class DialogueInteractable : Interactable{
     [Header("COLCOAR DIALOGO(S) AQUI!")]
-    [SerializeField]protected Dialogue dialogue;
+    public Dialogue dialogue;
     [SerializeField]GameObject canvas;
     bool didntAddInteract = false;
     protected override void Awake()
