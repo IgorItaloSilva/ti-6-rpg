@@ -215,6 +215,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         SetRest(knockbackDuration);
         currentState = new StateDamage();
         currentState.StateStart(this);
+        attackState = allSkills.ChoseSkill();
     }
 
     #endregion
