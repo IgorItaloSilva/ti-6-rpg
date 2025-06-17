@@ -53,6 +53,6 @@ public abstract class ASkills : MonoBehaviour
 
     public bool IsRangeSkill() { return isRangeSkill[indexSkill]; }
     
-    public void DisableWeapon(){ for (int i = 0; i < weapons.Length; i++) weapons[i]?.gameObject.SetActive(false); }
+    public void DisableWeapon(){ for (int i = 0; i < weapons.Length; i++) if(weapons[i]!=null)weapons[i].gameObject.SetActive(false); }
 
 }

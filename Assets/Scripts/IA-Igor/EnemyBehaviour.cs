@@ -37,13 +37,15 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [Header("Coisas de boss")]
     [SerializeField] bool isBoss;
     [SerializeField] string Nome;
-    [SerializeField] KitsuneBossDeathAux kitsuneBossDeathAux;
+    DialogChoiceAux dialogChoiceAux;
+    [SerializeField] bool hasDialogChoice;
     //Coisas do level loading manager (reload e spawn)
     [Header("Coisas do LevelLoadingManager")]
     public bool IsDead { get; private set; }
     [SerializeField] bool ignoreSaveLoad;
     [field: SerializeField] public string SaveId { get; private set; }
     Vector3 startingPos;
+    public bool neverDied{ get; private set; }
 
     public enum EnemyType
     {
@@ -79,6 +81,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             startingPos = transform.position;
         }
         Hp = maxHp;
+        neverDied = true;
+        if (hasDialogChoice) dialogChoiceAux = gameObject.GetComponent<DialogChoiceAux>();
     }
 
     void Start()
@@ -178,16 +182,26 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             healthBar.gameObject.SetActive(false);
         }
         IsDead = true;
-        Save();
         if (isBoss)
         {
             HideBossInfo();
-            kitsuneBossDeathAux?.Activate(this);
         }
         else
         {
-            Invoke("ActualDeath", timeToDie);
+            if (hasDialogChoice && neverDied)
+            {
+                if (dialogChoiceAux != null )
+                {
+                    dialogChoiceAux.Activate();
+                    neverDied = false;
+                }
+            }
+            else
+            {
+                Invoke("ActualDeath", timeToDie);
+            }
         }
+        Save();
     }
 
     void OnPlayerDied() {
@@ -256,6 +270,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         IsDead = enemyData.isDead;
         Hp = enemyData.currentLife;
         transform.position = enemyData.lastPosition;
+        neverDied = enemyData.neverDied;
         Physics.SyncTransforms();
         //initiationThroughLoad=true;
         if (IsDead) gameObject.SetActive(false);
