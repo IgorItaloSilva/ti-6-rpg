@@ -3,7 +3,7 @@ Shader "URP/SimpleWater"
     Properties
     {
         _BaseMap("Water Texture", 2D) = "white" {}
-        _Color("Color Tint", Color) = (0.3, 0.5, 0.7, 1)
+        [HDR] _Color("Color Tint", Color) = (0.3, 0.5, 0.7, 1)
         _WaveSpeed("Wave Speed", Float) = 1
         _WaveScale("Wave Scale", Float) = 1
         _WaveStrength("Wave Strength", Float) = 0.05
