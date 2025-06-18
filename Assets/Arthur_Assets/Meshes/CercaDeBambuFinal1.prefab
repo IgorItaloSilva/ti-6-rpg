@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1331074327808760466}
   - component: {fileID: 8823093687553313637}
   - component: {fileID: 2296518837474749588}
+  - component: {fileID: 184394650498983571}
   m_Layer: 0
   m_Name: CercaDeBambuFinal1
   m_TagString: Untagged
@@ -88,3 +89,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &184394650498983571
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750126321820965439}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.14352067, y: 4.869234, z: 2.874595}
+  m_Center: {x: 0.02285274, y: 2.4276905, z: -0.009205946}
