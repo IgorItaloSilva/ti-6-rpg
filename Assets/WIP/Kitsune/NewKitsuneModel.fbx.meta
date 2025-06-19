@@ -36,8 +36,8 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Fox|Attack1
-      takeName: Fox|Attack1
+      name: RigFox|Fox|Attack1
+      takeName: RigFox|Fox|Attack1
       internalID: -3696360924608382511
       firstFrame: 0
       lastFrame: 70
@@ -65,11 +65,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Fox|Damage
-      takeName: Fox|Damage
+      name: RigFox|Fox|Damage
+      takeName: RigFox|Fox|Damage
       internalID: -5191091340983876361
       firstFrame: 0
-      lastFrame: 19
+      lastFrame: 76
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -94,8 +94,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Fox|Run
-      takeName: Fox|Run
+      name: RigFox|Fox|Run
+      takeName: RigFox|Fox|Run
       internalID: -788650454100111917
       firstFrame: 0
       lastFrame: 15
@@ -123,8 +123,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Fox|Turn
-      takeName: Fox|Turn
+      name: RigFox|Fox|Turn
+      takeName: RigFox|Fox|Turn
       internalID: -3671848664425137715
       firstFrame: 0
       lastFrame: 30
@@ -152,8 +152,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Fox|Walk
-      takeName: Fox|Walk
+      name: RigFox|Fox|Walk
+      takeName: RigFox|Fox|Walk
       internalID: 4675685420877529297
       firstFrame: 0
       lastFrame: 35
@@ -181,37 +181,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Fox|RangeAttack1
-      takeName: Fox|RangeAttack1
-      internalID: -3141118196226611975
-      firstFrame: 0
-      lastFrame: 80
-      wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Fox|Stun
-      takeName: Fox|Stun
+      name: RigFox|Fox|Stun
+      takeName: RigFox|Fox|Stun
       internalID: -4221757147050235750
       firstFrame: 0
       lastFrame: 120
@@ -239,8 +210,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Fox|TailAttack
-      takeName: Fox|TailAttack
+      name: RigFox|Fox|TailAttack
+      takeName: RigFox|Fox|TailAttack
       internalID: -6745502418726186316
       firstFrame: 0
       lastFrame: 55
@@ -268,8 +239,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Fox|Idle
-      takeName: Fox|Idle
+      name: RigFox|Fox|Idle
+      takeName: RigFox|Fox|Idle
       internalID: 3840334483403123207
       firstFrame: 0
       lastFrame: 35
@@ -297,8 +268,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Fox|TurnRight
-      takeName: Fox|TurnRight
+      name: RigFox|Fox|TurnRight
+      takeName: RigFox|Fox|TurnRight
       internalID: 8540003595198168664
       firstFrame: 0
       lastFrame: 30
@@ -326,8 +297,8 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Fox|RangeAOE
-      takeName: Fox|RangeAOE
+      name: RigFox|Fox|RangeAOE
+      takeName: RigFox|Fox|RangeAOE
       internalID: -3508123070848970396
       firstFrame: 0
       lastFrame: 120
@@ -360,6 +331,64 @@ ModelImporter:
       internalID: 6961307931600175439
       firstFrame: 81
       lastFrame: 253
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: RigFox|Fox|RangeAttack1
+      takeName: RigFox|Fox|RangeAttack1
+      internalID: 6961307931600175439
+      firstFrame: 0
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: RigFox|CutsceneDamage
+      takeName: RigFox|CutsceneDamage
+      internalID: -3551720655740360548
+      firstFrame: 0
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
