@@ -26,6 +26,7 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
         
     virtual public void CompleteObjective(){
         GameEventsManager.instance?.objectiveEvents.CompleteObjective(objectiveSO.Id);
+        GameEventsManager.instance?.playerEvents.PlayerGainExp(objectiveSO.ExpGain);
         objectiveData.hasFinished=true;
         UpdateDisplayMessage();
         //update Ui
