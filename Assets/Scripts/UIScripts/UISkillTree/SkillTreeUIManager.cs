@@ -11,6 +11,7 @@ public class SkillTreeUIManager : MonoBehaviour
     public static SkillTreeUIManager instance;
     [Header("Painel Skill Tree")]
     [SerializeField]private GameObject painelSkillTree;
+    [SerializeField] private Color corCinza;
     [Header("Texto Das Moedas")]
     [SerializeField]String textCoinHonor;
     [SerializeField]String textCoinCorruption;
@@ -97,7 +98,7 @@ public class SkillTreeUIManager : MonoBehaviour
             {
                 powerUpUIBox.SetActive(true);
                 Vector2 pos = Mouse.current.position.ReadValue() + new Vector2(pixelOffset, pixelOffset);
-                powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos-new Vector2(200,0), Quaternion.identity);
+                powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos - new Vector2(200, 0), Quaternion.identity);
                 powerUpNameText.text = "Moeda Fuhai";
                 powerUpDescriptionText.text = "Usada para comprar talentos. Recebida por fazer ações más.";
                 puBoxMoedaTrevas.SetActive(true);
@@ -145,7 +146,7 @@ public class SkillTreeUIManager : MonoBehaviour
             if(buyablePowerUps==null)Debug.LogWarning("o buyablePowerUps não existe");
             if(buyablePowerUps[id]){
                 skillNode.button.interactable=true;
-                skillNode.NotBoughtOutlineImage.color=Color.gray;
+                skillNode.NotBoughtOutlineImage.color=corCinza;
             }
             else{
                 skillNode.button.interactable=false;
@@ -168,7 +169,7 @@ public class SkillTreeUIManager : MonoBehaviour
         }
         boughtPowerUps[id]=true;
         powerUpNodes[id].button.interactable=true;
-        powerUpNodes[id].NotBoughtOutlineImage.color=Color.gray;
+        powerUpNodes[id].NotBoughtOutlineImage.color=corCinza;
         powerUpNodes[id].powerUpBoughtGO.SetActive(true);
         powerUpNodes[id].powerUpNotBoughtGO.SetActive(false);
     }
@@ -178,7 +179,7 @@ public class SkillTreeUIManager : MonoBehaviour
         }
         buyablePowerUps[id]=true;
         powerUpNodes[id].button.interactable=true;
-        powerUpNodes[id].NotBoughtOutlineImage.color=Color.gray;
+        powerUpNodes[id].NotBoughtOutlineImage.color=corCinza;
     }
     
     public void AjustText(){
