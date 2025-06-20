@@ -29940,6 +29940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05cf135912e397a40b07d532d3c55fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponManager: {fileID: 0}
   collider: {fileID: 4700740467602469977}
   sizeSpeed: 45
 --- !u!1 &2947192963675093028
@@ -56098,6 +56099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeff027d81b03ae4a83f8ed3279f5934, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponManager: {fileID: 0}
   bullets:
   - {fileID: 9160129390701175507}
   - {fileID: 2582201021157537107}
@@ -71622,7 +71624,6 @@ GameObject:
   - component: {fileID: 7704846435828886811}
   - component: {fileID: 3898994051425546240}
   - component: {fileID: 1879033614563243633}
-  - component: {fileID: 8553293795222850908}
   m_Layer: 3
   m_Name: KitsuneYoukaiBossIgor
   m_TagString: Enemy
@@ -71690,6 +71691,12 @@ MonoBehaviour:
   allSkills: {fileID: 1879033614563243633}
   charControl: {fileID: 7704846435828886811}
   animator: {fileID: 2049836535320029946}
+  _dashVFX: {fileID: 0}
+  _headbuttVFX: {fileID: 0}
+  _bloodGameObject: {fileID: 0}
+  _bloodVFX: {fileID: 0}
+  EnemySounds: {fileID: 0}
+  SoundSource: {fileID: 0}
   maxHp: 1000
   poise: 10
   timeToDie: 3
@@ -71700,7 +71707,7 @@ MonoBehaviour:
   enemyType: 0
   isBoss: 1
   Nome: "Kitsune, a Guardi\xE3"
-  kitsuneBossDeathAux: {fileID: 8553293795222850908}
+  hasDialogChoice: 0
   ignoreSaveLoad: 0
   <SaveId>k__BackingField: 
   healthBar: {fileID: 0}
@@ -71721,20 +71728,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 9033748877070180942}
   - {fileID: 9135685033009147556}
---- !u!114 &8553293795222850908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9116456295357131205}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6746e23484b086542a516aafc7f10602, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  portalNextLevel: {fileID: 0}
-  dialogInteractableBoss: {fileID: 5532769436416988121}
 --- !u!1 &9130741003450812679
 GameObject:
   m_ObjectHideFlags: 0
@@ -72164,12 +72157,6 @@ PrefabInstance:
 --- !u!4 &5164050244177065749 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2849766397419915538, guid: c601b120f9a7b3c4ea6cb66b594cef8f,
-    type: 3}
-  m_PrefabInstance: {fileID: 6928228541276257799}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5532769436416988121 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3237625631558315486, guid: c601b120f9a7b3c4ea6cb66b594cef8f,
     type: 3}
   m_PrefabInstance: {fileID: 6928228541276257799}
   m_PrefabAsset: {fileID: 0}

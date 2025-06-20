@@ -57,18 +57,22 @@ public class ObjectiveUiManager : MonoBehaviour
         currentlyOpenButtonId=objectiveSO.Id;
         objectiveTitleText.text= objectiveSO.objectiveTitle;
         if(objectiveData.hasStarted){
+            objectiveStartedText.gameObject.SetActive(true);
             objectiveStartedText.text = "Sim";
             objectiveStartedText.color = Color.green;
         }
         else{
+            objectiveStartedText.gameObject.SetActive(true);
             objectiveStartedText.text = "Não";
             objectiveStartedText.color = Color.red;
         }
         if(objectiveData.hasFinished){
+            objectiveConcludedText.gameObject.SetActive(true);
             objectiveConcludedText.text = "Sim";
             objectiveConcludedText.color = Color.green;
         }
         else{
+            objectiveConcludedText.gameObject.SetActive(true);
             objectiveConcludedText.text = "Não";
             objectiveConcludedText.color = Color.red;
         }

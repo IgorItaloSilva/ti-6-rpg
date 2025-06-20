@@ -1,17 +1,17 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.InputSystem;
 
 public class DialogueInteractable : Interactable{
     [Header("COLCOAR DIALOGO(S) AQUI!")]
     [SerializeField]protected Dialogue dialogue;
-    [SerializeField]GameObject canvas;
+    [SerializeField]protected GameObject canvas;
     bool didntAddInteract = false;
     protected override void Awake()
     {
-        base.Awake();
-        if(canvas==null){
-            canvas=GetComponentInChildren<Canvas>().gameObject;
+    base.Awake();
+        if (canvas == null)
+        {
+            canvas = GetComponentInChildren<Canvas>().gameObject;
         }
     }
     protected virtual void OnEnable(){

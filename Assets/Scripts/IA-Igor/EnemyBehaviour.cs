@@ -35,7 +35,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [Header("Coisas de boss")]
     [SerializeField] bool isBoss;
     [SerializeField] string Nome;
-    [SerializeField] KitsuneBossDeathAux kitsuneBossDeathAux;
+    DialogChoiceAux dialogChoiceAux;
+    [SerializeField] bool hasDialogChoice;
     //Coisas do level loading manager (reload e spawn)
     [Header("Coisas do LevelLoadingManager")]
     public bool IsDead { get; private set; }
@@ -43,6 +44,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [SerializeField] private readonly bool _showDebugLogs;
     [field: SerializeField] public string SaveId { get; private set; }
     Vector3 startingPos;
+    public bool neverDied{ get; private set; }
 
     public enum EnemyType
     {
@@ -79,6 +81,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             startingPos = transform.position;
         }
         Hp = maxHp;
+        neverDied = true;
+        if (hasDialogChoice) dialogChoiceAux = gameObject.GetComponent<DialogChoiceAux>();
     }
 
     void Start()
@@ -194,16 +198,23 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             healthBar.gameObject.SetActive(false);
         }
         IsDead = true;
-        Save();
         if (isBoss)
         {
             HideBossInfo();
-            kitsuneBossDeathAux?.Activate(this);
+            Invoke("OpenDialog", timeToDie);
         }
         else
         {
-            Invoke("ActualDeath", timeToDie);
+            if (hasDialogChoice && neverDied)
+            {
+                Invoke("OpenDialog", timeToDie);
+            }
+            else
+            {
+                Invoke("ActualDeath", timeToDie);
+            }
         }
+        Save();
     }
 
     public IEnumerator Bleed()
@@ -283,6 +294,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         IsDead = enemyData.isDead;
         Hp = enemyData.currentLife;
         transform.position = enemyData.lastPosition;
+        neverDied = enemyData.neverDied;
         Physics.SyncTransforms();
         //initiationThroughLoad=true;
         if (IsDead) gameObject.SetActive(false);
@@ -313,5 +325,12 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     {
         UIManager.instance?.HideBossLife();
     }
-
+    void OpenDialog()
+    {
+        if (dialogChoiceAux != null)
+        {
+            dialogChoiceAux.Activate();
+            neverDied = false;
+        }
+    }
 }

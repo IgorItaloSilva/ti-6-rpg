@@ -55,10 +55,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI objectiveTitle;
     [SerializeField] TextMeshProUGUI objectiveText;
     [Header("Coisas Tutorial Popup")]
-    [SerializeField] GameObject tutorialImageLayoutGroup;
-    [SerializeField] GameObject tutorialTextLayoutGroup;
+    [SerializeField] GameObject tutorialLayoutGroup;
+    [SerializeField] HorizontalLayoutGroup tutorialHorizontalLayoutGroup;
     [SerializeField] TextMeshProUGUI tutorialTitle;
     [SerializeField] GameObject tutorialTextPrefab;
+    [SerializeField] GameObject tutorialImagePlusTextPrefab;
     [SerializeField] GameObject tutorialImagePrefab;
     //coisas do vfx ganahr exp
     int carriedExp;
@@ -570,27 +571,20 @@ public class UIManager : MonoBehaviour
         Debug.LogWarning("chamando o tutorial aqui");
         SwitchToScreen((int)UIScreens.TutorialPopup);
         tutorialTitle.text = tutorialSo.Title;
-        int childCount = tutorialImageLayoutGroup.transform.childCount;
+        int childCount = tutorialLayoutGroup.transform.childCount;
         Transform aux;
         for (int child = 0; child < childCount; child++)
         {
-            aux = tutorialImageLayoutGroup.transform.GetChild(child);
-            Destroy(aux.gameObject);
-        }
-        childCount = tutorialTextLayoutGroup.transform.childCount;
-        for (int child = 0; child < childCount; child++)
-        {
-            aux = tutorialTextLayoutGroup.transform.GetChild(child);
+            aux = tutorialLayoutGroup.transform.GetChild(child);
             Destroy(aux.gameObject);
         }
         for (int i = 0; i < tutorialSo.Sprites.Length; i++)
         {
-            GameObject newImage = Instantiate(tutorialImagePrefab, tutorialImageLayoutGroup.transform, false);
+            GameObject ImagePlusTextGO = Instantiate(tutorialImagePlusTextPrefab, tutorialHorizontalLayoutGroup.transform, false);
+            VerticalLayoutGroup verticalLayoutGroup = ImagePlusTextGO.GetComponentInChildren<VerticalLayoutGroup>();
+            GameObject newImage = Instantiate(tutorialImagePrefab, verticalLayoutGroup.transform, false);
             newImage.GetComponent<Image>().sprite = tutorialSo.Sprites[i];
-        }
-        for (int i = 0; i < tutorialSo.Texts.Length; i++)
-        {
-            GameObject newText = Instantiate(tutorialTextPrefab, tutorialTextLayoutGroup.transform, false);
+            GameObject newText = Instantiate(tutorialTextPrefab, verticalLayoutGroup.transform, false);
             newText.GetComponent<TextMeshProUGUI>().text = tutorialSo.Texts[i];
         }
     }
