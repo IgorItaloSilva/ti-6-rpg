@@ -7,7 +7,6 @@ public class PlayerLockedState : PlayerBaseState
     public PlayerLockedState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        UnlockStuckPlayer();
     }
 
     public override void EnterState()
@@ -33,13 +32,6 @@ public class PlayerLockedState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-
-    }
-
-    private async void UnlockStuckPlayer()
-    {
-        await Task.Delay(6000);
-        if(_ctx.IsLocked)
-            _ctx.UnlockPlayer();
+        
     }
 }

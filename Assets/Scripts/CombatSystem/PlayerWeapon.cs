@@ -2,30 +2,31 @@ using UnityEngine;
 
 public class PlayerWeapon : WeaponManager
 {
-    [SerializeField] float critRate = 5;
-    float heavyAttackDamage = 0;
-    float lightAttackDamage = 0;
-    float strBonusDamage; //recived from playerStats
-    float dexBonusDamage; //recived from playerStats
+    [SerializeField] private float critRate = 5;
+    private float _heavyAttackDamage;
+    private float _lightAttackDamage;
+    private float _strBonusDamage; //received from playerStats
+    private float _dexBonusDamage; //received from playerStats
 
-    float critRateBonus; //recived from runeManager
+    private float _critRateBonus; //received from runeManager
 
     //Weapon pinduricalhos
-    float runeBonusDamage = 0;
+    private float _runeBonusDamage;
 
     //Skill tree powerUps
-    int doubleDamageMultiplier = 1;
-    bool executeEnemiesPUActive;
-    bool lifeStealPUActive;
+    private int _doubleDamageMultiplier = 1;
+    private bool _executeEnemiesPuActive;
+    private bool _lifeStealPuActive;
+    [SerializeField] private readonly bool _showDebugLogs;
 
-    void OnEnable()
+    private void OnEnable()
     {
         GameEventsManager.instance.runeEvents.onRuneDamageBuff += RuneDamageBuff;
         GameEventsManager.instance.runeEvents.onRuneOtherBuff += RuneOtherBuff;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp += ActivatePowerUps;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         GameEventsManager.instance.runeEvents.onRuneDamageBuff -= RuneDamageBuff;
         GameEventsManager.instance.runeEvents.onRuneOtherBuff -= RuneOtherBuff;
@@ -37,7 +38,7 @@ public class PlayerWeapon : WeaponManager
         damageCollider = GetComponent<Collider>();
         if (damageCollider == null)
         {
-            Debug.LogWarning($"O weapon manager do {name} não achou o collider dela");
+            if(_showDebugLogs) Debug.LogWarning($"O weapon manager do {name} não achou o collider dela");
         }
 
         damage = baseDamage;
@@ -45,11 +46,11 @@ public class PlayerWeapon : WeaponManager
 
     protected override void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"A arma colidiu com um {other.name}");
+        if(_showDebugLogs) Debug.Log($"A arma colidiu com um {other.name}");
         if (!other.gameObject.CompareTag("EnemyDetection"))
         {
             IDamagable alvoAtacado = other.gameObject.GetComponentInParent<IDamagable>();
-            Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
+            if(_showDebugLogs) Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
             if (alvoAtacado != null && alvoAtacado.GetType() != typeof(PlayerStats))
             {
                 DealDamage(alvoAtacado, damage);
@@ -77,37 +78,37 @@ public class PlayerWeapon : WeaponManager
 
         damagedTargets.Add(alvo);
         //CritLogic
-        if (Random.Range(0f, 100f) <= critRate + critRateBonus)
+        if (Random.Range(0f, 100f) <= critRate + _critRateBonus)
         {
-            damageDealt = damage * 2 * doubleDamageMultiplier;
+            damageDealt = damage * 2 * _doubleDamageMultiplier;
             crited = true;
         }
         else
         {
-            damageDealt = damage * doubleDamageMultiplier;
+            damageDealt = damage * _doubleDamageMultiplier;
         }
 
-        if (lifeStealPUActive)
+        if (_lifeStealPuActive)
         {
             GameEventsManager.instance.skillTreeEvents.LifeStealHit(damageDealt / 2);
             if (showDebug) Debug.Log($"Curando o jogador com lifeSteal de {damageDealt / 2}");
         }
-
+        
         alvo.TakeDamage(damageDealt, damageType, crited);
         if (showDebug) Debug.Log($"Enviei {damageDealt} de dano para ser tomado para {alvo}");
     }
 
     public void SetDamageAndValues(float strongAttackBonus, float fastAttackBonus)
     {
-        strBonusDamage = strongAttackBonus;
-        dexBonusDamage = fastAttackBonus;
+        _strBonusDamage = strongAttackBonus;
+        _dexBonusDamage = fastAttackBonus;
         SetDamage();
     }
 
-    void SetDamage()
+    private void SetDamage()
     {
-        heavyAttackDamage = baseDamage + strBonusDamage + runeBonusDamage;
-        lightAttackDamage = baseDamage + dexBonusDamage + runeBonusDamage;
+        _heavyAttackDamage = baseDamage + _strBonusDamage + _runeBonusDamage;
+        _lightAttackDamage = baseDamage + _dexBonusDamage + _runeBonusDamage;
     }
 
     public void SetDamageType(Enums.AttackType attackType)
@@ -116,10 +117,28 @@ public class PlayerWeapon : WeaponManager
         switch (attackType)
         {
             case Enums.AttackType.LightAttack:
-                damage = lightAttackDamage;
+                damage = _lightAttackDamage;
+                damageType = Enums.DamageType.Regular;
                 break;
             case Enums.AttackType.HeavyAttack:
-                damage = heavyAttackDamage;
+                damage = _heavyAttackDamage;
+                damageType = Enums.DamageType.Regular;
+                break;
+            case Enums.AttackType.BleedAttack:
+                damage = _heavyAttackDamage;
+                damageType = Enums.DamageType.Bleed;
+                break;
+            case Enums.AttackType.PoiseAttack:
+                damage = _heavyAttackDamage;
+                damageType = Enums.DamageType.Poise;
+                break;
+            case Enums.AttackType.IceAttack:
+                damage = _heavyAttackDamage;
+                damageType = Enums.DamageType.Ice;
+                break;
+            case Enums.AttackType.SelfDamageAttack:
+                damage = _heavyAttackDamage;
+                damageType = Enums.DamageType.SelfDamage;
                 break;
         }
     }
@@ -128,31 +147,31 @@ public class PlayerWeapon : WeaponManager
     {
         if (isActivate)
         {
-            runeBonusDamage = value;
+            _runeBonusDamage = value;
         }
         else
         {
-            runeBonusDamage = 0;
+            _runeBonusDamage = 0;
             ;
         }
 
         SetDamage();
     }
 
-    void ActivatePowerUps(int id)
+    private void ActivatePowerUps(int id)
     {
         switch (id)
         {
             //DoubleDamage
             case 10:
-                doubleDamageMultiplier = 2;
+                _doubleDamageMultiplier = 2;
                 break;
             //Execute
             case 13:
                 break;
             //LifeSteal
             case 14:
-                lifeStealPUActive = true;
+                _lifeStealPuActive = true;
                 break;
         }
     }
@@ -164,7 +183,7 @@ public class PlayerWeapon : WeaponManager
             switch (code)
             {
                 case Enums.RuneOtherCode.Critico:
-                    critRateBonus = amount;
+                    _critRateBonus = amount;
                     break;
             }
         }
@@ -173,7 +192,7 @@ public class PlayerWeapon : WeaponManager
             switch (code)
             {
                 case Enums.RuneOtherCode.Critico:
-                    critRateBonus = 0;
+                    _critRateBonus = 0;
                     break;
             }
         }

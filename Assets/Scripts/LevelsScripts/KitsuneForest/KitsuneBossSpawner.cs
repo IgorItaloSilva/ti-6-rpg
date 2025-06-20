@@ -12,6 +12,9 @@ public class BossSpawner : MonoBehaviour
 
     void OnEnable(){
         GameEventsManager.instance.levelEvents.onPillarActivated+=PillarActivated;
+#if UNITY_EDITOR
+        numActivePillars = 0;
+#endif
     }
     void OnDisable(){
         GameEventsManager.instance.levelEvents.onPillarActivated-=PillarActivated;

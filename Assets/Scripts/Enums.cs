@@ -10,7 +10,11 @@ public class Enums {
     public enum DamageType{
         Regular,
         Magic,
-        Parry
+        Parry,
+        Poise,
+        Bleed,
+        Ice,
+        SelfDamage
     }
     //COISAS DAS RUNAS
     public enum KatanaPart{
@@ -35,7 +39,11 @@ public class Enums {
     }
     public enum AttackType{
         HeavyAttack,
-        LightAttack
+        LightAttack,
+        BleedAttack,
+        PoiseAttack,
+        IceAttack,
+        SelfDamageAttack
     }
     
 }

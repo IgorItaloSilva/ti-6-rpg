@@ -302,7 +302,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
                 break;
             case 6:
                 PULifeRegenActive = true;
-                InvokeRepeating("LifeRegenPowerUp", 0f, 5f);
+                InvokeRepeating(nameof(LifeRegenPowerUp), 0f, 5f);
                 Debug.Log("Ativei o powerUp 6");
                 break;
             default: break;

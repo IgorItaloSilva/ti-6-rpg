@@ -5,7 +5,7 @@ public class StateStuned : EnemyBaseState
 {
     
     protected override void OneExecution() {
-        enemyBehave.EnemySounds?.PlaySound(EnemySounds.SoundType.Death, enemyBehave.SoundSource);
+        enemyBehave.enemySounds?.PlaySound(EnemySounds.SoundType.Death, enemyBehave.soundSource);
         animator.Play("Stun", -1, 0.0f);
         
         if (enemyBehave.GetTarget())

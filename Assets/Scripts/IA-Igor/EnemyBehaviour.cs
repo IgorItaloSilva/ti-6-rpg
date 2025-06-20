@@ -1,8 +1,7 @@
-using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.VFX;
-using Random = UnityEngine.Random;
 
 public class EnemyBehaviour : MonoBehaviour, IDamagable
 {
@@ -13,12 +12,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [Header("VFX")]
     [SerializeField] public ParticleSystem _dashVFX;
     [SerializeField] public VisualEffect _headbuttVFX;
-    [SerializeField] private GameObject _bloodGameObject;
     [SerializeField] private VisualEffect _bloodVFX;
     
     [FormerlySerializedAs("_enemySounds")] [Header("Audio")]
-    public EnemySounds EnemySounds;
-    [FormerlySerializedAs("_soundSource")] public AudioSource SoundSource;
+    public EnemySounds enemySounds;
+    [FormerlySerializedAs("_soundSource")] public AudioSource soundSource;
     
     [Header("Valores")]
     [SerializeField] public float Hp { get; private set; }
@@ -42,6 +40,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [Header("Coisas do LevelLoadingManager")]
     public bool IsDead { get; private set; }
     [SerializeField] bool ignoreSaveLoad;
+    [SerializeField] private readonly bool _showDebugLogs;
     [field: SerializeField] public string SaveId { get; private set; }
     Vector3 startingPos;
 
@@ -59,6 +58,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     public EnemyBaseState attackState; // Estado de ataque
     Transform target;
     float restTimer;
+    byte damageCounter;
 
     [SerializeField] HealthBar healthBar;
     [SerializeField] WeaponManager weapon;
@@ -69,7 +69,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         {
             if (LevelLoadingManager.instance == null)
             {
-                Debug.LogWarning($"O inimigo {gameObject.name} está tentando se adicionar na lista de inimigos, mas não temos um LevelLoadingManger na cena");
+                if(_showDebugLogs) Debug.LogWarning($"O inimigo {gameObject.name} está tentando se adicionar na lista de inimigos, mas não temos um LevelLoadingManger na cena");
             }
             LevelLoadingManager.instance.enemiesIgor.Add(this);
             if (SaveId == "")
@@ -145,15 +145,31 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     public void TakeDamage(float damage, Enums.DamageType damageType, bool wasCrit)
     {
         Hp -= damage;
-        currentPoise -= 1;
+        currentPoise -= damageType switch
+        {
+            Enums.DamageType.Poise => 3,
+            Enums.DamageType.Magic or Enums.DamageType.Bleed => 0,
+            _ => 1
+        };
+        
+        if(damageType == Enums.DamageType.Bleed)
+        {
+            //Debug.LogError("Bleed activated");
+            damageCounter = 0;
+            StartCoroutine(Bleed());
+        }
+        
         healthBar?.SetValue(Hp, currentPoise, wasCrit);
-        _bloodGameObject?.transform.LookAt(target.position);
-        _bloodVFX?.Play();
+        if(target)
+        {
+            _bloodVFX?.gameObject.transform.LookAt(target.position);
+            _bloodVFX?.Play();
+        }
         if(isBoss)UIManager.instance?.UpdateBossLife(Hp,wasCrit);
         if(currentState?.GetType() == typeof(StateIdle))
         {
             animator.Play("Damage", 0, 0);
-            EnemySounds.PlaySound(EnemySounds.SoundType.Damage, SoundSource);
+            enemySounds.PlaySound(EnemySounds.SoundType.Damage, soundSource);
         }
         if (Hp <= 0) {
             allSkills.DisableWeapon();
@@ -190,6 +206,17 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         }
     }
 
+    public IEnumerator Bleed()
+    {
+        while (damageCounter < 10 && !IsDead)
+        {
+            TakeDamage(5f, Enums.DamageType.Magic, false);
+            damageCounter++;
+            yield return new WaitForSeconds(0.5f);
+        }
+        yield return null;
+    }
+    
     void OnPlayerDied() {
         allSkills.DisableWeapon();
     }
@@ -233,7 +260,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if (ignoreSaveLoad) return;
         if (LevelLoadingManager.instance == null)
         {
-            Debug.Log($"O inimigo {SaveId} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
+            if(_showDebugLogs) Debug.Log($"O inimigo {SaveId} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
         }
         //Debug.Log(LevelLoadingManager.instance.CurrentLevelData);
         //see if we have this data in dictionary        
