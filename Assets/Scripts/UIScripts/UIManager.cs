@@ -60,6 +60,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI tutorialTitle;
     [SerializeField] GameObject tutorialTextPrefab;
     [SerializeField] GameObject tutorialImagePrefab;
+    [Header("Canvases")]
+    [SerializeField] GameObject canvasFew;
+    [SerializeField] GameObject canvasMid;
+    [SerializeField] GameObject canvasFreq;
     //coisas do vfx ganahr exp
     int carriedExp;
     int gainedExp;
@@ -611,5 +615,11 @@ public class UIManager : MonoBehaviour
             toggleConfig = true;
             painelConfig.SetActive(true);
         }
+    }
+    public void SetCanvasActive(bool vf)
+    {
+        canvasFew.SetActive(vf);
+        canvasMid.SetActive(vf);
+        canvasFreq.SetActive(vf);
     }
 }
