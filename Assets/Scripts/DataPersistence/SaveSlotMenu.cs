@@ -87,11 +87,12 @@ public class SaveSlotMenu : Menu
         DataPersistenceManager.instance.SaveGame();
         if(levelToBeLoaded==""){
             if(DataPersistenceManager.instance.showDebug)Debug.Log("Como não tinha um level indo pro indice 1");
-            SceneManager.LoadSceneAsync(1);
+            GameManager.instance.ChangeLevelFromMainMenu("KitsuneForest", Vector3.zero);
         }
         else{
             if(DataPersistenceManager.instance.showDebug)Debug.Log("Indo pro level " + levelToBeLoaded);
-            SceneManager.LoadSceneAsync(levelToBeLoaded);
+            Vector3 pos = levelToBeLoaded == "MageMap" ? new Vector3(-117.099998f, -5.9000001f, -19.5300007f) : Vector3.zero;
+            GameManager.instance.ChangeLevelFromMainMenu(levelToBeLoaded, pos);
         }
         SceneManager.LoadSceneAsync("Hud",LoadSceneMode.Additive);
     }
