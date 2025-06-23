@@ -4,17 +4,17 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public class ResourceLoader : MonoBehaviour
 {
-    [SerializeField] GameObject terrainParent;
+    [SerializeField] GameObject terrainParent; 
     GameObject loadedAsset;
     SphereCollider meuCollider;
     bool alreadyLoaded;
-    void Awake()
+    void Awake() //feito só pra configurar o collider automaticamente
     {
         meuCollider = gameObject.GetComponent<SphereCollider>();
         meuCollider.radius = 10f;
         meuCollider.isTrigger = true;
     }
-    void Update()
+    void Update() //Debug pra testar se o UnloadFunciona
     {
         if (Input.GetKeyDown(KeyCode.CapsLock))
         {
@@ -31,11 +31,13 @@ public class ResourceLoader : MonoBehaviour
     }
     IEnumerator LoadTerrainAsync()
     {
+        //Load resource
         ResourceRequest resourceRequest = Resources.LoadAsync<GameObject>("KitsuneMapParts/PaiTerrenoEsquiso");
         while (!resourceRequest.isDone)
         {
             yield return null;
         }
+        //Instantiate guardando a referencia para destruir depois
         loadedAsset = Instantiate(resourceRequest.asset, terrainParent.transform) as GameObject;
         
     }
