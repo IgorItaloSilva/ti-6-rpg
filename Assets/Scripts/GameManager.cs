@@ -2,11 +2,17 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance {get;private set;}
     [SerializeField]bool shouldOpenHud;
+    [SerializeField] GameObject canvasChangingScene;
+    [SerializeField] Image backgroundImage;
+    [SerializeField] Sprite[] loadingImages;
+    [SerializeField] Slider sliderLoadScene;
+    
     public bool shouldLoadTutorial;
     public bool shouldShowTutorials = true;
     public bool showDebug;
@@ -74,17 +80,30 @@ public class GameManager : MonoBehaviour
         string currentLevel = LevelLoadingManager.instance.LevelName;
         GameEventsManager.instance.playerEvents.SetPosition(posToArrive);
         DataPersistenceManager.instance.SaveGame();
-        //Ligar a tela de carregamento, se quiser
         StartCoroutine(UnloadLevelAsync(currentLevel));
         StartCoroutine(LoadLevelAsync(levelName));
     }
-    IEnumerator LoadLevelAsync(string levelName){
-        AsyncOperation loadOperation = SceneManager.LoadSceneAsync(levelName,LoadSceneMode.Additive);
-        while(!loadOperation.isDone){
-            //float progressValue = mathf.Clamp01(loadOperation.progress/0.9f);
-            //atualizar o slider de progresso
+    public void ChangeLevelFromMainMenu(string levelName, Vector3 posToArrive)
+    {
+        GameEventsManager.instance.playerEvents.SetPosition(posToArrive);
+        DataPersistenceManager.instance.SaveGame();
+        StartCoroutine(LoadLevelAsync(levelName,false));
+    }
+    IEnumerator LoadLevelAsync(string levelName,bool isAdditive = true)
+    {
+        AsyncOperation loadOperation;
+        if (!isAdditive)loadOperation = SceneManager.LoadSceneAsync(levelName);
+        else loadOperation = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
+        canvasChangingScene.SetActive(true);
+        int code = levelName == "MageMap" ? 1 : 0;
+        backgroundImage.sprite = loadingImages[code];
+        while (!loadOperation.isDone)
+        {
+            float progressValue = loadOperation.progress;
+            sliderLoadScene.value = progressValue;
             yield return null;
         }
+        canvasChangingScene.SetActive(false);
     }
     IEnumerator UnloadLevelAsync(string levelName){
         AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(levelName);
