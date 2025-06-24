@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using UnityEngine.VFX;
 
 #endregion
@@ -242,7 +241,12 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public PlayerWeapon MagicWeaponManager => _magicWeaponManager;
     public Vector3 CurrentMovementInput => _currentMovementInput;
     public float Gravity => _gravity;
-    public byte AttackCount => _attackCount;
+    public byte AttackCount
+    {
+        get => _attackCount;
+        set => _attackCount = value;
+    }
+
     public bool IsInteractPressed => _isInteractPressed && _canInteract;
     public bool IsMovementPressed => _isMovementPressed;
     public bool IsJumpPressed => _isJumpPressed && _canJump;
@@ -690,10 +694,29 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         if (ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
     }
 
-    private void EnableSwordCollider()
+    private void EnableSwordCollider(string attackType = "light")
     {
         if (_isDodging) return;
-        _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
+        
+        switch (attackType)
+        {
+            case "light":
+                _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
+                Debug.Log("Light attack");
+                break;
+            case "heavy":
+                _swordWeaponManager.SetDamageType(Enums.AttackType.HeavyAttack);
+                Debug.Log("Heavy attack");
+                break;
+            case "bleed":
+                _swordWeaponManager.SetDamageType(Enums.AttackType.BleedAttack);
+                Debug.Log("Bleed attack");
+                break;
+            default:
+                _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
+                break;
+        }
+        
         _swordTrail.emitting = true;
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");

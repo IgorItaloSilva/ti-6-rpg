@@ -1,7 +1,4 @@
 using System.Threading.Tasks;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 public class PlayerCombatState : PlayerGroundedState
@@ -106,6 +103,7 @@ public class PlayerCombatState : PlayerGroundedState
         {
             _ctx.Animator.ResetTrigger(_ctx.Special1Hash);
             _ctx.Animator.SetTrigger(_ctx.Special1Hash);
+            _ctx.AttackCount = 5;
             _ctx.CanSpecial1 = false;
             _ctx.StartSpecialCooldown(1);
             SwitchState(_factory.Attack());
@@ -116,6 +114,7 @@ public class PlayerCombatState : PlayerGroundedState
         {
             _ctx.Animator.ResetTrigger(_ctx.Special2Hash);
             _ctx.Animator.SetTrigger(_ctx.Special2Hash);
+            _ctx.AttackCount = 6;
             _ctx.CanSpecial2 = false;
             _ctx.StartSpecialCooldown(2);
             SwitchState(_factory.Attack());
@@ -126,6 +125,7 @@ public class PlayerCombatState : PlayerGroundedState
         {
             _ctx.Animator.ResetTrigger(_ctx.Special3Hash);
             _ctx.Animator.SetTrigger(_ctx.Special3Hash);
+            _ctx.AttackCount = 7;
             _ctx.CanSpecial3 = false;
             _ctx.StartSpecialCooldown(3);
             SwitchState(_factory.Attack());
@@ -136,6 +136,7 @@ public class PlayerCombatState : PlayerGroundedState
         {
             _ctx.Animator.ResetTrigger(_ctx.Special4Hash);
             _ctx.Animator.SetTrigger(_ctx.Special4Hash);
+            _ctx.AttackCount = 8;
             _ctx.CanSpecial4 = false;
             _ctx.StartSpecialCooldown(4);
             SwitchState(_factory.Attack());

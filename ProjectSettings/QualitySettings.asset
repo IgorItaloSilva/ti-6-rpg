@@ -60,6 +60,7 @@ QualitySettings:
     terrainMaxTrees: 50
     excludedTargetPlatforms:
     - Server
+    - Standalone
   - serializedVersion: 4
     name: Balanced
     pixelLightCount: 1
@@ -90,7 +91,7 @@ QualitySettings:
     lodBias: 4
     maximumLODLevel: 0
     enableLODCrossFade: 1
-    streamingMipmapsActive: 0
+    streamingMipmapsActive: 1
     streamingMipmapsAddAllCameras: 1
     streamingMipmapsMemoryBudget: 512
     streamingMipmapsRenderersPerFrame: 512
@@ -167,6 +168,7 @@ QualitySettings:
     terrainMaxTrees: 50
     excludedTargetPlatforms:
     - Server
+    - Standalone
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
     Android: 1

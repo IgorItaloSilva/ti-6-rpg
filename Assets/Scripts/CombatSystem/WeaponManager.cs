@@ -41,7 +41,7 @@ public class WeaponManager : MonoBehaviour
             //Debug.Log($"A interface Idamageble que eu peguei foi {alvoAtacado}");
             if (alvoAtacado != null)
             {
-                if (PlayerStateMachine.Instance.IsBlocking)
+                if (PlayerStateMachine.Instance.IsBlocking && damageType != Enums.DamageType.Magic)
                 {
                     if (PlayerStateMachine.Instance.ShouldParry)
                     {
@@ -52,6 +52,7 @@ public class WeaponManager : MonoBehaviour
                     }
                     else
                     {
+                        
                         AudioPlayer.instance.PlaySFX("Parry");
                         DealDamage(alvoAtacado, damage / 3);
                     }

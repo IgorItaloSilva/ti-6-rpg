@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -21,7 +20,7 @@ public class EnemyDetection : MonoBehaviour
         {
             targetEnemy = other.gameObject;
             RaycastEnemyAsync();
-            Debug.Log("In enemy range, looking for line of sight");
+            if(PlayerStateMachine.Instance.ShowDebugLogs) Debug.Log("In enemy range, looking for line of sight");
             other.GetComponent<EnemyBehaviour>().SetTarget(transform.parent);
             other.GetComponent<EnemyBehaviour>().DisplayBossInfoIfBoss();
         }
@@ -46,7 +45,7 @@ public class EnemyDetection : MonoBehaviour
             {
                 if (_raycastHit.collider.CompareTag("Enemy"))
                 {
-                    Debug.Log("In enemy line of sight");
+                    if(PlayerStateMachine.Instance.ShowDebugLogs) Debug.Log("In enemy line of sight");
                     _inLineOfSight = true;
                     PlayerStateMachine.Instance.InCombat = true;
                     return;

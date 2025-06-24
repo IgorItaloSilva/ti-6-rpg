@@ -1,11 +1,10 @@
-using System.Diagnostics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 public class PlayerAttackState : PlayerBaseState
 {
     private const byte DecelerationSpeed = 2;
-    private bool _inSeekRange;
+    private bool _inSeekRange, _isSpecial;
 
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)

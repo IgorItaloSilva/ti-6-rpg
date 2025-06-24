@@ -16,6 +16,29 @@ MonoBehaviour:
   - {fileID: 5732795971586784133}
   - {fileID: 2424564621119242402}
   - {fileID: 8621495225701988134}
+  - {fileID: 743741620408427823}
+--- !u!114 &743741620408427823
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
+  m_Name: LiftGammaGain
+  m_EditorClassIdentifier: 
+  active: 1
+  lift:
+    m_OverrideState: 1
+    m_Value: {x: 0.9420654, y: 0.9637247, z: 1, w: 0}
+  gamma:
+    m_OverrideState: 1
+    m_Value: {x: 0.8927426, y: 0.9691786, z: 1, w: -0.38678488}
+  gain:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 0.8767841, z: 0.80055624, w: 0}
 --- !u!114 &2424564621119242402
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -39,17 +62,17 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 108.9
   enableGround:
-    m_OverrideState: 1
-    m_Value: 0
+    m_OverrideState: 0
+    m_Value: 1
   groundHeight:
     m_OverrideState: 1
-    m_Value: -0.6
+    m_Value: -9.18
   density:
     m_OverrideState: 1
-    m_Value: 0.544
+    m_Value: 1
   attenuationDistance:
     m_OverrideState: 1
-    m_Value: 10
+    m_Value: 9.46
   enableAPVContribution:
     m_OverrideState: 1
     m_Value: 0
@@ -61,19 +84,19 @@ MonoBehaviour:
     m_Value: 1
   anisotropy:
     m_OverrideState: 1
-    m_Value: 0.17
+    m_Value: -0.027
   scattering:
     m_OverrideState: 1
-    m_Value: 0.821
+    m_Value: 0.92
   tint:
     m_OverrideState: 1
     m_Value: {r: 0.7971698, g: 0.9638795, b: 1, a: 1}
   enableAdditionalLightsContribution:
-    m_OverrideState: 1
-    m_Value: 1
+    m_OverrideState: 0
+    m_Value: 0
   maxSteps:
     m_OverrideState: 1
-    m_Value: 16
+    m_Value: 32
   blurIterations:
     m_OverrideState: 1
     m_Value: 1
@@ -101,10 +124,10 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 1.84
   intensity:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 1.96
   scatter:
     m_OverrideState: 0
     m_Value: 0.7

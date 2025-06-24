@@ -16,15 +16,19 @@ public class TutorialLevelUp : Interactable
     {
         if (GameManager.instance.shouldShowTutorials)
         {
-            UIManager.instance.DisplayPopupTutorial(tutorialSO);
-            AlreadyInterated = true;
-            Save();
-            gameObject.SetActive(false);
+            Invoke("ActualShowTutorial", 1f);
         }
     }
     public override void Load(InteractableData interactableData)
     {
         base.Load(interactableData);
         if (AlreadyInterated) gameObject.SetActive(false);
+    }
+    void ActualShowTutorial()
+    {
+        UIManager.instance.DisplayPopupTutorial(tutorialSO);
+        AlreadyInterated = true;
+        Save();
+        gameObject.SetActive(false);
     }
 }

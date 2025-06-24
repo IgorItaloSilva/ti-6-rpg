@@ -165,11 +165,10 @@ ModelImporter:
       mm and maximum position error 4.1 mm at time 0:30 (50.0%) Frame 30\n\nRetargeting
       quality report for clip 'Yami_Rig|YMS_D_SW':\n\tRetargeting quality is good.
       No significant differences with original animation were found.\n\nRetargeting
-      quality report for clip 'Yami_Rig|YMS_E_E':\n\tLeftLowerArm average position
-      error 4.5 mm and maximum position error 276.7 mm at time 0: 0 (0.0%) Frame
-      0\n\tLeftHand average position error 4.6 mm and maximum position error 276.5
-      mm at time 0: 0 (0.0%) Frame 0\n\nRetargeting quality report for clip 'Yami_Rig|YMS_E_N':\n\tRetargeting
-      quality is good. No significant differences with original animation were found.\n\nRetargeting
+      quality report for clip 'Yami_Rig|YMS_E_E':\n\tRetargeting quality is good.
+      No significant differences with original animation were found.\n\nRetargeting
+      quality report for clip 'Yami_Rig|YMS_E_N':\n\tRetargeting quality is good.
+      No significant differences with original animation were found.\n\nRetargeting
       quality report for clip 'Yami_Rig|YMS_E_S':\n\tRetargeting quality is good.
       No significant differences with original animation were found.\n\nRetargeting
       quality report for clip 'Yami_Rig|YMS_E_W':\n\tRightHand average position error
@@ -904,7 +903,7 @@ ModelImporter:
       events:
       - time: 0.16339225
         functionName: EnableSwordCollider
-        data: 
+        data: heavy
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
@@ -920,13 +919,13 @@ ModelImporter:
         messageOptions: 0
       - time: 0.3986001
         functionName: EnableSwordCollider
-        data: 
+        data: heavy
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.54432434
+      - time: 0.5264139
         functionName: DisableSwordCollider
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -934,7 +933,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.67469877
+      - time: 0.56699085
         functionName: ResetAttacks
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -1091,7 +1090,7 @@ ModelImporter:
       events:
       - time: 0.18828784
         functionName: EnableSwordCollider
-        data: 
+        data: heavy
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
@@ -1107,7 +1106,7 @@ ModelImporter:
         messageOptions: 0
       - time: 0.4720594
         functionName: EnableSwordCollider
-        data: 
+        data: bleed
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
@@ -1121,7 +1120,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.82730925
+      - time: 0.8057703
         functionName: ResetAttacks
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -1479,7 +1478,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.75100404
+      - time: 0.709213
         functionName: ResetAttacks
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -2582,7 +2581,7 @@ ModelImporter:
       events:
       - time: 0.36858007
         functionName: EnableSwordCollider
-        data: 
+        data: light
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
@@ -2753,7 +2752,7 @@ ModelImporter:
       events:
       - time: 0.3836858
         functionName: EnableSwordCollider
-        data: 
+        data: light
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
@@ -2924,7 +2923,7 @@ ModelImporter:
       events:
       - time: 0.36253777
         functionName: EnableSwordCollider
-        data: 
+        data: light
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
@@ -3868,16 +3867,16 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.83143944
-        functionName: UnlockPlayer
+      - time: 0.045180723
+        functionName: LockPlayer
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0
-        functionName: LockPlayer
+      - time: 0.83143944
+        functionName: UnlockPlayer
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
