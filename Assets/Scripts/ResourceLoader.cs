@@ -32,7 +32,7 @@ public class ResourceLoader : MonoBehaviour
     IEnumerator LoadTerrainAsync()
     {
         //Load resource
-        ResourceRequest resourceRequest = Resources.LoadAsync<GameObject>("KitsuneMapParts/PaiTerrenoEsquiso");
+        ResourceRequest resourceRequest = Resources.LoadAsync<GameObject>("KitsuneMapParts/TerrenoSeparado2");
         while (!resourceRequest.isDone)
         {
             yield return null;
