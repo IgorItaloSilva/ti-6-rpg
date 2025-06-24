@@ -8,10 +8,11 @@ public class EnemyDetection : MonoBehaviour
     private bool _inLineOfSight;
     private Vector3 _raycastDirection, _raycastOffset;
     private RaycastHit _raycastHit;
+    [SerializeField] private LayerMask raycastLayerMask;
     private void Awake()
     {
         _collider = GetComponent<SphereCollider>();
-        _raycastOffset = new Vector3(0, 0.5f, 0);
+        _raycastOffset = new Vector3(0, 0, 0);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -36,22 +37,35 @@ public class EnemyDetection : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        if (targetEnemy && !_inLineOfSight)
+        {
+            Gizmos.color = Color.red;
+            Vector3 raycastDirection = targetEnemy.transform.position - transform.position + _raycastOffset;
+            Gizmos.DrawLine(transform.position, transform.position + raycastDirection);
+        }
+    }
+    
     private async void RaycastEnemyAsync()
     {
         while (targetEnemy && !_inLineOfSight)
         {
             _raycastDirection = targetEnemy.transform.position - transform.position + _raycastOffset;
-            if (Physics.Raycast(transform.position, _raycastDirection, out _raycastHit))
+            if (Physics.Raycast(transform.position, _raycastDirection, out _raycastHit, 25f,raycastLayerMask))
             {
                 if (_raycastHit.collider.CompareTag("Enemy"))
                 {
-                    if(PlayerStateMachine.Instance.ShowDebugLogs) Debug.Log("In enemy line of sight");
+                    if(PlayerStateMachine.Instance.ShowDebugLogs)
+                    {
+                        Debug.Log("In enemy line of sight");
+                    }
                     _inLineOfSight = true;
                     PlayerStateMachine.Instance.InCombat = true;
                     return;
                 }
             }
-            await Task.Delay(250);
+            await Task.Delay(100);
         }
     }
 

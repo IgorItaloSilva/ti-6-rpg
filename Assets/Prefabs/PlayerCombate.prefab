@@ -1146,6 +1146,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetEnemy: {fileID: 0}
+  raycastLayerMask:
+    serializedVersion: 2
+    m_Bits: 4104
 --- !u!1 &3007552710642705667
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,7 +2643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showDebug: 0
   damageType: 1
-  baseDamage: 15
+  baseDamage: 5
   critRate: 5
 --- !u!82 &1215197276202224457
 AudioSource:
@@ -2699,7 +2702,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2756,7 +2759,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 1.64
   m_Height: 4.84
@@ -8494,17 +8497,17 @@ PrefabInstance:
     - target: {fileID: 1205924697289906510, guid: aba9f5563654ee44f8ae6f09bb3877d2,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.41
+      value: -0.152
       objectReference: {fileID: 0}
     - target: {fileID: 1205924697289906510, guid: aba9f5563654ee44f8ae6f09bb3877d2,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.346
+      value: 1.46
       objectReference: {fileID: 0}
     - target: {fileID: 1205924697289906510, guid: aba9f5563654ee44f8ae6f09bb3877d2,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.605
+      value: 0.799
       objectReference: {fileID: 0}
     - target: {fileID: 1205924697289906510, guid: aba9f5563654ee44f8ae6f09bb3877d2,
         type: 3}
