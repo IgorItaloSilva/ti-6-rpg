@@ -36,6 +36,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject painelWeapon;
     [SerializeField] private GameObject buttonMainMenu;
     [SerializeField] private GameObject buttonTutorial;
+    [SerializeField] Image backgroundTextOptions;
+    [SerializeField] Image backgroundTextStats;
+    [SerializeField] Image backgroundTextKatana;
+    [SerializeField] Image backgroundTextSkillTree;
+    [SerializeField] Image backgroundTextQuest;
+    [SerializeField] Image backgroundTextTutorial;
+    [SerializeField] Color unselectedColor;
+    [SerializeField] Color selectedColor;
     [Header("Coisas do VFX de You Died ")]
     [SerializeField] private GameObject youDiedVFXParent;
     [SerializeField] private GameObject youDiedVFXBackgroundGO;
@@ -98,7 +106,6 @@ public class UIManager : MonoBehaviour
 
     void OnEnable()
     {
-        GameEventsManager.instance.uiEvents.onUpdateSliders += UpdateSliders;
         GameEventsManager.instance.uiEvents.onLifeChange += UpdateHealth;
         GameEventsManager.instance.uiEvents.onSavedGame += FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied += PlayerDied;
@@ -109,7 +116,7 @@ public class UIManager : MonoBehaviour
 
     void OnDisable()
     {
-        GameEventsManager.instance.uiEvents.onUpdateSliders -= UpdateSliders;
+        
         GameEventsManager.instance.uiEvents.onLifeChange -= UpdateHealth;
         GameEventsManager.instance.uiEvents.onSavedGame -= FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
@@ -236,7 +243,7 @@ public class UIManager : MonoBehaviour
             playerhealthBar.SetValue(vidaAtual, wasCrit);
         }
     }
-    private void UpdateSliders(int id, float maxValue)
+    public void UpdateSliders(int id, float maxValue)
     {
         switch (id)
         {
@@ -458,17 +465,21 @@ public class UIManager : MonoBehaviour
             case UIScreens.Closed: break;
             case UIScreens.MainPause:
                 hideblePausePartUI.SetActive(false);
+                backgroundTextOptions.color = unselectedColor;
                 break;
             case UIScreens.Stats:
                 if (statsUIManager.isSimulating) statsUIManager.CancelSimulation();
                 painelStats.SetActive(false);
+                backgroundTextStats.color = unselectedColor;
                 break;
             case UIScreens.SkillTree:
                 skillTreeUIManager?.AlternarPainelSkillTree();
+                backgroundTextSkillTree.color = unselectedColor;
                 break;
             case UIScreens.Weapon:
                 RuneManager.instance?.ApplySelectedRunes();
                 painelWeapon.SetActive(false);
+                backgroundTextKatana.color = unselectedColor;
                 break;
             case UIScreens.System: break;
             case UIScreens.Death:
@@ -481,9 +492,11 @@ public class UIManager : MonoBehaviour
                 break;
             case UIScreens.Tutorial:
                 painelTutorial.SetActive(false);
+                backgroundTextTutorial.color = unselectedColor;
                 break;
             case UIScreens.QuestLog:
                 painelQuest.SetActive(false);
+                backgroundTextQuest.color = unselectedColor;
                 break;
             case UIScreens.TutorialPopup:
                 GameManager.instance?.PauseGameAndUnlockCursor();
@@ -504,22 +517,26 @@ public class UIManager : MonoBehaviour
                 painelPause.SetActive(true);
                 hideblePausePartUI.SetActive(true);
                 currentUIScreen = UIScreens.MainPause;
+                backgroundTextOptions.color = selectedColor;
                 break;
             case UIScreens.SkillTree:
                 if (!skillTreeUIManager) Debug.LogWarning("tentamos trocar de tela sem ter referencia ao skill tree manager");
                 skillTreeUIManager?.AlternarPainelSkillTree();
                 currentUIScreen = UIScreens.SkillTree;
+                backgroundTextSkillTree.color = selectedColor;
                 break;
             case UIScreens.Stats:
                 painelStats.SetActive(true);
                 statsUIManager.UpdateValues();
                 currentUIScreen = UIScreens.Stats;
+                backgroundTextStats.color = selectedColor;
                 break;
             case UIScreens.Weapon:
                 painelWeapon.SetActive(true);
                 runesUiManager.UpdateRunes();
                 runesUiManager.DisableAllTexts();
                 currentUIScreen = UIScreens.Weapon;
+                backgroundTextKatana.color = selectedColor;
                 break;
             case UIScreens.System:
                 currentUIScreen = UIScreens.System;
@@ -537,11 +554,13 @@ public class UIManager : MonoBehaviour
             case UIScreens.Tutorial:
                 painelTutorial.SetActive(true);
                 currentUIScreen = UIScreens.Tutorial;
+                backgroundTextTutorial.color = selectedColor;
                 break;
             case UIScreens.QuestLog:
                 painelQuest.SetActive(true);
                 ObjectiveUiManager.instance?.WasOpened();
                 currentUIScreen = UIScreens.QuestLog;
+                backgroundTextQuest.color = selectedColor;
                 break;
             case UIScreens.TutorialPopup:
                 GameManager.instance.PauseGameAndUnlockCursor();

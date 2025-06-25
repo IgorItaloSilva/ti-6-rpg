@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 
 
-public class PlayerEvents 
+public class PlayerEvents
 {
     /****************************************
         COMO USAR AS CLASSES DE EVENTOS
@@ -29,27 +27,42 @@ public class PlayerEvents
                 }
     *****************************************/
     public event Action onPlayerDied;
-    public void PlayerDied(){
-        if(onPlayerDied!=null){
+    public void PlayerDied()
+    {
+        if (onPlayerDied != null)
+        {
             onPlayerDied();
         }
     }
     public event Action onPlayerRespawned;
-    public void PlayerRespawn(){
-        if(onPlayerRespawned!=null){
+    public void PlayerRespawn()
+    {
+        if (onPlayerRespawned != null)
+        {
             onPlayerRespawned();
         }
     }
     public event Action<int> onPlayerGainExp;
-    public void PlayerGainExp(int exp){
-        if(onPlayerGainExp!=null){
+    public void PlayerGainExp(int exp)
+    {
+        if (onPlayerGainExp != null)
+        {
             onPlayerGainExp(exp);
         }
     }
-    public event Action<Vector3>onPlayerPositionSet;
-    public void SetPosition(Vector3 pos){
-        if(onPlayerPositionSet!=null){
+    public event Action<Vector3> onPlayerPositionSet;
+    public void SetPosition(Vector3 pos)
+    {
+        if (onPlayerPositionSet != null)
+        {
             onPlayerPositionSet(pos);
+        }
+    }
+    public event Action<int> onInformLevelUpPoints;
+    public void InformLevelUpPoints(int levelUpPoints) {
+        if (onInformLevelUpPoints != null)
+        {
+            onInformLevelUpPoints(levelUpPoints);
         }
     }
     /* Um Evento com parametros tem a forma
@@ -59,5 +72,5 @@ public class PlayerEvents
             onEventoOcorreu(inteiro,flutuante);
         }
     } */
-    
+
 }

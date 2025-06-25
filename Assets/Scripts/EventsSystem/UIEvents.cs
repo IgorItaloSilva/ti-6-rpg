@@ -10,12 +10,12 @@ public class UIEvents
         }
     }
     
-    public event Action<int,float> onUpdateSliders;
+    /* public event Action<int,float> onUpdateSliders;
     public void UpdateSliders(int id,float maxValue){
         if(onUpdateSliders!=null){
             onUpdateSliders(id,maxValue);
         }
-    }
+    } */
     public event Action onSavedGame;
     public void SavedGame(){
         if(onSavedGame!=null){
