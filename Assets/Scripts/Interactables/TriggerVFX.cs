@@ -8,7 +8,7 @@ public class TriggerVFX : Interactable
     [SerializeField] LayerMask layerMask;
     Collider[] colliders;
 
-    void Start()
+    protected override void Start()
     {
         float rad = sphereCollider.radius;
         SetAllActive(false);

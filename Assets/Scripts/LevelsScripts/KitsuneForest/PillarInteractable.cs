@@ -7,6 +7,7 @@ public class PillarInteractabe : Interactable
     [SerializeField]int spawnId;
     [SerializeField]GameObject effect;
     [SerializeField]ObjectiveSO objectiveToBeProgressedSO;
+    [SerializeField] private AudioSource source;
     void OnEnable(){
         GameEventsManager.instance.levelEvents.onKitsuneDeath+=KitsuneDied;
     }
@@ -28,6 +29,7 @@ public class PillarInteractabe : Interactable
         GameEventsManager.instance.levelEvents.PillarActivated();
         AlreadyInterated = true;
         if(effect!=null)effect.SetActive(true);
+        if(source) AudioPlayer.instance.PlaySFX("Light Beam", source);
         if(objectiveToBeProgressedSO!=null)GameEventsManager.instance.objectiveEvents.ProgressMade(objectiveToBeProgressedSO.Id);
         Save();
     }

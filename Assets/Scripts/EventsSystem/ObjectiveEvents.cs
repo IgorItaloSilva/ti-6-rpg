@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class ObjectiveEvents
@@ -9,7 +10,7 @@ public class ObjectiveEvents
             OnProgressMade(id);
         }
     } 
-    public event Action<string,int> OnProgressMadeWithExtraId;
+    //public event Action<string,int> OnProgressMadeWithExtraId;
     public void ProgressMadeWithExtraID(string id,int extraId){
         if(OnProgressMade!=null){
             OnProgressMade(id);

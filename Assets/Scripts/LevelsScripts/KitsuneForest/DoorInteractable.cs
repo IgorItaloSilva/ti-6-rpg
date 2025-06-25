@@ -8,8 +8,8 @@ public class DoorInteractable : Interactable
 {
     [SerializeField]GameObject closedDoor;
     [SerializeField]GameObject openDoor;
-    [SerializeField]TextMeshPro wrongSideText;
-    [SerializeField]TextMeshPro keyIndicationText;
+    [SerializeField]GameObject wrongSideText;
+    [SerializeField]GameObject keyIndicationText;
     //PlayerInput playerInput;
     void OnEnable(){
         PlayerStateMachine.Instance.AddActionToInteract(Interact);

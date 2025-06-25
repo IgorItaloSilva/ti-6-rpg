@@ -9,6 +9,7 @@ public class RunePickupable : Interactable
 
     override protected void OnTriggerEnter(Collider outro){
         if(outro.CompareTag("Player")){
+            AudioPlayer.instance.PlaySFX("Rune Pickup");
             RuneManager.instance?.GainRune(rune,true);
             AlreadyInterated=true;
             Active=false;

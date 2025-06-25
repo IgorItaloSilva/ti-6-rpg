@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlaySound : StateMachineBehaviour
 {
-    public string name;
+    public new string name;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

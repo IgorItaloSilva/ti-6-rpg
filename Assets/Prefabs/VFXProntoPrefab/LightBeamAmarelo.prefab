@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 5121554789552393778}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 10, z: 1}
+  m_LocalPosition: {x: 0, y: -3.8, z: 0}
+  m_LocalScale: {x: 0.5, y: 100, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -42,7 +42,7 @@ VisualEffect:
   m_GameObject: {fileID: 5121554789552393778}
   m_Enabled: 1
   m_Asset: {fileID: 8926484042661614526, guid: 2653f80e2d626534b8c7192e1e89cbf9, type: 3}
-  m_InitialEventName: OnPlay
+  m_InitialEventName: 
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
   m_ResetSeedOnPlay: 1
@@ -53,7 +53,7 @@ VisualEffect:
       m_Array: []
     m_Vector2f:
       m_Array:
-      - m_Value: {x: 1, y: 10}
+      - m_Value: {x: 1, y: 700}
         m_Name: Voronoi tiling
         m_Overridden: 1
     m_Vector3f:
@@ -63,10 +63,10 @@ VisualEffect:
       - m_Value: {x: 8, y: 6.615183, z: 0, w: 1}
         m_Name: CorMovimento
         m_Overridden: 1
-      - m_Value: {x: 6.9894376, y: 7.0637937, z: 0, w: 1}
+      - m_Value: {x: 47.432655, y: 47.93726, z: 0, w: 0.06666667}
         m_Name: CorCilindo
         m_Overridden: 1
-      - m_Value: {x: 15.084013, y: 16, z: 0, w: 0.6862745}
+      - m_Value: {x: 45.19289, y: 47.93726, z: 0, w: 0.15294118}
         m_Name: CorCentro
         m_Overridden: 1
     m_Uint:

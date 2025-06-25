@@ -9,7 +9,7 @@ using System;
 public class DataPersistenceManager : MonoBehaviour
 {
     [Header("Debugging")]
-    [SerializeField]private bool disableDataPersistence = false;
+    private bool disableDataPersistence = false;
     [SerializeField] private bool initializeDataIfNull= false;
     [SerializeField] private bool overrideSelectedProfileId = false;
     [SerializeField] private string testSelectedProfileId = "test";

@@ -687,6 +687,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _animator.SetBool(Attack2Hash, false);
         _animator.SetBool(Attack3Hash, false);
         _animator.SetBool(Attack4Hash, false);
+        _animator.SetBool(Special1Hash, false);
+        _animator.SetBool(Special2Hash, false);
+        _animator.SetBool(Special3Hash, false);
+        _animator.SetBool(Special4Hash, false);
         _attackCount = 0;
 
         DisableSwordCollider();

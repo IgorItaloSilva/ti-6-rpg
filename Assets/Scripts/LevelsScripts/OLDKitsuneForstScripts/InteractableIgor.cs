@@ -3,8 +3,9 @@ using UnityEngine;
 
 public class InteractableIgor : MonoBehaviour
 {
-    [SerializeField] GameObject canvas;
+    [SerializeField] GameObject lockedDoorObject;
     [SerializeField] GameObject[] doors;
+    [SerializeField] private AudioSource source;
 
 
     // Start is called before the first frame update
@@ -15,16 +16,16 @@ public class InteractableIgor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        canvas.SetActive(true);
+        lockedDoorObject.SetActive(true);
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (Input.GetKey(KeyCode.E))
         {
-            Debug.Log("AAAAAAA");
-            Destroy(canvas);
-            Destroy(gameObject);
+            AudioPlayer.instance.PlaySFX("Gate Open", source);
+            lockedDoorObject.SetActive(false);
+            gameObject.SetActive(false);
             doors[0].gameObject?.SetActive(false);
             doors[1].gameObject.SetActive(true);
 
@@ -33,6 +34,6 @@ public class InteractableIgor : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        canvas.SetActive(false);
+        lockedDoorObject.SetActive(false);
     }
 }

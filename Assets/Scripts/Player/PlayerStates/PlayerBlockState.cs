@@ -6,7 +6,7 @@ using Task = System.Threading.Tasks.Task;
 
 public class PlayerBlockState : PlayerCombatState
 {
-    private new const float MaxAcceleration = 1f;
+    private const float MaxAcceleration = 1f;
     private const byte ParryDurationMs = 150, ParryCooldownMs = 150;
 
     public PlayerBlockState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(

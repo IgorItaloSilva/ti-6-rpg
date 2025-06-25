@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 public class wpn_KitsuneAoe : EnemyBaseWeapon
 {
-    Coroutine coroutine;
-    [SerializeField] SphereCollider collider;
+    new Coroutine coroutine;
+    [SerializeField] new SphereCollider collider;
     [SerializeField] float sizeSpeed;
     sbyte time;
 

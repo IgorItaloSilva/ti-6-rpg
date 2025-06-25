@@ -4,7 +4,6 @@ public class PlayerInAirState : PlayerBaseState
 {
     private readonly bool _shouldRotate;
     private const byte AirSpeed = 8;
-    private new const byte DecelerationSpeed = 1;
     private readonly float MaxAcceleration;
 
     public PlayerInAirState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory, bool shouldRotate) : base(
