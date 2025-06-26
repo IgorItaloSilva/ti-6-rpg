@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 3523191349520878487}
   - component: {fileID: 8386979519967322248}
   - component: {fileID: 7335535973016262471}
-  - component: {fileID: 8413864634659211262}
-  - component: {fileID: 877635790364348980}
   - component: {fileID: 5212439297537577912}
   m_Layer: 0
   m_Name: Corrupted_Particle
@@ -47,8 +45,8 @@ VisualEffect:
   m_GameObject: {fileID: 1351405527254120336}
   m_Enabled: 1
   m_Asset: {fileID: 8926484042661614526, guid: 4bbfb19d3e34476478df99afa61962a7, type: 3}
-  m_InitialEventName: OnPlay
-  m_InitialEventNameOverriden: 0
+  m_InitialEventName: 
+  m_InitialEventNameOverriden: 1
   m_StartSeed: 0
   m_ResetSeedOnPlay: 1
   m_AllowInstancing: 1
@@ -60,10 +58,10 @@ VisualEffect:
       m_Array: []
     m_Vector3f:
       m_Array:
-      - m_Value: {x: -1.8656878, y: 1.6731178, z: 7.5370936}
+      - m_Value: {x: -1.7456878, y: 1.3531177, z: 0.89709365}
         m_Name: pos1
         m_Overridden: 1
-      - m_Value: {x: -10.165688, y: -3.3668823, z: 9.047093}
+      - m_Value: {x: -41.73546, y: -1.5170001, z: -28.833298}
         m_Name: pos2
         m_Overridden: 1
       - m_Value: {x: -9.778519, y: 2.8639998, z: 2.3796477}
@@ -146,8 +144,6 @@ MonoBehaviour:
   m_ExecuteInEditor: 1
   m_Bindings:
   - {fileID: 7335535973016262471}
-  - {fileID: 8413864634659211262}
-  - {fileID: 877635790364348980}
   - {fileID: 5212439297537577912}
   m_VisualEffect: {fileID: 490247155981538766}
 --- !u!114 &7335535973016262471
@@ -166,38 +162,6 @@ MonoBehaviour:
   m_Property:
     m_Name: pos1
   Target: {fileID: 7822039900270403535}
---- !u!114 &8413864634659211262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1351405527254120336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07c3070554d0a8944a95ff8f018c2c9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Space: 0
-  m_Property:
-    m_Name: pos2
-  Target: {fileID: 0}
---- !u!114 &877635790364348980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1351405527254120336}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07c3070554d0a8944a95ff8f018c2c9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Space: 0
-  m_Property:
-    m_Name: pos3
-  Target: {fileID: 0}
 --- !u!114 &5212439297537577912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,7 +203,7 @@ Transform:
   m_GameObject: {fileID: 2462589238947583505}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 1.32, z: 6.87}
+  m_LocalPosition: {x: 0.12, y: 1, z: 0.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

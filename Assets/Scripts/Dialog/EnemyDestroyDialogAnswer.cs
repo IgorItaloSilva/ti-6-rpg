@@ -12,6 +12,7 @@ public class EnemyDestroyDialogAnswer : DialogAnswer
     {
         //Destruir o inimigo
         SkillTree.instance?.GainMoney((int)Enums.PowerUpType.Dark);
+        myEnemyBehaviour._corruptedVFX.Play();
         myEnemyBehaviour?.ActualDeath();
     }
 
@@ -21,6 +22,7 @@ public class EnemyDestroyDialogAnswer : DialogAnswer
         //n deveria ser o actual death né, deveria ter outro death que da metade do exp ou
         //algo assim
         SkillTree.instance?.GainMoney((int)Enums.PowerUpType.Light);
+        myEnemyBehaviour._uncorruptedVFX.Play();
         myEnemyBehaviour?.ActualDeath();
     }
 

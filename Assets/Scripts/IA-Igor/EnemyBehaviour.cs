@@ -13,6 +13,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [SerializeField] public ParticleSystem _dashVFX;
     [SerializeField] public VisualEffect _headbuttVFX;
     [SerializeField] private VisualEffect _bloodVFX;
+    [SerializeField] public ParticleSystem _uncorruptedVFX;
+    [SerializeField] public VisualEffect _corruptedVFX;
     
     [FormerlySerializedAs("_enemySounds")] [Header("Audio")]
     public EnemySounds enemySounds;
@@ -207,11 +209,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         {
             if (hasDialogChoice && neverDied)
             {
-                Invoke("OpenDialog", timeToDie);
+                Invoke(nameof(OpenDialog), timeToDie);
             }
             else
             {
-                Invoke("ActualDeath", timeToDie);
+                Invoke(nameof(ActualDeath), timeToDie);
             }
         }
         Save();
@@ -237,7 +239,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         //fazer o bicho sumir
         GameEventsManager.instance.playerEvents.PlayerGainExp(expGain);
         GameEventsManager.instance.levelEvents.EnemyDied((int)enemyType);
-        gameObject.SetActive(false);
+        Invoke(nameof(DisableKitsune), 5f);
     }
 
     public void WasParried()
@@ -254,6 +256,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         currentState = new StateDamage();
         currentState.StateStart(this);
         attackState = allSkills.ChoseSkill();
+    }
+
+    private void DisableKitsune()
+    {
+        gameObject.SetActive(false);
     }
 
     #endregion
@@ -327,7 +334,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     }
     void OpenDialog()
     {
-        if (dialogChoiceAux != null)
+        if (dialogChoiceAux)
         {
             dialogChoiceAux.Activate();
             neverDied = false;

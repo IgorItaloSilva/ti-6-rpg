@@ -50,9 +50,9 @@ public class AudioPlayer : MonoBehaviour
         {
             Debug.Log("SFX Not Found");
         }
-        else if(s.source == null)
+        else if(!s.source)
         {
-            musicSource.PlayOneShot(s.clip);
+            if(musicSource) musicSource.PlayOneShot(s.clip);
         }
         else
         {

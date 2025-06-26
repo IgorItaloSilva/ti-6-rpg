@@ -58,7 +58,7 @@ public class DialogueAnswerInteractable : DialogueInteractable
         Active = true;
         canvas.SetActive(true);
         int n= Physics.OverlapSphereNonAlloc(transform.position, sphereCollider.radius, results, layerMask) ;
-        Debug.Log(n);
+        // Debug.Log(n);
         if (n > 0)
         {
             for (int i = 0; i < n; i++)
