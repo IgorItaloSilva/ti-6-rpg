@@ -16,7 +16,7 @@ public class StateTurn : EnemyBaseState
 
     public override void StateUpdate()
     {
-        if(lookTime >= 0.5f){
+        if(lookTime >= 0.3f){
             enemyBehave.currentState = new StateIdle();
             StateExit();
         }

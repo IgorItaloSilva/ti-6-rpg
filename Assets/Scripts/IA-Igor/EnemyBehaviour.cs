@@ -153,9 +153,9 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         Hp -= damage;
         currentPoise -= damageType switch
         {
-            Enums.DamageType.Poise => 3,
+            Enums.DamageType.Poise => 2,
             Enums.DamageType.Magic or Enums.DamageType.Bleed => 0,
-            _ => 1
+            _ => 0.5f
         };
         
         if(damageType == Enums.DamageType.Bleed)

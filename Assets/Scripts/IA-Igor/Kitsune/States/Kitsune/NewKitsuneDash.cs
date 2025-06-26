@@ -9,7 +9,7 @@ public class NewKitsuneDash : EnemyBaseState
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     protected override void OneExecution()
     {
-        restTime = 2f;
+        restTime = 1f;
         animator.Play("Dash", -1, 0f);
         canDamage = true;
         PlayVFXAsync();

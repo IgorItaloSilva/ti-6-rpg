@@ -4,7 +4,7 @@ public class NewKitsuneAttackAOE : EnemyBaseState
 {
     protected override void OneExecution()
     {
-        restTime = 2;
+        restTime = 1.5f;
         animator.CrossFade("AttackAoe", 0.15f);
         lookTime = 0;
         enemyBehave.UseWeapon();

@@ -51,7 +51,7 @@ public class EnemyDetection : MonoBehaviour
     {
         while (targetEnemy && !_inLineOfSight)
         {
-            _raycastDirection = targetEnemy.transform.position - transform.position + _raycastOffset;
+            if(targetEnemy) _raycastDirection = targetEnemy.transform.position - transform.position + _raycastOffset;
             if (Physics.Raycast(transform.position, _raycastDirection, out _raycastHit, 25f,raycastLayerMask))
             {
                 if (_raycastHit.collider.CompareTag("Enemy"))
