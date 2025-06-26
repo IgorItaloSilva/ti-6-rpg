@@ -556,8 +556,8 @@ public class UIManager : MonoBehaviour
         if (isNear)
         {
             isNearCampfire = true;
-            buttonTutorial.SetActive(false);
-            buttonMainMenu.SetActive(false);
+            if(buttonTutorial) buttonTutorial.SetActive(false);
+            if(buttonMainMenu) buttonMainMenu.SetActive(false);
         }
         else
         {
