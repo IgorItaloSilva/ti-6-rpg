@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
@@ -75,6 +76,8 @@ public class UIManager : MonoBehaviour
     private Coroutine gainExpCouroutine;
     bool isGainExpCouroutineRunning;
     bool isGainedExpTextActive;
+    private Coroutine notificationCouroutine;
+    private bool isNotificationCouroutineRunning;
     private TextMeshProUGUI gainedExpText;
     //Coisas da Ui de morte
     private Text youDiedVFXText;
@@ -269,11 +272,19 @@ public class UIManager : MonoBehaviour
             StartCoroutine(SpinSaveIcon());
         }
     }
+    Queue<string> notificationQueue = new();
     public void PlayNotification(string text)
     {
-        notificationBox.SetActive(true);
-        notificationText.text = text;
-        StartCoroutine("PlayNotificationVFX");
+        if (!isNotificationCouroutineRunning)
+        {
+            notificationBox.SetActive(true);
+            notificationText.text = text;
+            notificationCouroutine = StartCoroutine("PlayNotificationVFX");
+        }
+        else
+        {
+            notificationQueue.Enqueue(text);
+        }
     }
     public void QuitGame()
     {
@@ -335,12 +346,14 @@ public class UIManager : MonoBehaviour
         carriedExp = expAmmount;
     }
     int targetAmmount;
+    int actualExpToGive;
     void PlayExpGain(int quantidade)
     {
         //Debug.Log("Chamando a função playExpGain da UI");
         if (isGainExpCouroutineRunning)
         {
             StopCoroutine(gainExpCouroutine);
+            //dar o  exp pro jogador se parar a corrotina
             if (isGainedExpTextActive)
             {
                 gainedExp += quantidade;
@@ -350,13 +363,15 @@ public class UIManager : MonoBehaviour
                 gainedExp = quantidade;
             }
             targetAmmount += quantidade;
+            actualExpToGive += quantidade;
         }
         else
         {
+            actualExpToGive = quantidade;
             targetAmmount = carriedExp + quantidade;
             gainedExp = quantidade;
         }
-        gainedExpText.text = gainedExp.ToString();
+        gainedExpText.text = "+"+gainedExp.ToString();
         gainedExpTextGO.SetActive(true);
         isGainedExpTextActive = true;
         gainExpCouroutine = StartCoroutine(PlayExpGainAnimation());
@@ -377,6 +392,8 @@ public class UIManager : MonoBehaviour
         gainedExp = 0;
         targetAmmount = 0;
         isGainExpCouroutineRunning = false;
+        GameEventsManager.instance.uiEvents.ExpCorroutineFinished(actualExpToGive);
+        actualExpToGive = 0;
     }
     #endregion
     IEnumerator SpinSaveIcon()
@@ -421,6 +438,7 @@ public class UIManager : MonoBehaviour
     }
     IEnumerator PlayNotificationVFX()
     {
+        isNotificationCouroutineRunning = true;
         //valor x no local position, inicial = 960, valor final = 560
         int ratio = 400 / iterationSteps;
         float yCoor = 0;//notificationBox.transform.localPosition.y;
@@ -435,6 +453,8 @@ public class UIManager : MonoBehaviour
             notificationBox.transform.localPosition = new Vector3(x, yCoor, 0);
             yield return new WaitForSecondsRealtime(totalTime / iterationSteps);
         }
+        isNotificationCouroutineRunning = false;
+        if (notificationQueue.Count > 0) PlayNotification(notificationQueue.Dequeue());
     }
     public void BossLifeSettup(float currentLife, float maxLife, string name)
     {

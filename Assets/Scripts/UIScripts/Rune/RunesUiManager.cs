@@ -30,7 +30,8 @@ public class RunesUiManager : MonoBehaviour
         index=0;
     }
     public void Setup(){
-        if(RuneManager.instance.runeInventory==null)return;
+        Debug.Log("Chamei o settup da runa");
+        if (RuneManager.instance.runeInventory == null) return;
         foreach(RuneSO runeSO in RuneManager.instance.runeInventory ){
             if(runeSO==null) continue;
             GameObject newRuneButtonGO=Instantiate(runeButtonprefab,scrollContent.transform);

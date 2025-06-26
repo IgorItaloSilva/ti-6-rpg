@@ -23,7 +23,7 @@ public class SkillTreeUIManager : MonoBehaviour
     [SerializeField]TextMeshProUGUI powerUpNameText;    
     [SerializeField]GameObject puBoxMoedaHonra;
     [SerializeField]GameObject puBoxMoedaTrevas;
-    [SerializeField]float pixelOffset = 5;
+    [SerializeField]float pixelOffset = 10;
     [SerializeField]SkillNodeUI[] powerUpNodes; //O NODE PRECISA SER FEITO EM ORDER PELO ID, não precisaria ser o node, mas caso precise já esta aqui
     bool powerUpBoxIsOpen = false;
     bool painelSkillTreeIsOpen;
@@ -98,7 +98,7 @@ public class SkillTreeUIManager : MonoBehaviour
             {
                 powerUpUIBox.SetActive(true);
                 Vector2 pos = Mouse.current.position.ReadValue() + new Vector2(pixelOffset, pixelOffset);
-                powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos - new Vector2(200, 0), Quaternion.identity);
+                powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos - new Vector2(400, 0), Quaternion.identity);
                 powerUpNameText.text = "Moeda Fuhai";
                 powerUpDescriptionText.text = "Usada para comprar talentos. Recebida por fazer ações más.";
                 puBoxMoedaTrevas.SetActive(true);

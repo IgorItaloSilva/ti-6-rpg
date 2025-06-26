@@ -17,10 +17,10 @@ public class PlayerHealthBar : HealthBar
         rectTransformVerde.sizeDelta = new Vector2(barWidthRatio*maxLife,rectTransformVerde.sizeDelta.y);
         rectTransformColorido.sizeDelta = new Vector2(barWidthRatio*maxLife,rectTransformColorido.sizeDelta.y);
     }
-     public void OnValidate()
+    /*  public void OnValidate()
     {
         background.sizeDelta = new Vector2(backgroundWidthRatio * maxLife, background.sizeDelta.y);
         rectTransformVerde.sizeDelta = new Vector2(barWidthRatio * maxLife, rectTransformVerde.sizeDelta.y);
         
-    } 
+    }  */
 }

@@ -91,7 +91,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         GameEventsManager.instance.uiEvents.onConfirmLevelUp += ConfirmChanges;
         GameEventsManager.instance.uiEvents.onDiscardLevelUp += DiscardChanges;
         GameEventsManager.instance.playerEvents.onPlayerRespawned += PlayerRespawn;
-        GameEventsManager.instance.playerEvents.onPlayerGainExp += GainExp;
+        GameEventsManager.instance.uiEvents.onExpCorroutineFinished += GainExp;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp += ActivatePowerUp;
         GameEventsManager.instance.runeEvents.onRuneStatBuff += RuneStatBuff;
         GameEventsManager.instance.skillTreeEvents.onLifeStealHit += HealLife;
@@ -111,7 +111,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         GameEventsManager.instance.uiEvents.onConfirmLevelUp -= ConfirmChanges;
         GameEventsManager.instance.uiEvents.onDiscardLevelUp += DiscardChanges;
         GameEventsManager.instance.playerEvents.onPlayerRespawned -= PlayerRespawn;
-        GameEventsManager.instance.playerEvents.onPlayerGainExp -= GainExp;
+        GameEventsManager.instance.uiEvents.onExpCorroutineFinished -= GainExp;
         GameEventsManager.instance.skillTreeEvents.onActivatePowerUp += ActivatePowerUp;
         GameEventsManager.instance.runeEvents.onRuneStatBuff -= RuneStatBuff;
         GameEventsManager.instance.skillTreeEvents.onLifeStealHit += HealLife;
@@ -211,6 +211,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
 
         PlayerStateMachine.Instance.UnlockPlayer();
         HealLife(maxLife);
+        UIManager.instance?.UpdateHealth(CurrentLife, false);
         PlayerIsDead = false;
         CarriedExp = 0;
         PotionsAmmount = maxPotions;
