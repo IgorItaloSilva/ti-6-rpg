@@ -40,9 +40,9 @@ public class Enums {
     public enum AttackType{
         HeavyAttack,
         LightAttack,
-        BleedAttack,
-        PoiseAttack,
-        IceAttack,
+        BleedAttack,//Corte de energia
+        PoiseAttack,//cone de gelo
+        IceAttack,//muralha de gelo
         SelfDamageAttack
     }
     

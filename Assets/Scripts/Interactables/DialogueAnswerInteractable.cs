@@ -11,6 +11,7 @@ public class DialogueAnswerInteractable : DialogueInteractable
     LayerMask layerMask =1<<9;
     protected override void Awake()
     {
+        //Debug.Log((int)layerMask);
         base.Awake();
         enemyDestroyDialogAnswer = gameObject.GetComponent<EnemyDestroyDialogAnswer>();
         if (enemyDestroyDialogAnswer == null) Debug.Log("Não consegui meu EnemyDestroyDialog");
