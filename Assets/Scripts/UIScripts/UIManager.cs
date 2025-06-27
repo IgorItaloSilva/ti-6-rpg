@@ -114,17 +114,18 @@ public class UIManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.onPlayerDied += PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened += OpenDialogPanel;
         GameEventsManager.instance.playerEvents.onPlayerGainExp += PlayExpGain;
-
+        SceneManager.sceneLoaded += AjustUiOnLoad;
     }
 
     void OnDisable()
     {
-        
+
         GameEventsManager.instance.uiEvents.onLifeChange -= UpdateHealth;
         GameEventsManager.instance.uiEvents.onSavedGame -= FeedBackSave;
         GameEventsManager.instance.playerEvents.onPlayerDied -= PlayerDied;
         GameEventsManager.instance.uiEvents.OnDialogOpened -= OpenDialogPanel;
         GameEventsManager.instance.playerEvents.onPlayerGainExp -= PlayExpGain;
+        SceneManager.sceneLoaded -= AjustUiOnLoad;
     }
 
     void Start()
@@ -164,6 +165,11 @@ public class UIManager : MonoBehaviour
         }
         RequestStartingInfo();
         //youDiedVFXText.color = new Color32(255,0,0,0);
+    }
+    void AjustUiOnLoad(Scene scene, LoadSceneMode mode)
+    {
+        AjustUiOnStart();
+        RequestStartingInfo();
     }
     void RequestStartingInfo()
     {
