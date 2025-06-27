@@ -12,7 +12,7 @@ public class EnemyDetection : MonoBehaviour
     private void Awake()
     {
         _collider = GetComponent<SphereCollider>();
-        _raycastOffset = new Vector3(0, 0, 0);
+        _raycastOffset = new Vector3(0, .2f, 0);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -52,7 +52,7 @@ public class EnemyDetection : MonoBehaviour
         while (targetEnemy && !_inLineOfSight)
         {
             if(targetEnemy) _raycastDirection = targetEnemy.transform.position - transform.position + _raycastOffset;
-            if (Physics.Raycast(transform.position, _raycastDirection, out _raycastHit, 25f,raycastLayerMask))
+            if (Physics.Raycast(transform.position, _raycastDirection + _raycastOffset, out _raycastHit, 25f,raycastLayerMask))
             {
                 if (_raycastHit.collider.CompareTag("Enemy"))
                 {
