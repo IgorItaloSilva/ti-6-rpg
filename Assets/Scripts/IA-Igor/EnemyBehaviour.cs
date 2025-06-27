@@ -301,8 +301,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         IsDead = enemyData.isDead;
         Hp = enemyData.currentLife;
         transform.position = enemyData.lastPosition;
-        neverDied = enemyData.neverDied;
         Physics.SyncTransforms();
+        neverDied = enemyData.neverDied;
         //initiationThroughLoad=true;
         if (IsDead) gameObject.SetActive(false);
     }

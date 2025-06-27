@@ -84,6 +84,11 @@ public class LevelLoadingManager : MonoBehaviour,IDataPersistence
                 enemy.Save();
             }
         }
+        foreach(EnemyBehaviour enemy in enemiesIgor){
+            if(enemy.gameObject.activeInHierarchy){
+                enemy.Save();
+            }
+        }
         if(gameData.levelsData.ContainsKey(LevelName)){
             gameData.levelsData[LevelName]=CurrentLevelData;
         }

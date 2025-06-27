@@ -14,8 +14,7 @@ public class PlayerWeapon : WeaponManager
     private float _runeBonusDamage;
 
     //Skill tree powerUps
-    private int _doubleDamageMultiplier = 1;
-    private bool _executeEnemiesPuActive;
+    private float _doubleDamageMultiplier = 1;
     private bool _lifeStealPuActive;
     [SerializeField] private readonly bool _showDebugLogs;
 
@@ -163,14 +162,11 @@ public class PlayerWeapon : WeaponManager
         switch (id)
         {
             //DoubleDamage
-            case 10:
-                _doubleDamageMultiplier = 2;
-                break;
-            //Execute
-            case 13:
+            case 8:
+                _doubleDamageMultiplier = 1.5f;
                 break;
             //LifeSteal
-            case 14:
+            case 7:
                 _lifeStealPuActive = true;
                 break;
         }

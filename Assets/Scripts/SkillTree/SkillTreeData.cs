@@ -6,7 +6,7 @@ using System;
 [Serializable]
 public class SkillTreeData 
 {
-    private const int NPOWERUPS = 15; //PRECISA SER AJUSTADO MANUALMENTE
+    private const int NPOWERUPS = 10; //PRECISA SER AJUSTADO MANUALMENTE
     public bool[] boughtPowerUps;
     public int[] currentMoney;
     public int[] totalMoneyGotten;

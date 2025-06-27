@@ -162,16 +162,16 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         switch (id) //sim essa merda é hardcoded  ¯\_(ツ)_/¯
         {
-            case 1: //tier 1 (primeiro a ser comprado) skill tree do bem
+            case 5: //auto dano
                 IsSpecial1Unlocked = true;
                 break;
-            case 5: //tier 3 (2 pré requisitos) skill tree do bem
+            case 6: //sangramento
                 IsSpecial2Unlocked = true;
                 break;
-            case 10: //tier 2 (1 pré requisito) skill tree do mal
+            case 2: //salto
                 IsSpecial3Unlocked = true;
                 break;
-            case 9: //tier 3 (2 pré requisitos) skill tree do mal (sim o 9 vem depois do 10)
+            case 1: //poise
                 IsSpecial4Unlocked = true;
                 break;
             default:

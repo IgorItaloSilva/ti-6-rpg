@@ -318,12 +318,12 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         {
             case 3:
                 PUArmorActive = true;
-                Debug.Log("Ativei o powerUp armor");
+                //Debug.Log("Ativei o powerUp armor");
                 break;
-            case 6:
+            case 4:
                 PULifeRegenActive = true;
                 //InvokeRepeating(nameof(LifeRegenPowerUp), 0f, 5f);
-                Debug.Log("Ativei o powerUp 6");
+                //Debug.Log("Ativei o powerUp regen vida");
                 break;
             default: break;
         }

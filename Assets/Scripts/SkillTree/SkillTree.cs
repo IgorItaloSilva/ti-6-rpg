@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class SkillTree : MonoBehaviour,IDataPersistence
 {
     public static SkillTree instance;
-    private const int NPOWERUPS = 13; //PRECISA SER AJUSTADO MANUALMENTE
+    private const int NPOWERUPS = 10; //PRECISA SER AJUSTADO MANUALMENTE
     [SerializeField] private List<PowerUpSO> powerUps;
     private int[] currentMoney;//o indice é o enum do tipo de powerUp
     private int[] totalMoneyGotten;//o indice é o enum do tipo de powerUp
@@ -50,6 +50,7 @@ public class SkillTree : MonoBehaviour,IDataPersistence
         PlayerStateMachine.Instance?.UnlockSpecial(id);
     }
     public bool BuyPowerUp(int id){//Vai ser chamado por uma função da UI, que vai responder um click de um botão
+        if (id == 9) return false;
         //Debug.Log($"Tentaram comprar o powerUp de Id {id}");
         Enums.PowerUpType powerUpType = powerUps[id].PUType;
         if(currentMoney[(int)powerUpType]<=0){

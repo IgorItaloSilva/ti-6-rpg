@@ -60,6 +60,32 @@ public class SkillTreeUIManager : MonoBehaviour
     {
         if (id >= 0)
         {
+            if (id == 9)
+            {
+                if (!boughtPowerUps[9])
+                {
+                    powerUpUIBox.SetActive(true);
+                    Vector2 pos = Mouse.current.position.ReadValue() + new Vector2(pixelOffset, pixelOffset);
+                    powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos, Quaternion.identity);
+                    powerUpNameText.text = "Magia de Fogo";
+                    powerUpDescriptionText.text = "Esse poder é desbloqueado de outra forma.";
+                    puBoxMoedaTrevas.SetActive(false);
+                    puBoxMoedaHonra.SetActive(false);
+                    powerUpBoxIsOpen = true;
+                }
+                else
+                {
+                    SkillNodeUI node = powerUpNodes[id];
+                    powerUpUIBox.SetActive(true);
+                    Vector2 pos = Mouse.current.position.ReadValue() + new Vector2(pixelOffset, pixelOffset);
+                    powerUpUIBox.GetComponent<RectTransform>().SetPositionAndRotation(pos, Quaternion.identity);
+                    powerUpNameText.text = node.powerUp.Name;
+                    powerUpDescriptionText.text = node.powerUp.UiDescription;
+                    powerUpBoxIsOpen = true;
+                    puBoxMoedaHonra.SetActive(false);
+                    puBoxMoedaTrevas.SetActive(false);
+                }
+            }else
             if (!powerUpBoxIsOpen)
             {
                 SkillNodeUI node = powerUpNodes[id];
