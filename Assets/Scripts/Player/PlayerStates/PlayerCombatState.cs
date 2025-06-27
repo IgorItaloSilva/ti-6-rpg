@@ -128,7 +128,8 @@ public class PlayerCombatState : PlayerGroundedState
             _ctx.AttackCount = 7;
             _ctx.CanSpecial3 = false;
             _ctx.StartSpecialCooldown(3);
-            SwitchState(_factory.Attack());
+            HandleJump();
+            SwitchState(_factory.InAir());
             return;
         }
 

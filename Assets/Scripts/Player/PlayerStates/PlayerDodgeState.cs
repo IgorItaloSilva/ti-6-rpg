@@ -9,16 +9,16 @@ public class PlayerDodgeState : PlayerCombatState
     public PlayerDodgeState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        _decelerationSpeed = 3;
+        _decelerationSpeed = 40;
         HandleAnimatorParameters();
-        _ctx.Acceleration = _ctx.IsMovementPressed ? 4f : -4f;
+        _ctx.Acceleration = _ctx.IsMovementPressed ? 8f : -4f;
         if (_ctx.ShowDebugLogs) Debug.Log("Dodging");
         _ctx.IsDodging = true;
         _turnTime = DodgeDurationMs / 2000f;
         _ctx.CanDodge = false;
         HandleDodgeDurationAsync();
         _ctx.ResetAttacks();
-        _ctx.Animator.speed = 1.25f;
+        _ctx.Animator.speed = 1.75f;
         _ctx.SwordTrail.emitting = true;
     }
 

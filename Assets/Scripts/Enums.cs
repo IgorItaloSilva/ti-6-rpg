@@ -42,7 +42,7 @@ public class Enums {
         LightAttack,
         BleedAttack,//Corte de energia
         PoiseAttack,//cone de gelo
-        IceAttack,//muralha de gelo
+        JumpAttack,//muralha de gelo
         SelfDamageAttack
     }
     

@@ -3,6 +3,7 @@
 using System;
 using System.Threading.Tasks;
 using Cinemachine;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.VFX;
@@ -46,6 +47,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     [SerializeField] private TrailRenderer _swordTrail;
 
     [SerializeField] private VisualEffect _swordSlash;
+    [SerializeField] private VisualEffect _bloodSplash;
     [SerializeField] private ParticleSystem _magicVFX;
     [SerializeField] private VisualEffect _parryVfx;
 
@@ -698,6 +700,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         if (ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
     }
 
+    [UsedImplicitly]
     private void EnableSwordCollider(string attackType = "light")
     {
         if (_isDodging) return;
@@ -716,6 +719,19 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
                 _swordWeaponManager.SetDamageType(Enums.AttackType.BleedAttack);
                 Debug.Log("Bleed attack");
                 break;
+            case "self":
+                PlayerStats.TakeDamage(300f, Enums.DamageType.SelfDamage, false);
+                _swordSlash.Play();
+                _swordWeaponManager.SetDamageType(Enums.AttackType.SelfDamageAttack);
+                Debug.Log("Self Damage attack");
+                break;
+            case "poise":
+                _swordWeaponManager.SetDamageType(Enums.AttackType.PoiseAttack);
+                Debug.Log("Poise attack");
+                break;
+            case "jump":
+                _swordWeaponManager.SetDamageType(Enums.AttackType.HeavyAttack);
+                break;
             default:
                 _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
                 break;
@@ -726,7 +742,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         AudioPlayer.instance.PlaySFX("AirSlash");
         if ((enemyDetector.targetEnemy &&
              Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f) || !_inCombat)
-            _acceleration = 2f;
+            if(attackType == "poise")
+                _acceleration = 4f;
+            else
+                _acceleration = 2f;
         if (TestHitFeedback)
         {
             HitAnimatorPause();
@@ -907,5 +926,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public void PlayParryVFX()
     {
         _parryVfx.Play();
+    }
+
+    public void PlayBloodVFX()
+    {
+        _bloodSplash.Play();
     }
 }

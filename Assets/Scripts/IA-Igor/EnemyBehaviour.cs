@@ -153,7 +153,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         Hp -= damage;
         currentPoise -= damageType switch
         {
-            Enums.DamageType.Poise => 2,
+            Enums.DamageType.Poise => 5,
             Enums.DamageType.Magic or Enums.DamageType.Bleed => 0,
             _ => 0.5f
         };
@@ -166,7 +166,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         }
         
         healthBar?.SetValue(Hp, currentPoise, wasCrit);
-        if(target)
+        if(target && damageType != Enums.DamageType.Poise)
         {
             _bloodVFX?.gameObject.transform.LookAt(target.position);
             _bloodVFX?.Play();
@@ -194,7 +194,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         currentState = null;
         animator.Play("Death", -1, 0.0f);
         charControl.enabled = false;
-        target.gameObject.GetComponentInChildren<EnemyDetection>().ForgetEnemy();
+        PlayerStateMachine.Instance.EnemyDetector.ForgetEnemy();
         if (healthBar)
         {
             healthBar.gameObject.SetActive(false);

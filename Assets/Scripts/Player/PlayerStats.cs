@@ -199,7 +199,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         //Debug.Log("Player morreu!");
         PlayerIsDead = true;
         AudioPlayer.instance.PlaySFX("PlayerDeath");
-        AudioPlayer.instance.PlayMusic("DeathMusic");
+        AudioPlayer.instance.PlayMusic("DeathMusic", false, false);
         PlayerStateMachine.Instance.InCombat = false;
         PlayerIsDead = true;
     }
@@ -295,6 +295,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         //GameEventsManager.instance.uiEvents.LifeChange(CurrentLife,wasCrit);
         Debug.Log("Player tomou dano");
         UIManager.instance?.UpdateHealth(CurrentLife, wasCrit);
+        if (damageType == Enums.DamageType.SelfDamage) return;
         PlayerStateMachine.Instance.CameraShake(2f, 0.5f);
         if (CurrentLife <= 0 && !PlayerIsDead)
         {

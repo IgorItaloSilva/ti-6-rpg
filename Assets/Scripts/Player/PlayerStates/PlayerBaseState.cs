@@ -35,7 +35,7 @@ public abstract class PlayerBaseState
         HandleAcceleration();
     }
 
-    protected virtual void HandleJump(float jumpForceOverride = 1f)
+    public void HandleJump(float jumpForceOverride = 1f)
     {
         _ctx.Animator.ResetTrigger(_ctx.HasJumpedHash);
         _ctx.Animator.SetTrigger(_ctx.HasJumpedHash);

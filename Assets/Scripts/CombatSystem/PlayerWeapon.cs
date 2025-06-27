@@ -129,15 +129,15 @@ public class PlayerWeapon : WeaponManager
                 damageType = Enums.DamageType.Bleed;
                 break;
             case Enums.AttackType.PoiseAttack:
-                damage = _heavyAttackDamage;
+                damage = 0f;
                 damageType = Enums.DamageType.Poise;
                 break;
-            case Enums.AttackType.IceAttack:
+            case Enums.AttackType.JumpAttack:
                 damage = _heavyAttackDamage;
                 damageType = Enums.DamageType.Ice;
                 break;
             case Enums.AttackType.SelfDamageAttack:
-                damage = _heavyAttackDamage;
+                damage = _heavyAttackDamage * 6;
                 damageType = Enums.DamageType.SelfDamage;
                 break;
         }

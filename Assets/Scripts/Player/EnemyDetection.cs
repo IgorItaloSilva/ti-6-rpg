@@ -61,6 +61,7 @@ public class EnemyDetection : MonoBehaviour
                         Debug.Log("In enemy line of sight");
                     }
                     _inLineOfSight = true;
+                    AudioPlayer.instance.PlayMusic("CombatMusic");
                     PlayerStateMachine.Instance.InCombat = true;
                     return;
                 }
@@ -71,6 +72,8 @@ public class EnemyDetection : MonoBehaviour
 
     public void ForgetEnemy()
     {
+        
+        AudioPlayer.instance.PlayMusic("MainTheme");
         PlayerStateMachine.Instance.InCombat = false;
         PlayerStateMachine.Instance.Animator.SetBool(PlayerStateMachine.Instance.InCombatHash, false);
         targetEnemy.GetComponent<EnemyBehaviour>()?.SetTarget(null);

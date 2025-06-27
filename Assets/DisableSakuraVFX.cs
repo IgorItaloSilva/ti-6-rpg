@@ -14,13 +14,15 @@ public class DisableSakuraVFX : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        foreach (var vfx in _sakuraVFX)
-            vfx.Stop();
+        if(other.CompareTag("Player"))
+            foreach (var vfx in _sakuraVFX)
+                vfx.Stop();
     }
     
     private void OnTriggerExit(Collider other)
     {
-        foreach (var vfx in _sakuraVFX)
-            vfx.Play();
+        if(other.CompareTag("Player"))
+            foreach (var vfx in _sakuraVFX)
+                vfx.Play();
     }
 }

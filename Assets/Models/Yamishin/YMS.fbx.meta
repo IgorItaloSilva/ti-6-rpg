@@ -114,8 +114,10 @@ ModelImporter:
       has scale animation that will be discarded.\n\t'Cravicle.L' has scale animation
       that will be discarded.\n\t'Cravicle.R' has scale animation that will be discarded.\n\t'Hips'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
-    animationRetargetingWarnings: "\nRetargeting quality report for clip 'Yami_Rig|A-Pose':\n\tRetargeting
+    animationRetargetingWarnings: "\nRetargeting quality report for clip 'A-Pose':\n\tRetargeting
       quality is good. No significant differences with original animation were found.\n\nRetargeting
+      quality report for clip 'Yami_Rig|A-Pose':\n\tRetargeting quality is good.
+      No significant differences with original animation were found.\n\nRetargeting
       quality report for clip 'Yami_Rig|Idle':\n\tLeftLowerLeg average position error
       5.1 mm and maximum position error 5.1 mm at time 0: 0 (0.0%) Frame 0\n\tLeftFoot
       average position error 4.6 mm and maximum position error 4.6 mm at time 0:
@@ -1317,15 +1319,23 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.16339225
-        functionName: EnableSwordCollider
-        data: heavy
+      - time: 0.24759616
+        functionName: PlayBloodVFX
+        data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.26698875
+      - time: 0.4999307
+        functionName: EnableSwordCollider
+        data: self
+        objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.6251618
         functionName: DisableSwordCollider
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -1333,23 +1343,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.3986001
-        functionName: EnableSwordCollider
-        data: heavy
-        objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
-          type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.5264139
-        functionName: DisableSwordCollider
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
-          type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.56699085
+      - time: 0.89872164
         functionName: ResetAttacks
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -1693,7 +1687,7 @@ ModelImporter:
       events:
       - time: 0.4
         functionName: EnableSwordCollider
-        data: 
+        data: jump
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
@@ -1707,7 +1701,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.82730925
+      - time: 0.81529003
         functionName: ResetAttacks
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -1841,7 +1835,7 @@ ModelImporter:
       name: Yami_Rig|YMS_C04
       takeName: Yami_Rig|YMS_C04
       internalID: -4642941025506082505
-      firstFrame: 0
+      firstFrame: 30
       lastFrame: 120
       wrapMode: 0
       orientationOffsetY: 0
@@ -1862,15 +1856,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.23396227
+      - time: 0.26904935
         functionName: EnableSwordCollider
-        data: 
+        data: poise
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
           type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.31320754
+      - time: 0.38709176
         functionName: DisableSwordCollider
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
@@ -1878,23 +1872,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.509434
-        functionName: EnableSwordColliderAttack4
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
-          type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.5962264
-        functionName: DisableSwordCollider
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
-          type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.709213
+      - time: 0.4063284
         functionName: ResetAttacks
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 753a9d43c206ba34183b2d5a493d13c3,
