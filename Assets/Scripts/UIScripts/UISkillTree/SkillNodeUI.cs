@@ -11,6 +11,7 @@ public class SkillNodeUI : MonoBehaviour, IPointerEnterHandler,IPointerExitHandl
     [field:SerializeField]public Button button{get; private set;}
     [field:SerializeField]public GameObject powerUpLockedGO{get; private set;}
     [field:SerializeField]public GameObject powerUpBoughtGO{get; private set;}
+    [field:SerializeField]public GameObject powerUpCanBuyCover{get; private set;}
     [field:SerializeField]public GameObject powerUpBaseOutline{get; private set;}
 
     public void OnPointerEnter(PointerEventData eventData)

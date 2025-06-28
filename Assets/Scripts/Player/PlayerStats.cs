@@ -299,6 +299,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         PlayerStateMachine.Instance.CameraShake(2f, 0.5f);
         if (CurrentLife <= 0 && !PlayerIsDead)
         {
+            CurrentLife = 0;
             PlayerStateMachine.Instance.LockPlayer();
             Die();
         }

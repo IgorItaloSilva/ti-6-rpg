@@ -105,6 +105,14 @@ public class StatsUIManager : MonoBehaviour
         {
             levelUpStuff.SetActive(true);
             this.pointsToSpend.text = pointsToSpend.ToString();
+            if (pointsToSpend > 0)
+            {
+                this.pointsToSpend.color = Color.green;
+            }
+            else
+            {
+                this.pointsToSpend.color = Color.white;
+            }
         }
         else
         {
