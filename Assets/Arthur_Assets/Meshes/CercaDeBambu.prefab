@@ -182,6 +182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3772498839633822904}
   - component: {fileID: 3773863708081075761}
+  - component: {fileID: 6575253983711052972}
   m_Layer: 12
   m_Name: CercaDeBambu
   m_TagString: Untagged
@@ -227,3 +228,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.28617367, y: 12.85, z: 2.432115}
   m_Center: {x: -0.011587903, y: 6.4, z: -0.0051956177}
+--- !u!205 &6575253983711052972
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9168182900197050632}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0.05805319, y: 0.63132536, z: 0.0033841133}
+  m_Size: 1
+  m_FadeMode: 1
+  m_AnimateCrossFading: 1
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.103275165
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 2124821505358399258}
+    - renderer: {fileID: 8000781250159628929}
+  m_Enabled: 1

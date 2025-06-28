@@ -16,6 +16,8 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     // Singleton publico do PlayerMovement
     public static PlayerStateMachine Instance;
+    private static readonly int TransparentEnabled = Shader.PropertyToID("_TransparentEnabled");
+    private static readonly int TweakTransparency = Shader.PropertyToID("_Tweak_transparency");
 
     private void CreateSingleton()
     {
@@ -144,6 +146,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public readonly int PlayerVelocityXHash = Animator.StringToHash("playerVelocityX");
     public readonly int PlayerVelocityYHash = Animator.StringToHash("playerVelocityY");
     public readonly int InCombatHash = Animator.StringToHash("inCombat");
+    public readonly int PlayerIdleAnimationHash = Animator.StringToHash("idleAnimation");
 
     #endregion
 
@@ -243,6 +246,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public PlayerWeapon MagicWeaponManager => _magicWeaponManager;
     public Vector3 CurrentMovementInput => _currentMovementInput;
     public float Gravity => _gravity;
+
     public byte AttackCount
     {
         get => _attackCount;
@@ -696,15 +700,13 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         _attackCount = 0;
 
         DisableSwordCollider();
-
-        if (ShowDebugLogs) Debug.LogWarning("RESET ATTACKS");
     }
 
     [UsedImplicitly]
     private void EnableSwordCollider(string attackType = "light")
     {
         if (_isDodging) return;
-        
+
         switch (attackType)
         {
             case "light":
@@ -736,13 +738,13 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
                 _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
                 break;
         }
-        
+
         _swordTrail.emitting = true;
         _swordWeaponManager.EnableCollider();
         AudioPlayer.instance.PlaySFX("AirSlash");
         if ((enemyDetector.targetEnemy &&
              Vector3.Distance(transform.position, enemyDetector.targetEnemy.transform.position) > 2f) || !_inCombat)
-            if(attackType == "poise")
+            if (attackType == "poise")
                 _acceleration = 4f;
             else
                 _acceleration = 2f;
@@ -910,6 +912,29 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         await Task.Delay(125);
         _animator.speed = 1f;
     }
+    //
+    // public async void DodgeTransparentEffect()
+    // {
+    //     while (playerMeshRenderer.material.GetFloat(TweakTransparency) > -1f)
+    //     {
+    //         playerMeshRenderer.material.SetFloat(TweakTransparency,
+    //             playerMeshRenderer.material.GetFloat(TweakTransparency) - 0.06f);
+    //         await Task.Delay(10);
+    //     }
+    //
+    //     while (playerMeshRenderer.material.GetFloat(TweakTransparency) < -0f)
+    //     {
+    //         playerMeshRenderer.material.SetFloat(TweakTransparency,
+    //             playerMeshRenderer.material.GetFloat(TweakTransparency) + 0.06f);
+    //         await Task.Delay(20);
+    //     }
+    //     playerMeshRenderer.material.SetFloat(TweakTransparency, 0f);
+    // }
+    //
+    // public void SetTransparentEnabled(bool transparent)
+    // {
+    //     playerMeshRenderer.material.SetInt(TransparentEnabled, transparent ? 1 : 0);
+    // }
 
     #endregion
 
@@ -931,5 +956,33 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public void PlayBloodVFX()
     {
         _bloodSplash.Play();
+    }
+    
+    public void RandomizeIdleAnimation()
+    {
+        var newIdle = UnityEngine.Random.Range(5, 31);
+        
+        Debug.Log(newIdle);
+        switch (newIdle)
+        {
+            case 26:
+                _animator.SetFloat(PlayerIdleAnimationHash, 1);
+                break;
+            case 27:
+                _animator.SetFloat(PlayerIdleAnimationHash, 2);
+                break;
+            case 28:
+                _animator.SetFloat(PlayerIdleAnimationHash, 3);
+                break;
+            case 29:
+                _animator.SetFloat(PlayerIdleAnimationHash, 4);
+                break;
+            case 30:
+                _animator.SetFloat(PlayerIdleAnimationHash, 5);
+                break;
+            default:
+                _animator.SetFloat(PlayerIdleAnimationHash, 0);
+                break;
+        };
     }
 }

@@ -20,6 +20,7 @@ public class ChochinRange : EnemyBaseState
     {
         if (useWeapon && timer >= 1.25f)
         {
+            enemyBehave.enemySounds.PlaySound(EnemySounds.SoundType.Attack, enemyBehave.soundSource, 2);
             useWeapon = false;
             enemyBehave.UseWeapon();
         }

@@ -18,7 +18,7 @@ public class EnemySounds : ScriptableObject
         Attack
     }
 
-    public void PlaySound(SoundType type, AudioSource source)
+    public void PlaySound(SoundType type, AudioSource source, sbyte index = -1)
     {
         _listToPlay = type switch
         {
@@ -28,7 +28,7 @@ public class EnemySounds : ScriptableObject
             _ => attackSounds
         };
         if (_listToPlay.Count > 0)
-            source.PlayOneShot(_listToPlay[Random.Range(0, _listToPlay.Count)]);
+            source.PlayOneShot(index == -1 ? _listToPlay[Random.Range(0, _listToPlay.Count)] : _listToPlay[index]);
         else
             Debug.LogWarning("Tried to play sound of type " + type + " but list is empty.");
     }

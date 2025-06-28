@@ -26,6 +26,7 @@ public class PlayerCombatState : PlayerGroundedState
         HandleAnimatorParameters();
         if (_ctx.ShowDebugLogs) Debug.Log("Combat");
         _turnTime = _ctx.BaseTurnTime * 2;
+        _ctx.Animator.SetFloat(_ctx.PlayerIdleAnimationHash, 0f);
     }
 
     public override void UpdateState()

@@ -116,7 +116,7 @@ public class AudioPlayer : MonoBehaviour
 
         AudioSource playSource = s.source ?? musicSource;
 
-        if (playSource.isPlaying)
+        if (playSource && playSource.isPlaying)
         {
             playSource.Stop();
         }

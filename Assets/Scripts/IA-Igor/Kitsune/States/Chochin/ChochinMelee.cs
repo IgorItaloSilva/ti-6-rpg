@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ChochinMelee : EnemyBaseState
 {
@@ -21,6 +22,7 @@ public class ChochinMelee : EnemyBaseState
     {
         if (useWeapon && timer >= 1.12f) {
             useWeapon = false;
+            enemyBehave.enemySounds.PlaySound(EnemySounds.SoundType.Attack, enemyBehave.soundSource, (sbyte)Random.Range(0,2));
             enemyBehave.UseWeapon();
         }
 

@@ -3,7 +3,6 @@ using Debug = UnityEngine.Debug;
 
 public class PlayerAttackState : PlayerBaseState
 {
-    private const byte DecelerationSpeed = 2;
     private bool _inSeekRange, _isSpecial;
 
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
@@ -11,6 +10,7 @@ public class PlayerAttackState : PlayerBaseState
     {
         _turnTime = _ctx.BaseTurnTime * 2;
         _maxAcceleration = 1f;
+        _decelerationSpeed = 2;
     }
 
     public override void EnterState()
@@ -55,7 +55,7 @@ public class PlayerAttackState : PlayerBaseState
 
     protected override void HandleAcceleration()
     {
-        if (_ctx.Acceleration > 0) _ctx.Acceleration -= Time.fixedDeltaTime * DecelerationSpeed;
+        if (_ctx.Acceleration > 0) _ctx.Acceleration -= Time.fixedDeltaTime * _decelerationSpeed;
         else _ctx.Acceleration = 0;
 
         _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, Mathf.Max(_ctx.Acceleration,1f), 0.1f, Time.deltaTime);
@@ -82,12 +82,6 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void CheckSwitchStates()
     {
-        if (_ctx.IsDodgePressed)
-        {
-            _ctx.ResetAttacks();
-            SwitchState(_factory.Dodge());
-        }
-
         if (_ctx.AttackCount == 0)
         {
             SwitchState(_factory.Grounded());

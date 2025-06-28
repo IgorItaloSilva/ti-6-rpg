@@ -29,10 +29,13 @@ public class PlayerMagicState : PlayerCombatState
 
     public override void ExitState()
     {
+        
+        SmoothDisableLightAsync(_lightIntensity);
         _ctx.CanCastMagic = false;
         _ctx.MagicWeaponManager.DisableCollider();
         _ctx.Animator.SetBool(_ctx.IsCastingMagicHash, false);
         _ctx.MagicVFX.Stop();
+        AudioPlayer.instance.StopSFX("Fire");
     }
 
     public override void CheckSwitchStates()
@@ -60,12 +63,9 @@ public class PlayerMagicState : PlayerCombatState
         SmoothEnableLightAsync();
         while (_ctx.IsMagicPressed && _ctx.CurrentState is PlayerMagicState)
         {
-            if (_ctx.ShowDebugLogs) Debug.Log("Magic Damage Tick");
             _ctx.MagicWeaponManager.EnableCollider();
             await Task.Delay(TimeBetweenDamagesMs);
         }
-        AudioPlayer.instance.StopSFX("Fire");
-        SmoothDisableLightAsync(_lightIntensity);
         _ctx.CanCastMagic = false;
         _ctx.MagicWeaponManager.DisableCollider();
         await Task.Delay(TimeBetweenDamagesMs);

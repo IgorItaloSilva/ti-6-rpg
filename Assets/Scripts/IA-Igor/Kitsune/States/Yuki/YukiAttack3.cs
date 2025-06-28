@@ -9,7 +9,7 @@ public class YukiAttack3 : EnemyBaseState
 
     protected override void OneExecution()
     {
-        restTime = 2;
+        restTime = 1f;
         timer = 0;
         useWeapon = true;
         lookTime = .5f;

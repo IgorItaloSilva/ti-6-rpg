@@ -8,11 +8,9 @@ public class wpn_ChochinMelee : EnemyBaseWeapon
 
     [SerializeField] float timeToEnableCollider, timeToDisableCollider;
 
-
-
-
     protected override void OneExecution()
     {
+        
         thisCoroutine = StartCoroutine(Disable());
         colliderCoroutine = StartCoroutine(ColliderTimer());
     }

@@ -267,7 +267,10 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     #region Weapon
 
-    public void EnableWeapon() { weapon.EnableCollider(); }
+    public void EnableWeapon()
+    {
+        weapon.EnableCollider();
+    }
     public void DisableWeapon() { weapon.DisableCollider(); }
     public void UseWeapon() { allSkills.UseWeapon(); }
 

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class PlayerDodgeState : PlayerCombatState
 {
-    private const int DodgeCooldownMs = 1000, DodgeDurationMs = 500;
+    private const int DodgeCooldownMs = 1000, DodgeDurationMs = 300;
 
     public PlayerDodgeState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
         _decelerationSpeed = 40;
         HandleAnimatorParameters();
-        _ctx.Acceleration = _ctx.IsMovementPressed ? 8f : -4f;
+        _ctx.Acceleration = 8f;
         if (_ctx.ShowDebugLogs) Debug.Log("Dodging");
         _ctx.IsDodging = true;
         _turnTime = DodgeDurationMs / 2000f;
@@ -24,6 +24,18 @@ public class PlayerDodgeState : PlayerCombatState
 
     public override void EnterState()
     {
+    }
+    
+    protected override void HandleAcceleration()
+    {
+        _lowestAccelerationSpeed = Mathf.Min(_ctx.Acceleration, _lowestAccelerationSpeed);
+
+        _ctx.Acceleration -= Time.fixedDeltaTime * _decelerationSpeed;
+
+        if (_lowestAccelerationSpeed < _maxAcceleration)
+        {
+            _ctx.Acceleration = Mathf.Clamp(_ctx.Acceleration, 0, _maxAcceleration);
+        }
     }
 
     public sealed override void HandleAnimatorParameters()

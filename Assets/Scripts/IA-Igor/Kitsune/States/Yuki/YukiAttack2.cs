@@ -12,7 +12,7 @@ public class YukiAttack2 : EnemyBaseState
     {
         timer = 0;
         useWeapon = true;
-        restTime = 2;
+        restTime = 1;
         animator.CrossFade("Attack02", 0.2f);
         lookTime = 0.25f;
     }
