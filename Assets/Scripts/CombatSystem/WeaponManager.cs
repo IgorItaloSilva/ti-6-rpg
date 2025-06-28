@@ -45,7 +45,7 @@ public class WeaponManager : MonoBehaviour
                 {
                     if (PlayerStateMachine.Instance.ShouldParry)
                     {
-                        enemyBehaviour.WasParried();
+                        enemyBehaviour?.WasParried();
                         AudioPlayer.instance.PlaySFX("Parry");
                         PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.HasParried);
                         PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.HasParried);

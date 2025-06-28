@@ -139,6 +139,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void SetTarget(Transform target) { this.target = target; }
     public Transform GetTarget() { return target; }
+    public bool HasTarget(){ return target != null ? true : false; }
     public void ClearTarget() { target = null; }
     public float GetMeleeDist() { return meleeDist; }
 
