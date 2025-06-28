@@ -44,9 +44,11 @@ public class RuneManager : MonoBehaviour,IDataPersistence
             }
         }
     }
-    public void GainRune(RuneSO newRune,bool displayNotification){
-        if(displayNotification)UIManager.instance?.PlayNotification("Você coletou a runa: "+newRune.Nome);
+    public void GainRune(RuneSO newRune, bool displayNotification)
+    {
+        if (displayNotification) UIManager.instance?.PlayNotification("Você coletou a runa: " + newRune.Nome);
         runeInventory.Add(newRune);
+        DataPersistenceManager.instance?.SaveGame();
     }
     public void EquipRune(int index){//Nossa Ui passa o index do array de runas dela, que é igual ao nosso, por isso usado o ID diretamente
         if(showRuneDebug)Debug.Log($"Vou equipar a runa de {index}, que é a {runeInventory[index]}");
@@ -74,21 +76,25 @@ public class RuneManager : MonoBehaviour,IDataPersistence
     }
     public void ApplySelectedRunes(){//Called when we close the UI, applyes the buffs from the selected Runes
         for(int i =0;i<hasChanged.Length;i++){
-            if(hasChanged[i]){
+            if (hasChanged[i])
+            {
                 //Deactivate a que estava esquipada
                 RuneSO rune = unequipedRunes[i];
-                if(rune!=null){
-                    if(showRuneDebug)Debug.Log($"Estou dando deapply na runa {rune}");
-                    ActivateDeactivateRune(rune,false);
-                    unequipedRunes[i]=null;
+                if (rune != null)
+                {
+                    if (showRuneDebug) Debug.Log($"Estou dando deapply na runa {rune}");
+                    ActivateDeactivateRune(rune, false);
+                    unequipedRunes[i] = null;
                 }
                 //Activate a nova esquipada
                 rune = equipedRunes[i];
-                if(rune!=null){
-                    if(showRuneDebug)Debug.Log($"Estou dando apply na runa {rune}");
-                    ActivateDeactivateRune(rune,true);
+                if (rune != null)
+                {
+                    if (showRuneDebug) Debug.Log($"Estou dando apply na runa {rune}");
+                    ActivateDeactivateRune(rune, true);
                 }
-                hasChanged[i]=false;
+                hasChanged[i] = false;
+                DataPersistenceManager.instance?.SaveGame();
             }
         }
     }
@@ -162,7 +168,8 @@ public class RuneManager : MonoBehaviour,IDataPersistence
         RuneSO auxRune;
         foreach(string runeName in gameData.runeData.collectedRunes){
             auxSaveLoadDictionary.TryGetValue(runeName,out auxRune);
-            GainRune(auxRune,false);
+            if(!runeInventory.Contains(auxRune))
+                GainRune(auxRune,false);
         }
         foreach(string runeName in gameData.runeData.equipedRunes){
             auxSaveLoadDictionary.TryGetValue(runeName,out auxRune);

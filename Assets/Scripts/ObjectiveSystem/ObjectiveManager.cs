@@ -85,13 +85,17 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
         newObjectiveInstantiable.StartObjective();
         newObjectiveInstantiable.LoadObjective(stringData);
     }
-    public void UpdateQuestData(string id,ObjectiveData objectiveData){
-        ObjectiveUiManager.instance?.UpdateData(id,objectiveData);
-        if(objectivesData.ContainsKey(id)){
-            objectivesData[id]=objectiveData;
+    public void UpdateQuestData(string id, ObjectiveData objectiveData)
+    {
+        ObjectiveUiManager.instance?.UpdateData(id, objectiveData);
+        if (objectivesData.ContainsKey(id))
+        {
+            objectivesData[id] = objectiveData;
         }
-        else{
-            objectivesData.Add(id,objectiveData);
+        else
+        {
+            objectivesData.Add(id, objectiveData);
         }
+        DataPersistenceManager.instance?.SaveGame();
     }
 }

@@ -8,7 +8,7 @@ public class DialogueInteractable : Interactable{
     bool didntAddInteract = false;
     protected override void Awake()
     {
-    base.Awake();
+        base.Awake();
         if (canvas == null)
         {
             canvas = GetComponentInChildren<Canvas>().gameObject;

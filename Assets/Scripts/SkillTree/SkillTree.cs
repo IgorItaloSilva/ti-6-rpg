@@ -64,6 +64,7 @@ public class SkillTree : MonoBehaviour,IDataPersistence
             currentMoney[(int)powerUpType]--;
             //Debug.Log($"Comprei o power up de Id {id}");
             GameEventsManager.instance.uiEvents.SkillTreeMoneyChange((int)powerUpType,currentMoney[(int)powerUpType]);
+            DataPersistenceManager.instance?.SaveGame();
             return true;
         }
         return false;

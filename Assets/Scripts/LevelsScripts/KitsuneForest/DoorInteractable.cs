@@ -8,42 +8,47 @@ public class DoorInteractable : Interactable
 {
     [SerializeField]GameObject closedDoor;
     [SerializeField]GameObject openDoor;
-    [SerializeField]GameObject wrongSideText;
-    [SerializeField]GameObject keyIndicationText;
+    [SerializeField]GameObject keyIndicationCanvas;
+    [SerializeField]GameObject otherSideDialogInteractable;
+    bool didntAddInteract;
     //PlayerInput playerInput;
-    void OnEnable(){
+    void OnEnable()
+    {
         PlayerStateMachine.Instance.AddActionToInteract(Interact);
+        if (!PlayerStateMachine.Instance) didntAddInteract = true;
     }
-    void OnDisable(){
-        PlayerStateMachine.Instance.RemoveActionFromInteract(Interact);
+    protected override void Awake()
+    {
+        base.Awake();
+        if (keyIndicationCanvas == null)
+        {
+            keyIndicationCanvas = GetComponentInChildren<Canvas>().gameObject;
+        }
     }
     protected override void Start()
     {
-        base.Start();
-        /* playerInput = new PlayerInput();
-        playerInput.Gameplay.Enable();
-        playerInput.Gameplay.Interact.performed+=Interact; */
+        if (didntAddInteract)
+        {
+            PlayerStateMachine.Instance?.AddActionToInteract(Interact);
+        }
+    }
+    void OnDisable(){
+        PlayerStateMachine.Instance.RemoveActionFromInteract(Interact);
     }
     protected override void OnTriggerEnter(Collider collider)
     {
         //Debug.Log("Entrei numa porta");
         if(collider.CompareTag("Player")){
             if(AlreadyInterated)return;
-            if(collider.transform.position.x>transform.position.x){//Lado onde não abre
-                wrongSideText.gameObject.SetActive(true);
-            }
-            else{
-                keyIndicationText.gameObject.SetActive(true);
-                inRange=true;
-            }
+            keyIndicationCanvas.SetActive(true);
+            inRange=true;
         }
     }
     void OnTriggerExit(Collider collider){
         //Debug.Log("Sai duma porta");
         if(collider.CompareTag("Player")){
             inRange = false;
-            keyIndicationText.gameObject.SetActive(false);
-            wrongSideText.gameObject.SetActive(false);
+            keyIndicationCanvas.SetActive(false);
         }
     }
     void Interact(InputAction.CallbackContext context){
@@ -53,11 +58,14 @@ public class DoorInteractable : Interactable
             }
         }
     }
-    void OpenDoor(){
+    void OpenDoor()
+    {
         closedDoor.SetActive(false);
         openDoor.SetActive(true);
-        AlreadyInterated=true;
+        AlreadyInterated = true;
+        otherSideDialogInteractable.SetActive(false);
         Save();
+        gameObject.SetActive(false);
     }
     public override void Load(InteractableData interactableData)
     {

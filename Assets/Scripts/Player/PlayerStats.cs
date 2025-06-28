@@ -652,6 +652,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         InformLevelUpPOintsToCheckPoint();
         SendHealthInfo();
         CheckPointStatue();
+        DataPersistenceManager.instance?.SaveGame();
     }
 
     void DiscardChanges()
