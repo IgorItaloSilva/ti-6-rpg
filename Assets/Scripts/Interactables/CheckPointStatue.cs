@@ -43,7 +43,7 @@ public class CheckPointStatue : Interactable
             }
             else
             {
-                LevelLoadingManager.instance.respawnPoint = transform.position;
+                LevelLoadingManager.instance.respawnPoint = transform.position+Vector3.forward;
             }
         }
     }
@@ -97,6 +97,7 @@ public class CheckPointStatue : Interactable
             PlayerStateMachine.Instance.Animator.SetFloat(PlayerStateMachine.Instance.PlayerVelocityYHash, 0f);
             PlayerStateMachine.Instance.LockPlayer();
             LevelLoadingManager.instance?.RespawnEnemies();
+            LevelLoadingManager.instance?.SetNewSpawn(transform.position);
             playerStats?.CheckPointStatue();
             DataPersistenceManager.instance.SaveGame();
             if (levelUpPoints > 0)

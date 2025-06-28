@@ -217,25 +217,33 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         PotionsAmmount = maxPotions;
         UIManager.instance?.DisplayPotionAmmount(PotionsAmmount);
         UIManager.instance?.DisplayExpAmmount(CarriedExp);
-        if (respawnPos.HasValue)
+        if (LevelLoadingManager.instance != null)
+        {
+            transform.position = LevelLoadingManager.instance.RespawnPos();
+        }
+        else
+        {
+            transform.position = Vector3.zero;
+        }
+        /* if (respawnPos.HasValue)
         {
             //Debug.Log("respawnPos tem valor, ent vou colocar minha posição nela");
             transform.position = respawnPos.Value;
         }
         else
-        {
-            if (LevelLoadingManager.instance == null)
+        { 
+             if (LevelLoadingManager.instance == null)
             {
                 //Debug.LogWarning("Não temos um levelLoadingManager, portanto não sabemos onde colocar o jogador ao renascer. Colocando ele no (0,0,0)");
                 transform.position = Vector3.zero;
             }
             else
-            {
+            { 
                 //Debug.Log("Como não temos uma respawnPos, vamos voltar por onde o levelLoadingManager mandou");
                 respawnPos = LevelLoadingManager.instance.respawnPoint;
                 transform.position = respawnPos.Value;
-            }
-        }
+           }
+        } */
 
         AudioPlayer.instance.PlayMusic("MainTheme");
         Physics.SyncTransforms();
@@ -261,6 +269,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
     {
         PlayerStatsData playerStatsData = new PlayerStatsData(this);
         data.playerStatsData = playerStatsData;
+        data.pos = transform.position;
     }
 
     public void LoadData(GameData data)
@@ -283,6 +292,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         this.isNearCampfire = data.playerStatsData.isNearCampfire;
         this.PotionsAmmount = data.playerStatsData.potionsAmmount;
         this.PotionLevel = data.playerStatsData.potionLevel;
+        AjustPosition(data.pos);
         CalculateStats();
         InformLevelUpPOintsToCheckPoint();
     }

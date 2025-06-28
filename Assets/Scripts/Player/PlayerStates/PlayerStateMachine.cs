@@ -801,14 +801,14 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 
     public void LoadData(GameData gameData)
     {
-        transform.position = gameData.pos;
-        Physics.SyncTransforms();
+        /* transform.position = gameData.pos;
+        Physics.SyncTransforms(); */
     }
 
     //Chamado manualmente para salvar o jogo
     public void SaveData(GameData gameData)
     {
-        gameData.pos = transform.position;
+        /* gameData.pos = transform.position; */
     }
 
     #endregion
