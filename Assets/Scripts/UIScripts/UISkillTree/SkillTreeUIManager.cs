@@ -170,41 +170,55 @@ public class SkillTreeUIManager : MonoBehaviour
             int id = skillNode.powerUp.Id;
             //Debug.Log($"id do power up id é {id}");
             if(buyablePowerUps==null)Debug.LogWarning("o buyablePowerUps não existe");
-            if(buyablePowerUps[id]){
-                skillNode.button.interactable=true;
+            if (buyablePowerUps[id])
+            {
+                skillNode.button.interactable = true;
                 skillNode.powerUpLockedGO.SetActive(false);
+                skillNode.powerUpCanBuyCover.SetActive(true);
             }
-            else{
-                skillNode.button.interactable=false;
+            else
+            {
+                skillNode.button.interactable = false;
                 skillNode.powerUpLockedGO.SetActive(true);
+                skillNode.powerUpCanBuyCover.SetActive(true);
             }
-            if(boughtPowerUps[id]){
+            if (boughtPowerUps[id])
+            {
                 powerUpNodes[id].button.interactable = true;
                 skillNode.powerUpBoughtGO.SetActive(true);
                 skillNode.powerUpBaseOutline.SetActive(false);
+                skillNode.powerUpCanBuyCover.SetActive(false);
+                skillNode.powerUpLockedGO.SetActive(false);
             }
-            else{
+            else
+            {
                 skillNode.powerUpBoughtGO.SetActive(false);
                 skillNode.powerUpBaseOutline.SetActive(true);
+                skillNode.powerUpCanBuyCover.SetActive(true);
             }
         }
     }
-    public void AjustBuy(int id){
-        if(boughtPowerUps==null){
+    public void AjustBuy(int id)
+    {
+        if (boughtPowerUps == null)
+        {
             boughtPowerUps = new bool[powerUpNodes.Count()];
         }
-        boughtPowerUps[id]=true;
-        powerUpNodes[id].button.interactable=true;
+        boughtPowerUps[id] = true;
+        powerUpNodes[id].button.interactable = true;
         powerUpNodes[id].powerUpBaseOutline.SetActive(false);
         powerUpNodes[id].powerUpBoughtGO.SetActive(true);
         powerUpNodes[id].powerUpLockedGO.SetActive(false);
+        powerUpNodes[id].powerUpCanBuyCover.SetActive(false);
     }
-    public void AjustBuyable(int id){
-        if(buyablePowerUps==null){
-            buyablePowerUps=new bool[powerUpNodes.Count()];
+    public void AjustBuyable(int id)
+    {
+        if (buyablePowerUps == null)
+        {
+            buyablePowerUps = new bool[powerUpNodes.Count()];
         }
-        buyablePowerUps[id]=true;
-        powerUpNodes[id].button.interactable=true;
+        buyablePowerUps[id] = true;
+        powerUpNodes[id].button.interactable = true;
         powerUpNodes[id].powerUpLockedGO.SetActive(false);
     }
     
