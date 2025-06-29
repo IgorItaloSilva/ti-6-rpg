@@ -8,18 +8,19 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [SerializeField] protected ASkills allSkills;
     [SerializeField] CharacterController charControl;
     [SerializeField] Animator animator;
-    
+
     [Header("VFX")]
     [SerializeField] public ParticleSystem _dashVFX;
     [SerializeField] public VisualEffect _headbuttVFX;
     [SerializeField] private VisualEffect _bloodVFX;
     [SerializeField] public ParticleSystem _uncorruptedVFX;
     [SerializeField] public VisualEffect _corruptedVFX;
-    
-    [FormerlySerializedAs("_enemySounds")] [Header("Audio")]
+
+    [FormerlySerializedAs("_enemySounds")]
+    [Header("Audio")]
     public EnemySounds enemySounds;
     [FormerlySerializedAs("_soundSource")] public AudioSource soundSource;
-    
+
     [Header("Valores")]
     [SerializeField] public float Hp { get; private set; }
     [SerializeField] float maxHp;
@@ -29,16 +30,21 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [SerializeField] float speed;
     [SerializeField] float knockbackDuration = 1f;
     [SerializeField] float meleeDist = 1.5f;
+
     //Coisas dos outros sistemas do jogo
     [Header("Coisas dos outros Sistemas")]
     [SerializeField] int expGain;
     [SerializeField] EnemyType enemyType;
+    [SerializeField] Vector3 initialPos;
+    [SerializeField] float maxDistSpawn;
+
     //Coisas de boss
     [Header("Coisas de boss")]
     [SerializeField] bool isBoss;
     [SerializeField] string Nome;
     DialogChoiceAux dialogChoiceAux;
     [SerializeField] bool hasDialogChoice;
+
     //Coisas do level loading manager (reload e spawn)
     [Header("Coisas do LevelLoadingManager")]
     public bool IsDead { get; private set; }
@@ -46,7 +52,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [SerializeField] private readonly bool _showDebugLogs;
     [field: SerializeField] public string SaveId { get; private set; }
     Vector3 startingPos;
-    public bool neverDied{ get; private set; }
+    public bool neverDied { get; private set; }
 
     public enum EnemyType
     {
@@ -66,6 +72,9 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     [SerializeField] HealthBar healthBar;
     [SerializeField] WeaponManager weapon;
+
+
+
     void Awake()
     {
         GameEventsManager.instance.playerEvents.onPlayerRespawned += OnPlayerDied;
@@ -73,7 +82,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         {
             if (LevelLoadingManager.instance == null)
             {
-                if(_showDebugLogs) Debug.LogWarning($"O inimigo {gameObject.name} está tentando se adicionar na lista de inimigos, mas não temos um LevelLoadingManger na cena");
+                if (_showDebugLogs) Debug.LogWarning($"O inimigo {gameObject.name} está tentando se adicionar na lista de inimigos, mas não temos um LevelLoadingManger na cena");
             }
             LevelLoadingManager.instance.enemiesIgor.Add(this);
             if (SaveId == "")
@@ -85,15 +94,18 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         Hp = maxHp;
         neverDied = true;
         if (hasDialogChoice) dialogChoiceAux = gameObject.GetComponent<DialogChoiceAux>();
+        initialPos = transform.position;
     }
+
     void OnDisable()
     {
         GameEventsManager.instance.playerEvents.onPlayerRespawned -= OnPlayerDied;
     }
+
     void Start()
     {
         healthBar?.SettupBarMax(maxHp, poise);
-        if(healthBar) healthBar.SetValue(Hp,false);
+        if (healthBar) healthBar.SetValue(Hp, false);
         currentPoise = poise;
         charControl = GetComponent<CharacterController>();
         ChoseSkill();
@@ -136,6 +148,9 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     public CharacterController GetCharControl() { return charControl; }
     public Animator GetAnimator() { return animator; }
     public float GetSpeed() { return speed; }
+    public float GetDistSpawn() { return Vector3.Distance(transform.position, initialPos); }
+    public bool IsDistFromSpawn() { return GetDistSpawn() > maxDistSpawn && maxDistSpawn > 0; }
+    public Vector3 GetInitialPos() { return initialPos; }
 
     #endregion
 
@@ -143,7 +158,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void SetTarget(Transform target) { this.target = target; }
     public Transform GetTarget() { return target; }
-    public bool HasTarget(){ return target != null ? true : false; }
+    public bool HasTarget() { return target != null ? true : false; }
     public void ClearTarget() { target = null; }
     public float GetMeleeDist() { return meleeDist; }
 
@@ -162,32 +177,34 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             Enums.DamageType.Magic or Enums.DamageType.Bleed => 0,
             _ => 0.5f
         };
-        
-        if(damageType == Enums.DamageType.Bleed)
+
+        if (damageType == Enums.DamageType.Bleed)
         {
             //Debug.LogError("Bleed activated");
             damageCounter = 0;
             StartCoroutine(Bleed());
         }
-        
-        if(healthBar) healthBar.SetValue(Hp, currentPoise, wasCrit);
-        if(target && damageType != Enums.DamageType.Poise && _bloodVFX)
+
+        if (healthBar) healthBar.SetValue(Hp, currentPoise, wasCrit);
+        if (target && damageType != Enums.DamageType.Poise && _bloodVFX)
         {
             _bloodVFX.gameObject.transform.LookAt(target.position);
             _bloodVFX.Play();
         }
-        if(isBoss)UIManager.instance?.UpdateBossLife(Hp,currentPoise,wasCrit);
-        if(currentState?.GetType() == typeof(StateIdle))
+        if (isBoss) UIManager.instance?.UpdateBossLife(Hp, currentPoise, wasCrit);
+        if (currentState?.GetType() == typeof(StateIdle))
         {
             animator.Play("Damage", 0, 0);
             enemySounds.PlaySound(EnemySounds.SoundType.Damage, soundSource);
         }
-        if (Hp <= 0) {
+        if (Hp <= 0)
+        {
             allSkills.DisableWeapon();
             Die();
             return;
         }
-        if (currentPoise <= 0 && !(currentState is StateStuned)) {
+        if (currentPoise <= 0 && !(currentState is StateStuned))
+        {
             allSkills.DisableWeapon();
             currentState = new StateStuned();
             currentState.StateStart(this);
@@ -242,7 +259,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         Hp = maxHp;
         if (healthBar) healthBar.SetValue(Hp, false);
         transform.position = startingPos;
-        
+
     }
 
     public void ActualDeath()
@@ -292,7 +309,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if (ignoreSaveLoad) return;
         if (LevelLoadingManager.instance == null)
         {
-            if(_showDebugLogs) Debug.Log($"O inimigo {SaveId} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
+            if (_showDebugLogs) Debug.Log($"O inimigo {SaveId} está tentando se salvar, mas não temos um LevelLoadingManger na cena");
         }
         //Debug.Log(LevelLoadingManager.instance.CurrentLevelData);
         //see if we have this data in dictionary        
@@ -317,7 +334,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         transform.position = enemyData.lastPosition;
         Physics.SyncTransforms();
         neverDied = enemyData.neverDied;
-        if(healthBar) healthBar.SetValue(Hp,false);
+        if (healthBar) healthBar.SetValue(Hp, false);
         //initiationThroughLoad=true;
         if (IsDead) gameObject.SetActive(false);
     }
@@ -339,17 +356,17 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if (dialogChoiceAux.IsDialogAnserInteractableActiveInHierarchy())
         {
             dialogChoiceAux.Deactivate();
-            neverDied=true;
+            neverDied = true;
         }
         Save();
-        
+
     }
     #endregion
     public void DisplayBossInfoIfBoss()
     {
         if (isBoss)
         {
-            UIManager.instance?.BossLifeSettup(Hp, maxHp,currentPoise,poise, Nome);
+            UIManager.instance?.BossLifeSettup(Hp, maxHp, currentPoise, poise, Nome);
             //UIManager.instance?.BossPoiseSettup(Hp, maxHp, Nome);
         }
     }
@@ -365,4 +382,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             neverDied = false;
         }
     }
+    
+
+
 }

@@ -14,9 +14,9 @@ public class wpn_MagoLazer : EnemyBaseWeapon
     {
         yield return new WaitForEndOfFrame();
         weaponManager.DisableCollider();
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
         weaponManager.EnableCollider();
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(.5f);
         weaponManager.DisableCollider();
         gameObject.SetActive(false);
         

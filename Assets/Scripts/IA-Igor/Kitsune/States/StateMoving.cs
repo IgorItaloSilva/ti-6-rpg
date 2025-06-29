@@ -2,9 +2,12 @@ using UnityEngine;
 
 public class StateMoving : EnemyBaseState
 {
+    float newSteering;
+    Vector3 directionToSpawn;
+    Quaternion rotationDesired;
 
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     protected override void OneExecution()
     {
         animator.CrossFade("Run", 0.25f);
@@ -14,7 +17,8 @@ public class StateMoving : EnemyBaseState
 
     public override void StateUpdate()
     {
-        if (GetPlayerDistance() < enemyBehave.GetMeleeDist()) {
+        if (GetPlayerDistance() < enemyBehave.GetMeleeDist())
+        {
             enemyBehave.currentState = new StateIdle();
             StateExit();
         }
@@ -23,7 +27,11 @@ public class StateMoving : EnemyBaseState
 
     public override void StateFixedUpdate()
     {
-        charControl.transform.rotation = ApplyRotation();
+        if (enemyBehave.IsDistFromSpawn() || !enemyBehave.GetTarget()){
+            enemyBehave.currentState = new StateMovingToSpawn();
+            StateExit();
+        }
+        charControl.transform.rotation = base.ApplyRotation();
         charControl.Move(charControl.transform.forward * speed * Time.fixedDeltaTime + Vector3.up * ApplyGravity());
     }
 

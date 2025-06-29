@@ -25,8 +25,8 @@ public class KitsuneMagicBullet : MonoBehaviour
 
     void OnEnable()
     {
-        moveTimer = 0.6f;
         isClose = false;
+        moveTimer = 0.6f;
         Invoke(nameof(EnableWeaponCollider), 0.1f);
     }
 
@@ -52,7 +52,8 @@ public class KitsuneMagicBullet : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Player") || other.CompareTag("Ground")){
+        if (other.CompareTag("Player") || other.CompareTag("Ground"))
+        {
             gameObject.SetActive(false);
         }
         
