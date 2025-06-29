@@ -22,6 +22,11 @@ public class PlayerBlockState : PlayerCombatState
         _turnTime = _ctx.BaseTurnTime * 2;
     }
 
+    public override void ExitState()
+    {
+
+    }
+
     private async void HandleParryDurationAsync()
     {
         await Task.Delay(ParryDurationMs);
@@ -31,11 +36,21 @@ public class PlayerBlockState : PlayerCombatState
     public override void CheckSwitchStates()
     {
         if (_ctx.PlayerStats.PlayerIsDead)
+        {
+            _ctx.Animator.SetBool(_ctx.IsBlockingHash, false);
+            SwitchState(_factory.Dead());
             return;
+        }
+
+        if (!_ctx.InCombat)
+        {
+            _ctx.Animator.SetBool(_ctx.IsBlockingHash, false);
+            SwitchState(_factory.Grounded());
+        }
         
         if (!_ctx.CC.isGrounded)
         {
-            _ctx.Animator.SetBool(_ctx.InCombatHash, false);
+            _ctx.Animator.SetBool(_ctx.IsBlockingHash, false);
             SwitchState(_factory.InAir());
             return;
         }

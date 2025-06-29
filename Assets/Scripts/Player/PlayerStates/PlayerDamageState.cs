@@ -78,5 +78,12 @@ public class PlayerDamageState : PlayerCombatState
             _ctx.Animator.SetBool(_ctx.InCombatHash, false);
             SwitchState(_factory.InAir());
         }
+        
+        if (_ctx.PlayerStats.PlayerIsDead)
+        {
+            _ctx.Animator.SetBool(_ctx.IsBlockingHash, false);
+            _ctx.Animator.SetBool(_ctx.InCombatHash, false);
+            SwitchState(_factory.Dead());
+        }
     }
 }
