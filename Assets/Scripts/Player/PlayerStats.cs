@@ -481,6 +481,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         GameEventsManager.instance?.tutorialEvents.LevelUpTutorial();
         DataPersistenceManager.instance.SaveGame();
         InformLevelUpPOintsToCheckPoint();
+        GainExp(0);
     }
 
     int ExpToNextLevel(int level)
