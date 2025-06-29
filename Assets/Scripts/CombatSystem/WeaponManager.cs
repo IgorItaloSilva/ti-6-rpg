@@ -23,7 +23,7 @@ public class WeaponManager : MonoBehaviour
     {
         damageCollider = GetComponent<Collider>();
         enemyBehaviour = GetComponentInParent<EnemyBehaviour>();
-        if (enemyBehaviour == null) Debug.LogWarning("A arma não achou o enemyControllerDela");
+        if (enemyBehaviour == null) Debug.LogWarning("A arma não achou o enemy behaviour dela");
         if (damageCollider == null)
         {
             Debug.LogWarning($"O weapon manager do {name} não achou o collider dela");

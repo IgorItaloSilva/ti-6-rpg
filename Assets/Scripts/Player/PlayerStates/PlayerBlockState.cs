@@ -20,6 +20,7 @@ public class PlayerBlockState : PlayerCombatState
     {
         if(_ctx.ShowDebugLogs) Debug.Log("Parrying");
         _turnTime = _ctx.BaseTurnTime * 2;
+        _ctx.ResetAttacks();
     }
 
     public override void ExitState()

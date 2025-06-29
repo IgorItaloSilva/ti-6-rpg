@@ -58,14 +58,14 @@ public class PlayerDodgeState : PlayerCombatState
 
     public override void CheckSwitchStates()
     {
-        if (_ctx.IsAttackPressed)
-        {
-            SwitchState(_factory.Attack());
-        }
-
         if (!_ctx.CC.isGrounded)
         {
             SwitchState(_factory.InAir());
+        }
+
+        if (!_ctx.InCombat)
+        {
+            SwitchState(_factory.Grounded());
         }
     }
 

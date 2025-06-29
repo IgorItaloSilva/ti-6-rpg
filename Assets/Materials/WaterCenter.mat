@@ -27,9 +27,14 @@ Material:
         m_Texture: {fileID: 2800000, guid: f18c7fa288483614f89f1735045b9430, type: 3}
         m_Scale: {x: 12, y: 12}
         m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 500df22bb3d54f04b84cb04a8ea5a1db, type: 3}
+        m_Scale: {x: 12, y: 12}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _Metallic: 0
+    - _Smoothness: 1
     - _WaveScale: 0.18
     - _WaveSpeed: 1.06
     - _WaveStrength: 0.05

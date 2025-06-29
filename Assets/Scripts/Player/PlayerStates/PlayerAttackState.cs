@@ -10,7 +10,7 @@ public class PlayerAttackState : PlayerBaseState
     {
         _turnTime = _ctx.BaseTurnTime * 2;
         _maxAcceleration = 1f;
-        _decelerationSpeed = 2;
+        _decelerationSpeed = 8;
     }
 
     public override void EnterState()
