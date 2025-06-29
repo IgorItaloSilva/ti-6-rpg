@@ -12,7 +12,7 @@ public class ChochinMelee : EnemyBaseState
     protected override void OneExecution()
     {
         animator.CrossFade("AttackMelee", 0.25f);
-        restTime = 2;
+        restTime = 1f;
         timer = 0;
         lookTime = 0.25f;
         useWeapon = true;

@@ -165,11 +165,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             StartCoroutine(Bleed());
         }
         
-        healthBar?.SetValue(Hp, currentPoise, wasCrit);
-        if(target && damageType != Enums.DamageType.Poise)
+        if(healthBar) healthBar.SetValue(Hp, currentPoise, wasCrit);
+        if(target && damageType != Enums.DamageType.Poise && _bloodVFX)
         {
-            _bloodVFX?.gameObject.transform.LookAt(target.position);
-            _bloodVFX?.Play();
+            _bloodVFX.gameObject.transform.LookAt(target.position);
+            _bloodVFX.Play();
         }
         if(isBoss)UIManager.instance?.UpdateBossLife(Hp,wasCrit);
         if(currentState?.GetType() == typeof(StateIdle))

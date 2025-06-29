@@ -962,7 +962,6 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         var newIdle = UnityEngine.Random.Range(5, 31);
         
-        Debug.Log(newIdle);
         switch (newIdle)
         {
             case 26:
