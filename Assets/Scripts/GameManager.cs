@@ -9,9 +9,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance {get;private set;}
     [SerializeField]bool shouldOpenHud;
     [SerializeField] GameObject canvasChangingScene;
-    [SerializeField] Image backgroundImage;
+    [SerializeField]Image backgroundImage;
     [SerializeField] Sprite[] loadingImages;
     [SerializeField] Slider sliderLoadScene;
+    [SerializeField] GameObject textoAperteQualquerTecla;
     
     public bool shouldLoadTutorial;
     public bool shouldShowTutorials = true;
@@ -34,10 +35,16 @@ public class GameManager : MonoBehaviour
         }
     }
     void Start(){
+        if (canvasChangingScene == null)
+        {
+            canvasChangingScene = GetComponentInChildren<Canvas>().gameObject;
+        }
+        canvasChangingScene.SetActive(false);
         #if UNITY_EDITOR
-            if(shouldOpenHud){
-                SceneManager.LoadScene("Hud",LoadSceneMode.Additive);
-            }
+        if (shouldOpenHud)
+        {
+            SceneManager.LoadScene("Hud", LoadSceneMode.Additive);
+        }
         #endif
     }
     /* void Update(){
@@ -94,13 +101,22 @@ public class GameManager : MonoBehaviour
         AsyncOperation loadOperation;
         if (!isAdditive)loadOperation = SceneManager.LoadSceneAsync(levelName);
         else loadOperation = SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
+        loadOperation.allowSceneActivation = false;
         canvasChangingScene.SetActive(true);
+        textoAperteQualquerTecla.gameObject.SetActive(false);
         int code = levelName == "MageMap" ? 1 : 0;
         backgroundImage.sprite = loadingImages[code];
         while (!loadOperation.isDone)
         {
-            float progressValue = loadOperation.progress;
-            sliderLoadScene.value = progressValue;
+            sliderLoadScene.value = loadOperation.progress;
+            if (loadOperation.progress >= 0.9f)
+            {
+                textoAperteQualquerTecla.gameObject.SetActive(true);
+                if (Keyboard.current.anyKey.wasPressedThisFrame)
+                {
+                    loadOperation.allowSceneActivation = true;
+                }
+            }
             yield return null;
         }
         canvasChangingScene.SetActive(false);
