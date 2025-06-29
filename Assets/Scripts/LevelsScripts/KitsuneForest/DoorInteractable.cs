@@ -14,7 +14,7 @@ public class DoorInteractable : Interactable
     //PlayerInput playerInput;
     void OnEnable()
     {
-        PlayerStateMachine.Instance.AddActionToInteract(Interact);
+        PlayerStateMachine.Instance?.AddActionToInteract(Interact);
         if (!PlayerStateMachine.Instance) didntAddInteract = true;
     }
     protected override void Awake()

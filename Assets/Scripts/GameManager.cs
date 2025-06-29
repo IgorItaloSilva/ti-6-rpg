@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Sprite[] loadingImages;
     [SerializeField] Slider sliderLoadScene;
     [SerializeField] GameObject textoAperteQualquerTecla;
+    [SerializeField] bool skipWaitForKeyPressToLoad;
     
     public bool shouldLoadTutorial;
     public bool shouldShowTutorials = true;
@@ -112,7 +113,7 @@ public class GameManager : MonoBehaviour
             if (loadOperation.progress >= 0.9f)
             {
                 textoAperteQualquerTecla.gameObject.SetActive(true);
-                if (Keyboard.current.anyKey.wasPressedThisFrame)
+                if (Keyboard.current.anyKey.wasPressedThisFrame||skipWaitForKeyPressToLoad)
                 {
                     loadOperation.allowSceneActivation = true;
                 }
