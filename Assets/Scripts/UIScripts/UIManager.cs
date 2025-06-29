@@ -480,16 +480,16 @@ public class UIManager : MonoBehaviour
         isNotificationCouroutineRunning = false;
         if (notificationQueue.Count > 0) PlayNotification(notificationQueue.Dequeue());
     }
-    public void BossLifeSettup(float currentLife, float maxLife, string name)
+    public void BossLifeSettup(float currentLife, float maxLife,float currentPoise,float poise, string name)
     {
         bossHPBarAndName.SetActive(true);
-        bossHealthBar.SettupBarMax(maxLife);
-        bossHealthBar.SetValue(currentLife, false);
+        bossHealthBar.SettupBarMax(maxLife,poise);
+        bossHealthBar.SetValue(currentLife,poise, false);
         bossName.text = name;
     }
-    public void UpdateBossLife(float currentHp, bool wasCrit)
+    public void UpdateBossLife(float currentHp,float currentPoise, bool wasCrit)
     {
-        bossHealthBar.SetValue(currentHp, wasCrit);
+        bossHealthBar.SetValue(currentHp,currentPoise, wasCrit);
     }
     public void HideBossLife()
     {

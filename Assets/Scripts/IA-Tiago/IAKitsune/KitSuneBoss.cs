@@ -32,7 +32,7 @@ public class KitsuneBoss : KitsuneController
         }
         else{
             if(!hasDisplayedLife){
-                UIManager.instance?.BossLifeSettup(CurrentHp,maxHp,nome);
+                UIManager.instance?.BossLifeSettup(CurrentHp,1,1,maxHp,nome);
                 hasDisplayedLife=true;
             }
             if(isAttacking){

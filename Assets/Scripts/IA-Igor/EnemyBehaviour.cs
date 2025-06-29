@@ -86,7 +86,10 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         neverDied = true;
         if (hasDialogChoice) dialogChoiceAux = gameObject.GetComponent<DialogChoiceAux>();
     }
-
+    void OnDisable()
+    {
+        GameEventsManager.instance.playerEvents.onPlayerRespawned -= OnPlayerDied;
+    }
     void Start()
     {
         healthBar?.SettupBarMax(maxHp, poise);
@@ -155,7 +158,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         Hp -= damage;
         currentPoise -= damageType switch
         {
-            Enums.DamageType.Poise => 5,
+            Enums.DamageType.Poise => 7,
             Enums.DamageType.Magic or Enums.DamageType.Bleed => 0,
             _ => 0.5f
         };
@@ -173,7 +176,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             _bloodVFX.gameObject.transform.LookAt(target.position);
             _bloodVFX.Play();
         }
-        if(isBoss)UIManager.instance?.UpdateBossLife(Hp,wasCrit);
+        if(isBoss)UIManager.instance?.UpdateBossLife(Hp,currentPoise,wasCrit);
         if(currentState?.GetType() == typeof(StateIdle))
         {
             animator.Play("Damage", 0, 0);
@@ -223,9 +226,10 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public IEnumerator Bleed()
     {
-        while (damageCounter < 10 && !IsDead)
+        float damage = maxHp / 40;
+        while (damageCounter < 5 && !IsDead)
         {
-            TakeDamage(5f, Enums.DamageType.Magic, false);
+            TakeDamage(damage, Enums.DamageType.Magic, false);
             damageCounter++;
             yield return new WaitForSeconds(0.5f);
         }
@@ -337,7 +341,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     #endregion
     public void DisplayBossInfoIfBoss()
     {
-        if(isBoss)UIManager.instance?.BossLifeSettup(Hp, maxHp, Nome);
+        if (isBoss)
+        {
+            UIManager.instance?.BossLifeSettup(Hp, maxHp,currentPoise,poise, Nome);
+            //UIManager.instance?.BossPoiseSettup(Hp, maxHp, Nome);
+        }
     }
     public void HideBossInfo()
     {

@@ -169,7 +169,7 @@ public abstract class ActualEnemyController : MonoBehaviour,ISteeringAgent,IDama
             animator.SetBool("damageMirror", !animator.GetBool("damageMirror"));
             hitsTaken=0;
         }
-        if(IsABoss)UIManager.instance?.UpdateBossLife(CurrentHp,wasCrit);
+        if(IsABoss)UIManager.instance?.UpdateBossLife(CurrentHp,1f,wasCrit);
         if(healthBar!=null)healthBar.SetValue(CurrentHp,wasCrit);
         if(CurrentHp<=0){
             if(IsABoss)BossDeath();
