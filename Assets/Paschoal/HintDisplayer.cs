@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class HintDisplayer : MonoBehaviour
 {
@@ -9,6 +10,13 @@ public class HintDisplayer : MonoBehaviour
 
     private void Awake()
     {
+        SceneManager.sceneLoaded += ChangeTip;
+    }
+
+    private void ChangeTip(Scene scene, LoadSceneMode mode) 
+    {
         text.text = hints[Random.Range(0, hints.Length)].HintText;
     }
+    
+
 }

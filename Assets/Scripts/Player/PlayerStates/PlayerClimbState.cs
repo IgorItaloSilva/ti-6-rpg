@@ -36,9 +36,9 @@ namespace Player.PlayerStates
 
         private void HandleClimb()
         {
-            _localMovement = Vector3.up * (_ctx.CurrentMovementInput.y * _ctx.Acceleration);
-            _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _localMovement.y);
-            _ctx.CC.Move(_localMovement * (ClimbSpeed * Time.deltaTime));
+        _localMovement = _ctx.transform.up * (_ctx.CurrentMovementInput.y * _ctx.Acceleration);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, Vector3.Dot(_localMovement, _ctx.transform.up));
+        _ctx.CC.Move(_localMovement * (ClimbSpeed * Time.deltaTime));
         }
 
         public override void ExitState()

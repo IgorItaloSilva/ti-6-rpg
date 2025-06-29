@@ -20,11 +20,10 @@ Shader "URP/SimpleWater"
         Pass
         {
             Name "ForwardLit"
-            Tags { "LightMode" = "UniversalForward" }
+            Tags { "LightMode" = "UniversalForward" "Queue" = "Geometry" }
 
             Blend SrcAlpha OneMinusSrcAlpha
             Cull Back
-            ZWrite Off
 
             HLSLPROGRAM
             #pragma vertex vert
