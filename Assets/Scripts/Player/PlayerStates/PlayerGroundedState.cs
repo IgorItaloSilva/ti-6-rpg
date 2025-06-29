@@ -22,6 +22,7 @@ public class PlayerGroundedState : PlayerBaseState
     public override void HandleAnimatorParameters()
     {
         _ctx.Animator.SetBool(_ctx.IsBlockingHash, false);
+        _ctx.Animator.SetBool(_ctx.IsCastingMagicHash, false);
         _ctx.Animator.SetBool(_ctx.IsGroundedHash, true);
         _ctx.Animator.SetBool(_ctx.InCombatHash, _ctx.InCombat);
         _ctx.Animator.SetBool(_ctx.IsWalkingHash, _ctx.IsMovementPressed);
