@@ -10,7 +10,10 @@ public class StateIdle : EnemyBaseState
     public override void StateUpdate()
     {
         if(!enemyBehave.isResting() && enemyBehave.GetTarget()){
-            if(GetTargetAngle(charControl.transform, enemyBehave.GetTarget()) > 80){
+            if (enemyBehave.IsDistFromSpawn()) {
+                enemyBehave.currentState = new StateMovingToSpawn();
+                StateExit();
+            }else if(GetTargetAngle(charControl.transform, enemyBehave.GetTarget()) > 80) {
                 enemyBehave.currentState = new StateTurn();
                 StateExit();
             }else if(enemyBehave.IsRangeSkill()) {

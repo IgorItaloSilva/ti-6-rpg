@@ -20,20 +20,21 @@ public class wpn_KitsuneMagicAttack : EnemyBaseWeapon
     protected override void OneExecution()
     {
         skillUsed = false;
-        for(int i = 0; i < bullets.Length; i++) {
+        for(int i = 0; i < bullets.Length; i++)
             bullets[i].transform.SetParent(this.transform);
-        }
         
     }
 
     protected override IEnumerator MultipleExecution()
     {
-        for(int i = 0; i < bullets.Length; i++) {
+        for (int i = 0; i < bullets.Length; i++)
+        {
             yield return new WaitForSeconds(0.2f);
             bullets[i].transform.localPosition = positions[i];
             bullets[i].transform.SetParent(null);
             bullets[i].SetActive(true);
             transform.LookAt(target);
+            Debug.Log(bullets[i].activeSelf);
 
         }
         skillUsed = true;

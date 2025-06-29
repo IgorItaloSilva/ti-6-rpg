@@ -77,7 +77,7 @@ public abstract class EnemyBaseState
     }
 
 
-    protected Quaternion ApplyRotation()
+    protected virtual Quaternion ApplyRotation()
     {
         newSteering = steeringForce;
         // Rotation
