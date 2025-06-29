@@ -93,13 +93,6 @@ public class PlayerCombatState : PlayerGroundedState
             return;
         }
 
-        if (_ctx.IsClimbing)
-        {
-            _ctx.Animator.SetBool(_ctx.InCombatHash, false);
-            SwitchState(_factory.Climb());
-            return;
-        }
-
         if (_ctx.IsSpecial1Pressed)
         {
             _ctx.Animator.ResetTrigger(_ctx.Special1Hash);
@@ -143,6 +136,11 @@ public class PlayerCombatState : PlayerGroundedState
             _ctx.StartSpecialCooldown(4);
             SwitchState(_factory.Attack());
             return;
+        }
+
+        if (_ctx.PlayerStats.PlayerIsDead)
+        {
+            SwitchState(_factory.Dead());
         }
     }
 

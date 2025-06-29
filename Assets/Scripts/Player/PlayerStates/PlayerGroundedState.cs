@@ -69,6 +69,11 @@ public class PlayerGroundedState : PlayerBaseState
             SwitchState(_factory.Climb());
         }
         
+        if (_ctx.PlayerStats.PlayerIsDead)
+        {
+            SwitchState(_factory.Dead());
+        }
+        
     }
 
 }
