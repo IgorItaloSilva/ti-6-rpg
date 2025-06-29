@@ -12,7 +12,7 @@ public class PlayerDamageState : PlayerCombatState
         currentContext, playerStateFactory)
     {
         _maxAcceleration = 1.5f;
-        _ctx.Acceleration = _ctx.IsBlocking ? 0.75f : 1.5f;
+        _ctx.Acceleration = _ctx.IsBlocking ? 1.25f : 1.75f;
         _ctx.AppliedMovementY = _ctx.BaseGravity;
         _ctx.CurrentMovement = _ctx.CurrentMovementInput;
         _ctx.CurrentMovementZ = _ctx.CurrentMovementInput.y;
@@ -31,8 +31,8 @@ public class PlayerDamageState : PlayerCombatState
 
     public override void ExitState()
     {
+        _ctx.Animator.SetBool(_ctx.IsBlockingHash, _ctx.IsBlockPressed);
         base.ExitState();
-            _ctx.Animator.SetBool(_ctx.IsBlockingHash, _ctx.IsBlockPressed);
     }
 
     public override void UpdateState()
@@ -67,8 +67,8 @@ public class PlayerDamageState : PlayerCombatState
 
         _ctx.CC.Move(_ctx.AppliedMovement * Time.fixedDeltaTime);
 
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _knockbackDir.x * 2, 0.1f, Time.fixedDeltaTime);
-        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _knockbackDir.z * 2, 0.1f, Time.fixedDeltaTime);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityXHash, _knockbackDir.x * 1.5f, 0.1f, Time.fixedDeltaTime);
+        _ctx.Animator.SetFloat(_ctx.PlayerVelocityYHash, _knockbackDir.z * 1.5f, 0.1f, Time.fixedDeltaTime);
     }
 
     public override void CheckSwitchStates()

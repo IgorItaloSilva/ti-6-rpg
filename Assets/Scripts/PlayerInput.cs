@@ -448,6 +448,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""6a025581-040d-498f-a8bb-1791ab40e143"",
+                    ""path"": ""<Keyboard>/v"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard + Mouse"",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""13d6e618-ed74-4b73-9ea7-658aecc34d2a"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
@@ -504,7 +515,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a91389d7-5936-4d1a-8a58-9a4760cf4465"",
-                    ""path"": ""<Keyboard>/t"",
+                    ""path"": ""<Keyboard>/leftAlt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard + Mouse"",

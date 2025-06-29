@@ -139,6 +139,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void SetTarget(Transform target) { this.target = target; }
     public Transform GetTarget() { return target; }
+    public bool HasTarget(){ return target != null ? true : false; }
     public void ClearTarget() { target = null; }
     public float GetMeleeDist() { return meleeDist; }
 
@@ -165,11 +166,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             StartCoroutine(Bleed());
         }
         
-        healthBar?.SetValue(Hp, currentPoise, wasCrit);
-        if(target && damageType != Enums.DamageType.Poise)
+        if(healthBar) healthBar.SetValue(Hp, currentPoise, wasCrit);
+        if(target && damageType != Enums.DamageType.Poise && _bloodVFX)
         {
-            _bloodVFX?.gameObject.transform.LookAt(target.position);
-            _bloodVFX?.Play();
+            _bloodVFX.gameObject.transform.LookAt(target.position);
+            _bloodVFX.Play();
         }
         if(isBoss)UIManager.instance?.UpdateBossLife(Hp,wasCrit);
         if(currentState?.GetType() == typeof(StateIdle))

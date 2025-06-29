@@ -10,7 +10,7 @@ public class ChochinRange : EnemyBaseState
     protected override void OneExecution()
     {
         animator.CrossFade("AttackRange", 0.25f);
-        restTime = 2;
+        restTime = 1f;
         timer = 0;
         lookTime = .25f;
         useWeapon = true;
