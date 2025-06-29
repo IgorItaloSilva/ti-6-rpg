@@ -12,7 +12,7 @@ public class MagoLazer : EnemyBaseState
     protected override void OneExecution()
     {
         restTime = 1;
-        animator.CrossFade("Fly", 0.15f);
+        animator.CrossFade("AttackRange", 0.15f);
         activateTimes = 5;
         timer = 0;
         canRecover = true;

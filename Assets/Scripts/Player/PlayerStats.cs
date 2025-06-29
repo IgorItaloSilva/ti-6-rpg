@@ -318,7 +318,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
             AudioPlayer.instance.PlaySFX("PlayerDamage" + Random.Range(1, 3));
             PlayerStateMachine.Instance.Animator.ResetTrigger(PlayerStateMachine.Instance.TookHitHash);
             PlayerStateMachine.Instance.Animator.SetTrigger(PlayerStateMachine.Instance.TookHitHash);
-            PlayerStateMachine.Instance.StaggerPlayer();
+            if(damageType != Enums.DamageType.Magic)
+                PlayerStateMachine.Instance.StaggerPlayer();
         }
     }
 

@@ -52,6 +52,9 @@ MonoBehaviour:
   - name: DeathMusic
     clip: {fileID: 8300000, guid: 01c6fbb7983da994eb810d09a2398377, type: 3}
     source: {fileID: 0}
+  - name: CombatMusic
+    clip: {fileID: 8300000, guid: 83e25f230b792e440a6d028e77d30a47, type: 3}
+    source: {fileID: 0}
   sfxSounds:
   - name: AirSlash
     clip: {fileID: 8300000, guid: 0a5e111505f918242bb5863e3b605e92, type: 3}
@@ -120,11 +123,12 @@ AudioSource:
   m_GameObject: {fileID: 1443295799654191971}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 8625613320339979248, guid: 28d12e905e801534f84fcdee40275ef4,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 1
   Mute: 0

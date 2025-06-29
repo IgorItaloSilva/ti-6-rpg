@@ -491,6 +491,8 @@ MonoBehaviour:
   meleeDist: 2.5
   expGain: 1000
   enemyType: 4
+  initialPos: {x: 0, y: 0, z: 0}
+  maxDistSpawn: 0
   isBoss: 0
   Nome: 
   hasDialogChoice: 0
@@ -2124,6 +2126,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -81.44414
       objectReference: {fileID: 0}
+    - target: {fileID: 4347159700411118405, guid: 8a403aa2d1290a947b64d6230196d0b3,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 191d4457bf12bbf49af7e437d86d9eb2, type: 2}
     - target: {fileID: 4739597521884557057, guid: 8a403aa2d1290a947b64d6230196d0b3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2424,6 +2431,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 179.99998
       objectReference: {fileID: 0}
+    - target: {fileID: 8349202355759952382, guid: 8a403aa2d1290a947b64d6230196d0b3,
+        type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 191d4457bf12bbf49af7e437d86d9eb2, type: 2}
     - target: {fileID: 8397938245258849036, guid: 8a403aa2d1290a947b64d6230196d0b3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

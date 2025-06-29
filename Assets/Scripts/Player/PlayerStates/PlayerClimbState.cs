@@ -75,7 +75,7 @@ namespace Player.PlayerStates
                     }
                     else
                     {
-                        if (_ctx.CurrentMovementInput is { x: < 0.5f, y: > 0.5f }) HandleJump(0.5f);
+                        if (_ctx.CurrentMovementInput is { x: < 0.5f, y: > 0.5f }) HandleJump();
                         SwitchState(_factory.InAir());
                     }
                 }
