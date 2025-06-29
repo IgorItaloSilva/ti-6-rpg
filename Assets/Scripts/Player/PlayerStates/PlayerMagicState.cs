@@ -4,19 +4,17 @@ using Task = System.Threading.Tasks.Task;
 
 public class PlayerMagicState : PlayerCombatState
 {
-    private readonly int TimeBetweenDamagesMs;
+    private readonly float _timeBetweenDamagesMs;
+    private float _damageTimer;
     private Light _fireLight;
-    private float _lightIntensity;
 
     public PlayerMagicState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        TimeBetweenDamagesMs = 500;
+        _timeBetweenDamagesMs = 0.5f;
         _ctx.CanCastMagic = false;
         _ctx.Animator.SetBool(_ctx.IsCastingMagicHash, true);
         _fireLight = _ctx.MagicVFX.transform.GetChild(0).GetComponent<Light>();
-        _lightIntensity = _fireLight.intensity;
-        _fireLight.intensity = 0f;
         _fireLight.enabled = true;
     }
 
@@ -25,20 +23,30 @@ public class PlayerMagicState : PlayerCombatState
         _ctx.MagicVFX.Play();
         _ctx.StartSpendManaCoroutine();
         _ctx.StartSpendManaCoroutine();
-        HandleMagicDamageRateAsync();
         if (_ctx.ShowDebugLogs) Debug.Log("Casting Magic");
         _turnTime = _ctx.BaseTurnTime * 2;
     }
 
     public override void ExitState()
     {
+        _ctx.CanCastMagic = true;
         _ctx.EndSpendManaCoroutine();
-        SmoothDisableLightAsync(_lightIntensity);
-        _ctx.CanCastMagic = false;
+        _fireLight.enabled = false;
         _ctx.MagicWeaponManager.DisableCollider();
         _ctx.Animator.SetBool(_ctx.IsCastingMagicHash, false);
         _ctx.MagicVFX.Stop();
         AudioPlayer.instance.StopSFX("Fire");
+    }
+
+    public override void FixedUpdateState()
+    {
+        base.FixedUpdateState();
+        _damageTimer += Time.fixedDeltaTime;
+        if (_damageTimer >= _timeBetweenDamagesMs)
+        {
+            _ctx.MagicWeaponManager.EnableCollider();
+            _damageTimer = 0f;
+        }
     }
 
     public override void CheckSwitchStates()
@@ -59,43 +67,4 @@ public class PlayerMagicState : PlayerCombatState
         }
     }
 
-    public async void HandleMagicDamageRateAsync()
-    {
-        await Task.Delay(TimeBetweenDamagesMs);
-        AudioPlayer.instance.PlaySFX("Fire");
-        SmoothEnableLightAsync();
-        while (_ctx.IsMagicPressed && _ctx.CurrentState is PlayerMagicState)
-        {
-            _ctx.MagicWeaponManager.EnableCollider();
-            await Task.Delay(TimeBetweenDamagesMs);
-        }
-        _ctx.CanCastMagic = false;
-        _ctx.MagicWeaponManager.DisableCollider();
-        await Task.Delay(TimeBetweenDamagesMs);
-        _ctx.CanCastMagic = true;
-    }
-
-    private async void SmoothDisableLightAsync(float initialLightIntensity)
-    {
-        while (_fireLight.intensity > 0)
-        {
-            _fireLight.intensity -= Time.fixedDeltaTime * 200;
-            await Task.Delay((int)(Time.fixedDeltaTime * 1000));
-        }
-
-        _fireLight.enabled = false;
-        _fireLight.intensity = initialLightIntensity;
-    }
-
-    private async void SmoothEnableLightAsync()
-    {
-        _fireLight.enabled = true;
-        while (_fireLight.intensity < _lightIntensity)
-        {
-            _fireLight.intensity += Time.fixedDeltaTime * 50;
-            await Task.Delay((int)(Time.fixedDeltaTime * 1000));
-        }
-        _fireLight.intensity = _lightIntensity;
-    }
-    
 }

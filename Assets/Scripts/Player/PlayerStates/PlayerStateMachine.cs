@@ -165,6 +165,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     float currentMana = 100;
     float maxMana;
     public bool HasMana() { return currentMana > 0; }
+    public bool HasManaToCastMagic() { return currentMana > 20; }
     Coroutine spendManaCoroutine;
     bool isSpendingManaCoroutineRunning;
 
@@ -318,7 +319,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3 && IsSpecial3Unlocked && !IsSpecial3OnCooldown;
     public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4 && IsSpecial4Unlocked && !IsSpecial4OnCooldown;
     public bool IsMagicPressed => _isMagicPressed;
-    public bool IsCastingMagic => _isMagicPressed  && IsSpecialFireUnlocked && _canCastMagic && HasMana();
+    public bool IsCastingMagic => _isMagicPressed  && IsSpecialFireUnlocked && _canCastMagic && HasManaToCastMagic();
     public bool IsClimbing => _isClimbing;
     public bool IsBlocking => _isBlocking && _inCombat;
     public float InitialJumpVelocity => _initialJumpVelocity;
