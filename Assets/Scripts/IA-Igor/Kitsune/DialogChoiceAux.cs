@@ -6,7 +6,15 @@ public class DialogChoiceAux : MonoBehaviour
     [SerializeField] GameObject nextLevelPortal;//infelizmente isso é um migue do caralho
     public void Activate()
     {
-        if(nextLevelPortal) nextLevelPortal.SetActive(true);
+        if (nextLevelPortal) nextLevelPortal.SetActive(true);
         dialogueAnswerInteractable.Activate();
+    }
+    public void Deactivate()
+    {
+        dialogueAnswerInteractable.Deactivate();
+    }
+    public bool IsDialogAnserInteractableActiveInHierarchy()
+    {
+        return dialogueAnswerInteractable.gameObject.activeInHierarchy;
     }
 }

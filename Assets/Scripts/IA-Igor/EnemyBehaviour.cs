@@ -336,7 +336,13 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             healthBar.SettupBarMax(maxHp, poise);
         }
         StartIdle();
+        if (dialogChoiceAux.IsDialogAnserInteractableActiveInHierarchy())
+        {
+            dialogChoiceAux.Deactivate();
+            neverDied=true;
+        }
         Save();
+        
     }
     #endregion
     public void DisplayBossInfoIfBoss()

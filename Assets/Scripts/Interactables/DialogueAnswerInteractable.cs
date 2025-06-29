@@ -8,7 +8,7 @@ public class DialogueAnswerInteractable : DialogueInteractable
     Speech speechToBeChanged;
     EnemyBehaviour enemyBehaviour;
     Collider[] results = new Collider[2];
-    LayerMask layerMask =1<<9;
+    LayerMask layerMask = 1 << 9;
     protected override void Awake()
     {
         //Debug.Log((int)layerMask);
@@ -58,7 +58,7 @@ public class DialogueAnswerInteractable : DialogueInteractable
     {
         Active = true;
         canvas.SetActive(true);
-        int n= Physics.OverlapSphereNonAlloc(transform.position, sphereCollider.radius, results, layerMask) ;
+        int n = Physics.OverlapSphereNonAlloc(transform.position, sphereCollider.radius, results, layerMask);
         // Debug.Log(n);
         if (n > 0)
         {
@@ -71,5 +71,11 @@ public class DialogueAnswerInteractable : DialogueInteractable
                 }
             }
         }
+    }
+    public void Deactivate()
+    {
+        Active = false;
+        canvas.SetActive(false);
+        inRange = false;
     }
 }
