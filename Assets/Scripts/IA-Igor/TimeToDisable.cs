@@ -1,21 +1,21 @@
-using System.Threading.Tasks;
+using System.Collections;
 using UnityEngine;
 
 public class TimeToDisable : MonoBehaviour
 {
-    [SerializeField] int miliseconds;
+    [SerializeField] float seconds;
 
 
 
     void OnEnable()
     {
-        Disable();
+        StartCoroutine(Disable());
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    async void Disable()
+    IEnumerator Disable()
     {
-        await Task.Delay(miliseconds);
+        yield return new WaitForSeconds(seconds);
         gameObject.SetActive(false);
 
     }

@@ -24,6 +24,7 @@ public class StateDamage : EnemyBaseState
             enemyBehave.SetRest(restTime);
             enemyBehave.StartIdle();
         }
+        charControl.Move(Vector3.up * ApplyGravity());
 
     }
 

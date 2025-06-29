@@ -21,6 +21,7 @@ public class StateStuned : EnemyBaseState
             enemyBehave.ResetPoise();
             StateExit();
         }
+        charControl.Move(Vector3.up * ApplyGravity());
 
     }
 
