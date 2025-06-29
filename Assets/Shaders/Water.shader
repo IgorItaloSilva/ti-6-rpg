@@ -4,6 +4,7 @@ Shader "URP/SimpleWater"
     {
         _BaseMap("Water Texture", 2D) = "white" {}
         _NormalMap("Normal Map", 2D) = "bump" {}
+        _NormalStrength("Normal Strength", Range(0, 1)) = 1
         _Color("Color Tint", Color) = (0.3, 0.5, 0.7, 1)
         _WaveSpeed("Wave Speed", Float) = 1
         _WaveScale("Wave Scale", Float) = 1
@@ -51,6 +52,7 @@ Shader "URP/SimpleWater"
 
             sampler2D _BaseMap;
             sampler2D _NormalMap;
+            float _NormalStrength;
             float4 _BaseMap_ST;
             float4 _NormalMap_ST;
             float4 _Color;
@@ -87,7 +89,7 @@ Shader "URP/SimpleWater"
             half4 frag(Varyings i) : SV_Target
             {
                 // Sample and unpack normal map
-                float3 normalTS = UnpackNormal(tex2D(_NormalMap, i.uv));
+                float3 normalTS = UnpackNormal(tex2D(_NormalMap, i.uv) * _NormalStrength);
                 float3 normalWS = normalize(mul(i.tangentToWorld, normalTS));
 
                 float3 viewDir = normalize(i.viewDirWS);
