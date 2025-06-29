@@ -1,6 +1,8 @@
 #region Imports
 
 using System;
+using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using Cinemachine;
 using JetBrains.Annotations;
@@ -9,7 +11,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.VFX;
 
 #endregion
-
 public class PlayerStateMachine : MonoBehaviour, IDataPersistence
 {
     #region Singleton
@@ -156,10 +157,16 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsSpecial2Unlocked { get; private set; }
     public bool IsSpecial3Unlocked { get; private set; }
     public bool IsSpecial4Unlocked { get; private set; }
+    public bool IsSpecialFireUnlocked { get; private set; }
     public bool IsSpecial1OnCooldown { get; private set; }
     public bool IsSpecial2OnCooldown { get; private set; }
     public bool IsSpecial3OnCooldown { get; private set; }
     public bool IsSpecial4OnCooldown { get; private set; }
+    float currentMana = 100;
+    float maxMana;
+    public bool HasMana() { return currentMana > 0; }
+    Coroutine spendManaCoroutine;
+    bool isSpendingManaCoroutineRunning;
 
     public void UnlockSpecial(int id)
     {
@@ -177,8 +184,10 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
             case 1: //poise
                 IsSpecial4Unlocked = true;
                 break;
+            case 9:
+                IsSpecialFireUnlocked = true;
+                break;
             default:
-                Debug.LogWarning("Tentamos ativar um power up que a State machine não reconhece");
                 break;
         }
     }
@@ -230,7 +239,50 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
                 break;
         }
     }
+    public void SetMaxManaAndDamage(float maxMana, float magicDamage)
+    {
+        _magicWeaponManager.SetMagicDamage(magicDamage);
+        this.maxMana = maxMana;
+        UIManager.instance?.UpdateSliders(1, maxMana);
+        
+    }
+    public void GetManaInfo()
+    {
+        UIManager.instance?.UpdateSliders(1, maxMana);
+        UIManager.instance?.UpdateMana(currentMana);
+    }
+    public void GetAdvancedManaInfo()
+    {
+        StatsUIManager.instance?.ReciveAdvancedManaInfo(currentMana, maxMana);
+    }
+    public void StartSpendManaCoroutine()
+    {
+        if (isSpendingManaCoroutineRunning)
+        {
+            StopCoroutine(spendManaCoroutine);
+        }
+        spendManaCoroutine = StartCoroutine(SpendManaCoroutine());
+    }
+    public void EndSpendManaCoroutine()
+    {
+        if (isSpendingManaCoroutineRunning)
+        {
+            StopCoroutine(spendManaCoroutine);
+            isSpendingManaCoroutineRunning = false;
+        }
+    }
+    IEnumerator SpendManaCoroutine()
+    {
 
+        isSpendingManaCoroutineRunning = true;
+        while (currentMana >= 0)
+        {
+            currentMana -= Time.deltaTime * 20f;
+            yield return null;
+        }
+        isSpendingManaCoroutineRunning = false;
+    }
+    
     #endregion
 
     #region Public Getters
@@ -266,7 +318,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsSpecial3Pressed => _isSpecial3Pressed && _canSpecial3 && IsSpecial3Unlocked && !IsSpecial3OnCooldown;
     public bool IsSpecial4Pressed => _isSpecial4Pressed && _canSpecial4 && IsSpecial4Unlocked && !IsSpecial4OnCooldown;
     public bool IsMagicPressed => _isMagicPressed;
-    public bool IsCastingMagic => _isMagicPressed && _canCastMagic;
+    public bool IsCastingMagic => _isMagicPressed  && IsSpecialFireUnlocked && _canCastMagic && HasMana();
     public bool IsClimbing => _isClimbing;
     public bool IsBlocking => _isBlocking && _inCombat;
     public float InitialJumpVelocity => _initialJumpVelocity;
@@ -619,6 +671,11 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     {
         _currentState.UpdateState();
 
+        if ((currentMana < maxMana) && !isSpendingManaCoroutineRunning)
+        {
+            currentMana += Time.deltaTime * (maxMana / 15);
+        }
+        UIManager.instance?.UpdateMana(currentMana);
         if (_isTargetPressed && _canTarget)
             HandleTarget();
     }

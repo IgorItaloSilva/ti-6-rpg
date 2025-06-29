@@ -18,8 +18,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
     */
     //Esses valores estão aqui para testes, depeois de definidos eles devem ser colocados no scriptableObjects
     [SerializeField] float vidaConsMod = 25;
-    [SerializeField] float manaIntMod = 10;
-    [SerializeField] float magicDamageMod = 10;
+    [SerializeField] float manaIntMod = 20;
+    [SerializeField] float magicDamageMod = 3;
     [SerializeField] float lightAttackDamageMod = 3;
     [SerializeField] float heavyAttackDamageMod = 5;
     public int Con { get; private set; }
@@ -362,6 +362,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
             lifeToheal = maxLife / 4 + potionLevelMultiplier * (PotionLevel - 1);
             maxPotions = maxStartingPotions + PotionLevel;
             CalculateWeaponDamage();
+            PlayerStateMachine.Instance?.SetMaxManaAndDamage(maxMana, magicDamage);
         }
         else
         {
@@ -516,7 +517,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
 
     void SendAdvancedStatsInfo()
     {
-        StatsUIManager.instance?.ReciveAdvancedStatsInfo(CurrentLife, maxLife, CurrentMana, maxMana, magicDamage
+        StatsUIManager.instance?.ReciveAdvancedStatsInfo(CurrentLife, maxLife, magicDamage
             , lightAttackDamage, heavyAttackDamage, lifeToheal);
     }
 
@@ -617,8 +618,8 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
                 int newIntValue = hasRuneBuff
                     ? Int + simulatedStatChange[3] + runeBuffAmount[3]
                     : Int + simulatedStatChange[3];
-                float simuMaxMana = BaseMana + manaIntMod * newIntValue - 10;
-                float simuMagicDamage = BaseMagicDamage + magicDamageMod * newIntValue - 10;
+                float simuMaxMana = BaseMana + manaIntMod * (newIntValue - 10);
+                float simuMagicDamage = BaseMagicDamage + magicDamageMod * (newIntValue - 10);
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(1, CurrentMana, simuMaxMana, isDifferent);
                 StatsUIManager.instance?.SimulateChangeAdvancedValue(4, 0, simuMagicDamage, isDifferent);
                 break;

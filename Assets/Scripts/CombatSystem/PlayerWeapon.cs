@@ -103,6 +103,10 @@ public class PlayerWeapon : WeaponManager
         _dexBonusDamage = fastAttackBonus;
         SetDamage();
     }
+    public void SetMagicDamage(float magicDamage)//OBS FEITO A MODA CARALHA SÓ USAR NO FOGO
+    {
+        damage = baseDamage + magicDamage;
+    }
 
     private void SetDamage()
     {

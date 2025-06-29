@@ -88,16 +88,19 @@ public class StatsUIManager : MonoBehaviour
         this.carriedExp.text = carriedExp.ToString();
         this.nextLevelExp.text = expToNextLevel.ToString();
     }
-    public void ReciveAdvancedStatsInfo(float currentLife, float maxLife, float currentMana, float maxMana,
+    public void ReciveAdvancedStatsInfo(float currentLife, float maxLife,
                                         float magicDamage, float lightAttackDamage, float heavyAtackDamage, float lifeToheal)
     {
         lifeInfo.text = currentLife.ToString("F0") + "/" + maxLife.ToString("F0");
-        manaInfo.text = currentMana.ToString("F0") + "/" + maxMana.ToString("F0");
         magicAttackDamage.text = magicDamage.ToString("F0");
         this.lightAttackDamage.text = lightAttackDamage.ToString("F0");
         this.heavyAttackDamage.text = heavyAtackDamage.ToString("F0");
         potionHeal.text = lifeToheal.ToString("F0");
 
+    }
+    public void ReciveAdvancedManaInfo(float currentMana,float maxMana)
+    {
+        manaInfo.text = currentMana.ToString("F0") + "/" + maxMana.ToString("F0");
     }
     public void ReciveLevelUpInfo(int pointsToSpend, bool isNearCampfire)
     {
@@ -125,6 +128,7 @@ public class StatsUIManager : MonoBehaviour
         GameEventsManager.instance.uiEvents.RequestExpStatsInfo();
         GameEventsManager.instance.uiEvents.RequestAdvancedStatsInfo();
         GameEventsManager.instance.uiEvents.RequestLevelUpInfo();
+        PlayerStateMachine.Instance.GetAdvancedManaInfo();
     }
     //COISAS DO LEVEL UP
     public void SimulateChangeBaseValue(int id, int newValue, bool isDifferent)

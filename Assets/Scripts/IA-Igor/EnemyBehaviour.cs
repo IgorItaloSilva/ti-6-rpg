@@ -89,7 +89,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     void Start()
     {
-        healthBar?.SettupBarMax(Hp, poise);
+        healthBar?.SettupBarMax(maxHp, poise);
+        if(healthBar) healthBar.SetValue(Hp,false);
         currentPoise = poise;
         charControl = GetComponent<CharacterController>();
         ChoseSkill();
@@ -230,9 +231,14 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         }
         yield return null;
     }
-    
-    void OnPlayerDied() {
+
+    void OnPlayerDied()
+    {
         allSkills.DisableWeapon();
+        Hp = maxHp;
+        if (healthBar) healthBar.SetValue(Hp, false);
+        transform.position = startingPos;
+        
     }
 
     public void ActualDeath()
@@ -307,6 +313,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         transform.position = enemyData.lastPosition;
         Physics.SyncTransforms();
         neverDied = enemyData.neverDied;
+        if(healthBar) healthBar.SetValue(Hp,false);
         //initiationThroughLoad=true;
         if (IsDead) gameObject.SetActive(false);
     }
@@ -322,7 +329,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if (healthBar)
         {
             healthBar.gameObject.SetActive(true);
-            healthBar.SettupBarMax(Hp, poise);
+            healthBar.SettupBarMax(maxHp, poise);
         }
         StartIdle();
         Save();

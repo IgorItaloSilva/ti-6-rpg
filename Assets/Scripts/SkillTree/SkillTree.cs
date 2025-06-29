@@ -29,12 +29,19 @@ public class SkillTree : MonoBehaviour,IDataPersistence
         totalMoneyGotten = new int[tamanhoTiposPU];
         LoadData();
     }
-    void Update(){
-        if(Keyboard.current.mKey.wasPressedThisFrame){
+    void Update()
+    {
+        if (Keyboard.current.mKey.wasPressedThisFrame)
+        {
             GainMoney(0);
         }
-        if(Keyboard.current.nKey.wasPressedThisFrame){
+        if (Keyboard.current.nKey.wasPressedThisFrame)
+        {
             GainMoney(1);
+        }
+        if (Keyboard.current.jKey.wasPressedThisFrame)
+        {
+            ActivatePowerUp(9);
         }
     }
     private void ActivatePowerUps(){

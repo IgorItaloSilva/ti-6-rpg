@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Task = System.Threading.Tasks.Task;
 
@@ -22,6 +23,8 @@ public class PlayerMagicState : PlayerCombatState
     public override void EnterState()
     {
         _ctx.MagicVFX.Play();
+        _ctx.StartSpendManaCoroutine();
+        _ctx.StartSpendManaCoroutine();
         HandleMagicDamageRateAsync();
         if (_ctx.ShowDebugLogs) Debug.Log("Casting Magic");
         _turnTime = _ctx.BaseTurnTime * 2;
@@ -29,7 +32,7 @@ public class PlayerMagicState : PlayerCombatState
 
     public override void ExitState()
     {
-        
+        _ctx.EndSpendManaCoroutine();
         SmoothDisableLightAsync(_lightIntensity);
         _ctx.CanCastMagic = false;
         _ctx.MagicWeaponManager.DisableCollider();
@@ -47,7 +50,7 @@ public class PlayerMagicState : PlayerCombatState
             return;
         }
 
-        if (!_ctx.IsMagicPressed || !_ctx.InCombat)
+        if (!_ctx.IsMagicPressed || !_ctx.InCombat || !_ctx.HasMana())
         {
             if (_ctx.InCombat)
                 SwitchState(_factory.Combat());
@@ -83,7 +86,7 @@ public class PlayerMagicState : PlayerCombatState
         _fireLight.enabled = false;
         _fireLight.intensity = initialLightIntensity;
     }
-    
+
     private async void SmoothEnableLightAsync()
     {
         _fireLight.enabled = true;
@@ -94,4 +97,5 @@ public class PlayerMagicState : PlayerCombatState
         }
         _fireLight.intensity = _lightIntensity;
     }
+    
 }

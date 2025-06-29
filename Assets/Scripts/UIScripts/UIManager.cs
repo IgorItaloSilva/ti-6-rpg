@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image saveIcon;
     [Header("Coisas das barras de Stats ")]
     [SerializeField] private PlayerHealthBar playerhealthBar;
+    [SerializeField] private Slider playerManaBar;
     [Header("Coisas de Exp ")]
     [SerializeField] private TextMeshProUGUI carriedExpText;
     [SerializeField] private GameObject gainedExpTextGO;
@@ -174,6 +175,7 @@ public class UIManager : MonoBehaviour
     void RequestStartingInfo()
     {
         RequestHealthBarInfo();
+        RequestManaBarInfo();
         RequestExpInfo();
         RequestPotionInfo();
     }
@@ -235,6 +237,10 @@ public class UIManager : MonoBehaviour
     {//deppois mudar pra mandar a mana tambem
         GameEventsManager.instance.uiEvents.RequestPlayerHealthInfo();
     }
+    void RequestManaBarInfo()
+    {
+        PlayerStateMachine.Instance.GetManaInfo();
+    }
     private void RequestExpInfo()
     {
         GameEventsManager.instance.uiEvents.RequestExpInfo();
@@ -252,6 +258,13 @@ public class UIManager : MonoBehaviour
             playerhealthBar.SetValue(vidaAtual, wasCrit);
         }
     }
+    public void UpdateMana(float currentMana)
+    {
+        if (playerManaBar != null)
+        {
+            playerManaBar.value = currentMana;
+        }
+    }
     public void UpdateSliders(int id, float maxValue)
     {
         switch (id)
@@ -261,7 +274,12 @@ public class UIManager : MonoBehaviour
                 {
                     playerhealthBar.SettupBarMax(maxValue);
                 }
-
+                break;
+            case 1:
+                if (playerManaBar != null)
+                {
+                    playerManaBar.maxValue = maxValue;
+                }
                 break;
             default: return;
         }
