@@ -26,6 +26,7 @@ public class PlayerDamageState : PlayerCombatState
     public override void EnterState()
     {
         HandleAnimatorParameters();
+        _ctx.ResetAttacks();
         if (_ctx.ShowDebugLogs) Debug.Log("Staggered");
     }
 
