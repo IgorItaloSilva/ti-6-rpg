@@ -21,6 +21,7 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
         objectiveData.hasStarted=true;
         UpdateDisplayMessage();
         SaveObjective();
+        CheckForProgressAlreadyMade();
         //update Ui
     }
         
@@ -32,6 +33,10 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
         //update Ui
         SaveObjective();
         myDestroy();
+    }
+    virtual public void CheckForProgressAlreadyMade()
+    {
+        GameEventsManager.instance?.objectiveEvents.ReciveAlreadyMadeProgress(objectiveSO.Id);
     }
     abstract public void Progress(string id);
         //progredir a quest
