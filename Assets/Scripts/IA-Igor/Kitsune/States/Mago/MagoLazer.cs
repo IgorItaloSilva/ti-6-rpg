@@ -40,7 +40,7 @@ public class MagoLazer : EnemyBaseState
         }
 
         timer += Time.deltaTime;
-        
+        charControl.Move(Vector3.up * ApplyGravity());
         
     }
 

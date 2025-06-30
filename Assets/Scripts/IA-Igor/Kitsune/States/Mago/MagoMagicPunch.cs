@@ -37,6 +37,7 @@ public class MagoMagicPunch : EnemyBaseState
             enemyBehave.ChoseSkill();
         }
         timer += Time.deltaTime;
+        charControl.Move(Vector3.up * ApplyGravity());
 
     }
 

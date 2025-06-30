@@ -18,7 +18,6 @@ public class MagoFireTornado : EnemyBaseState
     public override void StateUpdate()
     {
         charControl.transform.rotation = ApplyRotation();
-        timer += Time.deltaTime;
         if (canAttack && timer >= 0.85f) {
             enemyBehave.UseWeapon();
             canAttack = false;
@@ -28,6 +27,8 @@ public class MagoFireTornado : EnemyBaseState
             enemyBehave.StartIdle();
             enemyBehave.ChoseSkill();
         }
+        timer += Time.deltaTime;
+        charControl.Move(Vector3.up * ApplyGravity());
         
     }
     

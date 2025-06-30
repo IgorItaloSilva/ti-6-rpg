@@ -40,6 +40,7 @@ public class MagoEarthQuake : EnemyBaseState
         }
 
         timer += Time.fixedDeltaTime;
+        charControl.Move(Vector3.up * ApplyGravity());
     }
     
 }
