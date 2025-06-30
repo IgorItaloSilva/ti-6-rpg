@@ -10,7 +10,7 @@ public class SkillTree : MonoBehaviour,IDataPersistence
     private const int NPOWERUPS = 10; //PRECISA SER AJUSTADO MANUALMENTE
     [SerializeField] private List<PowerUpSO> powerUps;
     private int[] currentMoney;//o indice é o enum do tipo de powerUp
-    private int[] totalMoneyGotten;//o indice é o enum do tipo de powerUp
+    public int[] totalMoneyGotten;//o indice é o enum do tipo de powerUp
     private bool[] boughtPowerUps; //o indice do vetor precisa ser igual o Id do power up
     private bool[]buyablePowerUps;
     private SkillTreeData dataLoadada;
@@ -22,6 +22,7 @@ public class SkillTree : MonoBehaviour,IDataPersistence
             instance=this;
         else
             Destroy(gameObject);
+        ActivatePowerUp(9);
         boughtPowerUps=new bool[NPOWERUPS];
         buyablePowerUps=new bool[NPOWERUPS];
         tamanhoTiposPU = Enum.GetNames(typeof(Enums.PowerUpType)).Length;
@@ -93,6 +94,7 @@ public class SkillTree : MonoBehaviour,IDataPersistence
         if(powerUpType>=0&&powerUpType<Enum.GetNames(typeof(Enums.PowerUpType)).Length){
             //Debug.Log($"Ganhei dinheiro do tipo {powerUpType}");
             currentMoney[powerUpType]++;
+            totalMoneyGotten[powerUpType]++;
             if((Enums.PowerUpType)powerUpType==Enums.PowerUpType.Light)UIManager.instance?.PlayNotification("Sua honra lhe concedeu uma moeda Meiyo.");
             else UIManager.instance?.PlayNotification("Sua ambição lhe concedeu uma moeda Fuhai.");
             GameEventsManager.instance.uiEvents.SkillTreeMoneyChange(powerUpType,currentMoney[powerUpType]);

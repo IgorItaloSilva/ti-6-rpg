@@ -138,23 +138,20 @@ public class GameManager : MonoBehaviour
         //Despausar
     }
     
-    public void EndGame(string endingType)
+    public void EndGame()
     {
-        Ending endingToShow;
-        switch (endingType)
+        
+        Ending endingToShow = secretEnding;
+        int darkSkills = SkillTree.instance.totalMoneyGotten[(int)Enums.PowerUpType.Dark];
+        int lightSkills = SkillTree.instance.totalMoneyGotten[(int)Enums.PowerUpType.Light];
+        
+        if (darkSkills > lightSkills)
         {
-            case "Good":
-                endingToShow = goodEnding;
-                break;
-            case "Bad":
-                endingToShow = badEnding;
-                break;
-            case "Secret":
-                endingToShow = secretEnding;
-                break;
-            default:
-                Debug.LogError("Invalid ending type: " + endingType);
-                return;
+            endingToShow = badEnding;
+        }
+        else if (darkSkills < lightSkills)
+        {
+            endingToShow = goodEnding;
         }
         
         if (!endingDisplayer)

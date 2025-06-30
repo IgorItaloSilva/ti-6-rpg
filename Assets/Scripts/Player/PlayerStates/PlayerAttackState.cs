@@ -8,7 +8,7 @@ public class PlayerAttackState : PlayerBaseState
     public PlayerAttackState(PlayerStateMachine currentContext, PlayerStateFactory playerStateFactory) : base(
         currentContext, playerStateFactory)
     {
-        _turnTime = _ctx.BaseTurnTime * 2;
+        _turnTime = _ctx.BaseTurnTime;
         _maxAcceleration = 1f;
         _decelerationSpeed = 8;
     }

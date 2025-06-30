@@ -195,7 +195,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if (currentState?.GetType() == typeof(StateIdle))
         {
             animator.Play("Damage", 0, 0);
-            enemySounds.PlaySound(EnemySounds.SoundType.Damage, soundSource);
+            if(enemySounds) enemySounds.PlaySound(EnemySounds.SoundType.Damage, soundSource);
         }
         if (Hp <= 0)
         {
@@ -225,7 +225,14 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if (isBoss)
         {
             HideBossInfo();
-            Invoke("OpenDialog", timeToDie);
+            if (hasDialogChoice && neverDied)
+            {
+                Invoke(nameof(OpenDialog), timeToDie);
+            }
+            else
+            {
+                Invoke(nameof(ActualDeath), timeToDie);
+            }
         }
         else
         {
@@ -264,9 +271,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void ActualDeath()
     {
+
+        
         if (allSkills is MagoSkills)
         {
-            GameManager.instance.EndGame("Secret");
+            GameManager.instance.EndGame();
         }
         //fazer o bicho sumir
         GameEventsManager.instance.playerEvents.PlayerGainExp(expGain);

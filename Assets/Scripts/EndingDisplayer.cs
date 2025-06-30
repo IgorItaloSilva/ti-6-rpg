@@ -16,6 +16,7 @@ public class EndingDisplayer : MonoBehaviour
 
     private void OnEnable()
     {
+        PlayerStateMachine.Instance.LockPlayer();
         panelEndingStory.SetActive(false);
         panelCreditos.SetActive(false);
         if (ending)
@@ -48,6 +49,7 @@ public class EndingDisplayer : MonoBehaviour
                 panelCreditos.SetActive(false);
                 AudioPlayer.instance.PlayMusic("MainTheme");
                 gameObject.transform.parent.gameObject.SetActive(false);
+                PlayerStateMachine.Instance.UnlockPlayer();
                 return;
             }
             
