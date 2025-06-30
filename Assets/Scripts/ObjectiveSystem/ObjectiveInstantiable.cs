@@ -20,8 +20,12 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
         GameEventsManager.instance?.objectiveEvents.StartObjective(objectiveSO.Id);
         objectiveData.hasStarted=true;
         UpdateDisplayMessage();
+        if (!objectiveData.alreadyCheckedProgressAlreadyMade)
+        {
+            CheckForProgressAlreadyMade();
+            objectiveData.alreadyCheckedProgressAlreadyMade = true;
+        }
         SaveObjective();
-        CheckForProgressAlreadyMade();
         //update Ui
     }
         
