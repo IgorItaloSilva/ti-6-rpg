@@ -22,8 +22,9 @@ public class AudioPlayer : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
-        musicSource.volume = 1f;
+        
+        startVolume = musicSource.volume;
+        musicSource.volume = startVolume;
     }
 
     private void Start()

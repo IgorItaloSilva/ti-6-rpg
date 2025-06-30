@@ -9,12 +9,17 @@ public class GameManager : MonoBehaviour
     public static GameManager instance {get;private set;}
     [SerializeField]bool shouldOpenHud;
     [SerializeField] GameObject canvasChangingScene;
+    [SerializeField] private GameObject canvasEnding;
+    [SerializeField] private EndingDisplayer endingDisplayer;
     [SerializeField]Image backgroundImage;
     [SerializeField] Sprite[] loadingImages;
     [SerializeField] Slider sliderLoadScene;
     [SerializeField] GameObject textoAperteQualquerTecla;
     [SerializeField] bool skipWaitForKeyPressToLoad;
     public bool cheatsEnabled;
+    [SerializeField] private Ending goodEnding;
+    [SerializeField] private Ending badEnding;
+    [SerializeField] private Ending secretEnding;
     
     public bool shouldLoadTutorial;
     public bool shouldShowTutorials = true;
@@ -123,6 +128,7 @@ public class GameManager : MonoBehaviour
         }
         canvasChangingScene.SetActive(false);
     }
+    
     IEnumerator UnloadLevelAsync(string levelName){
         AsyncOperation unloadOperation = SceneManager.UnloadSceneAsync(levelName);
         //Pausar coisas que estão atrapalhando
@@ -131,4 +137,34 @@ public class GameManager : MonoBehaviour
         }
         //Despausar
     }
+    
+    public void EndGame(string endingType)
+    {
+        Ending endingToShow;
+        switch (endingType)
+        {
+            case "Good":
+                endingToShow = goodEnding;
+                break;
+            case "Bad":
+                endingToShow = badEnding;
+                break;
+            case "Secret":
+                endingToShow = secretEnding;
+                break;
+            default:
+                Debug.LogError("Invalid ending type: " + endingType);
+                return;
+        }
+        
+        if (!endingDisplayer)
+        {
+            endingDisplayer = canvasEnding.gameObject.GetComponentInChildren<EndingDisplayer>();
+        }
+        
+        endingDisplayer.ending = endingToShow;
+        canvasEnding.SetActive(true);
+        
+    }
+        
 }

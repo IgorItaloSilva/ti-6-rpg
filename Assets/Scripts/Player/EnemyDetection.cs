@@ -31,9 +31,8 @@ public class EnemyDetection : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            ForgetEnemy();
-            targetEnemy = other.gameObject;
             other.GetComponent<EnemyBehaviour>().HideBossInfo();
+            ForgetEnemy();
         }
     }
 

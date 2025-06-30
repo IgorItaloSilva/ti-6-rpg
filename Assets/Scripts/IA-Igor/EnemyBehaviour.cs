@@ -213,11 +213,6 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void Die()
     {
-        if (allSkills is MagoSkills)
-        {
-            Debug.LogWarning("MAGO MORREU!!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
-        
         currentState = null;
         animator.Play("Death", -1, 0.0f);
         charControl.enabled = false;
@@ -269,10 +264,15 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void ActualDeath()
     {
+        if (allSkills is MagoSkills)
+        {
+            GameManager.instance.EndGame("Secret");
+        }
         //fazer o bicho sumir
         GameEventsManager.instance.playerEvents.PlayerGainExp(expGain);
         GameEventsManager.instance.levelEvents.EnemyDied((int)enemyType);
         Invoke(nameof(DisableKitsune), 5f);
+        
     }
 
     public void WasParried()
@@ -358,7 +358,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
             healthBar.SettupBarMax(maxHp, poise);
         }
         StartIdle();
-        if (dialogChoiceAux.IsDialogAnserInteractableActiveInHierarchy())
+        
+        if (hasDialogChoice && dialogChoiceAux.IsDialogAnserInteractableActiveInHierarchy())
         {
             dialogChoiceAux.Deactivate();
             neverDied = true;
