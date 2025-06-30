@@ -117,6 +117,7 @@ public class Configuracao : MonoBehaviour, IDataPersistence
     public void LoadData(GameData gameData)
     {
         configData = gameData.configData;
+        SettupAudioValuesFromSavedData();
     }
 
     public void SaveData(GameData gameData)

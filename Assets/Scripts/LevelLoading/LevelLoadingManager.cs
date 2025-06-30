@@ -37,6 +37,14 @@ public class LevelLoadingManager : MonoBehaviour, IDataPersistence
         }
         if (showDebug) Debug.Log(LevelName);
     }
+    void OnEnable()
+    {
+        GameEventsManager.instance.playerEvents.onPlayerRespawned += RespawnEnemies;
+    }
+    void OnDisable()
+    {
+        GameEventsManager.instance.playerEvents.onPlayerRespawned -= RespawnEnemies;
+    }
     void Start()
     {
         DataPersistenceManager.instance.SetLevelName(LevelName);
