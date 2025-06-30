@@ -9,7 +9,7 @@ public class KIllPlayerWhenFallOutMap : MonoBehaviour
             PlayerStats playerStats = other.GetComponent<PlayerStats>();
             if (playerStats != null)
             {
-                playerStats.TakeDamage(99999, Enums.DamageType.Regular, false);
+                playerStats.Die();
             }
 
         }
@@ -22,7 +22,7 @@ public class KIllPlayerWhenFallOutMap : MonoBehaviour
             PlayerStats playerStats = collision.collider.GetComponent<PlayerStats>();
             if (playerStats != null)
             {
-                playerStats.TakeDamage(99999, Enums.DamageType.Regular, false);
+                playerStats.Die();
             }
 
         }
