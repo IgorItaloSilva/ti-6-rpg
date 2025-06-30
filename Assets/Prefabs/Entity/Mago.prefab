@@ -216,7 +216,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5299513649850670657
 Transform:
   m_ObjectHideFlags: 0
@@ -302,8 +302,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5, y: 3.05, z: 1.1661892}
-  m_Center: {x: 0, y: 0, z: 1.321908}
+  m_Size: {x: 2, y: 3, z: 1.4279652}
+  m_Center: {x: 0, y: 0, z: 1.4508905}
 --- !u!114 &1289123661055236776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,7 +392,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponManager: {fileID: 4776510099373564472}
   charControl: {fileID: 9217411181353803133}
-  speed: 8
+  speed: 7
   steeringForce: 1
   disableSeconds: 10
 --- !u!1 &7542609366219658159
@@ -976,21 +976,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5759596296797554469}
     m_Modifications:
-    - target: {fileID: 8904391315794082801, guid: 89cf57346b3e02840af4b0371bce0843,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8904391315794082801, guid: 89cf57346b3e02840af4b0371bce0843,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 8904391315794082801, guid: 89cf57346b3e02840af4b0371bce0843,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.1
-      objectReference: {fileID: 0}
     - target: {fileID: -9103376006308253769, guid: 8a403aa2d1290a947b64d6230196d0b3,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2510,6 +2495,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -2.03329
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904391315794082801, guid: 89cf57346b3e02840af4b0371bce0843,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904391315794082801, guid: 89cf57346b3e02840af4b0371bce0843,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8904391315794082801, guid: 89cf57346b3e02840af4b0371bce0843,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -59,12 +59,12 @@ public class wpn_MagoFireTornado : EnemyBaseWeapon
     IEnumerator Disable()
     {
         delayTime = disableSeconds * 0.45f;
-        for (int i = 0; i < 17; i++) {
+        for (int i = 0; i < 13; i++) {
             yield return new WaitForSeconds(0.7f);
             weaponManager.EnableCollider();
         }
         weaponManager.DisableCollider();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1.2f);
         gameObject.SetActive(false);
     }
 
