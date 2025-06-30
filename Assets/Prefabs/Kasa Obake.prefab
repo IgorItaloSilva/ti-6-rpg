@@ -241,7 +241,14 @@ MonoBehaviour:
   allSkills: {fileID: 7947671066532953246}
   charControl: {fileID: 6690789587079485574}
   animator: {fileID: 1361353175230562885}
-  maxHp: 0
+  _dashVFX: {fileID: 0}
+  _headbuttVFX: {fileID: 0}
+  _bloodVFX: {fileID: 0}
+  _uncorruptedVFX: {fileID: 0}
+  _corruptedVFX: {fileID: 0}
+  enemySounds: {fileID: 0}
+  soundSource: {fileID: 0}
+  maxHp: 500
   poise: 10
   timeToDie: 0
   speed: 4
@@ -249,6 +256,11 @@ MonoBehaviour:
   meleeDist: 2
   expGain: 0
   enemyType: 0
+  initialPos: {x: 0, y: 0, z: 0}
+  maxDistSpawn: 0
+  isBoss: 0
+  Nome: 
+  hasDialogChoice: 0
   ignoreSaveLoad: 0
   <SaveId>k__BackingField: 
   healthBar: {fileID: 2253834713390333375}
@@ -355,7 +367,7 @@ GameObject:
   - component: {fileID: 7751229636511217109}
   m_Layer: 8
   m_Name: DamageCollider
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

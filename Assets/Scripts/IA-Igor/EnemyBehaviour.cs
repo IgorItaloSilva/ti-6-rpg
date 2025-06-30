@@ -225,7 +225,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if (isBoss)
         {
             HideBossInfo();
-            if (hasDialogChoice && neverDied)
+            if (allSkills is not MagoSkills)
             {
                 Invoke(nameof(OpenDialog), timeToDie);
             }
@@ -271,8 +271,6 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void ActualDeath()
     {
-
-        
         if (allSkills is MagoSkills)
         {
             GameManager.instance.EndGame();
@@ -355,7 +353,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void Respawn()
     {
-        if (isBoss) return;
+        if (isBoss && IsDead)
+        {
+            gameObject.SetActive(false);
+            return;
+        }
         charControl.enabled = true;
         currentPoise = poise;
         Hp = maxHp;

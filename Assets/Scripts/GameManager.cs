@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
             if (loadOperation.progress >= 0.9f)
             {
                 textoAperteQualquerTecla.gameObject.SetActive(true);
-                if (Keyboard.current.anyKey.wasPressedThisFrame||skipWaitForKeyPressToLoad)
+                if (Keyboard.current.anyKey.wasPressedThisFrame || skipWaitForKeyPressToLoad)
                 {
                     loadOperation.allowSceneActivation = true;
                 }
@@ -144,6 +144,8 @@ public class GameManager : MonoBehaviour
         Ending endingToShow = secretEnding;
         int darkSkills = SkillTree.instance.totalMoneyGotten[(int)Enums.PowerUpType.Dark];
         int lightSkills = SkillTree.instance.totalMoneyGotten[(int)Enums.PowerUpType.Light];
+        
+        Debug.Log($"Dark Skills: {darkSkills}, Light Skills: {lightSkills}");
         
         if (darkSkills > lightSkills)
         {

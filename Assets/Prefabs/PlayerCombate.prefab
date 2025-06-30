@@ -71,7 +71,7 @@ MonoBehaviour:
   _bloodSplash: {fileID: 2424401329017198281}
   _magicVFX: {fileID: 7942237977266675612}
   _parryVfx: {fileID: 6547711465386495470}
-  ShowDebugLogs: 1
+  ShowDebugLogs: 0
   TestHitFeedback: 0
 --- !u!114 &7001136559969210805
 MonoBehaviour:
@@ -453,7 +453,8 @@ AudioSource:
   m_GameObject: {fileID: 825778988737856139}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3809116228487759729, guid: 28d12e905e801534f84fcdee40275ef4,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -991,7 +992,8 @@ AudioSource:
   m_GameObject: {fileID: 2890971499804944200}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3809116228487759729, guid: 28d12e905e801534f84fcdee40275ef4,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -1131,7 +1133,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 15
+  m_Radius: 25
   m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &5391340577207457527
 MonoBehaviour:
@@ -2350,7 +2352,8 @@ AudioSource:
   m_GameObject: {fileID: 6407400246006586799}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3809116228487759729, guid: 28d12e905e801534f84fcdee40275ef4,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
@@ -2654,7 +2657,8 @@ AudioSource:
   m_GameObject: {fileID: 7550291925953283326}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -3809116228487759729, guid: 28d12e905e801534f84fcdee40275ef4,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
