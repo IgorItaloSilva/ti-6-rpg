@@ -44,7 +44,7 @@ public class SkillTreeUIManager : MonoBehaviour
         /* ESSES MANOS VÃO SER CRIADOS NO LOAD DO SKILL TREE, QUE OCORRE ANTES DO START
         buyablePowerUps = new bool[quantidadePowerUps];
         boughtPowerUps = new bool[quantidadePowerUps];
-        currentMoney = new int[Enum.GetNames(typeof(Enums.PowerUpType)).Length]; */
+        currentMoney = new int[Enum.GetNames(typeof(Enums.PowerUpType)).Length];*/
     }
     public void OnEnable(){
         GameEventsManager.instance.skillTreeEvents.onUnlockBuy+=AjustBuyable;

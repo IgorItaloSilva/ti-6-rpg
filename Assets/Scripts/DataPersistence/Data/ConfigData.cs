@@ -9,8 +9,8 @@ public class ConfigData
 
     public ConfigData()
     {
-        volumeMaster = 0;
-        volumeMusic = 0;
+        volumeMaster = -5;
+        volumeMusic = -8;
         volumeVFX = -19;
     }
     public ConfigData(float vM,float vMu,float vV)
