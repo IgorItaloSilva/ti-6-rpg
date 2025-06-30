@@ -31,6 +31,8 @@ public class SkillTree : MonoBehaviour,IDataPersistence
     }
     void Update()
     {
+        if (!GameManager.instance.cheatsEnabled) return;
+        
         if (Keyboard.current.mKey.wasPressedThisFrame)
         {
             GainMoney(0);
@@ -91,8 +93,8 @@ public class SkillTree : MonoBehaviour,IDataPersistence
         if(powerUpType>=0&&powerUpType<Enum.GetNames(typeof(Enums.PowerUpType)).Length){
             //Debug.Log($"Ganhei dinheiro do tipo {powerUpType}");
             currentMoney[powerUpType]++;
-            if((Enums.PowerUpType)powerUpType==Enums.PowerUpType.Light)UIManager.instance?.PlayNotification("Você ganhou uma moeda Meiyo");
-            else UIManager.instance?.PlayNotification("Você ganhou uma moeda Fuhai");
+            if((Enums.PowerUpType)powerUpType==Enums.PowerUpType.Light)UIManager.instance?.PlayNotification("Sua honra lhe concedeu uma moeda Meiyo.");
+            else UIManager.instance?.PlayNotification("Sua ambição lhe concedeu uma moeda Fuhai.");
             GameEventsManager.instance.uiEvents.SkillTreeMoneyChange(powerUpType,currentMoney[powerUpType]);
         }
     }

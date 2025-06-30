@@ -213,6 +213,11 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     public void Die()
     {
+        if (allSkills is MagoSkills)
+        {
+            Debug.LogWarning("MAGO MORREU!!!!!!!!!!!!!!!!!!!!!!!!!");
+        }
+        
         currentState = null;
         animator.Play("Death", -1, 0.0f);
         charControl.enabled = false;

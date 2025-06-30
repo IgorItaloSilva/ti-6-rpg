@@ -108,6 +108,11 @@ public class Configuracao : MonoBehaviour, IDataPersistence
             audioMixer.SetFloat(exposedEffect, volumeVFX);
         }
     }
+
+    public void SetCheats(bool value)
+    {
+        GameManager.instance.cheatsEnabled = value;
+    }
     public void LoadData(GameData gameData)
     {
         configData = gameData.configData;

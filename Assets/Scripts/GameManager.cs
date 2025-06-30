@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Slider sliderLoadScene;
     [SerializeField] GameObject textoAperteQualquerTecla;
     [SerializeField] bool skipWaitForKeyPressToLoad;
+    public bool cheatsEnabled;
     
     public bool shouldLoadTutorial;
     public bool shouldShowTutorials = true;

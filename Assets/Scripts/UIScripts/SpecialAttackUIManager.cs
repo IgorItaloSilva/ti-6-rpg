@@ -75,7 +75,7 @@ public class SpecialAttackUIManager : MonoBehaviour
     }
     void Update()
     {
-        if (Keyboard.current.numpad7Key.wasPressedThisFrame)
+        if (Keyboard.current.numpad7Key.wasPressedThisFrame && GameManager.instance.cheatsEnabled)
         {
             for (int i = 1; i < 5; i++)
             {

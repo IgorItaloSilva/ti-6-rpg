@@ -223,11 +223,11 @@ public class UIManager : MonoBehaviour
                 SwitchToScreen((int)UIScreens.Closed);
             }
         }
-        if (Keyboard.current.pKey.wasPressedThisFrame)
-        {
-            PlayNotification("teste");
-
-        }
+        // if (Keyboard.current.pKey.wasPressedThisFrame)
+        // {
+        //     PlayNotification("teste");
+        //
+        // }
 
         /* if(Mouse.current.leftButton.wasPressedThisFrame){
             Debug.Log($"pos do mouse = {Mouse.current.position.ReadValue()}");

@@ -477,7 +477,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
         LevelUpPoints += 3;
         SendExpStatsInfo();
         SendLevelUpInfo();
-        UIManager.instance?.PlayNotification("Você upou de nível!");
+        UIManager.instance?.PlayNotification("Você subiu de nível!");
         UIManager.instance?.DisplayExpAmmount(CarriedExp);
         GameEventsManager.instance?.tutorialEvents.LevelUpTutorial();
         DataPersistenceManager.instance.SaveGame();
