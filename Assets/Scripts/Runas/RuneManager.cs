@@ -48,7 +48,7 @@ public class RuneManager : MonoBehaviour,IDataPersistence
     {
         if (displayNotification) UIManager.instance?.PlayNotification("Você coletou a runa: " + newRune.Nome);
         runeInventory.Add(newRune);
-        DataPersistenceManager.instance?.SaveGame();
+        //DataPersistenceManager.instance?.SaveGame();
     }
     public void EquipRune(int index){//Nossa Ui passa o index do array de runas dela, que é igual ao nosso, por isso usado o ID diretamente
         if(showRuneDebug)Debug.Log($"Vou equipar a runa de {index}, que é a {runeInventory[index]}");

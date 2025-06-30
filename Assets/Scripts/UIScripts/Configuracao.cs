@@ -35,6 +35,7 @@ public class Configuracao : MonoBehaviour, IDataPersistence
             Destroy(instance.gameObject);
         }
         instance = this;
+        configData = new();
     }
     void Start()
     {

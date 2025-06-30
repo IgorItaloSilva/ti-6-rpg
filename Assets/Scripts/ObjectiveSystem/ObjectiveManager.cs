@@ -96,6 +96,6 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
         {
             objectivesData.Add(id, objectiveData);
         }
-        DataPersistenceManager.instance?.SaveGame();
+        //DataPersistenceManager.instance?.SaveGame();
     }
 }

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
 public class SkillTree : MonoBehaviour,IDataPersistence
 {
     public static SkillTree instance;
@@ -15,19 +14,19 @@ public class SkillTree : MonoBehaviour,IDataPersistence
     private bool[]buyablePowerUps;
     private SkillTreeData dataLoadada;
     int tamanhoTiposPU;
-    
 
+    
     public void Start(){
         if(!instance)
             instance=this;
         else
             Destroy(gameObject);
-        ActivatePowerUp(9);
         boughtPowerUps=new bool[NPOWERUPS];
         buyablePowerUps=new bool[NPOWERUPS];
         tamanhoTiposPU = Enum.GetNames(typeof(Enums.PowerUpType)).Length;
         currentMoney = new int[tamanhoTiposPU];
         totalMoneyGotten = new int[tamanhoTiposPU];
+        ActivatePowerUp(9);
         LoadData();
     }
     void Update()
