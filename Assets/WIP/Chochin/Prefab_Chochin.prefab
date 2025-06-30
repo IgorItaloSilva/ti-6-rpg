@@ -319,10 +319,12 @@ MonoBehaviour:
   animator: {fileID: 2220292196690440360}
   _dashVFX: {fileID: 0}
   _headbuttVFX: {fileID: 0}
-  _bloodGameObject: {fileID: 7816337271820998935, guid: 0362735dab43e064f84e7cc7f1194fbe,
-    type: 3}
   _bloodVFX: {fileID: 8487972974991986813, guid: 0362735dab43e064f84e7cc7f1194fbe,
     type: 3}
+  _uncorruptedVFX: {fileID: 0}
+  _corruptedVFX: {fileID: 0}
+  enemySounds: {fileID: 0}
+  soundSource: {fileID: 0}
   maxHp: 600
   poise: 10
   timeToDie: 0
@@ -331,9 +333,11 @@ MonoBehaviour:
   meleeDist: 2.5
   expGain: 100
   enemyType: 1
+  initialPos: {x: 0, y: 0, z: 0}
+  maxDistSpawn: 15
   isBoss: 0
   Nome: 
-  kitsuneBossDeathAux: {fileID: 0}
+  hasDialogChoice: 0
   ignoreSaveLoad: 0
   <SaveId>k__BackingField: 
   healthBar: {fileID: 7958717559360537390}
