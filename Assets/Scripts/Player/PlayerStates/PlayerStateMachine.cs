@@ -321,7 +321,7 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
     public bool IsMagicPressed => _isMagicPressed;
     public bool IsCastingMagic => _isMagicPressed  && IsSpecialFireUnlocked && _canCastMagic && HasManaToCastMagic();
     public bool IsClimbing => _isClimbing;
-    public bool IsBlocking => _isBlocking && _inCombat;
+    public bool IsBlocking => _isBlocking && _inCombat && _attackCount == 0 && !_isMagicPressed;
     public float InitialJumpVelocity => _initialJumpVelocity;
 
     #endregion

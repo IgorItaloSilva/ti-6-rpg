@@ -79,6 +79,7 @@ public abstract class EnemyBaseState
 
     protected virtual Quaternion ApplyRotation()
     {
+        if(!enemyBehave.GetTarget()) return charControl.transform.rotation;
         newSteering = steeringForce;
         // Rotation
         directionToPlayer = (enemyBehave.GetTarget().position - charControl.transform.position).normalized;
