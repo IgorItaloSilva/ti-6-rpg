@@ -149,7 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showDebug: 0
   damageType: 0
-  baseDamage: 10
+  baseDamage: 300
 --- !u!1 &2991153553069272874
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,7 +216,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5299513649850670657
 Transform:
   m_ObjectHideFlags: 0
@@ -2666,6 +2666,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5759596296797554469}
     m_Modifications:
+    - target: {fileID: 121440976029175529, guid: f4393eec6b3188c4aa11f7c5c3b88aae,
+        type: 3}
+      propertyPath: baseDamage
+      value: 150
+      objectReference: {fileID: 0}
     - target: {fileID: 5502988730656011226, guid: f4393eec6b3188c4aa11f7c5c3b88aae,
         type: 3}
       propertyPath: m_Name
