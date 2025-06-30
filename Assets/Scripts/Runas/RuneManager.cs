@@ -94,7 +94,7 @@ public class RuneManager : MonoBehaviour,IDataPersistence
                     ActivateDeactivateRune(rune, true);
                 }
                 hasChanged[i] = false;
-                DataPersistenceManager.instance?.SaveGame();
+                //DataPersistenceManager.instance?.SaveGame();
             }
         }
     }

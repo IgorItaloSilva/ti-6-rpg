@@ -90,7 +90,8 @@ public class GameManager : MonoBehaviour
         GameEventsManager.instance.playerEvents.PlayerRespawn();
         UnpauseGameAndLockCursor();
     }
-    public void ChangeLevel(string levelName,Vector3 posToArrive){
+    public void ChangeLevel(string levelName, Vector3 posToArrive)
+    {
         string currentLevel = LevelLoadingManager.instance.LevelName;
         GameEventsManager.instance.playerEvents.SetPosition(posToArrive);
         DataPersistenceManager.instance.SaveGame();

@@ -298,7 +298,7 @@ public class PlayerStats : MonoBehaviour, IDataPersistence, IDamagable
     }
 
     public void TakeDamage(float damage, Enums.DamageType damageType, bool wasCrit)
-    {
+    {   if (GameManager.instance.cheatsEnabled) return;
         if (PlayerIsDead) return;
         if (PUArmorActive) damage /= 2;
         CurrentLife -= damage;
