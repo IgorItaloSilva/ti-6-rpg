@@ -14,7 +14,7 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
     }
     virtual public void myDestroy(){
         GameEventsManager.instance.objectiveEvents.OnProgressMade-=Progress;
-        if(gameObject)Destroy(gameObject);
+        Destroy(gameObject,1f);
     }
     virtual public void StartObjective(bool checkProgressAlreadyMade){
         GameEventsManager.instance?.objectiveEvents.StartObjective(objectiveSO.Id);

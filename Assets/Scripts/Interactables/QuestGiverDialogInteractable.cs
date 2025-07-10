@@ -8,12 +8,13 @@ public class QuestGiverDialogInteractable : DialogueInteractable
     [SerializeField]Dialogue dialoguePosCompletarQuest;
     Dialogue selectedDialog;
     [SerializeField]ObjectiveSO objectiveSO;
+    [SerializeField] GameObject indicadorQuest;
 
     protected override void Awake()
     {
         base.Awake();
-        ignoreSaveLoad=true;
-        selectedDialog=dialogue;
+        ignoreSaveLoad = true;
+        selectedDialog = dialogue;
     }
     protected override void OnEnable()
     {
@@ -33,13 +34,16 @@ public class QuestGiverDialogInteractable : DialogueInteractable
         }
     }
     void QuestAccepted(string id){
-        if(id==objectiveSO.Id){
-            selectedDialog=dialoguePosAceitarQuest;
+        if (id == objectiveSO.Id)
+        {
+            selectedDialog = dialoguePosAceitarQuest;
+            indicadorQuest.SetActive(false);
         }
     }
     void QuestCompleted(string id){
         if(id==objectiveSO.Id){
-            selectedDialog=dialoguePosCompletarQuest;
+            selectedDialog =dialoguePosCompletarQuest;
+            indicadorQuest.SetActive(false);
         }
     }
 }
