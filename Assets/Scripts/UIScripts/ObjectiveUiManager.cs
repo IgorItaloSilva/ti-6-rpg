@@ -12,6 +12,7 @@ public class ObjectiveUiManager : MonoBehaviour
     [SerializeField]TextMeshProUGUI objectiveStartedText;
     [SerializeField]TextMeshProUGUI objectiveConcludedText;
     [SerializeField]TextMeshProUGUI objectiveDescriptionText;
+    [SerializeField]TextMeshProUGUI objectiveExpAmountText;
     [Header("Prefab botão")]
     [SerializeField]GameObject prefabQuestButton;
     [SerializeField]RectTransform VerticalLayoutGroup;
@@ -56,12 +57,15 @@ public class ObjectiveUiManager : MonoBehaviour
     public void SetSelectedQuestTexts(ObjectiveSO objectiveSO, ObjectiveData objectiveData){
         currentlyOpenButtonId=objectiveSO.Id;
         objectiveTitleText.text= objectiveSO.objectiveTitle;
-        if(objectiveData.hasStarted){
+        objectiveExpAmountText.text = objectiveSO.ExpGain.ToString();
+        if (objectiveData.hasStarted)
+        {
             objectiveStartedText.gameObject.SetActive(true);
             objectiveStartedText.text = "Sim";
             objectiveStartedText.color = Color.green;
         }
-        else{
+        else
+        {
             objectiveStartedText.gameObject.SetActive(true);
             objectiveStartedText.text = "Não";
             objectiveStartedText.color = Color.red;
