@@ -21,12 +21,12 @@ public class LevelEvents
             onPillarActivated();
         }
     }
-    public event Action<int> OnEnemyDied;
+    /* public event Action<int> OnEnemyDied;
     public void EnemyDied(int enemyTypeCast)
     {
         if (OnEnemyDied != null)
         {
             OnEnemyDied(enemyTypeCast);
         }
-    }
+    } */
 }

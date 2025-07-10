@@ -33,6 +33,7 @@ public class PillarInteractabe : Interactable
 
     void ActivatePillar()
     {
+        Debug.Log($"Ativando o pilar de id {spawnId}");
         GameEventsManager.instance.levelEvents.PillarActivated();
         AlreadyInterated = true;
         if (effect != null) effect.SetActive(true);

@@ -25,12 +25,6 @@ public class GameManager : MonoBehaviour
     public bool shouldShowTutorials = true;
     public bool showDebug;
     [HideInInspector] public AudioManager audioManager;//negocio do igor
-    void OnEnable(){
-        GameEventsManager.instance.playerEvents.onPlayerDied+=PlayerDied;
-    }
-    void OnDisable(){
-        GameEventsManager.instance.playerEvents.onPlayerDied-=PlayerDied;
-    }
     void Awake(){
         if(!instance){
             instance=this;
@@ -73,10 +67,6 @@ public class GameManager : MonoBehaviour
         Cursor.lockState=CursorLockMode.Locked;
         Cursor.visible=false;
         GameEventsManager.instance.uiEvents.UnpauseGame();
-    }
-    private void PlayerDied(){
-        //A ui vai pausar o jogo apos o vfx
-        //PauseInputs
     }
     public void ExitGame(bool shouldSave){
         if(shouldSave){

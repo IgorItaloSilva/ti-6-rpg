@@ -14,16 +14,15 @@ public abstract class ObjectiveInstantiable : MonoBehaviour
     }
     virtual public void myDestroy(){
         GameEventsManager.instance.objectiveEvents.OnProgressMade-=Progress;
-        Destroy(gameObject);
+        if(gameObject)Destroy(gameObject);
     }
-    virtual public void StartObjective(){
+    virtual public void StartObjective(bool checkProgressAlreadyMade){
         GameEventsManager.instance?.objectiveEvents.StartObjective(objectiveSO.Id);
         objectiveData.hasStarted=true;
         UpdateDisplayMessage();
-        if (!objectiveData.alreadyCheckedProgressAlreadyMade)
+        if (checkProgressAlreadyMade)
         {
             CheckForProgressAlreadyMade();
-            objectiveData.alreadyCheckedProgressAlreadyMade = true;
         }
         SaveObjective();
         //update Ui

@@ -53,6 +53,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
     [field: SerializeField] public string SaveId { get; private set; }
     Vector3 startingPos;
     public bool neverDied { get; private set; }
+    DeathAux deathAux;
 
     public enum EnemyType
     {
@@ -95,6 +96,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         neverDied = true;
         if (hasDialogChoice) dialogChoiceAux = gameObject.GetComponent<DialogChoiceAux>();
         initialPos = transform.position;
+        deathAux = gameObject.GetComponent<DeathAux>();
+        if (deathAux != null) Debug.Log($"{name} tem um deathAux");
     }
 
     void OnDisable()
@@ -277,7 +280,8 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         }
         //fazer o bicho sumir
         GameEventsManager.instance.playerEvents.PlayerGainExp(expGain);
-        GameEventsManager.instance.levelEvents.EnemyDied((int)enemyType);
+        //GameEventsManager.instance.levelEvents.EnemyDied((int)enemyType);
+        if (deathAux != null) deathAux.OnDeath();
         Invoke(nameof(DisableKitsune), 5f);
         
     }
@@ -300,7 +304,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
 
     private void DisableKitsune()
     {
-        gameObject.SetActive(false);
+        if(gameObject!=null)gameObject.SetActive(false);
     }
 
     #endregion

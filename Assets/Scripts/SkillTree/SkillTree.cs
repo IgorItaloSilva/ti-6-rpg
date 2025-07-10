@@ -28,17 +28,25 @@ public class SkillTree : MonoBehaviour,IDataPersistence
     {
         LoadData();
     }
+    void Awake()
+    {
+        boughtPowerUps = new bool[NPOWERUPS];
+        buyablePowerUps = new bool[NPOWERUPS];
+        tamanhoTiposPU = Enum.GetNames(typeof(Enums.PowerUpType)).Length;
+        currentMoney = new int[tamanhoTiposPU];
+        totalMoneyGotten = new int[tamanhoTiposPU];
+    }
     public void Start()
     {
         if (!instance)
             instance = this;
         else
             Destroy(gameObject);
-        boughtPowerUps = new bool[NPOWERUPS];
+        /* boughtPowerUps = new bool[NPOWERUPS];
         buyablePowerUps = new bool[NPOWERUPS];
         tamanhoTiposPU = Enum.GetNames(typeof(Enums.PowerUpType)).Length;
         currentMoney = new int[tamanhoTiposPU];
-        totalMoneyGotten = new int[tamanhoTiposPU];
+        totalMoneyGotten = new int[tamanhoTiposPU]; */
         ActivatePowerUp(9);
         LoadData();
     }

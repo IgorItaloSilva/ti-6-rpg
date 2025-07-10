@@ -4,9 +4,9 @@ public class KitsuneObjective : ObjectiveInstantiable
 {
     int ammountKitsunesKilled;
     [SerializeField]int kitsunesToKill = 4;
-    public override void StartObjective()
+    public override void StartObjective(bool shouldStartObjective)
     {
-        base.StartObjective();
+        base.StartObjective(shouldStartObjective);
         UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,displayCompletedMessage);
     
     }
@@ -33,14 +33,16 @@ public class KitsuneObjective : ObjectiveInstantiable
     }
     public override void LoadObjective(string codedSave)
     {
-         if(int.TryParse(codedSave, out ammountKitsunesKilled)){
+        if (int.TryParse(codedSave, out ammountKitsunesKilled))
+        {
             UpdateDisplayMessage();
-            UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle,displayCompletedMessage);
+            UIManager.instance.ObjectiveUpdate(objectiveSO.objectiveTitle, displayCompletedMessage);
         }
-        else{
+        else
+        {
             Debug.LogError("Não conseguimos decoficar o save do kitsuneObjective");
         }
-        SaveObjective(); 
+        SaveObjective();
     }
 
     public override void SaveObjective()

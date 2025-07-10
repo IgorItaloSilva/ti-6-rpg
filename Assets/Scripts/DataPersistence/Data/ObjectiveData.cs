@@ -7,7 +7,6 @@ public class ObjectiveData
     public bool hasFinished;
     public string stringData;
     public string displayCompletedMessage;
-    public bool alreadyCheckedProgressAlreadyMade;
 
     public ObjectiveData()
     {
@@ -15,7 +14,6 @@ public class ObjectiveData
         hasFinished = false;
         stringData = "";
         displayCompletedMessage = "";
-        alreadyCheckedProgressAlreadyMade = false;
     }
     public ObjectiveData(bool Started)
     {
@@ -23,6 +21,5 @@ public class ObjectiveData
         hasFinished = false;
         stringData = "";
         displayCompletedMessage = "";
-        alreadyCheckedProgressAlreadyMade = true;
     }
 }

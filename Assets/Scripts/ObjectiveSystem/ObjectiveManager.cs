@@ -10,6 +10,7 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
     [SerializeField]List<ObjectiveSO> allQuests;
     [SerializeField] SerializableDictionary<string,ObjectiveData>objectivesData;
     ObjectiveData auxObjectiveData;
+
     [SerializeField] SerializableDictionary<string,ObjectiveSO>allQuestsDictionary;
     void Awake(){
         if(instance==null){
@@ -35,36 +36,41 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
             }
         }
     }
+    void Start()
+    {
+        LoadObjectiveData();
+        DataPersistenceManager.instance?.SaveGame();
+    }
 
     public void LoadData(GameData gameData)
     {
         objectivesData = gameData.objectivesData;
-        
-        if(objectivesData.Count>0)
-        /* foreach(KeyValuePair<string,ObjectiveData> keyValuePair in objectivesData){
-            if(keyValuePair.Key==null){Debug.Log("Por algum motivo tentamos dar laod numa key do objectives data que é nula, dando um continue");continue;}
-            if(keyValuePair.Value.hasStarted&&!keyValuePair.Value.hasFinished){
-                    LoadQuest(allQuestsDictionary[keyValuePair.Key],keyValuePair.Value.stringData);
+    }
+    void LoadObjectiveData(){
+        if (objectivesData == null) return;
+        if (objectivesData.Count > 0)
+            foreach (string s in objectivesData.Keys.ToArray())
+            {
+                if (s == null) { Debug.Log("Por algum motivo tentamos dar laod numa key do objectives data que é nula, dando um continue"); continue; }
+                if (objectivesData.TryGetValue(s, out auxObjectiveData) != false)
+                {
+                    ObjectiveUiManager.instance?.CreateButton(allQuestsDictionary[s], auxObjectiveData);
+                    if (auxObjectiveData.hasStarted && !auxObjectiveData.hasFinished)
+                    {
+                        LoadQuest(allQuestsDictionary[s], auxObjectiveData.stringData);
+                        GameEventsManager.instance.objectiveEvents.StartObjective(s);
+                    }
+                    if (auxObjectiveData.hasFinished && allQuestsDictionary[s].RequiresRecompletion)
+                    {
+                        GameEventsManager.instance.objectiveEvents.CompleteObjective(s);
+                    }
                 }
-        } */
-        //versão antiga e errada 
-        foreach(string s in objectivesData.Keys.ToArray()){
-            if(s==null){Debug.Log("Por algum motivo tentamos dar laod numa key do objectives data que é nula, dando um continue");continue;}
-            if(objectivesData.TryGetValue(s,out auxObjectiveData)!=false){
-                ObjectiveUiManager.instance?.CreateButton(allQuestsDictionary[s],auxObjectiveData);
-                if(auxObjectiveData.hasStarted&&!auxObjectiveData.hasFinished){
-                    LoadQuest(allQuestsDictionary[s],auxObjectiveData.stringData);
-                    GameEventsManager.instance.objectiveEvents.StartObjective(s);
-                }
-                if(auxObjectiveData.hasFinished){
-                    GameEventsManager.instance.objectiveEvents.CompleteObjective(s);
+                else
+                {
+                    Debug.Log($"Por algum motivo deu errado ler um objective data da string {s}, dando um continue");
+                    continue;
                 }
             }
-            else{
-                Debug.Log($"Por algum motivo deu errado ler um objective data da string {s}, dando um continue");
-                continue;
-            }
-        }
     }
 
     public void SaveData(GameData gameData)
@@ -76,13 +82,13 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
         ObjectiveInstantiable newObjectiveInstantiable=newObjectiveInstantiableGO.GetComponent<ObjectiveInstantiable>();
         ObjectiveUiManager.instance?.CreateButton(objectiveSO,new ObjectiveData(true));
         newObjectiveInstantiable.Settup(objectiveSO);
-        newObjectiveInstantiable.StartObjective();
+        newObjectiveInstantiable.StartObjective(true);
     }
-    void LoadQuest(ObjectiveSO objectiveSO,string stringData){
+    void LoadQuest(ObjectiveSO objectiveSO, string stringData) {
         GameObject newObjectiveInstantiableGO = Instantiate(objectiveSO.ObjectivePrefab);
-        ObjectiveInstantiable newObjectiveInstantiable=newObjectiveInstantiableGO.GetComponent<ObjectiveInstantiable>();
+        ObjectiveInstantiable newObjectiveInstantiable = newObjectiveInstantiableGO.GetComponent<ObjectiveInstantiable>();
         newObjectiveInstantiable.Settup(objectiveSO);
-        newObjectiveInstantiable.StartObjective();
+        newObjectiveInstantiable.StartObjective(false);
         newObjectiveInstantiable.LoadObjective(stringData);
     }
     public void UpdateQuestData(string id, ObjectiveData objectiveData)
@@ -96,6 +102,6 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
         {
             objectivesData.Add(id, objectiveData);
         }
-        //DataPersistenceManager.instance?.SaveGame();
+        DataPersistenceManager.instance?.SaveGame();
     }
 }
