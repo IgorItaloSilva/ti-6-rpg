@@ -44,4 +44,13 @@ public class ObjectiveEvents
             onReciveAlreadyMadeProgress(id);
         }
     }
+    //Não faz nada no objective manager, mas os dialogInteractables reagem a ele
+    public event Action<string> onObjectiveRefused;
+    public void RefuseQuest(string id)
+    {
+        if (onObjectiveRefused != null)
+        {
+            onObjectiveRefused(id);
+        }
+    }
 }

@@ -3,35 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ObjectiveManager : MonoBehaviour,IDataPersistence
+public class ObjectiveManager : MonoBehaviour, IDataPersistence
 {
     public static ObjectiveManager instance;
     [Header("COLOCAR TODOS OS OBJETIVOS AQUI")]
-    [SerializeField]List<ObjectiveSO> allQuests;
-    [SerializeField] SerializableDictionary<string,ObjectiveData>objectivesData;
+    [SerializeField] List<ObjectiveSO> allQuests;
+    [SerializeField] SerializableDictionary<string, ObjectiveData> objectivesData;
     ObjectiveData auxObjectiveData;
 
-    [SerializeField] SerializableDictionary<string,ObjectiveSO>allQuestsDictionary;
-    void Awake(){
-        if(instance==null){
-            instance=this;
+    [SerializeField] SerializableDictionary<string, ObjectiveSO> allQuestsDictionary;
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
         }
-        else{
+        else
+        {
             Destroy(gameObject);
         }
         objectivesData = new SerializableDictionary<string, ObjectiveData>();
-        allQuestsDictionary=new SerializableDictionary<string, ObjectiveSO>();
-        if(allQuests.Count==0){
+        allQuestsDictionary = new SerializableDictionary<string, ObjectiveSO>();
+        if (allQuests.Count == 0)
+        {
             Debug.LogWarning("Não temos nenhuma quest cadastrada na lista de todas as quests");
         }
-        else{
-            foreach(ObjectiveSO objectiveSO in allQuests){
-                if(objectiveSO==null){
+        else
+        {
+            foreach (ObjectiveSO objectiveSO in allQuests)
+            {
+                if (objectiveSO == null)
+                {
                     Debug.Log("Tem uma quest nula na lista de todas as quests, dando continue");
                     continue;
                 }
-                else{
-                    allQuestsDictionary.Add(objectiveSO.Id,objectiveSO);
+                else
+                {
+                    allQuestsDictionary.Add(objectiveSO.Id, objectiveSO);
                 }
             }
         }
@@ -46,23 +54,32 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
     {
         objectivesData = gameData.objectivesData;
     }
-    void LoadObjectiveData(){
+    void LoadObjectiveData()
+    {
         if (objectivesData == null) return;
         if (objectivesData.Count > 0)
             foreach (string s in objectivesData.Keys.ToArray())
             {
+                Debug.Log(s);
                 if (s == null) { Debug.Log("Por algum motivo tentamos dar laod numa key do objectives data que é nula, dando um continue"); continue; }
                 if (objectivesData.TryGetValue(s, out auxObjectiveData) != false)
                 {
-                    ObjectiveUiManager.instance?.CreateButton(allQuestsDictionary[s], auxObjectiveData);
-                    if (auxObjectiveData.hasStarted && !auxObjectiveData.hasFinished)
+                    if (!auxObjectiveData.questWasRefused)
                     {
-                        LoadQuest(allQuestsDictionary[s], auxObjectiveData.stringData);
-                        GameEventsManager.instance.objectiveEvents.StartObjective(s);
+                        ObjectiveUiManager.instance?.CreateButton(allQuestsDictionary[s], auxObjectiveData);
+                        if (auxObjectiveData.hasStarted && !auxObjectiveData.hasFinished)
+                        {
+                            LoadQuest(allQuestsDictionary[s], auxObjectiveData.stringData);
+                            GameEventsManager.instance.objectiveEvents.StartObjective(s);
+                        }
+                        if (auxObjectiveData.hasFinished && allQuestsDictionary[s].RequiresRecompletion)
+                        {
+                            GameEventsManager.instance.objectiveEvents.CompleteObjective(s);
+                        }
                     }
-                    if (auxObjectiveData.hasFinished && allQuestsDictionary[s].RequiresRecompletion)
+                    else
                     {
-                        GameEventsManager.instance.objectiveEvents.CompleteObjective(s);
+                        GameEventsManager.instance?.objectiveEvents.RefuseQuest(s);
                     }
                 }
                 else
@@ -77,14 +94,16 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
     {
         gameData.objectivesData = objectivesData;
     }
-    public void StartQuest(ObjectiveSO objectiveSO){
+    public void StartQuest(ObjectiveSO objectiveSO)
+    {
         GameObject newObjectiveInstantiableGO = Instantiate(objectiveSO.ObjectivePrefab);
-        ObjectiveInstantiable newObjectiveInstantiable=newObjectiveInstantiableGO.GetComponent<ObjectiveInstantiable>();
-        ObjectiveUiManager.instance?.CreateButton(objectiveSO,new ObjectiveData(true));
+        ObjectiveInstantiable newObjectiveInstantiable = newObjectiveInstantiableGO.GetComponent<ObjectiveInstantiable>();
+        ObjectiveUiManager.instance?.CreateButton(objectiveSO, new ObjectiveData(true));
         newObjectiveInstantiable.Settup(objectiveSO);
         newObjectiveInstantiable.StartObjective(true);
     }
-    void LoadQuest(ObjectiveSO objectiveSO, string stringData) {
+    void LoadQuest(ObjectiveSO objectiveSO, string stringData)
+    {
         GameObject newObjectiveInstantiableGO = Instantiate(objectiveSO.ObjectivePrefab);
         ObjectiveInstantiable newObjectiveInstantiable = newObjectiveInstantiableGO.GetComponent<ObjectiveInstantiable>();
         newObjectiveInstantiable.Settup(objectiveSO);
@@ -102,6 +121,19 @@ public class ObjectiveManager : MonoBehaviour,IDataPersistence
         {
             objectivesData.Add(id, objectiveData);
         }
+        DataPersistenceManager.instance?.SaveGame();
+    }
+    public void RefuseQuest(string id)
+    {
+        if (objectivesData.ContainsKey(id))
+        {
+            Debug.LogWarning($"Deu merda! Você acabou de recusar uma quest ativa!! de Id: {id}");
+        }
+        else
+        {
+            objectivesData.Add(id, new ObjectiveData(false,true));
+        }
+        GameEventsManager.instance?.objectiveEvents.RefuseQuest(id);
         DataPersistenceManager.instance?.SaveGame();
     }
 }

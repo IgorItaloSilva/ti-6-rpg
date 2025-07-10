@@ -7,19 +7,22 @@ public class ObjectiveData
     public bool hasFinished;
     public string stringData;
     public string displayCompletedMessage;
+    public bool questWasRefused;
 
-    public ObjectiveData()
+    public ObjectiveData(bool started = false,bool refused = false)
     {
-        hasStarted = false;
+        hasStarted = started;
         hasFinished = false;
         stringData = "";
         displayCompletedMessage = "";
+        questWasRefused = refused;
     }
-    public ObjectiveData(bool Started)
+    /* public ObjectiveData(bool Started)
     {
         hasStarted = true;
         hasFinished = false;
         stringData = "";
         displayCompletedMessage = "";
-    }
+        questWasRefused = false;
+    } */
 }

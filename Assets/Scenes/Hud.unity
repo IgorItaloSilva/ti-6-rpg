@@ -159,6 +159,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d1ff28a6e21036d449d465b370436e21, type: 2}
   - {fileID: 11400000, guid: 8ea11bf24fc77c84ba7c203e7d9cbe30, type: 2}
   - {fileID: 11400000, guid: 4d740bb3d9809ed43b3f8e678b1cd503, type: 2}
+  totalMoneyGotten: 
 --- !u!4 &18241017
 Transform:
   m_ObjectHideFlags: 0
@@ -3566,12 +3567,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shouldOpenHud: 0
   canvasChangingScene: {fileID: 0}
+  canvasEnding: {fileID: 0}
+  endingDisplayer: {fileID: 0}
   backgroundImage: {fileID: 0}
   loadingImages: []
   sliderLoadScene: {fileID: 0}
   textoAperteQualquerTecla: {fileID: 0}
   skipWaitForKeyPressToLoad: 0
   cheatsEnabled: 0
+  goodEnding: {fileID: 0}
+  badEnding: {fileID: 0}
+  secretEnding: {fileID: 0}
   shouldLoadTutorial: 0
   shouldShowTutorials: 1
   showDebug: 0
@@ -28497,6 +28503,23 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1972471575376898935, guid: d0969b6459558c54db73ecd36d15ccfe,
+        type: 3}
+      propertyPath: allQuests.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1972471575376898935, guid: d0969b6459558c54db73ecd36d15ccfe,
+        type: 3}
+      propertyPath: 'allQuests.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: a1fcba582a1ea354daba32bff538f409,
+        type: 2}
+    - target: {fileID: 1972471575376898935, guid: d0969b6459558c54db73ecd36d15ccfe,
+        type: 3}
+      propertyPath: 'allQuests.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 565f239a16a6ecc4986cbc1c172c7008,
+        type: 2}
     - target: {fileID: 3698866213331120700, guid: d0969b6459558c54db73ecd36d15ccfe,
         type: 3}
       propertyPath: m_Name

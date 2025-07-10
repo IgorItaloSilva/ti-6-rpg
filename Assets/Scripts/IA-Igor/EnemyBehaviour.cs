@@ -97,7 +97,7 @@ public class EnemyBehaviour : MonoBehaviour, IDamagable
         if (hasDialogChoice) dialogChoiceAux = gameObject.GetComponent<DialogChoiceAux>();
         initialPos = transform.position;
         deathAux = gameObject.GetComponent<DeathAux>();
-        if (deathAux != null) Debug.Log($"{name} tem um deathAux");
+        if (deathAux != null)if (_showDebugLogs) Debug.Log($"{name} tem um deathAux");
     }
 
     void OnDisable()

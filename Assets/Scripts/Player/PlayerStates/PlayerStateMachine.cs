@@ -769,25 +769,25 @@ public class PlayerStateMachine : MonoBehaviour, IDataPersistence
         {
             case "light":
                 _swordWeaponManager.SetDamageType(Enums.AttackType.LightAttack);
-                Debug.Log("Light attack");
+                if(ShowDebugLogs)Debug.Log("Light attack");
                 break;
             case "heavy":
                 _swordWeaponManager.SetDamageType(Enums.AttackType.HeavyAttack);
-                Debug.Log("Heavy attack");
+                if(ShowDebugLogs)Debug.Log("Heavy attack");
                 break;
             case "bleed":
                 _swordWeaponManager.SetDamageType(Enums.AttackType.BleedAttack);
-                Debug.Log("Bleed attack");
+                if(ShowDebugLogs)Debug.Log("Bleed attack");
                 break;
             case "self":
                 PlayerStats.TakeDamage(300f, Enums.DamageType.SelfDamage, false);
                 _swordSlash.Play();
                 _swordWeaponManager.SetDamageType(Enums.AttackType.SelfDamageAttack);
-                Debug.Log("Self Damage attack");
+                if(ShowDebugLogs)Debug.Log("Self Damage attack");
                 break;
             case "poise":
                 _swordWeaponManager.SetDamageType(Enums.AttackType.PoiseAttack);
-                Debug.Log("Poise attack");
+                if(ShowDebugLogs)Debug.Log("Poise attack");
                 break;
             case "jump":
                 _swordWeaponManager.SetDamageType(Enums.AttackType.HeavyAttack);
